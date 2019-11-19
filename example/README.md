@@ -8,11 +8,11 @@
 
 ### Uefi
 
-    virsh create uefi.xml
+    virsh create kvm-uefi.xml
 
 ### Bios
 
-    virsh create biso.xml
+    virsh create kvm-biso.xml
    
 
 
