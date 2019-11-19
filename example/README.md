@@ -6,11 +6,11 @@
     virsh vncdisplay panabit-01
 
 
-### Uefi
+### KVM UEFI
 
     virsh create kvm-uefi.xml
 
-### Bios
+### KVM BIOS
 
     virsh create kvm-biso.xml
    
