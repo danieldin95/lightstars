@@ -8,7 +8,11 @@
 
 ### Uefi
 
+    virsh create uefi.xml
 
 ### Bios
+
+    virsh create biso.xml
+   
 
 
