@@ -1,4 +1,5 @@
 <domain type='kvm'>
+	<!--web:admin/panabit; ssh:root/panaos-->
 	<name>panabit-01</name>
 	<memory unit='MiB'>1024</memory>
 	<currentMemory unit='MiB'>1024</currentMemory>
@@ -8,17 +9,17 @@
 	  <boot dev='hd'/>
 	  <boot dev='cdrom'/>
 	  <boot dev='network'/>
-   </os>
-   <features>
+	</os>
+	<features>
 	 <acpi/>
 	 <apic/>
 	 <pae/>
-   </features>
-   <clock offset='localtime'/>
-   <on_poweroff>destroy</on_poweroff>
-   <on_reboot>restart</on_reboot>
-   <on_crash>destroy</on_crash>
-   <devices>
+	</features>
+	<clock offset='localtime'/>
+	<on_poweroff>destroy</on_poweroff>
+	<on_reboot>restart</on_reboot>
+	<on_crash>destroy</on_crash>
+	<devices>
 	 <emulator>/usr/bin/qemu-system-x86_64</emulator>
 	 <disk type='file' device='cdrom'>
 	   <source file='/root/panabit-9.2.iso'/>
@@ -49,5 +50,5 @@
 	</interface>	
 	<input type='mouse' bus='ps2'/>
 	<graphics type='vnc' port='-1' autoport='yes' listen = '0.0.0.0' keymap='en-us'/>
-   </devices>
+	</devices>
 </domain>
