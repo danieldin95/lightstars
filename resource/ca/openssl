@@ -1,0 +1,31 @@
+#!/bin/bash
+
+### Private
+# File: server.key
+openssl genrsa -out private.key 2048 ###
+
+# openssl rsa -in private.key -noout -text
+
+openssl rsa -in private.key -pubout -out public.key
+
+# openssl rsa -pubin -in public.key -noout -text
+
+# using private to sign pem and generate a csr request.
+
+openssl req -new -key private.key -out csr.pem -subj "/C=CN/ST=JS/L=NJ/O=lightstar-dev/OU=dev/CN=hilightstar.com/emailAddress=danieldin95@163.com"
+
+# openssl req -noout -text -in csr.pem
+
+#### CA &x509
+
+openssl genrsa -out ca.key 2048
+
+openssl req -new -x509 -days 365 -key ca.key -out ca.crt -subj "/C=CN/ST=JS/L=NJ/O=lightstar-dev/OU=dev/CN=hilightstar.com/emailAddress=hilightstar@163.com"
+
+# openssl x509 -in ca.crt -noout -text
+
+#### Sign cert using myself ca
+# File: server.crt
+openssl x509 -req -days 3650 -in csr.pem -CA ca.crt -CAkey ca.key -CAcreateserial -out crt.pem ###
+
+#  openssl x509 -in crt.pem -noout -text
