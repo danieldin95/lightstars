@@ -1,0 +1,2 @@
+# github.com/libvirt/libvirt-go v5.10.0+incompatible
+github.com/libvirt/libvirt-go

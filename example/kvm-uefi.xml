@@ -5,9 +5,9 @@
 		<vcpu>2</vcpu>
 		<os firmware='uefi'>
 		  <type arch='x86_64' machine='pc'>hvm</type>
-		  <boot dev='hd'/>
-		  <boot dev='cdrom'/>
-		  <boot dev='network'/>
+			<boot dev='hd'/>
+			<boot dev='cdrom'/>
+			<boot dev='network'/>
 	   </os>
 	   <features>
 		 <acpi/>
