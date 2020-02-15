@@ -6,13 +6,13 @@ Linux KVM/Qemu
 
 The following that start a new CentOS7 instance.
 
-### Datastore
+### Initialize Local Datastore
 
-    mkdir -p /lightstar/datastore && /lightstar/datastore
+    mkdir -p /lightstar/datastore && cd /lightstar/datastore
     mkdir -p 09b191af-b82a-4736-b492-d43224bb5379
     ln -s 09b191af-b82a-4736-b492-d43224bb5379 0 && cd 0
    
-### Create Image
+### Create One Image
 
     mkdir -p centos7 && cd centos7
     qemu-img create -f qcow2 disk0.qcow2 10G
