@@ -31,6 +31,13 @@ The following that start a new CentOS7 instance.
     
     virsh list --all
     virsh vncdisplay panabit-01
+
+## Virtual Network
+
+    virsh net-create virbr1.xml
+    virsh attach-interface --domain centos7 --type bridge --source virbr1 --model virtio --config --persistent
+    virsh domiflist centos7
+    virsh detach-interface --domain centos7 --type bridge --mac 52:54:00:8e:20:b5 --config
     
 ## KVM UEFI
 
