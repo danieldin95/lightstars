@@ -1,2 +1,4 @@
+# github.com/gorilla/mux v1.7.4
+github.com/gorilla/mux
 # github.com/libvirt/libvirt-go v5.10.0+incompatible
 github.com/libvirt/libvirt-go
