@@ -31,11 +31,11 @@ type Server struct {
 	adminFile  string
 }
 
-func NewServer(listen, dir string) (h *Server) {
+func NewServer(listen, staticDir, authFile string) (h *Server) {
 	h = &Server{
 		listen:    listen,
-		pubDir:    dir,
-		adminFile: ".auth",
+		pubDir:    staticDir,
+		adminFile: authFile,
 	}
 	if h.adminToken == "" {
 		h.LoadToken()
@@ -46,6 +46,11 @@ func NewServer(listen, dir string) (h *Server) {
 	}
 	h.SaveToken()
 	return
+}
+
+func (h *Server) SetCert(keyFile, crtFile string) {
+	h.crtFile = crtFile
+	h.keyFile = keyFile
 }
 
 func (h *Server) Initialize() {
@@ -186,9 +191,9 @@ func (h *Server) GetFile(name string) string {
 func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 	file := path.Base(name)
 	tmpl, err := template.New(file).Funcs(template.FuncMap{
-		"prettyBytes": libstar.PrettyBytes,
+		"prettyBytes":  libstar.PrettyBytes,
 		"prettyKBytes": libstar.PrettyKBytes,
-		"prettyTime": libstar.PrettyTime,
+		"prettyTime":   libstar.PrettyTime,
 	}).ParseFiles(name)
 	if err != nil {
 		fmt.Fprintf(w, "template.ParseFiles %s", err)

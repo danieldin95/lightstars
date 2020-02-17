@@ -9,9 +9,9 @@ type DomainXML struct {
 	XMLName xml.Name   `xml:"domain"`
 	Id      string     `xml:"id,attr"`
 	Type    string     `xml:"type,attr"`
-	Name    string      `xml:"name"`
-	Uuid    string      `xml:"uuid"`
-	Devices DevicesXML  `xml:"devices"`
+	Name    string     `xml:"name"`
+	Uuid    string     `xml:"uuid"`
+	Devices DevicesXML `xml:"devices"`
 }
 
 func (domain *DomainXML) Decode(xmlData string) error {
@@ -31,7 +31,7 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 			return g.Listen, g.Port
 		}
 	}
-	return "",""
+	return "", ""
 }
 
 type DevicesXML struct {
@@ -48,10 +48,10 @@ func (devices *DevicesXML) Decode(xmlData string) error {
 }
 
 type GraphicsXML struct {
-	XMLName  xml.Name    `xml:"graphics"`
-	Type     string      `xml:"type,attr"`
-	Port     string      `xml:"port,attr"`
-	Listen   string      `xml:"listen,attr"`
+	XMLName xml.Name `xml:"graphics"`
+	Type    string   `xml:"type,attr"`
+	Port    string   `xml:"port,attr"`
+	Listen  string   `xml:"listen,attr"`
 }
 
 func (graphics *GraphicsXML) Decode(xmlData string) error {

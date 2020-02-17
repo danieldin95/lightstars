@@ -1,5 +1,7 @@
 package libstar
 
+import "fmt"
+
 var (
 	Version string
 	Date    string
@@ -7,7 +9,5 @@ var (
 )
 
 func init() {
-	Info("version is %s", Version)
-	Info("built on %s", Date)
-	Info("commit at %s", Commit)
+	fmt.Printf("%s %s %s\n", Version, Date, Commit)
 }

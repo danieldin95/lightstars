@@ -21,15 +21,21 @@ func Wait() {
 }
 
 func main() {
-	var dir string
-	var listen string
+	staticDir := "static"
+	crtDir := "ca"
+	authFile := ".auth"
+	listen := "0.0.0.0:10080"
 
-	flag.StringVar(&dir, "dir", ".", "the directory to serve files from.")
-	flag.StringVar(&listen, "listen", "0.0.0.0:10080", "the address http listen.")
+	flag.StringVar(&listen, "listen", listen, "the address http listen.")
+	flag.StringVar(&crtDir, "crt:dir", crtDir, "he directory X509 certificate file on.")
+	flag.StringVar(&staticDir, "static:dir", staticDir, "the directory to serve files from.")
+	flag.StringVar(&authFile, "auth:file", authFile, "the file saved administrator auth")
 	flag.Parse()
 
-	http := http.NewServer(listen, dir)
-	go http.Start()
+	h := http.NewServer(listen, staticDir, authFile)
+	h.SetCert(crtDir+"/private.key", crtDir+"/crt.pem")
+
+	go h.Start()
 
 	Wait()
 }

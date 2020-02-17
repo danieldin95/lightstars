@@ -15,8 +15,8 @@ type VersionSchema struct {
 func NewVersionSchema() VersionSchema {
 	return VersionSchema{
 		Version: libstar.Version,
-		Date: libstar.Date,
-		Commit: libstar.Commit,
+		Date:    libstar.Date,
+		Commit:  libstar.Commit,
 	}
 }
 
@@ -44,11 +44,11 @@ func InstanceState2Str(state libvirt.DomainState) string {
 }
 
 type InstanceSchema struct {
-	UUID    string `json:"uuid"`
-	Name    string `json:"name"`
-	State   string `json:"state"`
-	MaxCpu  uint   `json:"maxCpu"`
-	MaxMem  uint64 `json:"maxMem"`
+	UUID   string `json:"uuid"`
+	Name   string `json:"name"`
+	State  string `json:"state"`
+	MaxCpu uint   `json:"maxCpu"`
+	MaxMem uint64 `json:"maxMem"`
 }
 
 func NewInstanceSchema(dom libvirt.Domain) InstanceSchema {
@@ -59,15 +59,15 @@ func NewInstanceSchema(dom libvirt.Domain) InstanceSchema {
 	mem, _ := dom.GetMaxMemory()
 
 	return InstanceSchema{
-		UUID: uuid,
-		Name: name,
-		State: InstanceState2Str(state),
+		UUID:   uuid,
+		Name:   name,
+		State:  InstanceState2Str(state),
 		MaxCpu: cpu,
 		MaxMem: mem,
 	}
 }
 
 type IndexSchema struct {
-	Version   VersionSchema      `json:"version"`
-	Instances []InstanceSchema   `json:"instances"`
+	Version   VersionSchema    `json:"version"`
+	Instances []InstanceSchema `json:"instances"`
 }
