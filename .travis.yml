@@ -6,9 +6,10 @@ sudo: require
 go:
   - "1.12.9"
 
+global:
+  - GO111MODULE=on
+
 env:
-  global:
-    - GO111MODULE=on
   - LIBVIRT=4.10.0  EXT=xz TEST_ARGS="-tags integration"
 
 install:
