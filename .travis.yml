@@ -4,8 +4,7 @@ dist: xenial
 os: linux
 
 env:
-  global:
-    - GO111MODULE=on
+  - GO111MODULE=on
   - LIBVIRT=1.2.0  EXT=gz TEST_ARGS=
   - LIBVIRT=1.2.20 EXT=gz TEST_ARGS="-tags integration"
   - LIBVIRT=2.5.0  EXT=xz TEST_ARGS="-tags integration"
