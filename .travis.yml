@@ -4,6 +4,8 @@ env:
   global:
     - GO111MODULE=on
 
+dist: xenial
+
 go: 
   - 1.12.9
 
@@ -11,7 +13,7 @@ os:
   - linux
 
 before_install:
-  - echo ""
+  - yum install libvirt-devel
 
 script:
   - make
