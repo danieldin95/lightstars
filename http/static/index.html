@@ -88,6 +88,22 @@
 <body>
     <div class="container">
         <div class="panel">
+            <div class="panel-body">
+                <table class="table-list">
+                    <tbody>
+                    <tr>
+                        <td>Version:</td>
+                        <td>{{ .Version.Version }}</td>
+                    </tr>
+                    <tr>
+                        <td>Built on:</td>
+                        <td>{{ .Version.Date }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel">
             <div class="panel-header">
                 <p>The Domain defined on this machine, and total {{ len .Instances }}.</p>
             </div>

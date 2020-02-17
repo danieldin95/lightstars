@@ -212,6 +212,7 @@ func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
+	index.Version = NewVersionSchema()
 	if doms, err := conn.ListAllDomains(libvirtdriver.DOMAIN_ALL); err == nil {
 		for _, dom := range doms {
 			instance := NewInstanceSchema(dom)

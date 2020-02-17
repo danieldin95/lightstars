@@ -1,6 +1,6 @@
 .PHONY: lightstar test
 
-PKG = main
+PKG = github.com/danieldin95/lightstar/libstar
 
 LDFLAGS += -X $(PKG).Commit=$$(git rev-list -1 HEAD)
 LDFLAGS += -X $(PKG).Date=$$(date +%FT%T%z)

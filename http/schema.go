@@ -2,6 +2,7 @@ package http
 
 import "C"
 import (
+	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
 )
 
@@ -13,6 +14,9 @@ type VersionSchema struct {
 
 func NewVersionSchema() VersionSchema {
 	return VersionSchema{
+		Version: libstar.Version,
+		Date: libstar.Date,
+		Commit: libstar.Commit,
 	}
 }
 
