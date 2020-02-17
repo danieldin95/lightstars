@@ -6,13 +6,11 @@ sudo: require
 go:
   - "1.12.9"
 
-global:
-  - GO111MODULE=on
-
 env:
   - LIBVIRT=4.10.0  EXT=xz TEST_ARGS="-tags integration"
 
 install:
+  - export GO111MODULE="on"
   - sudo apt-get -qqy build-dep libvirt
   - sudo apt-get -qqy install curl qemu-system-x86 sasl2-bin
   - sudo mkdir -p /usr/src && sudo chown $(id -u) /usr/src
