@@ -23,8 +23,8 @@ type Logger struct {
 	FileName string
 	FileLog  *log.Logger
 
-	lock     sync.Mutex
-	errors   *list.List
+	lock   sync.Mutex
+	errors *list.List
 }
 
 func (l *Logger) Debug(format string, v ...interface{}) {
