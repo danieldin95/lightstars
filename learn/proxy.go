@@ -54,7 +54,7 @@ func main() {
 			libstar.Error("main.Dial %s", err)
 		}
 		//target, err := websocket.Dial("ws://192.168.209.141:10080/websockify", "", "http://192.168.209.141:6080/")
-		
+
 		go copyBytes("from target", conn, target)
 		go copyBytes("from server", target, conn)
 	}

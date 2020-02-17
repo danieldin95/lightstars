@@ -12,6 +12,7 @@ import (
 	"net"
 	"net/http"
 	"path"
+	"sync"
 	"text/template"
 	"time"
 )
@@ -110,7 +111,7 @@ func (h *Server) Start() error {
 func (h *Server) Shutdown() {
 	libstar.Info("Server.Shutdown %s", h.listen)
 	if err := h.server.Shutdown(context.Background()); err != nil {
-		libstar.Error("Server.Shutdown: %v", err)
+		libstar.Error("Server.Shutdown %v", err)
 	}
 }
 
@@ -168,29 +169,37 @@ func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Welcome Index\n"))
 }
 
+func (h *Server) GetTarget(id string) string {
+	return "192.168.4.249:5900"
+}
 func (h *Server) HandleWebsockify(ws *websocket.Conn) {
 	defer ws.Close()
-
 	ws.PayloadType = websocket.BinaryFrame
-	addr := "192.168.4.249:5900"
-	conn, err := net.Dial("tcp", addr)
+
+	conn, err := net.Dial("tcp", h.GetTarget(""))
 	if err != nil {
-		libstar.Error("Server.HandleWebsockify: Dial %s", err)
+		libstar.Error("Server.HandleWebsockify dial %s", err)
 		return
 	}
 	defer conn.Close()
 
-	libstar.Info("Server.HandleWebsockify: %x", ws.PayloadType)
-	libstar.Info("Server.HandleWebsockify: From %s", ws.RemoteAddr())
-	libstar.Info("Server.HandleWebsockify: To %s", addr)
+	libstar.Info("Server.HandleWebsockify request from %s", ws.RemoteAddr())
+	libstar.Info("Server.HandleWebsockify connection to %s", conn.LocalAddr())
+
+	wait := sync.WaitGroup{}
+	wait.Add(2)
 
 	go func() {
+		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Error("Server.HandleWebsockify: Copy %s", err)
+			libstar.Error("Server.HandleWebsockify copy from ws %s", err)
 		}
 	}()
-
-	if _, err := io.Copy(ws, conn); err != nil {
-		libstar.Error("Server.HandleWebsockify: Copy %s", err)
-	}
+	go func() {
+		defer wait.Done()
+		if _, err := io.Copy(ws, conn); err != nil {
+			libstar.Error("Server.HandleWebsockify copy from target %s", err)
+		}
+	}()
+	wait.Wait()
 }
