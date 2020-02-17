@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/danieldin95/lightstar/http"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-func main() {
+func Wait() {
 	x := make(chan os.Signal)
 	signal.Notify(x, os.Interrupt, syscall.SIGTERM)
 	signal.Notify(x, os.Interrupt, syscall.SIGKILL)
@@ -16,4 +17,11 @@ func main() {
 
 	<-x
 	fmt.Println("Done")
+}
+
+func main() {
+	http  := http.NewServer("0.0.0.0:10080")
+	go http.Start()
+
+	Wait()
 }
