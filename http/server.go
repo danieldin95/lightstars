@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/danieldin95/lightstar/compute/libvirt"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/gorilla/mux"
+	"github.com/libvirt/libvirt-go"
 	"golang.org/x/net/websocket"
 	"io"
 	"io/ioutil"
@@ -183,7 +185,11 @@ func (h *Server) GetFile(name string) string {
 
 func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 	file := path.Base(name)
-	tmpl, err := template.New(file).Funcs(template.FuncMap{}).ParseFiles(name)
+	tmpl, err := template.New(file).Funcs(template.FuncMap{
+		"prettyBytes": libstar.PrettyBytes,
+		"prettyKBytes": libstar.PrettyKBytes,
+		"prettyTime": libstar.PrettyTime,
+	}).ParseFiles(name)
 	if err != nil {
 		fmt.Fprintf(w, "template.ParseFiles %s", err)
 		return err
@@ -196,20 +202,72 @@ func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}
 }
 
 func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
+	index := IndexSchema{
+		Instances: make([]InstanceSchema, 0, 32),
+	}
+
+	conn, err := libvirt.NewConnect("qemu:///system")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer conn.Close()
+
+	if doms, err := conn.ListAllDomains(libvirtdriver.DOMAIN_ALL); err == nil {
+		for _, dom := range doms {
+			instance := NewInstanceSchema(dom)
+			index.Instances = append(index.Instances, instance)
+		}
+	}
 	file := h.GetFile("/index.html")
-	if err := h.ParseFiles(w, file, nil); err != nil {
+	if err := h.ParseFiles(w, file, index); err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
 	}
 }
 
-func (h *Server) GetTarget(id string) string {
-	return "192.168.4.249:5900"
+func (h *Server) GetTarget(req *http.Request) string {
+	var id string
+
+	query := req.URL.Query()
+	if tgt, ok := query["target"]; ok {
+		return tgt[0]
+	}
+	ids, ok := query["instance"]
+	if ok {
+		id = ids[0]
+	}
+	libstar.Info("Server.GetTarget %s", id)
+	conn, err := libvirt.NewConnect("qemu:///system")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer conn.Close()
+
+	dom, err := conn.LookupDomainByName(id)
+	if err != nil {
+		return ""
+	}
+	xml, err := dom.GetXMLDesc(libvirt.DOMAIN_XML_SECURE)
+	if err != nil {
+		return ""
+	}
+	instXml := libvirtdriver.DomainXML{}
+	if err := instXml.Decode(xml); err != nil {
+		return ""
+	}
+	_, port := instXml.VNCDisplay()
+	return "localhost:" + port
 }
+
 func (h *Server) HandleWebsockify(ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
 
-	conn, err := net.Dial("tcp", h.GetTarget(""))
+	target := h.GetTarget(ws.Request())
+	if target == "" {
+		libstar.Error("Server.HandleWebsockify target not found.")
+		return
+	}
+	conn, err := net.Dial("tcp", target)
 	if err != nil {
 		libstar.Error("Server.HandleWebsockify dial %s", err)
 		return

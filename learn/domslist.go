@@ -23,6 +23,9 @@ func main() {
 		if err == nil {
 			fmt.Printf("  %s\n", name)
 		}
+		if xml, err := dom.GetXMLDesc(libvirt.DOMAIN_XML_SECURE); err == nil {
+			fmt.Printf("%s", xml)
+		}
 		dom.Free()
 	}
 }

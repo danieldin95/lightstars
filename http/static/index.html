@@ -4,16 +4,124 @@
     <meta charset="UTF-8">
     <title>Dashboard | Lightstar</title>
     <style type="text/css">
+        @media
+        (min-device-width : 320px)
+        and (max-device-width : 860px) {
+            .container {
+                width: 80%;
+                margin: 0 auto;
+            }
+        }
+        @media
+        (min-device-width : 860px) {
+            .container {
+                width: 60%;
+            }
+        }
+        body {
+            font-family: monospace;
+            background: #fdfcf8;
+        }
         .container {
-            width: 80%;
-            text-align: center;
+            min-width: 800px;
             margin: 0 auto;
+        }
+        .container a {
+            text-decoration: none;
+        }
+        .panel {
+            width: 100%;
+            border: 1px solid #000000;
+            border-radius: 4px;
+            padding: 0 6px;
+            margin: 8px 2px;
+        }
+        .panel-header {
+            margin: 13px 0;
+            width: 100%;
+        }
+        .panel-header p {
+            margin: 0;
+        }
+        .panel-body {
+            margin: 8px 0;
+            width: 100%;
+        }
+        .table-display {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-display tr:nth-child(even)
+        {
+            background: #f1f1f1;
+        }
+        .table-display tr:nth-child(odd)
+        {
+            background: inherit;
+        }
+        .table-display th {
+            font-weight: normal;
+            font-size: small;
+        }
+        .table-display td, th {
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+        .table-list {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-list td:first-child {
+            font-size: small;
+        }
+        .running {
+            color: darkgreen;
+        }
+        .paused, .blocked, .pmsuspended {
+            color: chocolate;
+        }
+        .nostate, .crashed, .unknown {
+            color: black;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h3>Welcome to LightStar</h3>
+        <div class="panel">
+            <div class="panel-header">
+                <p>The Domain defined on this machine, and total {{ len .Instances }}.</p>
+            </div>
+            <div class="panel-body">
+                <table class="table-display">
+                    <thead>
+                    <tr>
+                        <th>UUID</th>
+                        <th>Name</th>
+                        <th>CPU</th>
+                        <th>Memory</th>
+                        <th>State</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ range .Instances }}
+                    <tr>
+                        <td>{{ .UUID }}</td>
+                        {{ if eq .State "running" }}
+                        <td><a href="/static/console?instance={{ .Name }}">{{ .Name }}</a></td>
+                        {{ else }}
+                        <td><a href="#">{{ .Name }}</a></td>
+                        {{ end }}
+                        <td>{{ .MaxCpu }}</td>
+                        <td>{{ prettyKBytes .MaxMem }}</td>
+                        <td><span class="{{ .State }}">{{ .State }}</span></td>
+                        <td></td>
+                    </tr>
+                    {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 </html>

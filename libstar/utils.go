@@ -145,3 +145,20 @@ func PrettyBytes(b uint64) string {
 	g, d := split(m, 1024)
 	return fmt.Sprintf("%d.%02dG", g, d)
 }
+
+func PrettyKBytes(k uint64) string {
+	split := func(_v uint64, _m uint64) (i uint64, d int) {
+		v := float64(_v%_m) / float64(_m)
+		return _v / _m, int(v * 100) //move two decimal to integer
+	}
+
+	if k < 1024 {
+		return fmt.Sprintf("%dK", k)
+	}
+	m, d := split(k, 1024)
+	if m < 1024 {
+		return fmt.Sprintf("%d.%02dM", m, d)
+	}
+	g, d := split(m, 1024)
+	return fmt.Sprintf("%d.%02dG", g, d)
+}

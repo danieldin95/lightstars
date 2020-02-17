@@ -11,8 +11,15 @@ lightstar:
 	go build -mod=vendor -ldflags "$(LDFLAGS)" -o resource/lightstar main.go
 
 
+rpm:
+	./packaging/auto.sh
+	rpmbuild -ba packaging/lightstar.spec
+	cp -rvf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm resource
+
+
 devel/requirements:
 	yum install libvirt-devel
 
+
 test:
-	@echo "TODO"
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/compute/libvirt

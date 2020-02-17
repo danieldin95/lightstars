@@ -146,6 +146,7 @@
         let port = readQueryVariable('port', window.location.port);
         const password = readQueryVariable('password', '');
         const path = readQueryVariable('path', 'websockify');
+        const session = readQueryVariable('session', '');
 
         // | | |         | | |
         // | | | Connect | | |
@@ -164,11 +165,14 @@
         if(port) {
             url += ':' + port;
         }
-        url += '/' + path;
+        url += '/' + path + window.location.search;
 
         // Creating a new RFB object will start a new connection
         rfb = new RFB(document.getElementById('screen'), url,
-                      { credentials: { password: password } });
+                      {
+                          credentials: { password: password },
+                          session: session,
+                      });
 
         // Add listeners to important events from the RFB module
         rfb.addEventListener("connect",  connectedToServer);
