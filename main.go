@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/danieldin95/lightstar/http"
 	"os"
@@ -20,7 +21,14 @@ func Wait() {
 }
 
 func main() {
-	http  := http.NewServer("0.0.0.0:10080")
+	var dir string
+	var listen string
+
+	flag.StringVar(&dir, "dir", ".", "the directory to serve files from.")
+	flag.StringVar(&listen, "listen", "0.0.0.0:10080", "the address http listen.")
+	flag.Parse()
+
+	http  := http.NewServer(listen, dir)
 	go http.Start()
 
 	Wait()

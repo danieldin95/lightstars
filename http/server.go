@@ -8,8 +8,10 @@ import (
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
 	"io"
+	"io/ioutil"
 	"net"
 	"net/http"
+	"os"
 	"path"
 	"sync"
 	"text/template"
@@ -23,14 +25,24 @@ type Server struct {
 	keyFile    string
 	pubDir     string
 	router     *mux.Router
+	adminToken string
+	adminFile  string
 }
 
 func NewServer(listen, dir string) (h *Server) {
 	h = &Server{
 		listen: listen,
 		pubDir: dir,
+		adminFile: ".auth",
+	}
+	if h.adminToken == "" {
+		h.LoadToken()
 	}
 
+	if h.adminToken == "" {
+		h.adminToken = libstar.GenToken(64)
+	}
+	h.SaveToken()
 	return
 }
 
@@ -49,19 +61,44 @@ func (h *Server) Initialize() {
 	h.LoadRouter()
 }
 
+func (h *Server) SaveToken() error {
+	libstar.Info("Server.SaveToken: AdminToken: %s", h.adminToken)
+	f, err := os.OpenFile(h.adminFile, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0600)
+	defer f.Close()
+	if err != nil {
+		libstar.Error("Server.SaveToken: %s", err)
+		return err
+	}
+	if _, err := f.Write([]byte(h.adminToken)); err != nil {
+		libstar.Error("Server.SaveToken: %s", err)
+		return err
+	}
+	return nil
+}
+
+func (h *Server) LoadToken() error {
+	if _, err := os.Stat(h.adminFile); os.IsNotExist(err) {
+		libstar.Info("Server.LoadToken: file:%s does not exist", h.adminFile)
+		return nil
+	}
+	contents, err := ioutil.ReadFile(h.adminFile)
+	if err != nil {
+		libstar.Error("Server.LoadToken: file:%s %s", h.adminFile, err)
+		return err
+
+	}
+	h.adminToken = string(contents)
+	return nil
+}
+
 func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
-	//token, pass, ok := r.BasicAuth()
-	//libstar.Debug("Server.IsAuth token: %s, pass: %s", token, pass)
-	//
-	//if len(r.URL.Path) < 4 || r.URL.Path[:4] != "/api" {
-	//	return true
-	//}
-	//
-	//if !ok || token != h.adminToke { //
-	//	w.Header().Set("WWW-Authenticate", "Basic")
-	//	http.Error(w, "Authorization Required.", http.StatusUnauthorized)
-	//	return false
-	//}
+	user, pass, ok := r.BasicAuth()
+	libstar.Debug("Server.IsAuth %s:%s", user, pass)
+	if !ok || pass != h.adminToken || user != "admin" {
+		w.Header().Set("WWW-Authenticate", "Basic")
+		http.Error(w, "Authorization Required.", http.StatusUnauthorized)
+		return false
+	}
 	return true
 }
 
