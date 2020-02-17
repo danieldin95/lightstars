@@ -31,8 +31,8 @@ type Server struct {
 
 func NewServer(listen, dir string) (h *Server) {
 	h = &Server{
-		listen: listen,
-		pubDir: dir,
+		listen:    listen,
+		pubDir:    dir,
 		adminFile: ".auth",
 	}
 	if h.adminToken == "" {
@@ -183,8 +183,7 @@ func (h *Server) GetFile(name string) string {
 
 func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 	file := path.Base(name)
-	tmpl, err := template.New(file).Funcs(template.FuncMap{
-	}).ParseFiles(name)
+	tmpl, err := template.New(file).Funcs(template.FuncMap{}).ParseFiles(name)
 	if err != nil {
 		fmt.Fprintf(w, "template.ParseFiles %s", err)
 		return err

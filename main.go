@@ -41,7 +41,7 @@ func main() {
 	flag.StringVar(&listen, "listen", "0.0.0.0:10080", "the address http listen.")
 	flag.Parse()
 
-	http  := http.NewServer(listen, dir)
+	http := http.NewServer(listen, dir)
 	go http.Start()
 
 	Wait()
