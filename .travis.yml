@@ -13,7 +13,7 @@ os:
   - linux
 
 before_install:
-  - apt install libvirt-dev
+  - sudo apt install libvirt-dev
 
 script:
   - make
