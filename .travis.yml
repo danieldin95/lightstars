@@ -1,19 +1,37 @@
 language: go
+sudo: require
+dist: xenial
+os: linux
 
 env:
   global:
     - GO111MODULE=on
+  - LIBVIRT=1.2.0  EXT=gz TEST_ARGS=
+  - LIBVIRT=1.2.20 EXT=gz TEST_ARGS="-tags integration"
+  - LIBVIRT=2.5.0  EXT=xz TEST_ARGS="-tags integration"
+  - LIBVIRT=3.6.0  EXT=xz TEST_ARGS="-tags integration"
+  - LIBVIRT=4.10.0  EXT=xz TEST_ARGS="-tags integration"
 
-dist: xenial
 
-go: 
+go:
   - 1.12.9
 
-os:
-  - linux
-
 before_install:
-  - sudo apt install libxen-dev libvirt0 libvirt-dev
+  - sudo apt-get -qqy build-dep libvirt
+  - sudo apt-get -qqy install curl qemu-system-x86 sasl2-bin
+  - sudo mkdir -p /usr/src && sudo chown $(id -u) /usr/src
+  - curl -O -s https://libvirt.org/sources/libvirt-${LIBVIRT}.tar.${EXT}
+  - tar -C /usr/src -xf libvirt-${LIBVIRT}.tar.${EXT}
+  - pushd /usr/src/libvirt-${LIBVIRT}
+  - |
+  ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc \
+    --without-polkit \
+    --without-esx --without-vbox --without-xen --without-libxl \
+    --with-qemu --with-lxc
+  - make
+  - sudo make install
+  - popd
 
 script:
   - make
+  - make test
