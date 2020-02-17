@@ -1,21 +1,19 @@
 language: go
-sudo: require
-dist: xenial
 os: linux
+dist: xenial
+sudo: require
+
+go:
+  - "1.12.9"
 
 env:
-  - GO111MODULE=on
   - LIBVIRT=1.2.0  EXT=gz TEST_ARGS=
   - LIBVIRT=1.2.20 EXT=gz TEST_ARGS="-tags integration"
   - LIBVIRT=2.5.0  EXT=xz TEST_ARGS="-tags integration"
   - LIBVIRT=3.6.0  EXT=xz TEST_ARGS="-tags integration"
   - LIBVIRT=4.10.0  EXT=xz TEST_ARGS="-tags integration"
 
-
-go:
-  - 1.12.9
-
-before_install:
+install:
   - sudo apt-get -qqy build-dep libvirt
   - sudo apt-get -qqy install curl qemu-system-x86 sasl2-bin
   - sudo mkdir -p /usr/src && sudo chown $(id -u) /usr/src
@@ -23,13 +21,18 @@ before_install:
   - tar -C /usr/src -xf libvirt-${LIBVIRT}.tar.${EXT}
   - pushd /usr/src/libvirt-${LIBVIRT}
   - |
-  ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc \
-    --without-polkit \
-    --without-esx --without-vbox --without-xen --without-libxl \
-    --with-qemu --with-lxc
+    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc \
+                --without-polkit \
+                --without-esx --without-vbox --without-xen --without-libxl \
+                --with-qemu --with-lxc
   - make
   - sudo make install
   - popd
+  - sudo cp libvirtd.sasl /etc/sasl2/libvirt.conf
+  - sudo libvirtd -d -l -f libvirtd.conf
+  - sudo virtlogd -d || true
+  - sudo chmod a+rwx /var/run/libvirt/libvirt-sock*
+  - echo "pass" | sudo saslpasswd2 -p -a libvirt user
 
 script:
   - make
