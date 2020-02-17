@@ -7,10 +7,6 @@ go:
   - "1.12.9"
 
 env:
-  - LIBVIRT=1.2.0  EXT=gz TEST_ARGS=
-  - LIBVIRT=1.2.20 EXT=gz TEST_ARGS="-tags integration"
-  - LIBVIRT=2.5.0  EXT=xz TEST_ARGS="-tags integration"
-  - LIBVIRT=3.6.0  EXT=xz TEST_ARGS="-tags integration"
   - LIBVIRT=4.10.0  EXT=xz TEST_ARGS="-tags integration"
 
 install:
@@ -28,11 +24,6 @@ install:
   - make
   - sudo make install
   - popd
-  - sudo cp libvirtd.sasl /etc/sasl2/libvirt.conf
-  - sudo libvirtd -d -l -f libvirtd.conf
-  - sudo virtlogd -d || true
-  - sudo chmod a+rwx /var/run/libvirt/libvirt-sock*
-  - echo "pass" | sudo saslpasswd2 -p -a libvirt user
 
 script:
   - make
