@@ -40,7 +40,6 @@ func NewServer(listen, staticDir, authFile string) (h *Server) {
 	if h.adminToken == "" {
 		h.LoadToken()
 	}
-
 	if h.adminToken == "" {
 		h.adminToken = libstar.GenToken(64)
 	}
@@ -248,7 +247,7 @@ func (h *Server) GetTarget(req *http.Request) string {
 	}
 	defer conn.Close()
 
-	dom, err := conn.LookupDomainByName(id)
+	dom, err := conn.LookupDomainByUUIDString(id)
 	if err != nil {
 		return ""
 	}

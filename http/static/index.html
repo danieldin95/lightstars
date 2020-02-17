@@ -36,6 +36,9 @@
             padding: 0 6px;
             margin: 8px 2px;
         }
+        .instances {
+            min-height: 400px;
+        }
         .panel-header {
             margin: 13px 0;
             width: 100%;
@@ -103,9 +106,9 @@
                 </table>
             </div>
         </div>
-        <div class="panel">
+        <div class="panel instances">
             <div class="panel-header">
-                <p>The Domain defined on this machine, and total {{ len .Instances }}.</p>
+                <p>The instance defined on this machine, and total {{ len .Instances }}.</p>
             </div>
             <div class="panel-body">
                 <table class="table-display">
@@ -124,7 +127,7 @@
                     <tr>
                         <td>{{ .UUID }}</td>
                         {{ if eq .State "running" }}
-                        <td><a href="/static/console?instance={{ .Name }}">{{ .Name }}</a></td>
+                        <td><a href="/static/console?instance={{ .UUID }}">{{ .Name }}</a></td>
                         {{ else }}
                         <td><a href="#">{{ .Name }}</a></td>
                         {{ end }}
