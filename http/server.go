@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"path"
@@ -26,9 +25,10 @@ type Server struct {
 	router     *mux.Router
 }
 
-func NewServer(listen string) (h *Server) {
+func NewServer(listen, dir string) (h *Server) {
 	h = &Server{
 		listen: listen,
+		pubDir: dir,
 	}
 
 	return
@@ -86,9 +86,13 @@ func (h *Server) Router() *mux.Router {
 }
 
 func (h *Server) LoadRouter() {
-	h.Router().HandleFunc("/", h.HandleIndex)
-	h.Router().HandleFunc("/favicon.ico", h.PubFile)
-	h.Router().Handle("/websockify", websocket.Handler(h.HandleWebsockify))
+	router := h.Router()
+
+	router.PathPrefix("/static/").Handler(
+		http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir))))
+
+	router.HandleFunc("/", h.HandleIndex)
+	router.Handle("/websockify", websocket.Handler(h.HandleWebsockify))
 }
 
 func (h *Server) Start() error {
@@ -140,16 +144,6 @@ func (h *Server) GetFile(name string) string {
 	return fmt.Sprintf("%s%s", h.pubDir, name)
 }
 
-func (h *Server) PubFile(w http.ResponseWriter, r *http.Request) {
-	realpath := h.GetFile(r.URL.Path)
-	contents, err := ioutil.ReadFile(realpath)
-	if err != nil {
-		fmt.Fprintf(w, "404")
-		return
-	}
-	fmt.Fprintf(w, "%s\n", contents)
-}
-
 func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 	file := path.Base(name)
 	tmpl, err := template.New(file).Funcs(template.FuncMap{
@@ -166,7 +160,10 @@ func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}
 }
 
 func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Welcome Index\n"))
+	file := h.GetFile("/index.html")
+	if err := h.ParseFiles(w, file, nil); err != nil {
+		libstar.Error("Server.HandleIndex %s", err)
+	}
 }
 
 func (h *Server) GetTarget(id string) string {
