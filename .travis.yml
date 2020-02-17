@@ -13,7 +13,7 @@ os:
   - linux
 
 before_install:
-  - sudo apt install libvirt-dev
+  - sudo apt install libxen-dev libvirt0 libvirt-dev
 
 script:
   - make
