@@ -115,6 +115,7 @@
                     <thead>
                     <tr>
                         <th>UUID</th>
+                        <th>CPU Time</th>
                         <th>Name</th>
                         <th>CPU</th>
                         <th>Memory</th>
@@ -126,6 +127,7 @@
                     {{ range .Instances }}
                     <tr>
                         <td>{{ .UUID }}</td>
+                        <td>{{ .CpuTime }}ms</td>
                         {{ if eq .State "running" }}
                         <td><a href="/static/console?instance={{ .UUID }}">{{ .Name }}</a></td>
                         {{ else }}

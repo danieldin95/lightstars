@@ -1,30 +1,39 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/libvirt/libvirt-go"
+	"time"
 )
 
 func main() {
-	conn, err := libvirt.NewConnect("qemu:///system")
+	hypervisor := "qemu:///system"
+
+	flag.StringVar(&hypervisor, "hyper", hypervisor, "hypervisor connecting to.")
+	flag.Parse()
+
+	fmt.Printf("%d\n", time.Now().Unix())
+	conn, err := libvirt.NewConnect(hypervisor)
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer conn.Close()
 
-	doms, err := conn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE)
+	doms, err := conn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE)
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	fmt.Printf("%d running domains:\n", len(doms))
 	for _, dom := range doms {
-		name, err := dom.GetName()
-		if err == nil {
+		if name, err := dom.GetName(); err == nil {
 			fmt.Printf("  %s\n", name)
 		}
-		if xml, err := dom.GetXMLDesc(libvirt.DOMAIN_XML_SECURE); err == nil {
-			fmt.Printf("%s", xml)
+		if os, err := dom.GetOSType(); err == nil {
+			fmt.Printf("  %s\n", os)
+		}
+		if xml, err := dom.GetInfo(); err == nil {
+			fmt.Printf("  %s", xml)
 		}
 		dom.Free()
 	}

@@ -192,7 +192,7 @@ func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}
 	tmpl, err := template.New(file).Funcs(template.FuncMap{
 		"prettyBytes":  libstar.PrettyBytes,
 		"prettyKBytes": libstar.PrettyKBytes,
-		"prettyTime":   libstar.PrettyTime,
+		"prettySecs":   libstar.PrettySecs,
 	}).ParseFiles(name)
 	if err != nil {
 		fmt.Fprintf(w, "template.ParseFiles %s", err)

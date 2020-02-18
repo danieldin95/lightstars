@@ -112,7 +112,7 @@ func Netmask2Len(s string) int {
 	return prefixSize
 }
 
-func PrettyTime(t int64) string {
+func PrettySecs(t uint64) string {
 	mins := t / 60
 	if mins < 60 {
 		return fmt.Sprintf("%dm%ds", mins, t%60)
