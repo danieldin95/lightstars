@@ -210,15 +210,14 @@ func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
 		Instances: make([]InstanceSchema, 0, 32),
 	}
 
-	conn, err := libvirt.NewConnect("qemu:///system")
+	hyper, err := libvirtdriver.GetHyper("")
 	if err != nil {
-		fmt.Println(err)
+		libstar.Error("Server.HandleIndex %s", err)
+		return
 	}
-	defer conn.Close()
-
 	index.Version = NewVersionSchema()
-	if doms, err := conn.ListAllDomains(libvirtdriver.DOMAIN_ALL); err == nil {
-		for _, dom := range doms {
+	if domains, err := hyper.ListAllDomains(); err == nil {
+		for _, dom := range domains {
 			instance := NewInstanceSchema(dom)
 			index.Instances = append(index.Instances, instance)
 		}
@@ -241,13 +240,12 @@ func (h *Server) GetTarget(req *http.Request) string {
 		id = ids[0]
 	}
 	libstar.Info("Server.GetTarget %s", id)
-	conn, err := libvirt.NewConnect("qemu:///system")
+	hyper, err := libvirtdriver.GetHyper("")
 	if err != nil {
-		fmt.Println(err)
+		libstar.Error("Server.HandleIndex %s", err)
+		return ""
 	}
-	defer conn.Close()
-
-	dom, err := conn.LookupDomainByUUIDString(id)
+	dom, err := hyper.LookupDomainByUUIDString(id)
 	if err != nil {
 		return ""
 	}
@@ -260,7 +258,8 @@ func (h *Server) GetTarget(req *http.Request) string {
 		return ""
 	}
 	_, port := instXml.VNCDisplay()
-	return "localhost:" + port
+
+	return hyper.Address + ":" + port
 }
 
 func (h *Server) HandleWebsockify(ws *websocket.Conn) {

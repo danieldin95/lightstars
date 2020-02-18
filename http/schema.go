@@ -2,6 +2,7 @@ package http
 
 import "C"
 import (
+	"github.com/danieldin95/lightstar/compute/libvirt"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
 )
@@ -51,7 +52,7 @@ type InstanceSchema struct {
 	MaxMem uint64 `json:"maxMem"`
 }
 
-func NewInstanceSchema(dom libvirt.Domain) InstanceSchema {
+func NewInstanceSchema(dom libvirtdriver.Domain) InstanceSchema {
 	uuid, _ := dom.GetUUIDString()
 	name, _ := dom.GetName()
 	state, _, _ := dom.GetState()
