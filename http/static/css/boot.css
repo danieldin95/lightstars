@@ -1,0 +1,10 @@
+.card {
+    margin: 16px 10px;
+    border-color: #1d2124;
+}
+.card-header {
+    padding: .25rem 1.25rem;
+}
+.dropdown-menu {
+    border-color: #1d2124;
+}

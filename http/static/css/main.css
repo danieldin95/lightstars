@@ -1,0 +1,39 @@
+body {
+    font-family: Arial;
+    font-size: medium;
+    background: #fdfcf8;
+}
+th {
+    font-weight: normal;
+    font-size: medium;
+}
+a {
+    font-size: medium;
+}
+.card-header-cnt {
+    margin-bottom: 10px;
+}
+.running {
+    color: darkgreen;
+}
+.paused, .blocked, .pmsuspended {
+    color: chocolate;
+}
+.nostate, .crashed, .unknown {
+    color: black;
+}
+@media (min-width: 768px) {
+    .dl-horizontal dt {
+        float: left;
+        width: 160px;
+        overflow: hidden;
+        clear: left;
+        /* text-align: right; */
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: normal;
+    }
+    .dl-horizontal dd {
+        margin-left: 180px;
+    }
+}
