@@ -1,8 +1,10 @@
+import Alert from "./widget/alert.js";
+
 export default class Instance {
     constructor() {
         this.instanes = [];
 
-        let instanceDom = $("tr [name=on-instance]")
+        let instanceDom = $("on-instance input");
         for (let i = 0; i < instanceDom.length; i++) {
             instanceDom.eq(i).on("change", this, function(e) {
                 let uuid = $(this).attr("data");
@@ -14,56 +16,71 @@ export default class Instance {
             });
         }
         // register click handle.
-        $("[name=btn-create]").on("click", this, function (e) {
+        $("btn-create").on("click", this, function (e) {
             e.data.create(this);
         });
-        $("[name=btn-start]").on("click", this, function (e) {
+        $("btn-start, btn-more-start").on("click", this, function (e) {
             e.data.start(this);
         });
-        $("[name=btn-shutdown]").on("click", this, function (e) {
+        $("btn-shutdown, btn-more-shutdown").on("click", this, function (e) {
             e.data.shutdown(this);
         });
-        $("[name=btn-more] [name=btn-start]").on("click", this, function (e) {
-            e.data.start(this);
-        });
-        $("[name=btn-more] [name=shutdown]").on("click", this, function (e) {
-            e.data.shutdown(this);
-        });
-        $("[name=btn-more] [name=btn-reset]").on("click", this, function (e) {
+        $("btn-more-reset").on("click", this, function (e) {
             e.data.reset(this);
         });
     }
     start(on) {
-        console.log("start", this.instanes);
         this.instanes.forEach(function (item, index, err) {
             $.post("instance/"+item, {action: 'start'}, function (data, status) {
-                    console.log("success", status, data);
-                })
-                .fail(function (e) {
-                    $("#errors").append(
-                        `<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            ${this.type} ${this.url}: ${e.responseText}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>`);
-                    console.log(this);
-                })
+                console.log("success", status, data);
+            }).fail(function (e) {
+                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+            });
         });
     }
     shutdown(on) {
-        console.log("shutdown", this.instanes);
+        this.instanes.forEach(function (item, index, err) {
+            $.post("instance/"+item, {action: 'shutdown'}, function (data, status) {
+                console.log("success", status, data);
+            }).fail(function (e) {
+                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+            });
+        });
     }
     reset(on) {
-        console.log("reset", this.instanes);
+        this.instanes.forEach(function (item, index, err) {
+            $.post("instance/"+item, {action: 'reset'}, function (data, status) {
+                console.log("success", status, data);
+            }).fail(function (e) {
+                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+            });
+        });
     }
     suspend(on) {
-        console.log("suspend", this.instanes);
+        this.instanes.forEach(function (item, index, err) {
+            $.post("instance/"+item, {action: 'suspend'}, function (data, status) {
+                console.log("success", status, data);
+            }).fail(function (e) {
+                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+            });
+        });
     }
     resume(on) {
-        console.log("shutdown", this.shutdown());
+        this.instanes.forEach(function (item, index, err) {
+            $.post("instance/"+item, {action: 'resume'}, function (data, status) {
+                console.log("success", status, data);
+            }).fail(function (e) {
+                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+            })
+        });
     }
     create (on) {
-        console.log("shutdown", this.instanes);
+        this.instanes.forEach(function (item, index, err) {
+            $.post("instance/"+item, {action: 'create'}, function (data, status) {
+                console.log("success", status, data);
+            }).fail(function (e) {
+                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+            });
+        });
     }
 }

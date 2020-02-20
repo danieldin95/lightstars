@@ -24,7 +24,8 @@
                 </dl>
             </div>
         </div>
-        <div id="errors" class="card-no-border">
+        <div class="card-no-border">
+            <errors></errors>
         </div>
         <div name="instances" class="card">
             <div class="card-header">
@@ -35,13 +36,19 @@
             <div class="card-body">
                 <div class="card-header-cnt">
                     <div class="btn-group">
-                        <button name="btn-create" type="button" class="btn btn-outline-dark btn-sm">create instance</button>
+                        <btn-create>
+                            <button name="" type="button" class="btn btn-outline-dark btn-sm">create instance</button>
+                        </btn-create>
                     </div>
                     <div class="btn-group">
-                        <button name="btn-start" type="button" class="btn btn-outline-dark btn-sm">start</button>
+                        <btn-start>
+                            <button name="" type="button" class="btn btn-outline-dark btn-sm">start</button>
+                        </btn-start>
                     </div>
                     <div class="btn-group">
-                        <button name="btn-shutdown" type="button" class="btn btn-outline-dark btn-sm">shutdown</button>
+                        <btn-shutdown>
+                            <button name="btn-shutdown" type="button" class="btn btn-outline-dark btn-sm">shutdown</button>
+                        </btn-shutdown>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
@@ -49,12 +56,22 @@
                             operations
                         </button>
                         <div name="btn-more" class="dropdown-menu">
-                            <a name="btn-start" class="dropdown-item" href="#">start</a>
-                            <a name="btn-shutdown" class="dropdown-item" href="#">shutdown</a>
-                            <a name="btn-reset" class="dropdown-item" href="#">reset</a>
+                            <btn-more-start>
+                                <a name="btn-start" class="dropdown-item" href="#">start</a>
+                            </btn-more-start>
+                            <btn-more-shutdown>
+                                <a name="btn-shutdown" class="dropdown-item" href="#">shutdown</a>
+                            </btn-more-shutdown>
+                            <btn-more-reset>
+                                <a name="btn-reset" class="dropdown-item" href="#">reset</a>
+                            </btn-more-reset>
                             <div class="dropdown-divider"></div>
-                            <a name="btn-suspend" class="dropdown-item" href="#">suspend</a>
-                            <a name="btn-resume" class="dropdown-item" href="#">resume</a>
+                            <btn-more-suspend>
+                                <a name="btn-suspend" class="dropdown-item" href="#">suspend</a>
+                            </btn-more-suspend>
+                            <btn-more-resume>
+                                <a name="btn-resume" class="dropdown-item" href="#">resume</a>
+                            </btn-more-resume>
                         </div>
                     </div>
                 </div>
@@ -74,7 +91,11 @@
                         <tbody>
                         {{ range .Instances }}
                         <tr>
-                            <td><input name="on-instance" type="checkbox" aria-label="select instance" data="{{ .UUID }}"></td>
+                            <td>
+                                <on-instance>
+                                    <input name="on-instance" type="checkbox" aria-label="select instance" data="{{ .UUID }}">
+                                </on-instance>
+                            </td>
                             {{ if eq .State "running" }}
                             <td><a class="text-decoration-none" href="/static/console?instance={{ .UUID }}">{{ .UUID }}</a></td>
                             {{ else }}
