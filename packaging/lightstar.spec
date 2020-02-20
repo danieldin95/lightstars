@@ -26,7 +26,7 @@ OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/ca -auth:file
 EOF
 
 mkdir -p %{buildroot}/usr/lib/systemd/system
-cp %_source_dir/resource/lightstar.service %{buildroot}/usr/lib/systemd/system
+cp %_source_dir/packaging/lightstar.service %{buildroot}/usr/lib/systemd/system
 
 mkdir -p %{buildroot}/var/lightstar
 cp -R %_source_dir/resource/ca %{buildroot}/var/lightstar

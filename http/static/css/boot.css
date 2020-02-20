@@ -14,3 +14,12 @@
 .btn-sm {
     font-size: small;
 }
+
+.alert {
+    margin-bottom: .25rem;
+    padding: 0.5rem 1.25rem;
+}
+
+.alert-dismissible .close {
+    padding: 0.5rem 1.25rem;
+}

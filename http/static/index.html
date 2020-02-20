@@ -96,72 +96,8 @@
     <script src="static/asset/jquery-3.3.1.js"></script>
     <script src="static/asset/popper.js/1.12.9/umd/popper.js"></script>
     <script src="static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
-    <script>
-        class Instance {
-            constructor() {
-                this.instanes = [];
-
-                let instances = $("tr [name=on-instance]")
-                for (let i = 0; i < instances.length; i++) {
-                    instances.eq(i).on("change", this, function(e) {
-                        let uuid = $(this).attr("data");
-                        if ($(this).prop("checked")) {
-                            e.data.instanes.push(uuid)
-                        } else {
-                            e.data.instanes = e.data.instanes.filter(v => v != uuid);
-                        }
-                        //console.log(e.data.instanes);
-                    });
-                }
-
-                $("[name=btn-create]").on("click", this, function (e) {
-                    e.data.start(this);
-                });
-                $("[name=btn-start], [name=btn-more] [name=start]").on("click", this, function (e) {
-                    e.data.start(this);
-                });
-                $("[name=btn-shutdown], [name=btn-more] [name=shutdown]").on("click", this, function (e) {
-                    e.data.shutdown(this);
-                });
-                $("[name=btn-reset]").on("click", this, function (e) {
-                    e.data.reset(this);
-                });
-            }
-            start(on) {
-                console.log("start", this.instanes);
-                this.instanes.forEach(function (item, index, err) {
-                    $.post("instance/"+item, {action: 'start'}, function (data, status) {
-                            console.log("success", status, data);
-                        })
-                        .fail(function (e) {
-                            $("#errors").append(`
-                                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            ${this.type} ${this.url}: ${e.responseText}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`
-                            );
-                            console.log(this);
-                        })
-                });
-            }
-            shutdown(on) {
-                console.log("shutdown", this.instanes);
-            }
-            reset(on) {
-                console.log("reset", this.instanes);
-            }
-            suspend(on) {
-                console.log("suspend", this.instanes);
-            }
-            resume(on) {
-                console.log("shutdown", this.shutdown());
-            }
-            create (on) {
-                console.log("shutdown", this.instanes);
-            }
-        }
+    <script type="module">
+        import Instance from './static/js/instance.js';
         new Instance();
     </script>
 </body>
