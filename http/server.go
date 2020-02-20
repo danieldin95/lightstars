@@ -173,6 +173,11 @@ func (h *Server) ResponseJson(w http.ResponseWriter, v interface{}) {
 	}
 }
 
+func (h *Server) ResponseXml(w http.ResponseWriter, v string) {
+	w.Header().Set("Content-Type", "application/xml")
+	w.Write([]byte(v))
+}
+
 func (h *Server) ResponseMsg(w http.ResponseWriter, code int, message string) {
 	ret := struct {
 		Code    int    `json:"code"`
@@ -229,17 +234,23 @@ func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Server) GetTarget(req *http.Request) string {
-	var id string
-
+func (h *Server) GetQueryOne(req *http.Request, name string) string {
 	query := req.URL.Query()
-	if tgt, ok := query["target"]; ok {
-		return tgt[0]
+	if values, ok := query[name]; ok {
+		return values[0]
 	}
-	ids, ok := query["instance"]
-	if ok {
-		id = ids[0]
+	return ""
+}
+
+func (h *Server) GetTarget(req *http.Request) string {
+	if t := h.GetQueryOne(req, "target"); t != "" {
+		return t
 	}
+	id := h.GetQueryOne(req, "instance")
+	if id == "" {
+		return ""
+	}
+
 	libstar.Info("Server.GetTarget %s", id)
 	hyper, err := libvirtdriver.GetHyper("")
 	if err != nil {
@@ -311,7 +322,18 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	h.ResponseJson(w, libvirtdriver.NewDomainXMLFromDom(dom, true))
+
+	format := h.GetQueryOne(r, "format")
+	if format == "xml" {
+		xmlDesc, err := dom.GetXMLDesc(false)
+		if err == nil {
+			h.ResponseXml(w, xmlDesc)
+		} else {
+			h.ResponseXml(w, "<error>"+err.Error()+"</error>")
+		}
+	} else {
+		h.ResponseJson(w, libvirtdriver.NewDomainXMLFromDom(dom, true))
+	}
 }
 
 func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
@@ -360,7 +382,7 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 
 	switch conf.Action {
 	case "start":
-		xmlData, err := dom.GetXMLDesc(0)
+		xmlData, err := dom.GetXMLDesc(false)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -378,7 +400,7 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	case "shutdown":
-		xmlData, err := dom.GetXMLDesc(0)
+		xmlData, err := dom.GetXMLDesc(false)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

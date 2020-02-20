@@ -6,3 +6,9 @@ github.com/gorilla/websocket v1.4.1 h1:q7AeDBpnBk8AogcD4DSag/Ukw/KV+YhzLj2bP5HvK
 github.com/gorilla/websocket v1.4.1/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/libvirt/libvirt-go v5.10.0+incompatible h1:01fwkdUHH2hk4YyFNCr48OvSGqXYLzp9cofUpeyeLNc=
 github.com/libvirt/libvirt-go v5.10.0+incompatible/go.mod h1:34zsnB4iGeOv7Byj6qotuW8Ya4v4Tr43ttjz/F0wjLE=
+github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+github.com/quadrifoglio/go-qemu v0.0.0-20170212183343-c95730abf426 h1:ia4LPjgmxjPARk1s3o0nmVNUfdw2A0m/ft4ibyUokyY=
+github.com/quadrifoglio/go-qemu v0.0.0-20170212183343-c95730abf426/go.mod h1:P9Eay2JynPJbHPsIDtPnQ9O+pmAZXqX/CYZ/SFpWTcs=
+github.com/zchee/go-qcow2 v0.0.0-20170102190316-9a991fd172f0 h1:dyzM+LWIb64QGUsDUZ2y6e2NkkqejOv8PEv05ajx1co=
+github.com/zchee/go-qcow2 v0.0.0-20170102190316-9a991fd172f0/go.mod h1:XO8ymgJzGFNntEd5L8yc0l1wyz3T5DbQD4lguyldfMA=

@@ -14,29 +14,39 @@ type HyperVisor struct {
 	Conn    *libvirt.Connect
 }
 
+func parseQemuTCP(name string) (address, path string) {
+	if strings.Contains(name, "://") {
+		addrs := strings.SplitN(name, "://", 2)[1]
+		address = strings.SplitN(addrs, "/", 2)[0]
+		if strings.Contains(addrs, "/") {
+			path = strings.SplitN(addrs, "/", 2)[1]
+		}
+	}
+	return address, path
+}
+
+func parseQemuSSH(name string) (address, path string) {
+	if strings.Contains(name, "://") {
+		addrs := strings.SplitN(name, "://", 2)[1]
+		address = strings.SplitN(addrs, "/", 2)[0]
+		if strings.Contains(addrs, "/") {
+			path = strings.SplitN(addrs, "/", 2)[1]
+		}
+		if strings.Contains(address, "@") {
+			address = strings.SplitN(address, "@", 2)[1]
+		}
+	}
+	return address, path
+}
+
 func (h *HyperVisor) Init() {
 	if h.Name != "" {
 		h.Schema = strings.SplitN(h.Name, ":", 2)[0]
 		switch h.Schema {
 		case "qemu+ssh":
-			if strings.Contains(h.Name, "://") {
-				address := strings.SplitN(h.Name, "://", 2)[1]
-				h.Address = strings.SplitN(address, "/", 2)[0]
-				if strings.Contains(address, "/") {
-					h.Path = strings.SplitN(address, "/", 2)[1]
-				}
-				if strings.Contains(h.Address, "@") {
-					h.Address = strings.SplitN(h.Address, "@", 2)[1]
-				}
-			}
+			h.Address, h.Path = parseQemuSSH(h.Name)
 		case "qemu+tcp", "qemu+tls":
-			if strings.Contains(h.Name, "://") {
-				address := strings.SplitN(h.Name, "://", 2)[1]
-				h.Address = strings.SplitN(address, "/", 2)[0]
-				if strings.Contains(address, "/") {
-					h.Path = strings.SplitN(address, "/", 2)[1]
-				}
-			}
+			h.Address, h.Path = parseQemuTCP(h.Name)
 		default:
 			h.Address = "localhost"
 			h.Path = "system"
@@ -57,7 +67,7 @@ func (h *HyperVisor) ListAllDomains() ([]Domain, error) {
 	}
 	newDomains := make([]Domain, 0, 32)
 	for _, m := range domains {
-		newDomains = append(newDomains, Domain{m})
+		newDomains = append(newDomains, *NewDomainFromVir(&m))
 	}
 	return newDomains, nil
 }
@@ -71,7 +81,7 @@ func (h *HyperVisor) LookupDomainByUUIDString(id string) (*Domain, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Domain{*domain}, nil
+	return NewDomainFromVir(domain), nil
 }
 
 func (h *HyperVisor) LookupDomainByUUIDName(id string) (*Domain, error) {
@@ -85,9 +95,9 @@ func (h *HyperVisor) LookupDomainByUUIDName(id string) (*Domain, error) {
 		if err != nil {
 			return nil, err
 		}
-		return &Domain{*domain}, nil
+		return NewDomainFromVir(domain), nil
 	}
-	return &Domain{*domain}, nil
+	return NewDomainFromVir(domain), nil
 }
 
 func (h *HyperVisor) LookupDomainByName(id string) (*Domain, error) {

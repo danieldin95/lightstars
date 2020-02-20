@@ -45,18 +45,17 @@ func InstanceState2Str(state libvirt.DomainState) string {
 }
 
 type InstanceSchema struct {
-	UUID   string  `json:"uuid"`
-	Name   string  `json:"name"`
-	State  string  `json:"state"`
-	MaxCpu uint    `json:"maxCpu"`
-	MaxMem uint64  `json:"maxMem"` // Kbytes
-	Memory uint64  `json:"memory"` // KBytes
+	UUID    string `json:"uuid"`
+	Name    string `json:"name"`
+	State   string `json:"state"`
+	MaxCpu  uint   `json:"maxCpu"`
+	MaxMem  uint64 `json:"maxMem"`  // Kbytes
+	Memory  uint64 `json:"memory"`  // KBytes
 	CpuTime uint64 `json:"cpuTime"` // MicroSeconds
 }
 
 func NewInstanceSchema(dom libvirtdriver.Domain) InstanceSchema {
-	object := InstanceSchema{
-	}
+	object := InstanceSchema{}
 	object.UUID, _ = dom.GetUUIDString()
 	object.Name, _ = dom.GetName()
 	if info, err := dom.GetInfo(); err == nil {

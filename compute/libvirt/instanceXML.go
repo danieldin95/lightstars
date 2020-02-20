@@ -3,7 +3,6 @@ package libvirtdriver
 import (
 	"encoding/xml"
 	"github.com/danieldin95/lightstar/libstar"
-	"github.com/libvirt/libvirt-go"
 )
 
 type DomainXML struct {
@@ -22,11 +21,7 @@ func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
 	if dom == nil {
 		return nil
 	}
-	if secure {
-		xmlData, err = dom.GetXMLDesc(libvirt.DOMAIN_XML_SECURE)
-	} else {
-		xmlData, err = dom.GetXMLDesc(0)
-	}
+	xmlData, err = dom.GetXMLDesc(secure)
 	if err != nil {
 		return nil
 	}
@@ -60,6 +55,7 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 type DevicesXML struct {
 	XMLName  xml.Name      `xml:"devices" json:"-"`
 	Graphics []GraphicsXML `xml:"graphics" json:"graphics"`
+	Disks    []DiskXML     `xml:"disk" json:"disk"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -80,6 +76,65 @@ type GraphicsXML struct {
 func (graphics *GraphicsXML) Decode(xmlData string) error {
 	if err := xml.Unmarshal([]byte(xmlData), graphics); err != nil {
 		libstar.Error("GraphicsXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type DiskXML struct {
+	XMLName xml.Name      `xml:"disk" json:"-"`
+	Type    string        `xml:"type,attr" json:"type"`
+	Device  string        `xml:"device,attr" json:"device"`
+	Driver  DiskDriverXML `xml:"driver" json:"driver"`
+	Source  DiskSourceXML `xml:"source" json:"source"`
+	Target  DiskTargetXML `xml:"target" json:"target"`
+}
+
+func (disk *DiskXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), disk); err != nil {
+		libstar.Error("DiskXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type DiskDriverXML struct {
+	XMLName xml.Name `xml:"driver" json:"-"`
+	Type    string   `xml:"type,attr" json:"type"`
+	Name    string   `xml:"name,attr" json:"name"`
+}
+
+func (drv *DiskDriverXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), drv); err != nil {
+		libstar.Error("DiskDriverXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type DiskSourceXML struct {
+	XMLName xml.Name `xml:"source" json:"-"`
+	Name    string   `xml:"file,attr" json:"file"`
+	Device  string   `xml:"device,attr" json:"device"`
+}
+
+func (src *DiskSourceXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), src); err != nil {
+		libstar.Error("DiskSourceXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type DiskTargetXML struct {
+	XMLName xml.Name `xml:"target" json:"-"`
+	Bus     string   `xml:"bus,attr" json:"bus"`
+	Dev     string   `xml:"dev,attr" json:"dev"`
+}
+
+func (tgt *DiskTargetXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), tgt); err != nil {
+		libstar.Error("DiskTargetXML.Decode %s", err)
 		return err
 	}
 	return nil
