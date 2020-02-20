@@ -73,3 +73,7 @@ type IndexSchema struct {
 	Version   VersionSchema    `json:"version"`
 	Instances []InstanceSchema `json:"instances"`
 }
+
+type InstanceConfSchema struct {
+	Action string `json:"action"` // If is "", means not action.
+}

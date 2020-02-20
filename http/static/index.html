@@ -37,49 +37,60 @@
                 <div class="card-header-cnt">
                     <div class="btn-group">
                         <instance-create>
-                            <button name="" type="button" class="btn btn-outline-dark btn-sm">create instance</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm">create instance</button>
                         </instance-create>
                     </div>
                     <div class="btn-group">
                         <instance-start>
-                            <button name="" type="button" class="btn btn-outline-dark btn-sm">start</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm">start</button>
                         </instance-start>
                     </div>
                     <div class="btn-group">
                         <instance-shutdown>
-                            <button name="btn-shutdown" type="button" class="btn btn-outline-dark btn-sm">shutdown</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm">shutdown</button>
                         </instance-shutdown>
                     </div>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            operations
-                        </button>
-                        <div name="btn-more" class="dropdown-menu">
-                            <instance-more-start>
-                                <a name="instance-start" class="dropdown-item" href="#">start</a>
-                            </instance-more-start>
-                            <instance-more-shutdown>
-                                <a name="instance-shutdown" class="dropdown-item" href="#">shutdown</a>
-                            </instance-more-shutdown>
-                            <instance-more-reset>
-                                <a name="instance-reset" class="dropdown-item" href="#">reset</a>
-                            </instance-more-reset>
-                            <div class="dropdown-divider"></div>
-                            <instance-more-suspend>
-                                <a name="instance-suspend" class="dropdown-item" href="#">suspend</a>
-                            </instance-more-suspend>
-                            <instance-more-resume>
-                                <a name="instance-resume" class="dropdown-item" href="#">resume</a>
-                            </instance-more-resume>
-                        </div>
+                        <instance-refresh>
+                            <a type="button" class="btn btn-outline-dark btn-sm" href=".">refresh</a>
+                        </instance-refresh>
+                    </div>
+                    <div class="btn-group">
+                        <instance-more>
+                            <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                operations
+                            </button>
+                            <div name="btn-more" class="dropdown-menu">
+                                <instance-more-start>
+                                    <a class="dropdown-item" href="#">start</a>
+                                </instance-more-start>
+                                <instance-more-shutdown>
+                                    <a class="dropdown-item" href="#">shutdown</a>
+                                </instance-more-shutdown>
+                                <instance-more-reset>
+                                    <a class="dropdown-item" href="#">reset</a>
+                                </instance-more-reset>
+                                <div class="dropdown-divider"></div>
+                                <instance-more-suspend>
+                                    <a class="dropdown-item" href="#">suspend</a>
+                                </instance-more-suspend>
+                                <instance-more-resume>
+                                    <a class="dropdown-item" href="#">resume</a>
+                                </instance-more-resume>
+                            </div>
+                        </instance-more>
                     </div>
                 </div>
                 <div class="l-content-body">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th></th>
+                            <th>
+                                <instance-on-all>
+                                    <input type="checkbox" aria-label="select all instances">
+                                </instance-on-all>
+                            </th>
                             <th>UUID</th>
                             <th>CPU Time</th>
                             <th>Name</th>
@@ -92,15 +103,15 @@
                         {{ range .Instances }}
                         <tr>
                             <td>
-                                <instance-on>
-                                    <input type="checkbox" aria-label="select instance" data="{{ .UUID }}">
-                                </instance-on>
+                                <instance-on-one>
+                                    <input type="checkbox" aria-label="select {{ .Name }}" data="{{ .UUID }}">
+                                </instance-on-one>
                             </td>
                             <td>
                                 {{ if eq .State "running" }}
                                 <a class="text-decoration-none" href="/static/console?instance={{ .UUID }}">{{ .UUID }}</a>
                                 {{ else }}
-                                <a class="text-decoration-none" href="#">{{ .Name }}</a>
+                                <a class="text-decoration-none" href="#">{{ .UUID }}</a>
                                 {{ end }}
                             </td>
                             <td>{{ .CpuTime }}ms</td>
@@ -114,6 +125,9 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="card-no-border">
+            <infos></infos>
         </div>
     </div>
     <script src="static/asset/jquery-3.3.1.js"></script>

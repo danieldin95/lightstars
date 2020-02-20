@@ -3,15 +3,38 @@ package libvirtdriver
 import (
 	"encoding/xml"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/libvirt/libvirt-go"
 )
 
 type DomainXML struct {
-	XMLName xml.Name   `xml:"domain"`
-	Id      string     `xml:"id,attr"`
-	Type    string     `xml:"type,attr"`
-	Name    string     `xml:"name"`
-	Uuid    string     `xml:"uuid"`
-	Devices DevicesXML `xml:"devices"`
+	XMLName xml.Name   `xml:"domain" json:"-"`
+	Id      string     `xml:"id,attr" json:"id"`
+	Type    string     `xml:"type,attr" json:"type"`
+	Name    string     `xml:"name" json:"name"`
+	Uuid    string     `xml:"uuid" json:"uuid"`
+	Devices DevicesXML `xml:"devices" json:"devices"`
+}
+
+func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
+	var xmlData string
+	var err error
+
+	if dom == nil {
+		return nil
+	}
+	if secure {
+		xmlData, err = dom.GetXMLDesc(libvirt.DOMAIN_XML_SECURE)
+	} else {
+		xmlData, err = dom.GetXMLDesc(0)
+	}
+	if err != nil {
+		return nil
+	}
+	instXml := &DomainXML{}
+	if err := instXml.Decode(xmlData); err != nil {
+		return nil
+	}
+	return instXml
 }
 
 func (domain *DomainXML) Decode(xmlData string) error {
@@ -35,8 +58,8 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 }
 
 type DevicesXML struct {
-	XMLName  xml.Name      `xml:"devices"`
-	Graphics []GraphicsXML `xml:"graphics"`
+	XMLName  xml.Name      `xml:"devices" json:"-"`
+	Graphics []GraphicsXML `xml:"graphics" json:"graphics"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -48,10 +71,10 @@ func (devices *DevicesXML) Decode(xmlData string) error {
 }
 
 type GraphicsXML struct {
-	XMLName xml.Name `xml:"graphics"`
-	Type    string   `xml:"type,attr"`
-	Port    string   `xml:"port,attr"`
-	Listen  string   `xml:"listen,attr"`
+	XMLName xml.Name `xml:"graphics" json:"-"`
+	Type    string   `xml:"type,attr" json:"type"`
+	Port    string   `xml:"port,attr" json:"port"`
+	Listen  string   `xml:"listen,attr" json:"listen"`
 }
 
 func (graphics *GraphicsXML) Decode(xmlData string) error {

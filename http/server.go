@@ -7,7 +7,6 @@ import (
 	"github.com/danieldin95/lightstar/compute/libvirt"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/gorilla/mux"
-	"github.com/libvirt/libvirt-go"
 	"golang.org/x/net/websocket"
 	"io"
 	"io/ioutil"
@@ -130,12 +129,14 @@ func (h *Server) Router() *mux.Router {
 
 func (h *Server) LoadRouter() {
 	router := h.Router()
-
-	router.PathPrefix("/static/").Handler(
-		http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir))))
+	staticFile := http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir)))
 
 	router.HandleFunc("/", h.HandleIndex)
-	router.Handle("/websockify", websocket.Handler(h.HandleWebsockify))
+	router.PathPrefix("/static/").Handler(staticFile)
+	router.Handle("/websockify", websocket.Handler(h.HandleWebSockify))
+	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
+	router.HandleFunc("/api/instance/{id}", h.AddInstance).Methods("POST")
+	router.HandleFunc("/api/instance/{id}", h.ModInstance).Methods("PUT")
 }
 
 func (h *Server) Start() error {
@@ -249,37 +250,34 @@ func (h *Server) GetTarget(req *http.Request) string {
 	if err != nil {
 		return ""
 	}
-	xml, err := dom.GetXMLDesc(libvirt.DOMAIN_XML_SECURE)
-	if err != nil {
+	instXml := libvirtdriver.NewDomainXMLFromDom(dom, true)
+	if instXml == nil {
 		return ""
 	}
-	instXml := libvirtdriver.DomainXML{}
-	if err := instXml.Decode(xml); err != nil {
-		return ""
+	if _, port := instXml.VNCDisplay(); port != "" {
+		return hyper.Address + ":" + port
 	}
-	_, port := instXml.VNCDisplay()
-
-	return hyper.Address + ":" + port
+	return ""
 }
 
-func (h *Server) HandleWebsockify(ws *websocket.Conn) {
+func (h *Server) HandleWebSockify(ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
 
 	target := h.GetTarget(ws.Request())
 	if target == "" {
-		libstar.Error("Server.HandleWebsockify target not found.")
+		libstar.Error("Server.HandleWebSockify target not found.")
 		return
 	}
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("Server.HandleWebsockify dial %s", err)
+		libstar.Error("Server.HandleWebSockify dial %s", err)
 		return
 	}
 	defer conn.Close()
 
-	libstar.Info("Server.HandleWebsockify request from %s", ws.RemoteAddr())
-	libstar.Info("Server.HandleWebsockify connection to %s", conn.LocalAddr())
+	libstar.Info("Server.HandleWebSockify request from %s", ws.RemoteAddr())
+	libstar.Info("Server.HandleWebSockify connection to %s", conn.LocalAddr())
 
 	wait := sync.WaitGroup{}
 	wait.Add(2)
@@ -287,14 +285,121 @@ func (h *Server) HandleWebsockify(ws *websocket.Conn) {
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Error("Server.HandleWebsockify copy from ws %s", err)
+			libstar.Error("Server.HandleWebSockify copy from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Error("Server.HandleWebsockify copy from target %s", err)
+			libstar.Error("Server.HandleWebSockify copy from target %s", err)
 		}
 	}()
 	wait.Wait()
+}
+
+func (h *Server) GetArg(r *http.Request, name string) (string, bool) {
+	vars := mux.Vars(r)
+	value, ok := vars[name]
+	return value, ok
+}
+
+func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := h.GetArg(r, "id")
+
+	dom, err := libvirtdriver.LookupDomainByUUIDString("", uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	h.ResponseJson(w, libvirtdriver.NewDomainXMLFromDom(dom, true))
+}
+
+func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
+	//defer r.Body.Close()
+	//body, err := ioutil.ReadAll(r.Body)
+	//if err != nil {
+	//	http.Error(w, err.Error(), http.StatusInternalServerError)
+	//	return
+	//}
+	//
+	//user := &UserSchema{}
+	//if err := json.Unmarshal([]byte(body), user); err != nil {
+	//	http.Error(w, err.Error(), http.StatusInternalServerError)
+	//	return
+	//}
+	//
+	//h.ResponseMsg(w, 0, "")
+}
+
+func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := h.GetArg(r, "id")
+
+	hyper, err := libvirtdriver.GetHyper("")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	dom, err := hyper.LookupDomainByUUIDName(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	conf := &InstanceConfSchema{}
+	if err := json.Unmarshal([]byte(body), conf); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	switch conf.Action {
+	case "start":
+		xmlData, err := dom.GetXMLDesc(0)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if err := dom.Undefine(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if dom, err := hyper.DomainDefineXML(xmlData); err == nil {
+			if err := dom.Create(); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	case "shutdown":
+		xmlData, err := dom.GetXMLDesc(0)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if err := dom.Shutdown(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		if _, err := hyper.DomainDefineXML(xmlData); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	case "suspend":
+		if err := dom.Suspend(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	case "resume":
+		if err := dom.Resume(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+	h.ResponseMsg(w, 0, "")
 }

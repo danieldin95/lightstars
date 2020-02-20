@@ -74,6 +74,46 @@ func (h *HyperVisor) LookupDomainByUUIDString(id string) (*Domain, error) {
 	return &Domain{*domain}, nil
 }
 
+func (h *HyperVisor) LookupDomainByUUIDName(id string) (*Domain, error) {
+	if h.Conn == nil {
+		return nil, libstar.NewErr("not connected")
+	}
+
+	domain, err := hyper.Conn.LookupDomainByUUIDString(id)
+	if err != nil {
+		domain, err := hyper.Conn.LookupDomainByName(id)
+		if err != nil {
+			return nil, err
+		}
+		return &Domain{*domain}, nil
+	}
+	return &Domain{*domain}, nil
+}
+
+func (h *HyperVisor) LookupDomainByName(id string) (*Domain, error) {
+	if h.Conn == nil {
+		return nil, libstar.NewErr("not connected")
+	}
+
+	domain, err := hyper.Conn.LookupDomainByName(id)
+	if err != nil {
+		return nil, err
+	}
+	return &Domain{*domain}, nil
+}
+
+func (h *HyperVisor) DomainDefineXML(xmlConfig string) (*Domain, error) {
+	if h.Conn == nil {
+		return nil, libstar.NewErr("not connected")
+	}
+
+	domain, err := h.Conn.DomainDefineXML(xmlConfig)
+	if err != nil {
+		return nil, err
+	}
+	return &Domain{*domain}, nil
+}
+
 var hyper = HyperVisor{
 	Name:    "qemu:///system",
 	Address: "localhost",
@@ -111,4 +151,28 @@ func CloseHyper(name string) {
 
 func init() {
 	hyper.Init()
+}
+
+func LookupDomainByUUIDString(name, uuid string) (*Domain, error) {
+	hyper, err := GetHyper(name)
+	if err != nil {
+		return nil, err
+	}
+	dom, err := hyper.LookupDomainByUUIDString(uuid)
+	if err != nil {
+		return nil, err
+	}
+	return dom, nil
+}
+
+func LookupDomainByUUIDName(name, uuid string) (*Domain, error) {
+	hyper, err := GetHyper(name)
+	if err != nil {
+		return nil, err
+	}
+	dom, err := hyper.LookupDomainByUUIDName(uuid)
+	if err != nil {
+		return nil, err
+	}
+	return dom, nil
 }
