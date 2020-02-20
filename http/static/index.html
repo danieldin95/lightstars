@@ -36,19 +36,19 @@
             <div class="card-body">
                 <div class="card-header-cnt">
                     <div class="btn-group">
-                        <btn-create>
+                        <instance-create>
                             <button name="" type="button" class="btn btn-outline-dark btn-sm">create instance</button>
-                        </btn-create>
+                        </instance-create>
                     </div>
                     <div class="btn-group">
-                        <btn-start>
+                        <instance-start>
                             <button name="" type="button" class="btn btn-outline-dark btn-sm">start</button>
-                        </btn-start>
+                        </instance-start>
                     </div>
                     <div class="btn-group">
-                        <btn-shutdown>
+                        <instance-shutdown>
                             <button name="btn-shutdown" type="button" class="btn btn-outline-dark btn-sm">shutdown</button>
-                        </btn-shutdown>
+                        </instance-shutdown>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
@@ -56,22 +56,22 @@
                             operations
                         </button>
                         <div name="btn-more" class="dropdown-menu">
-                            <btn-more-start>
-                                <a name="btn-start" class="dropdown-item" href="#">start</a>
-                            </btn-more-start>
-                            <btn-more-shutdown>
-                                <a name="btn-shutdown" class="dropdown-item" href="#">shutdown</a>
-                            </btn-more-shutdown>
-                            <btn-more-reset>
-                                <a name="btn-reset" class="dropdown-item" href="#">reset</a>
-                            </btn-more-reset>
+                            <instance-more-start>
+                                <a name="instance-start" class="dropdown-item" href="#">start</a>
+                            </instance-more-start>
+                            <instance-more-shutdown>
+                                <a name="instance-shutdown" class="dropdown-item" href="#">shutdown</a>
+                            </instance-more-shutdown>
+                            <instance-more-reset>
+                                <a name="instance-reset" class="dropdown-item" href="#">reset</a>
+                            </instance-more-reset>
                             <div class="dropdown-divider"></div>
-                            <btn-more-suspend>
-                                <a name="btn-suspend" class="dropdown-item" href="#">suspend</a>
-                            </btn-more-suspend>
-                            <btn-more-resume>
-                                <a name="btn-resume" class="dropdown-item" href="#">resume</a>
-                            </btn-more-resume>
+                            <instance-more-suspend>
+                                <a name="instance-suspend" class="dropdown-item" href="#">suspend</a>
+                            </instance-more-suspend>
+                            <instance-more-resume>
+                                <a name="instance-resume" class="dropdown-item" href="#">resume</a>
+                            </instance-more-resume>
                         </div>
                     </div>
                 </div>
@@ -92,15 +92,17 @@
                         {{ range .Instances }}
                         <tr>
                             <td>
-                                <on-instance>
-                                    <input name="on-instance" type="checkbox" aria-label="select instance" data="{{ .UUID }}">
-                                </on-instance>
+                                <instance-on>
+                                    <input type="checkbox" aria-label="select instance" data="{{ .UUID }}">
+                                </instance-on>
                             </td>
-                            {{ if eq .State "running" }}
-                            <td><a class="text-decoration-none" href="/static/console?instance={{ .UUID }}">{{ .UUID }}</a></td>
-                            {{ else }}
-                            <td><a class="text-decoration-none" href="#">{{ .Name }}</a></td>
-                            {{ end }}
+                            <td>
+                                {{ if eq .State "running" }}
+                                <a class="text-decoration-none" href="/static/console?instance={{ .UUID }}">{{ .UUID }}</a>
+                                {{ else }}
+                                <a class="text-decoration-none" href="#">{{ .Name }}</a>
+                                {{ end }}
+                            </td>
                             <td>{{ .CpuTime }}ms</td>
                             <td>{{ .Name }}</td>
                             <td>{{ .MaxCpu }}</td>

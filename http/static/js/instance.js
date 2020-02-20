@@ -1,10 +1,11 @@
-import Alert from "./widget/alert.js";
+import {AlertDanger} from "./widget/alert.js";
+import {AlertWarn} from "./widget/alert.js";
 
 export default class Instance {
     constructor() {
         this.instanes = [];
 
-        let instanceDom = $("on-instance input");
+        let instanceDom = $("instance-on input");
         for (let i = 0; i < instanceDom.length; i++) {
             instanceDom.eq(i).on("change", this, function(e) {
                 let uuid = $(this).attr("data");
@@ -15,17 +16,17 @@ export default class Instance {
                 }
             });
         }
-        // register click handle.
-        $("btn-create").on("click", this, function (e) {
+        // Register click handle.
+        $("instance-create").on("click", this, function (e) {
             e.data.create(this);
         });
-        $("btn-start, btn-more-start").on("click", this, function (e) {
+        $("instance-start, instance-more-start").on("click", this, function (e) {
             e.data.start(this);
         });
-        $("btn-shutdown, btn-more-shutdown").on("click", this, function (e) {
+        $("instance-shutdown, instance-more-shutdown").on("click", this, function (e) {
             e.data.shutdown(this);
         });
-        $("btn-more-reset").on("click", this, function (e) {
+        $("instance-more-reset").on("click", this, function (e) {
             e.data.reset(this);
         });
     }
@@ -34,7 +35,7 @@ export default class Instance {
             $.post("instance/"+item, {action: 'start'}, function (data, status) {
                 console.log("success", status, data);
             }).fail(function (e) {
-                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         });
     }
@@ -43,7 +44,7 @@ export default class Instance {
             $.post("instance/"+item, {action: 'shutdown'}, function (data, status) {
                 console.log("success", status, data);
             }).fail(function (e) {
-                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+                $("errors").append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         });
     }
@@ -52,7 +53,7 @@ export default class Instance {
             $.post("instance/"+item, {action: 'reset'}, function (data, status) {
                 console.log("success", status, data);
             }).fail(function (e) {
-                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         });
     }
@@ -61,7 +62,7 @@ export default class Instance {
             $.post("instance/"+item, {action: 'suspend'}, function (data, status) {
                 console.log("success", status, data);
             }).fail(function (e) {
-                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         });
     }
@@ -70,17 +71,11 @@ export default class Instance {
             $.post("instance/"+item, {action: 'resume'}, function (data, status) {
                 console.log("success", status, data);
             }).fail(function (e) {
-                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
+                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             })
         });
     }
     create (on) {
-        this.instanes.forEach(function (item, index, err) {
-            $.post("instance/"+item, {action: 'create'}, function (data, status) {
-                console.log("success", status, data);
-            }).fail(function (e) {
-                $("errors").append(new Alert((`${this.type} ${this.url}: ${e.responseText}`)).danger());
-            });
-        });
+        console.log("TODO diag create wizard.")
     }
 }
