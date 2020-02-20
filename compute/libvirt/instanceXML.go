@@ -12,6 +12,9 @@ type DomainXML struct {
 	Name    string     `xml:"name" json:"name"`
 	Uuid    string     `xml:"uuid" json:"uuid"`
 	Devices DevicesXML `xml:"devices" json:"devices"`
+	Memory  MemXML     `xml:"memory" json:"memory"`
+	CurMem  CurMemXML  `xml:"currentMemory" json:"currentMemory"`
+	VCPUXml VCPUXML    `xml:"vcpu" json:"vcpu"`
 }
 
 func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
@@ -40,6 +43,15 @@ func (domain *DomainXML) Decode(xmlData string) error {
 	return nil
 }
 
+func (domain *DomainXML) Encode() string {
+	data, err := xml.Marshal(domain)
+	if err != nil {
+		libstar.Error("DomainXML.Encode %s", err)
+		return ""
+	}
+	return string(data)
+}
+
 func (domain *DomainXML) VNCDisplay() (string, string) {
 	if len(domain.Devices.Graphics) == 0 {
 		return "", ""
@@ -50,6 +62,48 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 		}
 	}
 	return "", ""
+}
+
+type VCPUXML struct {
+	XMLName xml.Name `xml:"vcpu" json:"-"`
+	Type    string   `xml:"placement,attr" json:"placement"`
+	Value   string   `xml:",chardata" json:"Value"`
+}
+
+func (cpu *VCPUXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), cpu); err != nil {
+		libstar.Error("VCPUXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type MemXML struct {
+	XMLName xml.Name `xml:"memory" json:"-"`
+	Type    string   `xml:"unit,attr" json:"unit"`
+	Value   string   `xml:",chardata" json:"value"`
+}
+
+func (mem *MemXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), mem); err != nil {
+		libstar.Error("MemXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type CurMemXML struct {
+	XMLName xml.Name `xml:"currentMemory" json:"-"`
+	Type    string   `xml:"unit,attr" json:"unit"`
+	Value   string   `xml:",chardata" json:"value"`
+}
+
+func (cmem *CurMemXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), cmem); err != nil {
+		libstar.Error("CurMemXML.Decode %s", err)
+		return err
+	}
+	return nil
 }
 
 type DevicesXML struct {
@@ -115,7 +169,7 @@ func (drv *DiskDriverXML) Decode(xmlData string) error {
 type DiskSourceXML struct {
 	XMLName xml.Name `xml:"source" json:"-"`
 	Name    string   `xml:"file,attr" json:"file"`
-	Device  string   `xml:"device,attr" json:"device"`
+	Device  string   `xml:"device,attr,omitempty" json:"device,omitempty"`
 }
 
 func (src *DiskSourceXML) Decode(xmlData string) error {

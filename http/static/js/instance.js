@@ -56,9 +56,9 @@ export default class Instance {
         disabled(this.instanes.length == 0);
 
         // Register click handle.
-        $("instance-create").on("click", this, function (e) {
-            e.data.create(this);
-        });
+        // $("instance-create").on("click", this, function (e) {
+        //     e.data.create(this);
+        // });
         $("instance-start, instance-more-start").on("click", this, function (e) {
             e.data.start(this);
         });

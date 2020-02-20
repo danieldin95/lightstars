@@ -23,3 +23,8 @@
 .alert-dismissible .close {
     padding: 0.5rem 1.25rem;
 }
+
+.modal {
+    top: 10%;
+    bottom: inherit;
+}
