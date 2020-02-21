@@ -35,8 +35,8 @@ func (i *Image) Create() error {
 }
 
 type IsoFile struct {
-	Name string  `json:"name"`
-	Path string  `json:"path"`
+	Name string `json:"name"`
+	Path string `json:"path"`
 }
 
 type IsoMgr struct {
@@ -64,8 +64,8 @@ var ISO = IsoMgr{
 }
 
 type DataStore struct {
-	Name string  `json:"name"`
-	Path string  `json:"path"`
+	Name string `json:"name"`
+	Path string `json:"path"`
 }
 
 type DataStoreMgr struct {
@@ -75,7 +75,7 @@ type DataStoreMgr struct {
 func (store DataStoreMgr) List() []DataStore {
 	stores := make([]DataStore, 0, 32)
 
-	if dirs, err := libstar.DIR.ListDirs(Location+"datastore"); err == nil {
+	if dirs, err := libstar.DIR.ListDirs(Location + "datastore"); err == nil {
 		for _, dir := range dirs {
 			path := strings.Replace(dir, Location, "", 1)
 			name := strings.Replace(path, "/", ".", 4)

@@ -344,9 +344,9 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 
 func (h *Server) GetStore(store, name string) string {
 	if strings.HasPrefix(store, qemuimgdriver.Location) {
-		return store+"/"+name+"/"
+		return store + "/" + name + "/"
 	} else {
-		return qemuimgdriver.Location+store+"/"+name+"/"
+		return qemuimgdriver.Location + store + "/" + name + "/"
 	}
 }
 
@@ -357,7 +357,7 @@ func (h *Server) NewImage(conf *InstanceConfSchema) (*qemuimgdriver.Image, error
 			return nil, err
 		}
 	}
-	file := path+"disk0.qcow2"
+	file := path + "disk0.qcow2"
 	size := libstar.ToBytes(conf.DiskSize, conf.DiskUnit)
 	img := qemuimgdriver.NewImage(file, size)
 	if err := img.Create(); err != nil {
@@ -371,19 +371,19 @@ func (h *Server) InstanceConf2XML(conf *InstanceConfSchema) (libvirtdriver.Domai
 		Type: "kvm",
 		Name: conf.Name,
 		Devices: libvirtdriver.DevicesXML{
-			Disks: make([]libvirtdriver.DiskXML, 2),
+			Disks:    make([]libvirtdriver.DiskXML, 2),
 			Graphics: make([]libvirtdriver.GraphicsXML, 1),
 		},
 		OS: libvirtdriver.OSXML{
 			Type: libvirtdriver.OSTypeXML{
-				Arch: conf.Arch,
+				Arch:  conf.Arch,
 				Value: "hvm",
 			},
 			Boot: make([]libvirtdriver.OSBootXML, 3),
 		},
 	}
 	if dom.OS.Type.Arch == "" {
-		dom.OS.Type.Arch =  "x86_64"
+		dom.OS.Type.Arch = "x86_64"
 	}
 	// create new disk firstly.
 	img, err := h.NewImage(conf)
@@ -402,24 +402,24 @@ func (h *Server) InstanceConf2XML(conf *InstanceConfSchema) (libvirtdriver.Domai
 	}
 	dom.VCPUXml = libvirtdriver.VCPUXML{
 		Placement: "static",
-		Value: conf.Cpu,
+		Value:     conf.Cpu,
 	}
 	dom.Memory = libvirtdriver.MemXML{
 		Value: conf.MemorySize,
-		Type: conf.MemoryUnit,
+		Type:  conf.MemoryUnit,
 	}
 	dom.CurMem = libvirtdriver.CurMemXML{
 		Value: conf.MemorySize,
-		Type: conf.MemoryUnit,
+		Type:  conf.MemoryUnit,
 	}
 	dom.Devices.Graphics[0] = libvirtdriver.GraphicsXML{
-		Type: "vnc",
+		Type:   "vnc",
 		Listen: "0.0.0.0",
-		Port: "-1",
+		Port:   "-1",
 	}
 	if strings.HasPrefix(conf.IsoFile, "/dev") {
 		dom.Devices.Disks[0] = libvirtdriver.DiskXML{
-			Type: "block",
+			Type:   "block",
 			Device: "cdrom",
 			Driver: libvirtdriver.DiskDriverXML{
 				Name: "qemu",
@@ -435,7 +435,7 @@ func (h *Server) InstanceConf2XML(conf *InstanceConfSchema) (libvirtdriver.Domai
 		}
 	} else {
 		dom.Devices.Disks[0] = libvirtdriver.DiskXML{
-			Type: "file",
+			Type:   "file",
 			Device: "cdrom",
 			Driver: libvirtdriver.DiskDriverXML{
 				Name: "qemu",
@@ -451,7 +451,7 @@ func (h *Server) InstanceConf2XML(conf *InstanceConfSchema) (libvirtdriver.Domai
 		}
 	}
 	dom.Devices.Disks[1] = libvirtdriver.DiskXML{
-		Type: "file",
+		Type:   "file",
 		Device: "disk",
 		Driver: libvirtdriver.DiskDriverXML{
 			Name: "qemu",
@@ -499,7 +499,7 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//libstar.Info("Server.AddInstance: xmlData: %s", xmlData)
-	file := h.GetStore(conf.DataStore, conf.Name)+"/define.xml"
+	file := h.GetStore(conf.DataStore, conf.Name) + "/define.xml"
 	libstar.XML.MarshalSave(xmlObj, file, true)
 
 	if dom, err := hyper.DomainDefineXML(xmlData); err == nil {

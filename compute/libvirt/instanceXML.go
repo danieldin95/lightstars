@@ -65,7 +65,6 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 	return "", ""
 }
 
-
 type VCPUXML struct {
 	XMLName   xml.Name `xml:"vcpu" json:"-"`
 	Placement string   `xml:"placement,attr" json:"placement"`

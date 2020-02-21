@@ -60,7 +60,7 @@ func (h *HyperVisor) Init() {
 	}
 }
 
-func (h *HyperVisor) GetCPU() (int, string){
+func (h *HyperVisor) GetCPU() (int, string) {
 	if c, err := cpu.Info(); err == nil {
 		return len(c), c[0].VendorID
 	}

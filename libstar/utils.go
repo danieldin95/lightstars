@@ -249,7 +249,6 @@ func (x xmlUtils) UnmarshalLoad(v interface{}, file string) error {
 	return nil
 }
 
-
 type Dir struct {
 }
 
