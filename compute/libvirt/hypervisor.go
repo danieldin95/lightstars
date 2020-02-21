@@ -3,6 +3,9 @@ package libvirtdriver
 import (
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/mem"
 	"strings"
 )
 
@@ -55,6 +58,31 @@ func (h *HyperVisor) Init() {
 			h.Address = strings.SplitN(h.Address, ":", 2)[0]
 		}
 	}
+}
+
+func (h *HyperVisor) GetCPU() (int, string){
+	if c, err := cpu.Info(); err == nil {
+		return len(c), c[0].VendorID
+	}
+	return 0, ""
+}
+
+func (h *HyperVisor) GetMem() (uint64, uint64, float64) {
+	if v, err := mem.VirtualMemory(); err == nil {
+		return v.Total, v.Free, v.UsedPercent
+	}
+	return 0, 0, 0
+}
+
+func (h *HyperVisor) GetRootfs() string {
+	if parts, err := disk.Partitions(false); err == nil {
+		for _, p := range parts {
+			if p.Mountpoint == "/" {
+				return p.Device
+			}
+		}
+	}
+	return ""
 }
 
 func (h *HyperVisor) ListAllDomains() ([]Domain, error) {

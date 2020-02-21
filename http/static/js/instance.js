@@ -7,20 +7,16 @@ export class Instance {
     constructor() {
         this.instanes = [];
 
-        let disabled = function(isdDisabled) {
-            if (isdDisabled) {
-                $("instance-start button").attr('aria-disabled', true);
+        let disabled = function(is) {
+            if (is) {
                 $("instance-start button").addClass('disabled');
-                $("instance-shutdown button").attr('aria-disabled', true);
+                $("instance-console button").addClass('disabled');
                 $("instance-shutdown button").addClass('disabled');
-                $("instance-more button").attr('aria-disabled', true);
                 $("instance-more button").addClass('disabled');
             } else {
-                $("instance-start button").attr('aria-disabled', false);
                 $("instance-start button").removeClass('disabled');
-                $("instance-shutdown button").attr('aria-disabled', false);
+                $("instance-console button").removeClass('disabled');
                 $("instance-shutdown button").removeClass('disabled');
-                $("instance-more button").attr('aria-disabled', false);
                 $("instance-more button").removeClass('disabled');
             }
         };
@@ -56,6 +52,9 @@ export class Instance {
         disabled(this.instanes.length == 0);
 
         // Register click handle.
+        $("instance-console").on("click", this, function (e) {
+            e.data.console(this);
+        });
         $("instance-start, instance-more-start").on("click", this, function (e) {
             e.data.start(this);
         });
@@ -163,6 +162,11 @@ export class Instance {
         });
     }
 
+    console(on) {
+        this.instanes.forEach(function (item, index, err) {
+            window.open("/static/console?instance="+item);
+        });
+    }
 
     create (data) {
         $.post("api/instance", JSON.stringify(data), function (data, status) {

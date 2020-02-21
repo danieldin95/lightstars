@@ -227,6 +227,7 @@ func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	index.Version = NewVersionSchema()
+	index.Hyper = NewHyperSchema()
 	if domains, err := hyper.ListAllDomains(); err == nil {
 		for _, dom := range domains {
 			instance := NewInstanceSchema(dom)

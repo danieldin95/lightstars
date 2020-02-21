@@ -19,7 +19,7 @@
 </head>
 <body>
     <div class="container">
-        <div name="system" class="card">
+        <div name="system" class="card system">
             <div class="card-header">
                 <div>
                     System Information
@@ -31,13 +31,17 @@
                     <dd>{{ .Version.Version }}</dd>
                     <dt>Built on:</dt>
                     <dd>{{ .Version.Date }}</dd>
+                    <dt>CPU:</dt>
+                    <dd>{{ .Hyper.CpuNum }} | {{ .Hyper.CpuVendor }}</dd>
+                    <dt>Memory</dt>
+                    <dd>{{ prettyBytes .Hyper.MemTotal }} | {{ prettyBytes .Hyper.MemFree }}</dd>
                 </dl>
             </div>
         </div>
         <div class="card-no-border">
             <errors></errors>
         </div>
-        <div name="instances" class="card">
+        <div name="instances" class="card instances">
             <div class="card-header">
                 <div>
                     Instances
@@ -45,62 +49,41 @@
             </div>
             <div class="card-body">
                 <div class="card-header-cnt">
-                    <div class="btn-group">
-                        <instance-create>
-                            <button type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#instanceCreateModal">
-                                create instance
-                            </button>
-                        </instance-create>
-                    </div>
-                    <div class="btn-group">
-                        <instance-start>
-                            <button type="button" class="btn btn-outline-dark btn-sm">start</button>
-                        </instance-start>
-                    </div>
-                    <div class="btn-group">
-                        <instance-shutdown>
-                            <button type="button" class="btn btn-outline-dark btn-sm">shutdown</button>
-                        </instance-shutdown>
-                    </div>
-                    <div class="btn-group">
-                        <instance-refresh>
-                            <a type="button" class="btn btn-outline-dark btn-sm" href=".">refresh</a>
-                        </instance-refresh>
-                    </div>
-                    <div class="btn-group">
-                        <instance-more>
-                            <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                operations
-                            </button>
-                            <div name="btn-more" class="dropdown-menu">
-                                <instance-more-start>
-                                    <a class="dropdown-item" href="#">start</a>
-                                </instance-more-start>
-                                <instance-more-shutdown>
-                                    <a class="dropdown-item" href="#">shutdown</a>
-                                </instance-more-shutdown>
-                                <instance-more-reset>
-                                    <a class="dropdown-item" href="#">reset</a>
-                                </instance-more-reset>
-                                <div class="dropdown-divider"></div>
-                                <instance-more-suspend>
-                                    <a class="dropdown-item" href="#">suspend</a>
-                                </instance-more-suspend>
-                                <instance-more-resume>
-                                    <a class="dropdown-item" href="#">resume</a>
-                                </instance-more-resume>
-                                <div class="dropdown-divider"></div>
-                                <instance-more-destroy>
-                                    <a class="dropdown-item" href="#">destroy</a>
-                                </instance-more-destroy>
-                                <instance-more-remove>
-                                    <a class="dropdown-item" href="#">remove</a>
-                                </instance-more-remove>
-                            </div>
-                        </instance-more>
-                    </div>
+                    <instance-create>
+                        <button type="button" class="btn btn-outline-dark btn-sm"
+                                data-toggle="modal" data-target="#instanceCreateModal">
+                            create instance
+                        </button>
+                    </instance-create>
+                    <instance-console>
+                        <button type="button" class="btn btn-outline-dark btn-sm">console</button>
+                    </instance-console>
+                    <instance-start>
+                        <button type="button" class="btn btn-outline-dark btn-sm">start</button>
+                    </instance-start>
+                    <instance-shutdown>
+                        <button type="button" class="btn btn-outline-dark btn-sm">shutdown</button>
+                    </instance-shutdown>
+                    <instance-refresh>
+                        <a type="button" class="btn btn-outline-dark btn-sm" href=".">refresh</a>
+                    </instance-refresh>
+                    <instance-more>
+                        <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            operations
+                        </button>
+                        <div name="btn-more" class="dropdown-menu">
+                            <instance-more-start><a class="dropdown-item" href="#">start</a></instance-more-start>
+                            <instance-more-shutdown><a class="dropdown-item" href="#">shutdown</a></instance-more-shutdown>
+                            <instance-more-reset><a class="dropdown-item" href="#">reset</a></instance-more-reset>
+                            <div class="dropdown-divider"></div>
+                            <instance-more-suspend><a class="dropdown-item" href="#">suspend</a></instance-more-suspend>
+                            <instance-more-resume><a class="dropdown-item" href="#">resume</a></instance-more-resume>
+                            <div class="dropdown-divider"></div>
+                            <instance-more-destroy><a class="dropdown-item" href="#">destroy</a></instance-more-destroy>
+                            <instance-more-remove><a class="dropdown-item" href="#">remove</a></instance-more-remove>
+                        </div>
+                    </instance-more>
                 </div>
                 <div class="l-content-body">
                     <table class="table table-striped">
@@ -127,13 +110,7 @@
                                     <input type="checkbox" aria-label="select {{ .Name }}" data="{{ .UUID }}">
                                 </instance-on-one>
                             </td>
-                            <td>
-                                {{ if eq .State "running" }}
-                                <a class="text-decoration-none" href="/static/console?instance={{ .UUID }}">{{ .UUID }}</a>
-                                {{ else }}
-                                <a class="text-decoration-none" href="#">{{ .UUID }}</a>
-                                {{ end }}
-                            </td>
+                            <td><a class="text-decoration-none" href="instance/{{ .UUID }}">{{ .UUID }}</a></td>
                             <td>{{ .CpuTime }}ms</td>
                             <td>{{ .Name }}</td>
                             <td>{{ .MaxCpu }}</td>

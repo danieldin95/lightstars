@@ -20,6 +20,23 @@ func NewVersionSchema() VersionSchema {
 	}
 }
 
+type HyperSchema struct {
+	CpuNum     int     `json:"cpuNum"`
+	CpuVendor  string  `json:"cpuVendor"`
+	MemTotal   uint64  `json:"memTotal"`
+	MemFree    uint64  `json:"memFree"`
+	MemPercent float64 `json:"memPercent"`
+}
+
+func NewHyperSchema() (hs HyperSchema) {
+	hyper, _ := libvirtdriver.GetHyper()
+
+	hs.CpuNum, hs.CpuVendor = hyper.GetCPU()
+	hs.MemTotal, hs.MemFree, hs.MemPercent = hyper.GetMem()
+
+	return hs
+}
+
 func InstanceState2Str(state libvirt.DomainState) string {
 	switch state {
 	case libvirt.DOMAIN_NOSTATE:
@@ -69,6 +86,7 @@ func NewInstanceSchema(dom libvirtdriver.Domain) InstanceSchema {
 
 type IndexSchema struct {
 	Version   VersionSchema    `json:"version"`
+	Hyper     HyperSchema      `json:"hyper"`
 	Instances []InstanceSchema `json:"instances"`
 }
 
