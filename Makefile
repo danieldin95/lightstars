@@ -22,4 +22,5 @@ devel/requirements:
 
 
 test:
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/libstar
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/compute/libvirt

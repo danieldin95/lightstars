@@ -12,6 +12,7 @@ import (
 	"reflect"
 	"runtime"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -106,17 +107,17 @@ func PrettyKBytes(k uint64) string {
 	return fmt.Sprintf("%d.%02dG", g, d)
 }
 
-func ToKib(v, u string) uint64 {
+func ToBytes(v, u string) uint64 {
 	value, _ := strconv.Atoi(v)
 	switch u {
-	case "MiB":
-		return uint64(value) * 1024
-	case "GiB":
-		return uint64(value) * 1024 * 1024
-	case "TiB":
-		return uint64(value) * 1024 * 1024 * 1024
 	case "KiB":
-		return uint64(value)
+		return uint64(value) * 1024
+	case "MiB":
+		return uint64(value) * 1024 * 1024
+	case "GiB":
+		return uint64(value) * 1024 * 1024 * 1024
+	case "TiB":
+		return uint64(value) * 1024 * 1024 * 1024 * 1024
 	default:
 		return 0
 	}
@@ -246,4 +247,51 @@ func (x xmlUtils) UnmarshalLoad(v interface{}, file string) error {
 	}
 
 	return nil
+}
+
+
+type Dir struct {
+}
+
+var DIR = Dir{}
+
+func (d Dir) ListFiles(dirPth string, suffix string) (files []string, err error) {
+	files = make([]string, 0, 10)
+
+	dir, err := ioutil.ReadDir(dirPth)
+	if err != nil {
+		return nil, err
+	}
+
+	PthSep := string(os.PathSeparator)
+	suffix = strings.ToUpper(suffix)
+	for _, fi := range dir {
+		if fi.IsDir() {
+			continue
+		}
+		if strings.HasSuffix(strings.ToUpper(fi.Name()), suffix) {
+			files = append(files, dirPth+PthSep+fi.Name())
+		}
+	}
+
+	return files, nil
+}
+
+func (d Dir) ListDirs(dirPth string) (dirs []string, err error) {
+	dirs = make([]string, 0, 10)
+
+	dir, err := ioutil.ReadDir(dirPth)
+	if err != nil {
+		return nil, err
+	}
+
+	PthSep := string(os.PathSeparator)
+	for _, fi := range dir {
+		if !fi.IsDir() {
+			continue
+		}
+		dirs = append(dirs, dirPth+PthSep+fi.Name())
+	}
+
+	return dirs, nil
 }

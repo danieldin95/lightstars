@@ -1,3 +1,5 @@
+import {Option} from "./option.js";
+import {AlertDanger} from "../alert.js";
 
 export class InstanceCreateModal {
     constructor () {
@@ -14,8 +16,9 @@ export class InstanceCreateModal {
         this.forms = $("#instanceCreateWizard form");
         this.prevbtn = "#instanceCreateWizard #prev-btn";
         this.nextbtn = "#instanceCreateWizard #next-btn";
-
+        
         this.load();
+        this.fetch();
         this.events = {
             submit: {
                 func: function (e) {
@@ -23,6 +26,39 @@ export class InstanceCreateModal {
                 data: undefined,
             }
         }
+    }
+
+    fetch() {
+        let cpu_selector = this.view.find("select[name='isoFile']");
+        let cpu_refresh = function(datastore) {
+            $.getJSON("api/iso", {datastore: datastore}, function (data) {
+                cpu_selector.find("option").remove();
+                data.forEach(function (ele, index) {
+                    cpu_selector.append(Option(ele['name'], ele['path']));
+                })
+            }).fail(function (e) {
+                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            });
+        };
+
+        let store_selector = this.view.find("select[name='datastore']");
+        let store_refresh = function () {
+            $.getJSON("api/datastore", function (data) {
+                store_selector.find("option").remove();
+                data.forEach(function (ele, index) {
+                    store_selector.append(Option(ele['name'], ele['path']));
+                })
+            }).fail(function (e) {
+                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            });
+        };
+
+        store_refresh();
+        cpu_refresh("datastore/01");
+
+        store_selector.on("change", this, function (e) {
+            cpu_refresh($(this).val());
+        });
     }
 
     submit() {
@@ -125,7 +161,9 @@ export class InstanceCreateModal {
                                     <label for="inputPassword" class="col-sm-4 col-form-label-sm">Datastore ISO file</label>
                                     <div class="col-sm-6">
                                         <div class="input-group">
-                                            <input type="text" class="form-control form-control-sm" name="isoFile" value="/dev/sr0">
+                                            <select class="select-simple" name="isoFile">
+                                                <option value="/dev/sr0">sr0</option>
+                                            </select>   
                                         </div>
                                     </div>
                                 </div>

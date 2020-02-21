@@ -48,6 +48,30 @@ func NewServer(listen, staticDir, authFile string) (h *Server) {
 	return
 }
 
+func (h *Server) Router() *mux.Router {
+	if h.router == nil {
+		h.router = mux.NewRouter()
+		h.router.Use(h.Middleware)
+	}
+
+	return h.router
+}
+
+func (h *Server) LoadRouter() {
+	router := h.Router()
+	staticFile := http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir)))
+
+	router.HandleFunc("/", h.HandleIndex)
+	router.PathPrefix("/static/").Handler(staticFile)
+	router.Handle("/websockify", websocket.Handler(h.HandleWebSockify))
+	router.HandleFunc("/api/instance", h.AddInstance).Methods("POST")
+	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
+	router.HandleFunc("/api/instance/{id}", h.ModInstance).Methods("PUT")
+	router.HandleFunc("/api/iso", h.GetISO).Methods("GET")
+	router.HandleFunc("/api/bridge", h.GetBridge).Methods("GET")
+	router.HandleFunc("/api/datastore", h.GetDataStore).Methods("GET")
+}
+
 func (h *Server) SetCert(keyFile, crtFile string) {
 	h.crtFile = crtFile
 	h.keyFile = keyFile
@@ -118,27 +142,6 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 			http.Error(w, "Authorization Required.", http.StatusUnauthorized)
 		}
 	})
-}
-
-func (h *Server) Router() *mux.Router {
-	if h.router == nil {
-		h.router = mux.NewRouter()
-		h.router.Use(h.Middleware)
-	}
-
-	return h.router
-}
-
-func (h *Server) LoadRouter() {
-	router := h.Router()
-	staticFile := http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir)))
-
-	router.HandleFunc("/", h.HandleIndex)
-	router.PathPrefix("/static/").Handler(staticFile)
-	router.Handle("/websockify", websocket.Handler(h.HandleWebSockify))
-	router.HandleFunc("/api/instance", h.AddInstance).Methods("POST")
-	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
-	router.HandleFunc("/api/instance/{id}", h.ModInstance).Methods("PUT")
 }
 
 func (h *Server) Start() error {
@@ -339,7 +342,11 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Server) GetStore(store, name string) string {
-	return "/lightstar/"+store+"/"+name+"/"
+	if strings.HasPrefix(store, qemuimgdriver.Location) {
+		return store+"/"+name+"/"
+	} else {
+		return qemuimgdriver.Location+store+"/"+name+"/"
+	}
 }
 
 func (h *Server) NewImage(conf *InstanceConfSchema) (*qemuimgdriver.Image, error) {
@@ -350,7 +357,7 @@ func (h *Server) NewImage(conf *InstanceConfSchema) (*qemuimgdriver.Image, error
 		}
 	}
 	file := path+"disk0.qcow2"
-	size := libstar.ToKib(conf.DiskSize, conf.DiskUnit)
+	size := libstar.ToBytes(conf.DiskSize, conf.DiskUnit)
 	img := qemuimgdriver.NewImage(file, size)
 	if err := img.Create(); err != nil {
 		return nil, err
@@ -587,4 +594,20 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	h.ResponseMsg(w, 0, "")
+}
+
+func (h *Server) GetDataStore(w http.ResponseWriter, r *http.Request) {
+	h.ResponseJson(w, qemuimgdriver.DATASTOR.List())
+}
+
+func (h *Server) GetISO(w http.ResponseWriter, r *http.Request) {
+	store := h.GetQueryOne(r, "datastore")
+	if store == "" {
+		store = "datastore/01"
+	}
+	h.ResponseJson(w, qemuimgdriver.ISO.ListFiles(store))
+}
+
+func (h *Server) GetBridge(w http.ResponseWriter, r *http.Request) {
+	h.ResponseJson(w, nil)
 }
