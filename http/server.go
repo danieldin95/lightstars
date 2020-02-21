@@ -498,7 +498,6 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
 		return
 	}
-	//libstar.Info("Server.AddInstance: xmlData: %s", xmlData)
 	file := h.GetStore(conf.DataStore, conf.Name) + "/define.xml"
 	libstar.XML.MarshalSave(xmlObj, file, true)
 
@@ -507,7 +506,12 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		h.ResponseMsg(w, 0, "")
+		domXML := libvirtdriver.NewDomainXMLFromDom(dom, true)
+		if domXML != nil {
+			h.ResponseJson(w, domXML)
+		} else {
+			h.ResponseJson(w, xmlObj)
+		}
 	} else {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
