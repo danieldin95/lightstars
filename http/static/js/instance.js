@@ -1,8 +1,8 @@
-import {AlertDanger} from "./widget/alert.js";
-import {AlertWarn} from "./widget/alert.js";
-import {AlertSuccess} from "./widget/alert.js";
+import {AlertDanger} from "./alert.js";
+import {AlertWarn} from "./alert.js";
+import {AlertSuccess} from "./alert.js";
 
-export default class Instance {
+export class Instance {
 
     constructor() {
         this.instanes = [];

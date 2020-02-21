@@ -25,6 +25,24 @@
 }
 
 .modal {
-    top: 10%;
-    bottom: inherit;
+    top: 0;
+    bottom: 0;
+}
+
+.sw-toolbar-bottom {
+    padding: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.sw-main ul.step-anchor {
+    margin: 0.5rem 1rem;
+}
+
+.sw-main .sw-container {
+    margin: 1.5rem;
+    min-height: 200px;
+}
+
+.col-form-label-sm {
+    font-size: inherit;
 }

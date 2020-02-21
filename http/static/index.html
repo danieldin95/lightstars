@@ -47,7 +47,7 @@
                     <div class="btn-group">
                         <instance-create>
                             <button type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#instanceCreate">
+                                    data-toggle="modal" data-target="#instanceCreateModal">
                                 create instance
                             </button>
                         </instance-create>
@@ -144,85 +144,9 @@
     </div>
 
     <!-- Create instance modal -->
-    <div class="modal fade" id="instanceCreate" tabindex="-1" role="dialog" aria-labelledby="instanceCreateLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="instanceCreateLabel">Create a Instance</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!-- Smart Wizard HTML -->
-                    <div id="smartWizard">
-                        <ul>
-                            <li><a href="#step-1">System<br /><small>Configure OS, CPU, and memory</small></a></li>
-                            <li><a href="#step-2">Disk<br /><small>Configure Disks</small></a></li>
-                            <li><a href="#step-3">Interface<br /><small>Configure VM's interface</small></a></li>
-                        </ul>
-                        <div>
-                            <div id="step-1" class="">
-                                <form name="system-config">
-                                    <div class="form-group row">
-                                        <label for="staticEmail" class="col-sm-2 col-form-label">CPU number:</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="cpuNum" value="2">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-2 col-form-label">Memory:</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="memorySize" value="2">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">GiB</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div id="step-2" class="">
-                                <form name="disk-config">
-                                    <div class="form-group row">
-                                        <label for="staticEmail" class="col-sm-2 col-form-label">Disk size:</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="diskSize" value="10">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">GiB</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="inputPassword" class="col-sm-2 col-form-label">ISO location:</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="isoFile" value="2">
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div id="step-3" class="">
-                                <form name="disk-config">
-                                    <div class="form-group row">
-                                        <label for="staticEmail" class="col-sm-2 col-form-label">Bridge interface:</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="bridge" value="virbr0">
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
+    <div id="instanceCreateModal" class="modal fade" tabindex="-1" role="dialog"
+         aria-labelledby="instanceCreateModalLabel" aria-hidden="true">
     </div>
-
     <!-- JQuery Javascript -->
     <script src="static/asset/jquery-3.3.1.js"></script>
     <script src="static/asset/popper.js/1.12.9/umd/popper.js"></script>
@@ -232,37 +156,12 @@
     <script src="/static/asset/smartwizard/js/jquery.smartWizard.js"></script>
 
     <script type="module">
-        import Instance from './static/js/instance.js';
+        import {Instance} from './static/js/instance.js';
+        import {InstanceCreateModal} from './static/js/widget/modal.js'
+
         $(document).ready(function() {
-            new Instance();
-
-            // Step show event
-            $("#smartWizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
-                if(stepPosition === 'first') {
-                    $("#prev-btn").addClass('disabled');
-                }else if(stepPosition === 'final'){
-                    $("#next-btn").addClass('disabled');
-                }else{
-                    $("#prev-btn").removeClass('disabled');
-                    $("#next-btn").removeClass('disabled');
-                }
-            });
-            // Toolbar extra buttons
-            var btnFinish = $('<button></button>').text('Finish')
-                .addClass('btn btn-outline-success btn-sm')
-                .on('click', function(){ alert('Finish Clicked'); });
-
-            // Smart Wizard
-            $('#smartWizard').smartWizard({
-                selected: 0,
-                theme: 'dots',
-                transitionEffect:'fade',
-                showStepURLhash: false,
-                toolbarSettings: {
-                    toolbarPosition: 'bottom',
-                    toolbarExtraButtons: [btnFinish],
-                }
-            });
+            let instance = new Instance();
+            let createModal = new InstanceCreateModal()
         });
     </script>
 </body>
