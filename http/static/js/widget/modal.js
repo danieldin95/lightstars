@@ -1,9 +1,32 @@
 
 export class InstanceCreateModal {
     constructor () {
-        let view = this.render();
-        $("#instanceCreateModal").html(view);
+        this.view = this.render();
+        this.container = $("#instanceCreateModal");
+        this.container.html(this.view);
+
+        this.wizard = $("#instanceCreateWizard");
+        this.forms = $("#instanceCreateWizard form");
+
         this.load();
+        this.events = {
+            submit: {
+                on: function (e) {
+                },
+                data: undefined,
+            }
+        }
+    }
+
+    submit() {
+        if (this.events.submit.on) {
+            this.events.submit.on({data: this.events.submit.data, array: this.forms.serializeArray()});
+        }
+    }
+
+    onSubmit(data, fn) {
+        this.events.submit.data = data;
+        this.events.submit.on = fn;
     }
 
     render() {
@@ -36,7 +59,7 @@ export class InstanceCreateModal {
                                 <div class="form-group row">
                                     <label for="storage" class="col-sm-4 col-form-label-sm">Storage</label>
                                     <div class="col-sm-6">
-                                        <select class="custom-select input-select-sm" name="datastore">
+                                        <select class="custom-select custom-select-sm input-select-sm" name="datastore">
                                             <option value="datastore01" selected>datastore01</option>
                                             <option value="datastore02">datastore02</option>
                                         </select>
@@ -57,7 +80,7 @@ export class InstanceCreateModal {
                                     <div class="col-sm-6">
                                         <div class="input-group">
                                             <input type="text" class="form-control form-control-sm input-number-lg" name="diskSize" value="10">
-                                            <select class="" name="diskUnit">
+                                            <select class="simple-select unit-select" name="diskUnit">
                                                 <option value="Mib">MiB</option>
                                                 <option value="GiB" selected>GiB</option>
                                                 <option value="TiB">TiB</option>
@@ -76,7 +99,7 @@ export class InstanceCreateModal {
                                     <div class="col-sm-6">
                                         <div class="input-group">
                                             <input type="text" class="form-control form-control-sm input-number-lg" name="memorySize" value="2048">
-                                            <select class="" name="memoryUnit">
+                                            <select class="simple-select unit-select" name="memoryUnit">
                                                 <option value="Mib" selected>MiB</option>
                                                 <option value="GiB">GiB</option>
                                             </select>       
@@ -98,8 +121,11 @@ export class InstanceCreateModal {
     }
 
     load() {
+        console.log("wizard", this.wizard);
+
+
         // Step show event
-        $("#instanceCreateWizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+        this.wizard.on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
             if(stepPosition === 'first') {
                 $("#prev-btn").addClass('disabled');
             }else if(stepPosition === 'final'){
@@ -110,17 +136,19 @@ export class InstanceCreateModal {
             }
         });
         // Toolbar extra buttons
-        var btnFinish = $('<button></button>').text('Finish')
+        let btnFinish = $('<button></button>').text('Finish')
             .addClass('btn btn-outline-success btn-sm')
-            .on('click', function() {
-                instance.create("#instaceCreateWizard");
+            .on('click', this, function(e) {
+                e.data.submit();
             });
-        var btnCancel = $('<button></button>').text('Cancel')
+        let btnCancel = $('<button></button>').text('Cancel')
             .addClass('btn btn-outline-dark btn-sm')
-            .on('click', function(){ $("#instanceCreateModal").modal("hide"); });
+            .on('click', this, function(e) {
+                e.data.container.modal("hide");
+            });
 
         // Smart Wizard
-        $('#instanceCreateWizard').smartWizard({
+        this.wizard.smartWizard({
             selected: 0,
             theme: 'dots',
             transitionEffect: 'fade',

@@ -46,3 +46,10 @@
 .col-form-label-sm {
     font-size: inherit;
 }
+
+.custom-select-sm {
+    font-size: inherit;
+    font-weight: inherit;
+    padding-top: calc(0.25rem + 1px);
+    padding-bottom: calc(0.25rem + 1px);
+}

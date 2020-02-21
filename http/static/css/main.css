@@ -53,21 +53,9 @@ a {
     margin: 16px 10px;
 }
 
-.custom-select {
-    display: inline-block;
-    width: 100%;
-    height: calc(1.5em + .75rem + 2px);
-    padding: .375rem 1.75rem .375rem .75rem;
-    font-size: inherit;
-    font-weight: inherit;
-    line-height: 1.5;
-    color: #495057;
-}
-
-.input-group select {
+.simple-select {
     display: block;
-    min-width: 4rem;
-    margin-left: 1rem;
+    width: 100%;
     padding: 0.375rem 0.75rem;
     font-size: inherit;
     line-height: 1.5;
@@ -77,6 +65,14 @@ a {
     background-size: 8px 10px;
     -webkit-appearance: none;
     border-radius: 0.2rem;
+}
+
+.unit-select {
+    width: auto;
+    min-width: 4rem;
+    margin-left: 1rem;
+    padding: 0.375rem 0.75rem;
+    font-size: inherit;
 }
 
 .input-number {

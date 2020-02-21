@@ -161,7 +161,11 @@
 
         $(document).ready(function() {
             let instance = new Instance();
-            let createModal = new InstanceCreateModal()
+            let createModal = new InstanceCreateModal();
+
+            createModal.onSubmit(instance, function (e) {
+                e.data.create(e.array);
+            });
         });
     </script>
 </body>

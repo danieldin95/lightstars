@@ -136,7 +136,7 @@ export class Instance {
         });
     }
 
-    create (on) {
-        console.log("TODO diag create wizard.");
+    create (data) {
+        console.log("TODO diag create wizard.", data);
     }
 }
