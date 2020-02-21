@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Dashboard | LightStar</title>
     <!-- Bootstrap CSS -->
+    <link rel="shortcut icon" href="static/images/favicon.ico">
     <link rel="stylesheet" href="static/asset/bootstrap/4.0.0/css/bootstrap.css">
 
     <!-- Optional SmartWizard theme -->
@@ -90,6 +91,13 @@
                                 <instance-more-resume>
                                     <a class="dropdown-item" href="#">resume</a>
                                 </instance-more-resume>
+                                <div class="dropdown-divider"></div>
+                                <instance-more-destroy>
+                                    <a class="dropdown-item" href="#">destroy</a>
+                                </instance-more-destroy>
+                                <instance-more-remove>
+                                    <a class="dropdown-item" href="#">remove</a>
+                                </instance-more-remove>
                             </div>
                         </instance-more>
                     </div>
@@ -158,13 +166,14 @@
     <script type="module">
         import {Instance} from './static/js/instance.js';
         import {InstanceCreateModal} from './static/js/widget/modal.js'
+        import {Arr2Json} from "./static/js/utils.js";
 
         $(document).ready(function() {
             let instance = new Instance();
             let createModal = new InstanceCreateModal();
 
             createModal.onSubmit(instance, function (e) {
-                e.data.create(e.array);
+                e.data.create(Arr2Json(e.array));
             });
         });
     </script>

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/danieldin95/lightstar/compute/libvirt"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/storage/qemu"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
 	"io"
@@ -14,6 +15,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 	"sync"
 	"text/template"
 	"time"
@@ -134,8 +136,8 @@ func (h *Server) LoadRouter() {
 	router.HandleFunc("/", h.HandleIndex)
 	router.PathPrefix("/static/").Handler(staticFile)
 	router.Handle("/websockify", websocket.Handler(h.HandleWebSockify))
+	router.HandleFunc("/api/instance", h.AddInstance).Methods("POST")
 	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
-	router.HandleFunc("/api/instance/{id}", h.AddInstance).Methods("POST")
 	router.HandleFunc("/api/instance/{id}", h.ModInstance).Methods("PUT")
 }
 
@@ -216,7 +218,7 @@ func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
 		Instances: make([]InstanceSchema, 0, 32),
 	}
 
-	hyper, err := libvirtdriver.GetHyper("")
+	hyper, err := libvirtdriver.GetHyper()
 	if err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
 		return
@@ -252,7 +254,7 @@ func (h *Server) GetTarget(req *http.Request) string {
 	}
 
 	libstar.Info("Server.GetTarget %s", id)
-	hyper, err := libvirtdriver.GetHyper("")
+	hyper, err := libvirtdriver.GetHyper()
 	if err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
 		return ""
@@ -317,7 +319,7 @@ func (h *Server) GetArg(r *http.Request, name string) (string, bool) {
 func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := h.GetArg(r, "id")
 
-	dom, err := libvirtdriver.LookupDomainByUUIDString("", uuid)
+	dom, err := libvirtdriver.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -336,27 +338,178 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *Server) GetStore(store, name string) string {
+	return "/lightstar/"+store+"/"+name+"/"
+}
+
+func (h *Server) NewImage(conf *InstanceConfSchema) (*qemuimgdriver.Image, error) {
+	path := h.GetStore(conf.DataStore, conf.Name)
+	if err := os.Mkdir(path, os.ModePerm); err != nil {
+		if !os.IsExist(err) {
+			return nil, err
+		}
+	}
+	file := path+"disk0.qcow2"
+	size := libstar.ToKib(conf.DiskSize, conf.DiskUnit)
+	img := qemuimgdriver.NewImage(file, size)
+	if err := img.Create(); err != nil {
+		return nil, err
+	}
+	return img, nil
+}
+
+func (h *Server) InstanceConf2XML(conf *InstanceConfSchema) (libvirtdriver.DomainXML, error) {
+	dom := libvirtdriver.DomainXML{
+		Type: "kvm",
+		Name: conf.Name,
+		Devices: libvirtdriver.DevicesXML{
+			Disks: make([]libvirtdriver.DiskXML, 2),
+			Graphics: make([]libvirtdriver.GraphicsXML, 1),
+		},
+		OS: libvirtdriver.OSXML{
+			Type: libvirtdriver.OSTypeXML{
+				Arch: conf.Arch,
+				Value: "hvm",
+			},
+			Boot: make([]libvirtdriver.OSBootXML, 3),
+		},
+	}
+	if dom.OS.Type.Arch == "" {
+		dom.OS.Type.Arch =  "x86_64"
+	}
+	// create new disk firstly.
+	img, err := h.NewImage(conf)
+	if err != nil {
+		return dom, err
+	}
+	if conf.Boots == "" {
+		conf.Boots = "hd,cdrom,network"
+	}
+	for i, v := range strings.Split(conf.Boots, ",") {
+		if i < 3 {
+			dom.OS.Boot[i] = libvirtdriver.OSBootXML{
+				Dev: v,
+			}
+		}
+	}
+	dom.VCPUXml = libvirtdriver.VCPUXML{
+		Placement: "static",
+		Value: conf.Cpu,
+	}
+	dom.Memory = libvirtdriver.MemXML{
+		Value: conf.MemorySize,
+		Type: conf.MemoryUnit,
+	}
+	dom.CurMem = libvirtdriver.CurMemXML{
+		Value: conf.MemorySize,
+		Type: conf.MemoryUnit,
+	}
+	dom.Devices.Graphics[0] = libvirtdriver.GraphicsXML{
+		Type: "vnc",
+		Listen: "0.0.0.0",
+		Port: "-1",
+	}
+	if strings.HasPrefix(conf.IsoFile, "/dev") {
+		dom.Devices.Disks[0] = libvirtdriver.DiskXML{
+			Type: "block",
+			Device: "cdrom",
+			Driver: libvirtdriver.DiskDriverXML{
+				Name: "qemu",
+				Type: "raw",
+			},
+			Source: libvirtdriver.DiskSourceXML{
+				Device: conf.IsoFile,
+			},
+			Target: libvirtdriver.DiskTargetXML{
+				Bus: "ide",
+				Dev: "hda",
+			},
+		}
+	} else {
+		dom.Devices.Disks[0] = libvirtdriver.DiskXML{
+			Type: "file",
+			Device: "cdrom",
+			Driver: libvirtdriver.DiskDriverXML{
+				Name: "qemu",
+				Type: "raw",
+			},
+			Source: libvirtdriver.DiskSourceXML{
+				File: conf.IsoFile,
+			},
+			Target: libvirtdriver.DiskTargetXML{
+				Bus: "ide",
+				Dev: "hda",
+			},
+		}
+	}
+	dom.Devices.Disks[1] = libvirtdriver.DiskXML{
+		Type: "file",
+		Device: "disk",
+		Driver: libvirtdriver.DiskDriverXML{
+			Name: "qemu",
+			Type: img.Format,
+		},
+		Source: libvirtdriver.DiskSourceXML{
+			File: img.Path,
+		},
+		Target: libvirtdriver.DiskTargetXML{
+			Bus: "virtio",
+			Dev: "vda",
+		},
+	}
+	return dom, nil
+}
+
 func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
-	//defer r.Body.Close()
-	//body, err := ioutil.ReadAll(r.Body)
-	//if err != nil {
-	//	http.Error(w, err.Error(), http.StatusInternalServerError)
-	//	return
-	//}
-	//
-	//user := &UserSchema{}
-	//if err := json.Unmarshal([]byte(body), user); err != nil {
-	//	http.Error(w, err.Error(), http.StatusInternalServerError)
-	//	return
-	//}
-	//
-	//h.ResponseMsg(w, 0, "")
+	hyper, err := libvirtdriver.GetHyper()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	conf := &InstanceConfSchema{}
+	if err := json.Unmarshal([]byte(body), conf); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	xmlObj, err := h.InstanceConf2XML(conf)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	xmlData := xmlObj.Encode()
+	if xmlData == "" {
+		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
+		return
+	}
+	//libstar.Info("Server.AddInstance: xmlData: %s", xmlData)
+	file := h.GetStore(conf.DataStore, conf.Name)+"/define.xml"
+	libstar.XML.MarshalSave(xmlObj, file, true)
+
+	if dom, err := hyper.DomainDefineXML(xmlData); err == nil {
+		if err := dom.Create(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		h.ResponseMsg(w, 0, "")
+	} else {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := h.GetArg(r, "id")
 
-	hyper, err := libvirtdriver.GetHyper("")
+	hyper, err := libvirtdriver.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -417,9 +570,19 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		return
-	case "resume":
-		if err := dom.Resume(); err != nil {
+	case "destroy":
+		if err := dom.Destroy(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	case "remove":
+		if err := dom.Undefine(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		} else {
+			if name, err := dom.GetName(); err == nil {
+				path := h.GetStore("datastore/01", name)
+				os.RemoveAll(path)
+			}
 		}
 		return
 	}

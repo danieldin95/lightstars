@@ -56,9 +56,6 @@ export class Instance {
         disabled(this.instanes.length == 0);
 
         // Register click handle.
-        // $("instance-create").on("click", this, function (e) {
-        //     e.data.create(this);
-        // });
         $("instance-start, instance-more-start").on("click", this, function (e) {
             e.data.start(this);
         });
@@ -73,6 +70,12 @@ export class Instance {
         });
         $("instance-more-resume").on("click", this, function (e) {
             e.data.resume(this);
+        });
+        $("instance-more-destroy").on("click", this, function (e) {
+            e.data.destroy(this);
+        });
+        $("instance-more-remove").on("click", this, function (e) {
+            e.data.remove(this);
         });
     }
 
@@ -136,7 +139,36 @@ export class Instance {
         });
     }
 
+    destroy(on) {
+        this.instanes.forEach(function (item, index, err) {
+            let data = {action: 'destroy'};
+
+            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+                $("infos").append(AlertSuccess(`destroy instance '${item}' success`));
+            }).fail(function (e) {
+                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            })
+        });
+    }
+
+    remove(on) {
+        this.instanes.forEach(function (item, index, err) {
+            let data = {action: 'remove'};
+
+            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+                $("infos").append(AlertSuccess(`remove instance '${item}' success`));
+            }).fail(function (e) {
+                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            })
+        });
+    }
+
+
     create (data) {
-        console.log("TODO diag create wizard.", data);
+        $.post("api/instance", JSON.stringify(data), function (data, status) {
+            $("infos").append(AlertSuccess(`create instance '${data.name}' success`));
+        }).fail(function (e) {
+            $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        })
     }
 }

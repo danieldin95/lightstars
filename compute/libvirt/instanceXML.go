@@ -15,6 +15,7 @@ type DomainXML struct {
 	Memory  MemXML     `xml:"memory" json:"memory"`
 	CurMem  CurMemXML  `xml:"currentMemory" json:"currentMemory"`
 	VCPUXml VCPUXML    `xml:"vcpu" json:"vcpu"`
+	OS      OSXML      `xml:"os" json:"os"`
 }
 
 func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
@@ -64,10 +65,11 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 	return "", ""
 }
 
+
 type VCPUXML struct {
-	XMLName xml.Name `xml:"vcpu" json:"-"`
-	Type    string   `xml:"placement,attr" json:"placement"`
-	Value   string   `xml:",chardata" json:"Value"`
+	XMLName   xml.Name `xml:"vcpu" json:"-"`
+	Placement string   `xml:"placement,attr" json:"placement"`
+	Value     string   `xml:",chardata" json:"Value"`
 }
 
 func (cpu *VCPUXML) Decode(xmlData string) error {
@@ -101,6 +103,48 @@ type CurMemXML struct {
 func (cmem *CurMemXML) Decode(xmlData string) error {
 	if err := xml.Unmarshal([]byte(xmlData), cmem); err != nil {
 		libstar.Error("CurMemXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type OSXML struct {
+	XMLName xml.Name    `xml:"os" json:"-"`
+	Type    OSTypeXML   `xml:"type" json:"type"`
+	Boot    []OSBootXML `xml:"boot" json:"boot"`
+}
+
+func (osx *OSXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), osx); err != nil {
+		libstar.Error("OSXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type OSTypeXML struct {
+	XMLName xml.Name `xml:"type" json:"-"`
+	Arch    string   `xml:"arch,attr" json:"arch"`
+	Machine string   `xml:"machine,attr" json:"machine"`
+	Value   string   `xml:",chardata" json:"value"`
+}
+
+func (ost *OSTypeXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), ost); err != nil {
+		libstar.Error("OSTypeXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type OSBootXML struct {
+	XMLName xml.Name `xml:"boot" json:"-"`
+	Dev     string   `xml:"dev,attr" json:"dev"`
+}
+
+func (osb *OSBootXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), osb); err != nil {
+		libstar.Error("OSBootXML.Decode %s", err)
 		return err
 	}
 	return nil
@@ -168,7 +212,7 @@ func (drv *DiskDriverXML) Decode(xmlData string) error {
 
 type DiskSourceXML struct {
 	XMLName xml.Name `xml:"source" json:"-"`
-	Name    string   `xml:"file,attr" json:"file"`
+	File    string   `xml:"file,attr,omitempty" json:"file,omitempty"`
 	Device  string   `xml:"device,attr,omitempty" json:"device,omitempty"`
 }
 

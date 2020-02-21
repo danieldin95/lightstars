@@ -3,6 +3,7 @@ package libstar
 import (
 	"bytes"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -10,6 +11,7 @@ import (
 	"os"
 	"reflect"
 	"runtime"
+	"strconv"
 	"time"
 )
 
@@ -40,65 +42,6 @@ func GenEthAddr(n int) []byte {
 	data[0] &= 0xfe
 
 	return data
-}
-
-func Marshal(v interface{}, pretty bool) (string, error) {
-	str, err := json.Marshal(v)
-	if err != nil {
-		Error("Marshal error: %s", err)
-		return "", err
-	}
-
-	if !pretty {
-		return string(str), nil
-	}
-
-	var out bytes.Buffer
-
-	if err := json.Indent(&out, str, "", "  "); err != nil {
-		return string(str), nil
-	}
-
-	return out.String(), nil
-}
-
-func MarshalSave(v interface{}, file string, pretty bool) error {
-	f, err := os.OpenFile(file, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0600)
-	defer f.Close()
-	if err != nil {
-		Error("MarshalSave: %s", err)
-		return err
-	}
-
-	str, err := Marshal(v, true)
-	if err != nil {
-		Error("MarshalSave error: %s", err)
-		return err
-	}
-
-	if _, err := f.Write([]byte(str)); err != nil {
-		Error("MarshalSave: %s", err)
-		return err
-	}
-
-	return nil
-}
-
-func UnmarshalLoad(v interface{}, file string) error {
-	if _, err := os.Stat(file); os.IsNotExist(err) {
-		return NewErr("UnmarshalLoad: file:<%s> does not exist", file)
-	}
-
-	contents, err := ioutil.ReadFile(file)
-	if err != nil {
-		return NewErr("UnmarshalLoad: file:<%s> %s", file, err)
-	}
-
-	if err := json.Unmarshal([]byte(contents), v); err != nil {
-		return NewErr("UnmarshalLoad: %s", err)
-	}
-
-	return nil
 }
 
 func FunName(i interface{}) string {
@@ -161,4 +104,146 @@ func PrettyKBytes(k uint64) string {
 	}
 	g, d := split(m, 1024)
 	return fmt.Sprintf("%d.%02dG", g, d)
+}
+
+func ToKib(v, u string) uint64 {
+	value, _ := strconv.Atoi(v)
+	switch u {
+	case "MiB":
+		return uint64(value) * 1024
+	case "GiB":
+		return uint64(value) * 1024 * 1024
+	case "TiB":
+		return uint64(value) * 1024 * 1024 * 1024
+	case "KiB":
+		return uint64(value)
+	default:
+		return 0
+	}
+}
+
+type jsonUtils struct {
+}
+
+var JSON = jsonUtils{}
+
+func (j jsonUtils) Marshal(v interface{}, pretty bool) (string, error) {
+	str, err := json.Marshal(v)
+	if err != nil {
+		Error("Marshal error: %s", err)
+		return "", err
+	}
+
+	if !pretty {
+		return string(str), nil
+	}
+
+	var out bytes.Buffer
+
+	if err := json.Indent(&out, str, "", "  "); err != nil {
+		return string(str), nil
+	}
+
+	return out.String(), nil
+}
+
+func (j jsonUtils) MarshalSave(v interface{}, file string, pretty bool) error {
+	f, err := os.OpenFile(file, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0600)
+	defer f.Close()
+	if err != nil {
+		Error("MarshalSave: %s", err)
+		return err
+	}
+
+	str, err := j.Marshal(v, true)
+	if err != nil {
+		Error("MarshalSave error: %s", err)
+		return err
+	}
+
+	if _, err := f.Write([]byte(str)); err != nil {
+		Error("MarshalSave: %s", err)
+		return err
+	}
+
+	return nil
+}
+
+func (j jsonUtils) UnmarshalLoad(v interface{}, file string) error {
+	if _, err := os.Stat(file); os.IsNotExist(err) {
+		return NewErr("UnmarshalLoad: file:<%s> does not exist", file)
+	}
+
+	contents, err := ioutil.ReadFile(file)
+	if err != nil {
+		return NewErr("UnmarshalLoad: file:<%s> %s", file, err)
+	}
+
+	if err := json.Unmarshal([]byte(contents), v); err != nil {
+		return NewErr("UnmarshalLoad: %s", err)
+	}
+
+	return nil
+}
+
+type xmlUtils struct {
+}
+
+var XML = xmlUtils{}
+
+func (x xmlUtils) Marshal(v interface{}, pretty bool) (string, error) {
+	if !pretty {
+		str, err := xml.Marshal(v)
+		if err != nil {
+			Error("Marshal error: %s", err)
+			return "", err
+		}
+		return string(str), nil
+	} else {
+		str, err := xml.MarshalIndent(v, "", "  ")
+		if err != nil {
+			Error("Marshal error: %s", err)
+			return "", err
+		}
+		return string(str), nil
+	}
+}
+
+func (x xmlUtils) MarshalSave(v interface{}, file string, pretty bool) error {
+	f, err := os.OpenFile(file, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0600)
+	defer f.Close()
+	if err != nil {
+		Error("MarshalSave: %s", err)
+		return err
+	}
+
+	str, err := x.Marshal(v, true)
+	if err != nil {
+		Error("MarshalSave error: %s", err)
+		return err
+	}
+
+	if _, err := f.Write([]byte(str)); err != nil {
+		Error("MarshalSave: %s", err)
+		return err
+	}
+
+	return nil
+}
+
+func (x xmlUtils) UnmarshalLoad(v interface{}, file string) error {
+	if _, err := os.Stat(file); os.IsNotExist(err) {
+		return NewErr("UnmarshalLoad: file:<%s> does not exist", file)
+	}
+
+	contents, err := ioutil.ReadFile(file)
+	if err != nil {
+		return NewErr("UnmarshalLoad: file:<%s> %s", file, err)
+	}
+
+	if err := xml.Unmarshal([]byte(contents), v); err != nil {
+		return NewErr("UnmarshalLoad: %s", err)
+	}
+
+	return nil
 }

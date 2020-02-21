@@ -129,7 +129,7 @@ var hyper = HyperVisor{
 	Address: "localhost",
 }
 
-func GetHyper(name string) (*HyperVisor, error) {
+func GetHyper() (*HyperVisor, error) {
 	if hyper.Conn == nil {
 		conn, err := libvirt.NewConnect(hyper.Name)
 		if err != nil {
@@ -163,8 +163,8 @@ func init() {
 	hyper.Init()
 }
 
-func LookupDomainByUUIDString(name, uuid string) (*Domain, error) {
-	hyper, err := GetHyper(name)
+func LookupDomainByUUIDString(uuid string) (*Domain, error) {
+	hyper, err := GetHyper()
 	if err != nil {
 		return nil, err
 	}
@@ -175,8 +175,8 @@ func LookupDomainByUUIDString(name, uuid string) (*Domain, error) {
 	return dom, nil
 }
 
-func LookupDomainByUUIDName(name, uuid string) (*Domain, error) {
-	hyper, err := GetHyper(name)
+func LookupDomainByUUIDName(uuid string) (*Domain, error) {
+	hyper, err := GetHyper()
 	if err != nil {
 		return nil, err
 	}

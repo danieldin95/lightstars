@@ -2,16 +2,23 @@
 export class InstanceCreateModal {
     constructor () {
         this.view = this.render();
+
+        this.view.find("select[name='cpu'] option").remove();
+        for (let i = 1; i <= 16; i++) {
+            this.view.find("select[name='cpu']").append(new Option(i, i));
+        }
         this.container = $("#instanceCreateModal");
         this.container.html(this.view);
 
         this.wizard = $("#instanceCreateWizard");
         this.forms = $("#instanceCreateWizard form");
+        this.prevbtn = "#instanceCreateWizard #prev-btn";
+        this.nextbtn = "#instanceCreateWizard #next-btn";
 
         this.load();
         this.events = {
             submit: {
-                on: function (e) {
+                func: function (e) {
                 },
                 data: undefined,
             }
@@ -19,18 +26,21 @@ export class InstanceCreateModal {
     }
 
     submit() {
-        if (this.events.submit.on) {
-            this.events.submit.on({data: this.events.submit.data, array: this.forms.serializeArray()});
+        if (this.events.submit.func) {
+            this.events.submit.func({
+                data: this.events.submit.data,
+                array: this.forms.serializeArray()
+            });
         }
     }
 
     onSubmit(data, fn) {
         this.events.submit.data = data;
-        this.events.submit.on = fn;
+        this.events.submit.func = fn;
     }
 
     render() {
-        return `
+        return $(`
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -49,7 +59,9 @@ export class InstanceCreateModal {
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-4 col-form-label-sm">Name</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-sm" name="name" value="centos.xx">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm" name="name" value="centos.xx">
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -59,10 +71,12 @@ export class InstanceCreateModal {
                                 <div class="form-group row">
                                     <label for="storage" class="col-sm-4 col-form-label-sm">Storage</label>
                                     <div class="col-sm-6">
-                                        <select class="custom-select custom-select-sm input-select-sm" name="datastore">
-                                            <option value="datastore01" selected>datastore01</option>
-                                            <option value="datastore02">datastore02</option>
-                                        </select>
+                                        <div class="input-group">
+                                            <select class="select-simple" name="datastore">
+                                                <option value="datastore/01" selected>datastore01</option>
+                                                <option value="datastore/02">datastore02</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -72,15 +86,34 @@ export class InstanceCreateModal {
                                 <div class="form-group row">
                                     <label for="staticEmail" class="col-sm-4 col-form-label-sm">CPU</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-sm input-number" name="cpuNum" value="2">
+                                        <div class="input-group">
+                                            <select class="select-simple select-unit" name="cpu">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>   
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="staticEmail" class="col-sm-4 col-form-label-sm">Disk</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label-sm">Memory</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm input-number-lg" name="memorySize" value="2048">
+                                            <select class="select-simple select-unit-right" name="memoryUnit">
+                                                <option value="Mib" selected>MiB</option>
+                                                <option value="GiB">GiB</option>
+                                            </select>       
+                                        </div>
+                                    </div>
+                                </div>                                
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-sm-4 col-form-label-sm">Hardware disk01</label>
                                     <div class="col-sm-6">
                                         <div class="input-group">
                                             <input type="text" class="form-control form-control-sm input-number-lg" name="diskSize" value="10">
-                                            <select class="simple-select unit-select" name="diskUnit">
+                                            <select class="select-simple select-unit-right" name="diskUnit">
                                                 <option value="Mib">MiB</option>
                                                 <option value="GiB" selected>GiB</option>
                                                 <option value="TiB">TiB</option>
@@ -91,25 +124,22 @@ export class InstanceCreateModal {
                                 <div class="form-group row">
                                     <label for="inputPassword" class="col-sm-4 col-form-label-sm">Datastore ISO file</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-sm" name="isoFile" value="/dev/sr0">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label-sm">Memory</label>
-                                    <div class="col-sm-6">
                                         <div class="input-group">
-                                            <input type="text" class="form-control form-control-sm input-number-lg" name="memorySize" value="2048">
-                                            <select class="simple-select unit-select" name="memoryUnit">
-                                                <option value="Mib" selected>MiB</option>
-                                                <option value="GiB">GiB</option>
-                                            </select>       
+                                            <input type="text" class="form-control form-control-sm" name="isoFile" value="/dev/sr0">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="staticEmail" class="col-sm-4 col-form-label-sm">Bridge interface</label>
+                                    <label for="staticEmail" class="col-sm-4 col-form-label-sm">Network interface01</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-sm input-string-sm" name="bridge" value="virbr0">
+                                        <div class="input-group">
+                                            <select class="select-simple" name="interface">
+                                                <option value="virbr0" selected>Virtual Bridge0</option>
+                                                <option value="virbr1">Virtual Bridge1</option>
+                                                <option value="virbr2">Virtual Bridge2</option>
+                                                <option value="virbr3">Virtual Bridge3</option>
+                                            </select>  
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -117,31 +147,32 @@ export class InstanceCreateModal {
                     </div>
                 </div>
             </div>
-        </div>`
+        </div>`)
     }
 
     load() {
-        console.log("wizard", this.wizard);
-
+        let prevbtn = this.prevbtn;
+        let nextbtn = this.nextbtn;
 
         // Step show event
         this.wizard.on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
-            if(stepPosition === 'first') {
-                $("#prev-btn").addClass('disabled');
-            }else if(stepPosition === 'final'){
-                $("#next-btn").addClass('disabled');
-            }else{
-                $("#prev-btn").removeClass('disabled');
-                $("#next-btn").removeClass('disabled');
+            if (stepPosition === 'first') {
+                $(prevbtn).addClass('disabled');
+            } else if (stepPosition === 'final') {
+                $(nextbtn).addClass('disabled');
+            } else {
+                $(prevbtn).removeClass('disabled');
+                $(nextbtn).removeClass('disabled');
             }
         });
         // Toolbar extra buttons
-        let btnFinish = $('<button></button>').text('Finish')
+        let btnFinish = $('<button id="finish-btn"></button>').text('Finish')
             .addClass('btn btn-outline-success btn-sm')
             .on('click', this, function(e) {
                 e.data.submit();
+                e.data.container.modal("hide");
             });
-        let btnCancel = $('<button></button>').text('Cancel')
+        let btnCancel = $('<button id="cancel-btn"></button>').text('Cancel')
             .addClass('btn btn-outline-dark btn-sm')
             .on('click', this, function(e) {
                 e.data.container.modal("hide");

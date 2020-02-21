@@ -53,7 +53,7 @@ a {
     margin: 16px 10px;
 }
 
-.simple-select {
+.select-simple {
     display: block;
     width: 100%;
     padding: 0.375rem 0.75rem;
@@ -61,13 +61,22 @@ a {
     line-height: 1.5;
     color: #495057;
     border: 1px solid #ced4da;
-    background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+    background: #fff
+        url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E")
+        no-repeat right 0.75rem center;
     background-size: 8px 10px;
     -webkit-appearance: none;
     border-radius: 0.2rem;
 }
 
-.unit-select {
+.select-unit {
+    width: auto;
+    min-width: 4rem;
+    padding: 0.375rem 0.75rem;
+    font-size: inherit;
+}
+
+.select-unit-right {
     width: auto;
     min-width: 4rem;
     margin-left: 1rem;

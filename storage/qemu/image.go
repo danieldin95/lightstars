@@ -1,4 +1,4 @@
-package libvirtdriver
+package qemuimgdriver
 
 import (
 	"github.com/quadrifoglio/go-qemu"
