@@ -15,27 +15,27 @@ export function Arr2Json(data) {
 export function ListenChangeAll(storage, one, all, fn) {
     // listen on all one.
     for (let i = 0; i < $(one).length; i++) {
-        $(one).eq(i).on("change", storage, function(e) {
+        $(one).eq(i).on("change", function(e) {
             let data = $(this).attr("data");
             if ($(this).prop("checked")) {
-                e.data.push(data)
+                storage.push(data)
             } else {
-                e.data = e.data.filter(v => v != data);
+                storage = storage.filter(v => v != data);
             }
             fn({data: storage})
         });
     }
 
     // listen on all and change to one.
-    $(all).on("change", storage, function(e) {
+    $(all).on("change", function(e) {
+        storage = []; // empty
         if ($(this).prop("checked")) {
             $(one).each(function (index, element) {
-                e.data.push($(this).attr("data"));
+                storage.push($(this).attr("data"));
                 $(element).prop("checked", true);
             });
         } else {
             $(one).each(function (index, element) {
-                e.data = [];
                 $(element).prop("checked", false);
             });
         }
