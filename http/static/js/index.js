@@ -1,4 +1,5 @@
 import {InstanceApi} from "./api/instance.js";
+import {ListenChangeAll} from "./com/utils.js";
 
 export class Instances {
 
@@ -44,34 +45,8 @@ export class InstanceOn {
         this.uuids = [];
 
         let disabled = this.disable;
-        let documentOne = $("instance-on-one input");
-        let documentAll = $("instance-on-all input");
-
-        for (let i = 0; i < documentOne.length; i++) {
-            documentOne.eq(i).on("change", this.uuids, function(e) {
-                let uuid = $(this).attr("data");
-                if ($(this).prop("checked")) {
-                    e.data.push(uuid)
-                } else {
-                    e.data = e.data.filter(v => v != uuid);
-                }
-                disabled(e.data.length == 0);
-            });
-        }
-
-        documentAll.on("change", this.uuids, function(e) {
-            if ($(this).prop("checked")) {
-                documentOne.each(function (index, element) {
-                    e.data.push($(this).attr("data"));
-                    $(element).prop("checked", true);
-                });
-            } else {
-                documentOne.each(function (index, element) {
-                    e.data = [];
-                    $(element).prop("checked", false);
-                });
-            }
-            disabled(e.data.length == 0);
+        ListenChangeAll(this.uuids, "instance-on-one input", "instance-on-all input", function (e) {
+           disabled(e.data.length == 0);
         });
 
         // Disabled firstly.
