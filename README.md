@@ -22,6 +22,7 @@ This software makes it easier for you to control compute resource.
 ## Configure Default DataStore
 
     mkdir -p /lighstar/datastore/01
+    virsh pool-create-as --name 01 --type dir --target /lightstar/datastore/01
 
 ## Upload one Linux ISO file
 

@@ -667,7 +667,7 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Server) GetDataStore(w http.ResponseWriter, r *http.Request) {
-	h.ResponseJson(w, qemus.DATASTOR.List())
+	h.ResponseJson(w, libvirts.DATASTOR.List())
 }
 
 func (h *Server) GetISO(w http.ResponseWriter, r *http.Request) {
@@ -676,7 +676,7 @@ func (h *Server) GetISO(w http.ResponseWriter, r *http.Request) {
 		store = "datastore@01"
 	}
 	path := storage.PATH.Unix(store)
-	h.ResponseJson(w, qemus.ISO.ListFiles(path))
+	h.ResponseJson(w, libvirts.ISO.ListFiles(path))
 }
 
 func (h *Server) GetBridge(w http.ResponseWriter, r *http.Request) {
