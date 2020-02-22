@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirt"
+	"github.com/danieldin95/lightstar/compute/libvir"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
 )
@@ -29,7 +29,7 @@ type Hyper struct {
 }
 
 func NewHyper() (hs Hyper) {
-	hyper, _ := libvirtdriver.GetHyper()
+	hyper, _ := libvir.GetHyper()
 
 	hs.CpuNum, hs.CpuVendor = hyper.GetCPU()
 	hs.MemTotal, hs.MemFree, hs.MemPercent = hyper.GetMem()

@@ -1,4 +1,4 @@
-package libvirtdriver
+package libvir
 
 import (
 	"github.com/libvirt/libvirt-go"

@@ -1,4 +1,0 @@
-1. support default bridge mode;
-2. support vxlan/vlan/gre;
-3. support openvswitch;
-4. dhcp, dns and vroute;

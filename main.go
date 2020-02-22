@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/danieldin95/lightstar/compute/libvirt"
+	"github.com/danieldin95/lightstar/compute/libvir"
 	"github.com/danieldin95/lightstar/http"
 	"os"
 	"os/signal"
@@ -35,7 +35,7 @@ func main() {
 	flag.StringVar(&authFile, "auth:file", authFile, "the file saved administrator auth")
 	flag.Parse()
 
-	libvirtdriver.SetHyper(hypervisor)
+	libvir.SetHyper(hypervisor)
 	h := http.NewServer(listen, staticDir, authFile)
 	h.SetCert(crtDir+"/private.key", crtDir+"/crt.pem")
 

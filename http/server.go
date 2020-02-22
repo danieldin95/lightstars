@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/danieldin95/lightstar/compute/libvirt"
+	"github.com/danieldin95/lightstar/compute/libvir"
 	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
@@ -257,7 +257,7 @@ func (h *Server) HandleUi(w http.ResponseWriter, r *http.Request) {
 		Instances: make([]schema.Instance, 0, 32),
 	}
 
-	hyper, err := libvirtdriver.GetHyper()
+	hyper, err := libvir.GetHyper()
 	if err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
 		return
@@ -279,7 +279,7 @@ func (h *Server) HandleUi(w http.ResponseWriter, r *http.Request) {
 func (h *Server) HandleInstance(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := h.GetArg(r, "id")
 
-	dom, err := libvirtdriver.LookupDomainByUUIDString(uuid)
+	dom, err := libvir.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -309,7 +309,7 @@ func (h *Server) GetTarget(req *http.Request) string {
 	}
 
 	libstar.Info("Server.GetTarget %s", id)
-	hyper, err := libvirtdriver.GetHyper()
+	hyper, err := libvir.GetHyper()
 	if err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
 		return ""
@@ -318,7 +318,7 @@ func (h *Server) GetTarget(req *http.Request) string {
 	if err != nil {
 		return ""
 	}
-	instXml := libvirtdriver.NewDomainXMLFromDom(dom, true)
+	instXml := libvir.NewDomainXMLFromDom(dom, true)
 	if instXml == nil {
 		return ""
 	}
@@ -372,7 +372,7 @@ func (h *Server) GetArg(r *http.Request, name string) (string, bool) {
 func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := h.GetArg(r, "id")
 
-	dom, err := libvirtdriver.LookupDomainByUUIDString(uuid)
+	dom, err := libvir.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -389,7 +389,7 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 	} else if format == "schema" {
 		h.ResponseJson(w, schema.NewInstance(*dom))
 	} else {
-		h.ResponseJson(w, libvirtdriver.NewDomainXMLFromDom(dom, true))
+		h.ResponseJson(w, libvir.NewDomainXMLFromDom(dom, true))
 	}
 }
 
@@ -413,21 +413,21 @@ func (h *Server) NewImage(conf *schema.InstanceConf) (*qemuimgdriver.Image, erro
 	return img, nil
 }
 
-func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtdriver.DomainXML, error) {
-	dom := libvirtdriver.DomainXML{
+func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvir.DomainXML, error) {
+	dom := libvir.DomainXML{
 		Type: "kvm",
 		Name: conf.Name,
-		Devices: libvirtdriver.DevicesXML{
-			Disks:      make([]libvirtdriver.DiskXML, 2),
-			Graphics:   make([]libvirtdriver.GraphicsXML, 1),
-			Interfaces: make([]libvirtdriver.InterfaceXML, 1),
+		Devices: libvir.DevicesXML{
+			Disks:      make([]libvir.DiskXML, 2),
+			Graphics:   make([]libvir.GraphicsXML, 1),
+			Interfaces: make([]libvir.InterfaceXML, 1),
 		},
-		OS: libvirtdriver.OSXML{
-			Type: libvirtdriver.OSTypeXML{
+		OS: libvir.OSXML{
+			Type: libvir.OSTypeXML{
 				Arch:  conf.Arch,
 				Value: "hvm",
 			},
-			Boot: make([]libvirtdriver.OSBootXML, 3),
+			Boot: make([]libvir.OSBootXML, 3),
 		},
 	}
 	if dom.OS.Type.Arch == "" {
@@ -443,82 +443,82 @@ func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtdriver.Doma
 	}
 	for i, v := range strings.Split(conf.Boots, ",") {
 		if i < 3 {
-			dom.OS.Boot[i] = libvirtdriver.OSBootXML{
+			dom.OS.Boot[i] = libvir.OSBootXML{
 				Dev: v,
 			}
 		}
 	}
-	dom.VCPUXml = libvirtdriver.VCPUXML{
+	dom.VCPUXml = libvir.VCPUXML{
 		Placement: "static",
 		Value:     conf.Cpu,
 	}
-	dom.Memory = libvirtdriver.MemXML{
+	dom.Memory = libvir.MemXML{
 		Value: conf.MemorySize,
 		Type:  conf.MemoryUnit,
 	}
-	dom.CurMem = libvirtdriver.CurMemXML{
+	dom.CurMem = libvir.CurMemXML{
 		Value: conf.MemorySize,
 		Type:  conf.MemoryUnit,
 	}
-	dom.Devices.Graphics[0] = libvirtdriver.GraphicsXML{
+	dom.Devices.Graphics[0] = libvir.GraphicsXML{
 		Type:   "vnc",
 		Listen: "0.0.0.0",
 		Port:   "-1",
 	}
 	if strings.HasPrefix(conf.IsoFile, "/dev") {
-		dom.Devices.Disks[0] = libvirtdriver.DiskXML{
+		dom.Devices.Disks[0] = libvir.DiskXML{
 			Type:   "block",
 			Device: "cdrom",
-			Driver: libvirtdriver.DiskDriverXML{
+			Driver: libvir.DiskDriverXML{
 				Name: "qemu",
 				Type: "raw",
 			},
-			Source: libvirtdriver.DiskSourceXML{
+			Source: libvir.DiskSourceXML{
 				Device: conf.IsoFile,
 			},
-			Target: libvirtdriver.DiskTargetXML{
+			Target: libvir.DiskTargetXML{
 				Bus: "ide",
 				Dev: "hda",
 			},
 		}
 	} else {
-		dom.Devices.Disks[0] = libvirtdriver.DiskXML{
+		dom.Devices.Disks[0] = libvir.DiskXML{
 			Type:   "file",
 			Device: "cdrom",
-			Driver: libvirtdriver.DiskDriverXML{
+			Driver: libvir.DiskDriverXML{
 				Name: "qemu",
 				Type: "raw",
 			},
-			Source: libvirtdriver.DiskSourceXML{
+			Source: libvir.DiskSourceXML{
 				File: storage.PATH.Unix(conf.IsoFile),
 			},
-			Target: libvirtdriver.DiskTargetXML{
+			Target: libvir.DiskTargetXML{
 				Bus: "ide",
 				Dev: "hda",
 			},
 		}
 	}
-	dom.Devices.Disks[1] = libvirtdriver.DiskXML{
+	dom.Devices.Disks[1] = libvir.DiskXML{
 		Type:   "file",
 		Device: "disk",
-		Driver: libvirtdriver.DiskDriverXML{
+		Driver: libvir.DiskDriverXML{
 			Name: "qemu",
 			Type: img.Format,
 		},
-		Source: libvirtdriver.DiskSourceXML{
+		Source: libvir.DiskSourceXML{
 			File: img.Path,
 		},
-		Target: libvirtdriver.DiskTargetXML{
+		Target: libvir.DiskTargetXML{
 			Bus: "virtio",
 			Dev: "vda",
 		},
 	}
-	dom.Devices.Interfaces[0] = libvirtdriver.InterfaceXML{
+	dom.Devices.Interfaces[0] = libvir.InterfaceXML{
 		Type: "bridge",
-		Source: libvirtdriver.InterfaceSourceXML{
+		Source: libvir.InterfaceSourceXML{
 			Bridge: conf.Interface,
 		},
-		Model: libvirtdriver.InterfaceModelXML{
+		Model: libvir.InterfaceModelXML{
 			Type: "virtio",
 		},
 	}
@@ -526,7 +526,7 @@ func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtdriver.Doma
 }
 
 func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
-	hyper, err := libvirtdriver.GetHyper()
+	hyper, err := libvir.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -563,7 +563,7 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		domXML := libvirtdriver.NewDomainXMLFromDom(dom, true)
+		domXML := libvir.NewDomainXMLFromDom(dom, true)
 		if domXML != nil {
 			h.ResponseJson(w, domXML)
 		} else {
@@ -578,7 +578,7 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := h.GetArg(r, "id")
 
-	hyper, err := libvirtdriver.GetHyper()
+	hyper, err := libvir.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
