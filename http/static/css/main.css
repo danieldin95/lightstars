@@ -149,10 +149,11 @@ a {
 }
 
 .disk, .interface {
-    border-color: #dee2e6;
+    border-color: #6c757d;
 }
 
 .disk .card-header, .interface .card-header {
     background-color: #f8f9fa;
+    border-color: #6c757d;
 }
 
