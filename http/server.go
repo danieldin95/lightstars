@@ -67,13 +67,15 @@ func (h *Server) LoadRouter() {
 	// static files
 	staticFile := http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir)))
 	router.PathPrefix("/static/").Handler(staticFile)
+	router.HandleFunc("/favicon.ico", h.HandleFavicon)
 	// proxy websocket
 	router.Handle("/websockify", websocket.Handler(h.HandleWebSockify))
 
 	// custom router
-	router.HandleFunc("/ui", h.HandleIndex)
-	router.HandleFunc("/ui/", h.HandleIndex)
-	router.HandleFunc("/ui/index", h.HandleIndex)
+	router.HandleFunc("/", h.HandleIndex)
+	router.HandleFunc("/ui", h.HandleUi)
+	router.HandleFunc("/ui/", h.HandleUi)
+	router.HandleFunc("/ui/index", h.HandleUi)
 	router.HandleFunc("/ui/instance/{id}", h.HandleInstance)
 
 	// api router
@@ -229,6 +231,16 @@ func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}
 	return nil
 }
 
+func (h *Server) HandleFavicon(w http.ResponseWriter, r *http.Request) {
+	realpath := h.GetFile("images/favicon.ico")
+	contents, err := ioutil.ReadFile(realpath)
+	if err != nil {
+		fmt.Fprintf(w, "404")
+		return
+	}
+	fmt.Fprintf(w, "%s\n", contents)
+}
+
 func (h *Server) Handle404(w http.ResponseWriter, r *http.Request) {
 	file := h.GetFile("404.html")
 	if err := h.ParseFiles(w, file, nil); err != nil {
@@ -237,6 +249,10 @@ func (h *Server) Handle404(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/ui", http.StatusTemporaryRedirect)
+}
+
+func (h *Server) HandleUi(w http.ResponseWriter, r *http.Request) {
 	index := schema.Index{
 		Instances: make([]schema.Instance, 0, 32),
 	}
