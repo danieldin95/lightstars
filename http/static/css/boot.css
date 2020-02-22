@@ -1,3 +1,8 @@
+.container {
+    min-width: 800px;
+    padding: 0;
+}
+
 .card {
     margin: 16px 10px;
     border-color: #6c757d;
@@ -5,6 +10,7 @@
 
 .card-header {
     padding: .25rem 1.25rem;
+    background-color: #ced4da;
 }
 
 .dropdown-menu {
@@ -25,8 +31,16 @@
 }
 
 .modal {
-    top: 0;
-    bottom: 0;
+    top: 10%;
+    bottom: inherit;
+    overflow: auto!important;
+}
+
+.sw-modal {
+    min-width: 760px;
+}
+
+.sw-main {
 }
 
 .sw-toolbar-bottom {

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/danieldin95/lightstar/compute/libvirt"
+	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage/qemu"
 	"github.com/gorilla/mux"
@@ -49,21 +50,31 @@ func NewServer(listen, staticDir, authFile string) (h *Server) {
 }
 
 func (h *Server) Router() *mux.Router {
-	if h.router == nil {
-		h.router = mux.NewRouter()
-		h.router.Use(h.Middleware)
+	if h.router != nil {
+		return h.router
 	}
+
+	h.router = mux.NewRouter()
+	h.router.NotFoundHandler = http.HandlerFunc(h.Handle404)
+	h.router.Use(h.Middleware)
 
 	return h.router
 }
 
 func (h *Server) LoadRouter() {
 	router := h.Router()
+	// static files
 	staticFile := http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir)))
-
-	router.HandleFunc("/", h.HandleIndex)
 	router.PathPrefix("/static/").Handler(staticFile)
+	// proxy websocket
 	router.Handle("/websockify", websocket.Handler(h.HandleWebSockify))
+
+	// custom router
+	router.HandleFunc("/ui", h.HandleIndex)
+	router.HandleFunc("/ui/index", h.HandleIndex)
+	router.HandleFunc("/ui/instance/{id}", h.HandleInstance)
+
+	// api router
 	router.HandleFunc("/api/instance", h.AddInstance).Methods("POST")
 	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
 	router.HandleFunc("/api/instance/{id}", h.ModInstance).Methods("PUT")
@@ -178,7 +189,7 @@ func (h *Server) ResponseJson(w http.ResponseWriter, v interface{}) {
 	}
 }
 
-func (h *Server) ResponseXml(w http.ResponseWriter, v string) {
+func (h *Server) ResponseXML(w http.ResponseWriter, v string) {
 	w.Header().Set("Content-Type", "application/xml")
 	w.Write([]byte(v))
 }
@@ -195,7 +206,7 @@ func (h *Server) ResponseMsg(w http.ResponseWriter, code int, message string) {
 }
 
 func (h *Server) GetFile(name string) string {
-	return fmt.Sprintf("%s%s", h.pubDir, name)
+	return fmt.Sprintf("%s/%s", h.pubDir, name)
 }
 
 func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
@@ -216,9 +227,16 @@ func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}
 	return nil
 }
 
+func (h *Server) Handle404(w http.ResponseWriter, r *http.Request) {
+	file := h.GetFile("404.html")
+	if err := h.ParseFiles(w, file, nil); err != nil {
+		libstar.Error("Server.Handle404 %s", err)
+	}
+}
+
 func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
-	index := IndexSchema{
-		Instances: make([]InstanceSchema, 0, 32),
+	index := schema.Index{
+		Instances: make([]schema.Instance, 0, 32),
 	}
 
 	hyper, err := libvirtdriver.GetHyper()
@@ -226,17 +244,32 @@ func (h *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
 		libstar.Error("Server.HandleIndex %s", err)
 		return
 	}
-	index.Version = NewVersionSchema()
-	index.Hyper = NewHyperSchema()
+	index.Version = schema.NewVersion()
+	index.Hyper = schema.NewHyper()
 	if domains, err := hyper.ListAllDomains(); err == nil {
 		for _, dom := range domains {
-			instance := NewInstanceSchema(dom)
+			instance := schema.NewInstance(dom)
 			index.Instances = append(index.Instances, instance)
 		}
 	}
-	file := h.GetFile("/index.html")
+	file := h.GetFile("index.html")
 	if err := h.ParseFiles(w, file, index); err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
+	}
+}
+
+func (h *Server) HandleInstance(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := h.GetArg(r, "id")
+
+	dom, err := libvirtdriver.LookupDomainByUUIDString(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	instance := schema.NewInstance(*dom)
+	file := h.GetFile("instance.html")
+	if err := h.ParseFiles(w, file, instance); err != nil {
+		libstar.Error("Server.HandleInstance %s", err)
 	}
 }
 
@@ -333,10 +366,12 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 	if format == "xml" {
 		xmlDesc, err := dom.GetXMLDesc(false)
 		if err == nil {
-			h.ResponseXml(w, xmlDesc)
+			h.ResponseXML(w, xmlDesc)
 		} else {
-			h.ResponseXml(w, "<error>"+err.Error()+"</error>")
+			h.ResponseXML(w, "<error>"+err.Error()+"</error>")
 		}
+	} else if format == "schema" {
+		h.ResponseJson(w, schema.NewInstance(*dom))
 	} else {
 		h.ResponseJson(w, libvirtdriver.NewDomainXMLFromDom(dom, true))
 	}
@@ -350,7 +385,7 @@ func (h *Server) GetStore(store, name string) string {
 	}
 }
 
-func (h *Server) NewImage(conf *InstanceConfSchema) (*qemuimgdriver.Image, error) {
+func (h *Server) NewImage(conf *schema.InstanceConf) (*qemuimgdriver.Image, error) {
 	path := h.GetStore(conf.DataStore, conf.Name)
 	if err := os.Mkdir(path, os.ModePerm); err != nil {
 		if !os.IsExist(err) {
@@ -366,13 +401,14 @@ func (h *Server) NewImage(conf *InstanceConfSchema) (*qemuimgdriver.Image, error
 	return img, nil
 }
 
-func (h *Server) InstanceConf2XML(conf *InstanceConfSchema) (libvirtdriver.DomainXML, error) {
+func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtdriver.DomainXML, error) {
 	dom := libvirtdriver.DomainXML{
 		Type: "kvm",
 		Name: conf.Name,
 		Devices: libvirtdriver.DevicesXML{
-			Disks:    make([]libvirtdriver.DiskXML, 2),
-			Graphics: make([]libvirtdriver.GraphicsXML, 1),
+			Disks:      make([]libvirtdriver.DiskXML, 2),
+			Graphics:   make([]libvirtdriver.GraphicsXML, 1),
+			Interfaces: make([]libvirtdriver.InterfaceXML, 1),
 		},
 		OS: libvirtdriver.OSXML{
 			Type: libvirtdriver.OSTypeXML{
@@ -465,6 +501,15 @@ func (h *Server) InstanceConf2XML(conf *InstanceConfSchema) (libvirtdriver.Domai
 			Dev: "vda",
 		},
 	}
+	dom.Devices.Interfaces[0] = libvirtdriver.InterfaceXML{
+		Type: "bridge",
+		Source: libvirtdriver.InterfaceSourceXML{
+			Bridge: conf.Interface,
+		},
+		Model: libvirtdriver.InterfaceModelXML{
+			Type: "virtio",
+		},
+	}
 	return dom, nil
 }
 
@@ -481,7 +526,7 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	conf := &InstanceConfSchema{}
+	conf := &schema.InstanceConf{}
 	if err := json.Unmarshal([]byte(body), conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -539,7 +584,7 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	conf := &InstanceConfSchema{}
+	conf := &schema.InstanceConf{}
 	if err := json.Unmarshal([]byte(body), conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

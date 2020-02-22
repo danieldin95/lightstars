@@ -31,7 +31,7 @@ export class InstanceCreateModal {
     fetch() {
         let cpu_selector = this.view.find("select[name='isoFile']");
         let cpu_refresh = function(datastore) {
-            $.getJSON("api/iso", {datastore: datastore}, function (data) {
+            $.getJSON("/api/iso", {datastore: datastore}, function (data) {
                 cpu_selector.find("option").remove();
                 data.forEach(function (ele, index) {
                     cpu_selector.append(Option(ele['name'], ele['path']));
@@ -43,7 +43,7 @@ export class InstanceCreateModal {
 
         let store_selector = this.view.find("select[name='datastore']");
         let store_refresh = function () {
-            $.getJSON("api/datastore", function (data) {
+            $.getJSON("/api/datastore", function (data) {
                 store_selector.find("option").remove();
                 data.forEach(function (ele, index) {
                     store_selector.append(Option(ele['name'], ele['path']));
@@ -77,7 +77,7 @@ export class InstanceCreateModal {
 
     render() {
         return $(`
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered sw-modal overflow-auto" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="instanceCreateModalLabel">Create Instance</h5>

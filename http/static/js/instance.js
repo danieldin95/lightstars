@@ -82,7 +82,7 @@ export class Instance {
         this.instanes.forEach(function (item, index, err) {
             let data = {action: 'start'};
 
-            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
                 $("infos").append(AlertSuccess(`start instance '${item}' success`));
             }).fail(function (e) {
                 $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
@@ -94,7 +94,7 @@ export class Instance {
         this.instanes.forEach(function (item, index, err) {
             let data = {action: 'shutdown'};
 
-            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
                 $("infos").append(AlertSuccess(`shutdown instance '${item}' success`));
             }).fail(function (e) {
                 $("errors").append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
@@ -106,7 +106,7 @@ export class Instance {
         this.instanes.forEach(function (item, index, err) {
             let data = {action: 'reset'};
 
-            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
                 $("infos").append(AlertSuccess(`reset instance '${item}' success`));
             }).fail(function (e) {
                 $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
@@ -118,7 +118,7 @@ export class Instance {
         this.instanes.forEach(function (item, index, err) {
             let data = {action: 'suspend'};
 
-            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
                 $("infos").append(AlertSuccess(`suspend instance '${item}' success`));
             }).fail(function (e) {
                 $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
@@ -130,7 +130,7 @@ export class Instance {
         this.instanes.forEach(function (item, index, err) {
             let data = {action: 'resume'};
 
-            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
                 $("infos").append(AlertSuccess(`resume instance '${item}' success`));
             }).fail(function (e) {
                 $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
@@ -142,7 +142,7 @@ export class Instance {
         this.instanes.forEach(function (item, index, err) {
             let data = {action: 'destroy'};
 
-            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
                 $("infos").append(AlertSuccess(`destroy instance '${item}' success`));
             }).fail(function (e) {
                 $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
@@ -154,7 +154,7 @@ export class Instance {
         this.instanes.forEach(function (item, index, err) {
             let data = {action: 'remove'};
 
-            $.put("api/instance/"+item, JSON.stringify(data), function (data, status) {
+            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
                 $("infos").append(AlertSuccess(`remove instance '${item}' success`));
             }).fail(function (e) {
                 $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
@@ -169,7 +169,7 @@ export class Instance {
     }
 
     create (data) {
-        $.post("api/instance", JSON.stringify(data), function (data, status) {
+        $.post("/api/instance", JSON.stringify(data), function (data, status) {
             $("infos").append(AlertSuccess(`create instance '${data.name}' success`));
         }).fail(function (e) {
             $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));

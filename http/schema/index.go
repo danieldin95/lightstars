@@ -1,4 +1,4 @@
-package http
+package schema
 
 import (
 	"github.com/danieldin95/lightstar/compute/libvirt"
@@ -6,21 +6,21 @@ import (
 	"github.com/libvirt/libvirt-go"
 )
 
-type VersionSchema struct {
+type Version struct {
 	Version string `json:"version"`
 	Date    string `json:"date"`
 	Commit  string `json:"commit"`
 }
 
-func NewVersionSchema() VersionSchema {
-	return VersionSchema{
+func NewVersion() Version {
+	return Version{
 		Version: libstar.Version,
 		Date:    libstar.Date,
 		Commit:  libstar.Commit,
 	}
 }
 
-type HyperSchema struct {
+type Hyper struct {
 	CpuNum     int     `json:"cpuNum"`
 	CpuVendor  string  `json:"cpuVendor"`
 	MemTotal   uint64  `json:"memTotal"`
@@ -28,7 +28,7 @@ type HyperSchema struct {
 	MemPercent float64 `json:"memPercent"`
 }
 
-func NewHyperSchema() (hs HyperSchema) {
+func NewHyper() (hs Hyper) {
 	hyper, _ := libvirtdriver.GetHyper()
 
 	hs.CpuNum, hs.CpuVendor = hyper.GetCPU()
@@ -60,37 +60,13 @@ func InstanceState2Str(state libvirt.DomainState) string {
 	}
 }
 
-type InstanceSchema struct {
-	UUID    string `json:"uuid"`
-	Name    string `json:"name"`
-	State   string `json:"state"`
-	MaxCpu  uint   `json:"maxCpu"`
-	MaxMem  uint64 `json:"maxMem"`  // Kbytes
-	Memory  uint64 `json:"memory"`  // KBytes
-	CpuTime uint64 `json:"cpuTime"` // MicroSeconds
+type Index struct {
+	Version   Version    `json:"version"`
+	Hyper     Hyper      `json:"hyper"`
+	Instances []Instance `json:"instances"`
 }
 
-func NewInstanceSchema(dom libvirtdriver.Domain) InstanceSchema {
-	object := InstanceSchema{}
-	object.UUID, _ = dom.GetUUIDString()
-	object.Name, _ = dom.GetName()
-	if info, err := dom.GetInfo(); err == nil {
-		object.State = InstanceState2Str(info.State)
-		object.MaxMem = info.MaxMem
-		object.Memory = info.Memory
-		object.MaxCpu = info.NrVirtCpu
-		object.CpuTime = info.CpuTime / 1000000
-	}
-	return object
-}
-
-type IndexSchema struct {
-	Version   VersionSchema    `json:"version"`
-	Hyper     HyperSchema      `json:"hyper"`
-	Instances []InstanceSchema `json:"instances"`
-}
-
-type InstanceConfSchema struct {
+type InstanceConf struct {
 	Action     string `json:"action"` // If is "", means not action.
 	Name       string `json:"name"`
 	Arch       string `json:"arch"`

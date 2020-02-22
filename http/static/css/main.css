@@ -29,8 +29,20 @@ a {
     font-size: small;
 }
 
-.card-header-cnt {
+/* Index */
+.card-header-cnt, .card-header-btn {
     margin-bottom: 10px;
+}
+
+.card-header-dis {
+    /*margin-top: 10px;*/
+    /*margin-bottom: 10px;*/
+    padding: 0 1.25rem;
+}
+
+.card-header-dis ol, .card-header-dis ul, .card-header-dis dl {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .running {
@@ -49,8 +61,38 @@ a {
     min-height: 430px;
 }
 
+.instance {
+    min-height: 430px;
+}
+
 .card-no-border {
     margin: 16px 10px;
+}
+
+.card-none {
+    padding: .25rem 1.25rem;
+}
+
+.card-just-left {
+    margin-left: 16px;
+}
+
+.background-light {
+    background-color: #f8f9fa;
+}
+
+.no-top {
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.no-bottom {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.no-border {
+    border: none;
 }
 
 .select-simple {
@@ -98,5 +140,11 @@ a {
 
 .input-string, .input-select {
     width: 100%;
+}
+
+/* Instance */
+
+.instance {
+    /*border-color: #f8f9fa;*/
 }
 

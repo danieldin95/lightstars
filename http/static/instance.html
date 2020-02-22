@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{.Name}} | Instance</title>
+    <!-- Bootstrap CSS -->
+    <link rel="shortcut icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/asset/bootstrap/4.0.0/css/bootstrap.css">
+
+    <!-- LightStar theme -->
+    <link rel="stylesheet" href="/static/css/boot.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body>
+<div class="container">
+    <div name="" class="card instance">
+        <div class="card-header background-light">
+            <div class="card-just-left"><strong>{{.Name}}</strong></div>
+        </div>
+
+        <!-- Overview -->
+        <div class="card-none">
+            <div class="card no-border">
+                <div class="card-header-btn">
+                    <instance-console>
+                        {{ if eq .State "running" }}
+                        <a type="button" class="btn btn-outline-dark btn-sm" href="/static/console?instance={{.UUID}}">console</a>
+                        {{ else }}
+                        <a type="button" class="btn btn-outline-dark btn-sm disabled" href="#">console</a>
+                        {{ end }}
+                    </instance-console>
+                    <instance-start>
+                        <button type="button" class="btn btn-outline-dark btn-sm">start</button>
+                    </instance-start>
+                    <instance-refresh>
+                        <a type="button" class="btn btn-outline-dark btn-sm" href="javascript:window.location.reload();">refresh</a>
+                    </instance-refresh>
+                    <instance-more>
+                        <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            operations
+                        </button>
+                        <div name="btn-more" class="dropdown-menu">
+                            <instance-more-start><a class="dropdown-item" href="#">start</a></instance-more-start>
+                            <instance-more-shutdown><a class="dropdown-item" href="#">shutdown</a></instance-more-shutdown>
+                            <instance-more-reset><a class="dropdown-item" href="#">reset</a></instance-more-reset>
+                            <div class="dropdown-divider"></div>
+                            <instance-more-suspend><a class="dropdown-item" href="#">suspend</a></instance-more-suspend>
+                            <instance-more-resume><a class="dropdown-item" href="#">resume</a></instance-more-resume>
+                            <div class="dropdown-divider"></div>
+                            <instance-more-destroy><a class="dropdown-item" href="#">destroy</a></instance-more-destroy>
+                            <instance-more-remove><a class="dropdown-item" href="#">remove</a></instance-more-remove>
+                        </div>
+                    </instance-more>
+                </div>
+                <div class="card-header-dis">
+                    <dl class="dl-horizontal">
+                        <dt>UUID:</dt>
+                        <dd>{{ .UUID }}</dd>
+                        <dt>Arch:</dt>
+                        <dd>{{ .Arch }} | {{ .Type }}</dd>
+                        <dt>CPU:</dt>
+                        <dd>{{ .MaxCpu }} | {{ .CpuTime }}ms</dd>
+                        <dt>Memory</dt>
+                        <dd>{{ prettyKBytes .MaxMem }} | {{ prettyKBytes .Memory }}</dd>
+                        <dt>State:</dt>
+                        <dd><span class="{{ .State }}">{{ .State }}</span></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-no-border no-top no-bottom">
+            <tasks></tasks>
+        </div>
+
+        <!-- Virtual Disk -->
+        <div class="card-body no-top">
+            <div name="disk" class="card disk">
+                <div class="card-header">
+                    <div>
+                        Virtual Disk
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-header-cnt">
+                        <disk-create>
+                            <button type="button" class="btn btn-outline-dark btn-sm"
+                                    data-toggle="modal" data-target="#diskCreateModal">
+                                create
+                            </button>
+                        </disk-create>
+                        <disk-edit>
+                            <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                        </disk-edit>
+                        <disk-delete>
+                            <button type="button" class="btn btn-outline-dark btn-sm">remove</button>
+                        </disk-delete>
+                    </div>
+                    <div class="l-content-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <disk-on-all>
+                                        <input type="checkbox" aria-label="select all disks">
+                                    </disk-on-all>
+                                </th>
+                                <th>ID</th>
+                                <th>Bus</th>
+                                <th>Device</th>
+                                <th>Source</th>
+                                <th>Format</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{ range $index, $_ := .Disks }}
+                                <tr>
+                                    <td>
+                                        <disk-on-one>
+                                            <input type="checkbox" aria-label="select {{ .Device }}" data="{{ .Device }}">
+                                        </disk-on-one>
+                                    </td>
+                                    <td>{{ $index }}</td>
+                                    <td>{{ .Bus }}</td>
+                                    <td>{{ .Device }}</td>
+                                    <td>{{ .Source }}</td>
+                                    <td>{{ .Format }}</td>
+                                </tr>
+                            {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interface -->
+            <div name="interface" class="card interface">
+                <div class="card-header">
+                    <div>
+                        Interface
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-header-cnt">
+                        <interface-create>
+                            <button type="button" class="btn btn-outline-dark btn-sm"
+                                    data-toggle="modal" data-target="#instanceCreateModal">
+                                create
+                            </button>
+                        </interface-create>
+                        <interface-edit>
+                            <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                        </interface-edit>
+                        <interface-remove>
+                            <button type="button" class="btn btn-outline-dark btn-sm">remove</button>
+                        </interface-remove>
+                    </div>
+                    <div class="l-content-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <interface-on-all>
+                                        <input type="checkbox" aria-label="select all interfaces">
+                                    </interface-on-all>
+                                </th>
+                                <th>ID</th>
+                                <th>Model</th>
+                                <th>Device</th>
+                                <th>Address</th>
+                                <th>Source</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{ range $index, $_ := .Interfaces }}
+                                <tr>
+                                    <td>
+                                        <interface-on-one>
+                                            <input type="checkbox" aria-label="select {{ .Device }}" data="{{ .Device }}">
+                                        </interface-on-one>
+                                    </td>
+                                    <td>{{ $index }}</td>
+                                    <td>{{ .Model }}</td>
+                                    <td>{{ .Device }}</td>
+                                    <td>{{ .Address }}</td>
+                                    <td>{{ .Source }}</td>
+                                </tr>
+                            {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- JQuery Javascript -->
+<script src="/static/asset/jquery-3.3.1.js"></script>
+<script src="/static/asset/popper.js/1.12.9/umd/popper.js"></script>
+<!-- Bootstrap Javascript -->
+<script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
+</body>
+</html>

@@ -11,11 +11,11 @@ type DomainXML struct {
 	Type    string     `xml:"type,attr" json:"type"`
 	Name    string     `xml:"name" json:"name"`
 	Uuid    string     `xml:"uuid" json:"uuid"`
-	Devices DevicesXML `xml:"devices" json:"devices"`
+	OS      OSXML      `xml:"os" json:"os"`
+	VCPUXml VCPUXML    `xml:"vcpu" json:"vcpu"`
 	Memory  MemXML     `xml:"memory" json:"memory"`
 	CurMem  CurMemXML  `xml:"currentMemory" json:"currentMemory"`
-	VCPUXml VCPUXML    `xml:"vcpu" json:"vcpu"`
-	OS      OSXML      `xml:"os" json:"os"`
+	Devices DevicesXML `xml:"devices" json:"devices"`
 }
 
 func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
@@ -153,6 +153,7 @@ type DevicesXML struct {
 	XMLName  xml.Name      `xml:"devices" json:"-"`
 	Graphics []GraphicsXML `xml:"graphics" json:"graphics"`
 	Disks    []DiskXML     `xml:"disk" json:"disk"`
+	Interfaces []InterfaceXML `xml:"interface", json:"interface"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -225,13 +226,84 @@ func (src *DiskSourceXML) Decode(xmlData string) error {
 
 type DiskTargetXML struct {
 	XMLName xml.Name `xml:"target" json:"-"`
-	Bus     string   `xml:"bus,attr" json:"bus"`
-	Dev     string   `xml:"dev,attr" json:"dev"`
+	Bus     string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
+	Dev     string   `xml:"dev,attr,omitempty" json:"dev,omitempty"`
 }
 
 func (tgt *DiskTargetXML) Decode(xmlData string) error {
 	if err := xml.Unmarshal([]byte(xmlData), tgt); err != nil {
 		libstar.Error("DiskTargetXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type InterfaceXML struct {
+	XMLName xml.Name      `xml:"interface" json:"-"`
+	Type    string         `xml:"type,attr" json:"type"`
+	Mac     InterfaceMacXML    `xml:"mac" json:"mac"`
+	Source  InterfaceSourceXML `xml:"source" json:"source"`
+	Model   InterfaceModelXML  `xml:"model" json:"model"`
+	Target   InterfaceTargetXML  `xml:"target" json:"tatget"`
+}
+
+func (intf *InterfaceXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), intf); err != nil {
+		libstar.Error("InterfaceXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type InterfaceMacXML struct {
+	XMLName xml.Name `xml:"mac" json:"-"`
+	Address string   `xml:"address,attr,omitempty" json:"address,omitempty"`
+}
+
+func (mac *InterfaceMacXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), mac); err != nil {
+		libstar.Error("InterfaceMacXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type InterfaceSourceXML struct {
+	XMLName xml.Name `xml:"source" json:"-"`
+	Bridge  string   `xml:"bridge,attr,omitempty" json:"bridge,omitempty"`
+}
+
+func (src *InterfaceSourceXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), src); err != nil {
+		libstar.Error("InterfaceSourceXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+
+type InterfaceModelXML struct {
+	XMLName xml.Name `xml:"model" json:"-"`
+	Type  string   `xml:"type,attr" json:"type"`
+}
+
+func (mod *InterfaceModelXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), mod); err != nil {
+		libstar.Error("InterfaceModelXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type InterfaceTargetXML struct {
+	XMLName xml.Name `xml:"target" json:"-"`
+	Bus     string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
+	Dev     string   `xml:"dev,attr,omitempty" json:"dev,omitempty"`
+}
+
+func (tgt *InterfaceTargetXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), tgt); err != nil {
+		libstar.Error("InterfaceTargetXML.Decode %s", err)
 		return err
 	}
 	return nil
