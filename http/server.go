@@ -644,6 +644,11 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		return
+	case "resume":
+		if err := dom.Resume(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
 	case "remove":
 		if err := dom.Undefine(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
