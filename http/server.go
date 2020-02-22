@@ -380,7 +380,7 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Server) GetPath(store, name string) string {
-	return storage.PATH.Unix(store)+ name + "/"
+	return storage.PATH.Unix(store) + name + "/"
 }
 
 func (h *Server) NewImage(conf *schema.InstanceConf) (*qemuimgdriver.Image, error) {
