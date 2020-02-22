@@ -21,7 +21,7 @@ type Instance struct {
 
 func NewInstance(dom libvirtc.Domain) Instance {
 	obj := Instance{
-		Disks: make([]Disk, 0, 32),
+		Disks:      make([]Disk, 0, 32),
 		Interfaces: make([]Interface, 0, 32),
 	}
 	obj.UUID, _ = dom.GetUUIDString()
@@ -33,7 +33,7 @@ func NewInstance(dom libvirtc.Domain) Instance {
 		obj.MaxCpu = info.NrVirtCpu
 		obj.CpuTime = info.CpuTime / 1000000
 	}
-	xmlObj:= libvirtc.NewDomainXMLFromDom(&dom, true)
+	xmlObj := libvirtc.NewDomainXMLFromDom(&dom, true)
 	if xmlObj != nil {
 		obj.Arch = xmlObj.OS.Type.Arch
 		obj.Type = xmlObj.Type
@@ -66,7 +66,7 @@ type Interface struct {
 	Address string `json:"address"`
 	Source  string `json:"source"`
 	Model   string `json:"model"`
-	Device string `json:"device"`
+	Device  string `json:"device"`
 }
 
 func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int Interface) {

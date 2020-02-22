@@ -94,4 +94,3 @@ func (vol *Volume) GetXMLObj() (*VolumeXML, error) {
 	xmlObj := &VolumeXML{}
 	return xmlObj, xmlObj.Decode(xmlData)
 }
-

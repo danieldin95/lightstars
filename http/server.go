@@ -9,7 +9,6 @@ import (
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/danieldin95/lightstar/storage/libvirts"
-	"github.com/danieldin95/lightstar/storage/qemus"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
 	"io"
@@ -396,22 +395,6 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 
 func (h *Server) GetPath(store, name string) string {
 	return storage.PATH.Unix(store) + "/" + name + "/"
-}
-
-func (h *Server) NewImage(conf *schema.InstanceConf) (*qemus.Image, error) {
-	path := h.GetPath(conf.DataStore, conf.Name)
-	if err := os.Mkdir(path, os.ModePerm); err != nil {
-		if !os.IsExist(err) {
-			return nil, err
-		}
-	}
-	file := path + "disk0.qcow2"
-	size := libstar.ToBytes(conf.DiskSize, conf.DiskUnit)
-	img := qemus.NewImage(file, size)
-	if err := img.Create(); err != nil {
-		return nil, err
-	}
-	return img, nil
 }
 
 func (h *Server) NewVolumeAndPool(conf *schema.InstanceConf) (*libvirts.VolumeXML, error) {

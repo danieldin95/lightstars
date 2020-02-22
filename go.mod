@@ -8,7 +8,7 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/libvirt/libvirt-go v5.10.0+incompatible
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/quadrifoglio/go-qemu v0.0.0-20170212183343-c95730abf426
+	github.com/quadrifoglio/go-qemu v0.0.0-20170212183343-c95730abf426 // indirect
 	github.com/shirou/gopsutil v2.20.1+incompatible
 	github.com/stretchr/testify v1.5.1
 	github.com/zchee/go-qcow2 v0.0.0-20170102190316-9a991fd172f0 // indirect

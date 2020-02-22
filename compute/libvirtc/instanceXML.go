@@ -134,9 +134,9 @@ type OSBootXML struct {
 }
 
 type DevicesXML struct {
-	XMLName  xml.Name      `xml:"devices" json:"-"`
-	Graphics []GraphicsXML `xml:"graphics" json:"graphics"`
-	Disks    []DiskXML     `xml:"disk" json:"disk"`
+	XMLName    xml.Name       `xml:"devices" json:"-"`
+	Graphics   []GraphicsXML  `xml:"graphics" json:"graphics"`
+	Disks      []DiskXML      `xml:"disk" json:"disk"`
 	Interfaces []InterfaceXML `xml:"interface", json:"interface"`
 }
 
@@ -199,12 +199,12 @@ type DiskTargetXML struct {
 }
 
 type InterfaceXML struct {
-	XMLName xml.Name      `xml:"interface" json:"-"`
-	Type    string         `xml:"type,attr" json:"type"`
+	XMLName xml.Name           `xml:"interface" json:"-"`
+	Type    string             `xml:"type,attr" json:"type"`
 	Mac     InterfaceMacXML    `xml:"mac" json:"mac"`
 	Source  InterfaceSourceXML `xml:"source" json:"source"`
 	Model   InterfaceModelXML  `xml:"model" json:"model"`
-	Target   InterfaceTargetXML  `xml:"target" json:"tatget"`
+	Target  InterfaceTargetXML `xml:"target" json:"tatget"`
 }
 
 func (intf *InterfaceXML) Decode(xmlData string) error {
@@ -225,10 +225,9 @@ type InterfaceSourceXML struct {
 	Bridge  string   `xml:"bridge,attr,omitempty" json:"bridge,omitempty"`
 }
 
-
 type InterfaceModelXML struct {
 	XMLName xml.Name `xml:"model" json:"-"`
-	Type  string   `xml:"type,attr" json:"type"`
+	Type    string   `xml:"type,attr" json:"type"`
 }
 
 type InterfaceTargetXML struct {
