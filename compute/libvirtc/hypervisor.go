@@ -1,4 +1,4 @@
-package libvir
+package libvirtc
 
 import (
 	"github.com/danieldin95/lightstar/libstar"

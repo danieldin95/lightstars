@@ -1,4 +1,4 @@
-package libvir
+package libvirtc
 
 import (
 	"encoding/xml"
