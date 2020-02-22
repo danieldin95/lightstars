@@ -399,11 +399,6 @@ func (h *Server) GetPath(store, name string) string {
 
 func (h *Server) NewVolumeAndPool(conf *schema.InstanceConf) (*libvirts.VolumeXML, error) {
 	path := h.GetPath(conf.DataStore, conf.Name)
-	if err := os.Mkdir(path, os.ModePerm); err != nil {
-		if !os.IsExist(err) {
-			return nil, err
-		}
-	}
 	pol, err := libvirts.CreatePool(libvirts.ToDomainPool(conf.Name), path)
 	if err != nil {
 		return nil, err

@@ -68,7 +68,7 @@ func (pol *Pool) Create() error {
 			Path: pol.Path,
 		},
 	}
-	if _, err := pol.Conn.StoragePoolCreateXML(polXml.Encode(), 0); err != nil {
+	if _, err := pol.Conn.StoragePoolCreateXML(polXml.Encode(), libvirt.STORAGE_POOL_CREATE_WITH_BUILD); err != nil {
 		return err
 	}
 	return nil

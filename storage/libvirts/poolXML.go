@@ -13,7 +13,7 @@ type PoolXML struct {
 	Source     string        `xml:"source" json:"source"`
 	Capacity   CapacityXML   `xml:"capacity", json:"capacity"`
 	Allocation AllocationXML `xml:"allocation" json:"allocation"`
-	Physical   PhysicalXML   `xml:"physical" json:"physical"`
+	Available  AvailableXML  `xml:"available" json:"available"`
 	Target     TargetXML     `xml:"target" json:"target"`
 }
 
@@ -32,4 +32,10 @@ func (pol *PoolXML) Encode() string {
 		return ""
 	}
 	return string(data)
+}
+
+type AvailableXML struct {
+	XMLName xml.Name `xml:"available" json:"-"`
+	Unit    string   `xml:"unit,attr" json:"unit"`
+	Value   string   `xml:",chardata" json:"value"`
 }
