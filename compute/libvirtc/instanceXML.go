@@ -128,25 +128,9 @@ type OSTypeXML struct {
 	Value   string   `xml:",chardata" json:"value"`
 }
 
-func (ost *OSTypeXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), ost); err != nil {
-		libstar.Error("OSTypeXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type OSBootXML struct {
 	XMLName xml.Name `xml:"boot" json:"-"`
 	Dev     string   `xml:"dev,attr" json:"dev"`
-}
-
-func (osb *OSBootXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), osb); err != nil {
-		libstar.Error("OSBootXML.Decode %s", err)
-		return err
-	}
-	return nil
 }
 
 type DevicesXML struct {
@@ -202,40 +186,16 @@ type DiskDriverXML struct {
 	Name    string   `xml:"name,attr" json:"name"`
 }
 
-func (drv *DiskDriverXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), drv); err != nil {
-		libstar.Error("DiskDriverXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type DiskSourceXML struct {
 	XMLName xml.Name `xml:"source" json:"-"`
 	File    string   `xml:"file,attr,omitempty" json:"file,omitempty"`
 	Device  string   `xml:"device,attr,omitempty" json:"device,omitempty"`
 }
 
-func (src *DiskSourceXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), src); err != nil {
-		libstar.Error("DiskSourceXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type DiskTargetXML struct {
 	XMLName xml.Name `xml:"target" json:"-"`
 	Bus     string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
 	Dev     string   `xml:"dev,attr,omitempty" json:"dev,omitempty"`
-}
-
-func (tgt *DiskTargetXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), tgt); err != nil {
-		libstar.Error("DiskTargetXML.Decode %s", err)
-		return err
-	}
-	return nil
 }
 
 type InterfaceXML struct {
@@ -260,25 +220,9 @@ type InterfaceMacXML struct {
 	Address string   `xml:"address,attr,omitempty" json:"address,omitempty"`
 }
 
-func (mac *InterfaceMacXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), mac); err != nil {
-		libstar.Error("InterfaceMacXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type InterfaceSourceXML struct {
 	XMLName xml.Name `xml:"source" json:"-"`
 	Bridge  string   `xml:"bridge,attr,omitempty" json:"bridge,omitempty"`
-}
-
-func (src *InterfaceSourceXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), src); err != nil {
-		libstar.Error("InterfaceSourceXML.Decode %s", err)
-		return err
-	}
-	return nil
 }
 
 
@@ -287,24 +231,8 @@ type InterfaceModelXML struct {
 	Type  string   `xml:"type,attr" json:"type"`
 }
 
-func (mod *InterfaceModelXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), mod); err != nil {
-		libstar.Error("InterfaceModelXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type InterfaceTargetXML struct {
 	XMLName xml.Name `xml:"target" json:"-"`
 	Bus     string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
 	Dev     string   `xml:"dev,attr,omitempty" json:"dev,omitempty"`
-}
-
-func (tgt *InterfaceTargetXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), tgt); err != nil {
-		libstar.Error("InterfaceTargetXML.Decode %s", err)
-		return err
-	}
-	return nil
 }

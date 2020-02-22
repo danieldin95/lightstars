@@ -8,6 +8,7 @@ import (
 	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
+	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/danieldin95/lightstar/storage/qemus"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
@@ -394,7 +395,7 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Server) GetPath(store, name string) string {
-	return storage.PATH.Unix(store) + name + "/"
+	return storage.PATH.Unix(store) + "/" + name + "/"
 }
 
 func (h *Server) NewImage(conf *schema.InstanceConf) (*qemus.Image, error) {
@@ -411,6 +412,25 @@ func (h *Server) NewImage(conf *schema.InstanceConf) (*qemus.Image, error) {
 		return nil, err
 	}
 	return img, nil
+}
+
+func (h *Server) NewVolumeAndPool(conf *schema.InstanceConf) (*libvirts.VolumeXML, error) {
+	path := h.GetPath(conf.DataStore, conf.Name)
+	if err := os.Mkdir(path, os.ModePerm); err != nil {
+		if !os.IsExist(err) {
+			return nil, err
+		}
+	}
+	pol, err := libvirts.CreatePool(libvirts.ToDomainPool(conf.Name), path)
+	if err != nil {
+		return nil, err
+	}
+	size := libstar.ToBytes(conf.DiskSize, conf.DiskUnit)
+	vol, err := libvirts.CreateVolume(pol.Name, "disk0.qcow2", size)
+	if err != nil {
+		return nil, err
+	}
+	return vol.GetXMLObj()
 }
 
 func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
@@ -434,7 +454,7 @@ func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML
 		dom.OS.Type.Arch = "x86_64"
 	}
 	// create new disk firstly.
-	img, err := h.NewImage(conf)
+	vol, err := h.NewVolumeAndPool(conf)
 	if err != nil {
 		return dom, err
 	}
@@ -503,10 +523,10 @@ func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML
 		Device: "disk",
 		Driver: libvirtc.DiskDriverXML{
 			Name: "qemu",
-			Type: img.Format,
+			Type: vol.Target.Format.Type,
 		},
 		Source: libvirtc.DiskSourceXML{
-			File: img.Path,
+			File: vol.Target.Path,
 		},
 		Target: libvirtc.DiskTargetXML{
 			Bus: "virtio",

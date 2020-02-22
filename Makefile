@@ -25,3 +25,4 @@ test:
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/libstar
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/storage
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/compute/libvirtc
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/storage/libvirts
