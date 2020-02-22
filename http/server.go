@@ -67,7 +67,6 @@ func (h *Server) LoadRouter() {
 	// static files
 	staticFile := http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir)))
 	router.PathPrefix("/static/").Handler(staticFile)
-	router.HandleFunc("/favicon.ico", h.HandleFavicon)
 	// proxy websocket
 	router.Handle("/websockify", websocket.Handler(h.HandleWebSockify))
 
@@ -76,6 +75,7 @@ func (h *Server) LoadRouter() {
 	router.HandleFunc("/ui", h.HandleUi)
 	router.HandleFunc("/ui/", h.HandleUi)
 	router.HandleFunc("/ui/index", h.HandleUi)
+	router.HandleFunc("/favicon.ico", h.HandleFavicon)
 	router.HandleFunc("/ui/instance/{id}", h.HandleInstance)
 
 	// api router
@@ -343,13 +343,11 @@ func (h *Server) HandleWebSockify(ws *websocket.Conn) {
 		return
 	}
 	defer conn.Close()
-
-	libstar.Info("Server.HandleWebSockify request from %s", ws.RemoteAddr())
-	libstar.Info("Server.HandleWebSockify connection to %s", conn.LocalAddr())
+	libstar.Debug("Server.HandleWebSockify request from %s", ws.RemoteAddr())
+	libstar.Debug("Server.HandleWebSockify connection to %s", conn.LocalAddr())
 
 	wait := sync.WaitGroup{}
 	wait.Add(2)
-
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {

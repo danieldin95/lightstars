@@ -3,7 +3,7 @@
 <head>
     <title>{{.Name}} | Instance</title>
     <!-- Bootstrap CSS -->
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="/static/asset/bootstrap/4.0.0/css/bootstrap.css">
 
     <!-- LightStar theme -->
@@ -12,7 +12,11 @@
 </head>
 
 <body>
+
 <div class="container">
+    <div class="card-no-border no-bottom">
+        <tasks></tasks>
+    </div>
     <div name="" class="card instance">
         <div class="card-header background-light">
             <div class="card-just-left">
@@ -24,34 +28,48 @@
         <div class="card-none">
             <div class="card no-border">
                 <div class="card-header-btn">
-                    <instance-console>
+                    <instance-console data="{{ .UUID }}">
                         {{ if eq .State "running" }}
-                        <a type="button" class="btn btn-outline-dark btn-sm" href="/static/console?instance={{.UUID}}">console</a>
+                        <a type="button" class="btn btn-outline-dark btn-sm" href="/static/console?instance={{ .UUID }}">console</a>
                         {{ else }}
                         <a type="button" class="btn btn-outline-dark btn-sm disabled" href="#">console</a>
                         {{ end }}
                     </instance-console>
-                    <instance-start>
+                    <instance-start data="{{ .UUID }}">
                         <button type="button" class="btn btn-outline-dark btn-sm">start</button>
                     </instance-start>
-                    <instance-refresh>
+                    <instance-refresh data="{{ .UUID }}">
                         <a type="button" class="btn btn-outline-dark btn-sm" href="javascript:window.location.reload();">refresh</a>
                     </instance-refresh>
-                    <instance-more>
+                    <instance-more data="{{ .UUID }}">
                         <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             operations
                         </button>
                         <div name="btn-more" class="dropdown-menu">
-                            <instance-more-start><a class="dropdown-item" href="#">start</a></instance-more-start>
-                            <instance-more-shutdown><a class="dropdown-item" href="#">shutdown</a></instance-more-shutdown>
-                            <instance-more-reset><a class="dropdown-item" href="#">reset</a></instance-more-reset>
+                            <instance-more-start data="{{ .UUID }}">
+                                <a class="dropdown-item" href="#">start</a>
+                            </instance-more-start>
+                            <instance-more-shutdown data="{{ .UUID }}">
+                                <a class="dropdown-item" href="#">shutdown</a>
+                            </instance-more-shutdown>
+                            <instance-more-reset data="{{ .UUID }}">
+                                <a class="dropdown-item" href="#">reset</a>
+                            </instance-more-reset>
                             <div class="dropdown-divider"></div>
-                            <instance-more-suspend><a class="dropdown-item" href="#">suspend</a></instance-more-suspend>
-                            <instance-more-resume><a class="dropdown-item" href="#">resume</a></instance-more-resume>
+                            <instance-more-suspend data="{{ .UUID }}">
+                                <a class="dropdown-item" href="#">suspend</a>
+                            </instance-more-suspend>
+                            <instance-more-resume data="{{ .UUID }}">
+                                <a class="dropdown-item" href="#">resume</a>
+                            </instance-more-resume>
                             <div class="dropdown-divider"></div>
-                            <instance-more-destroy><a class="dropdown-item" href="#">destroy</a></instance-more-destroy>
-                            <instance-more-remove><a class="dropdown-item" href="#">remove</a></instance-more-remove>
+                            <instance-more-destroy data="{{ .UUID }}">
+                                <a class="dropdown-item" href="#">destroy</a>
+                            </instance-more-destroy>
+                            <instance-more-remove data="{{ .UUID }}">
+                                <a class="dropdown-item" href="#">remove</a>
+                            </instance-more-remove>
                         </div>
                     </instance-more>
                 </div>
@@ -70,10 +88,6 @@
                     </dl>
                 </div>
             </div>
-        </div>
-
-        <div class="card-no-border no-top no-bottom">
-            <tasks></tasks>
         </div>
 
         <!-- Virtual Disk -->
@@ -95,9 +109,9 @@
                         <disk-edit>
                             <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
                         </disk-edit>
-                        <disk-delete>
+                        <disk-remove>
                             <button type="button" class="btn btn-outline-dark btn-sm">remove</button>
-                        </disk-delete>
+                        </disk-remove>
                     </div>
                     <div class="l-content-body">
                         <table class="table table-striped">
@@ -202,5 +216,10 @@
 <script src="/static/asset/popper.js/1.12.9/umd/popper.js"></script>
 <!-- Bootstrap Javascript -->
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
+<script type="module">
+    import {Instance} from '/static/js/instance.js'
+
+    let instance = new Instance();
+</script>
 </body>
 </html>

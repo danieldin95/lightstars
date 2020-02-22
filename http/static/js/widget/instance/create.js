@@ -1,7 +1,7 @@
-import {Option} from "./option.js";
-import {AlertDanger} from "../alert.js";
+import {Option} from "../option.js";
+import {AlertDanger} from "../../com/alert.js";
 
-export class InstanceCreateModal {
+export class InstanceCreate {
     constructor () {
         this.view = this.render();
 

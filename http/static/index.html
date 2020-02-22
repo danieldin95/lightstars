@@ -134,15 +134,15 @@
 <script src="/static/asset/smartwizard/js/jquery.smartWizard.js"></script>
 
 <script type="module">
-    import {Instance} from '/static/js/instance.js';
-    import {InstanceCreateModal} from '/static/js/widget/modal.js'
+    import {Instances} from '/static/js/index.js';
+    import {InstanceCreate} from '/static/js/widget/instance/create.js'
     import {Arr2Json} from "/static/js/utils.js";
 
     $(document).ready(function() {
-        let instance = new Instance();
-        let createModal = new InstanceCreateModal();
+        let instances = new Instances();
+        let createModal = new InstanceCreate();
 
-        createModal.onSubmit(instance, function (e) {
+        createModal.onSubmit(instances, function (e) {
             e.data.create(Arr2Json(e.array));
         });
     });

@@ -1,178 +1,134 @@
-import {AlertDanger} from "./alert.js";
-import {AlertWarn} from "./alert.js";
-import {AlertSuccess} from "./alert.js";
+import {InstanceApi} from './api/instance.js'
 
 export class Instance {
 
     constructor() {
-        this.instanes = [];
+        this.disk = new Disk();
+        this.interface = new Interface();
 
-        let disabled = function(is) {
-            if (is) {
-                $("instance-start button").addClass('disabled');
-                $("instance-console button").addClass('disabled');
-                $("instance-shutdown button").addClass('disabled');
-                $("instance-more button").addClass('disabled');
-            } else {
-                $("instance-start button").removeClass('disabled');
-                $("instance-console button").removeClass('disabled');
-                $("instance-shutdown button").removeClass('disabled');
-                $("instance-more button").removeClass('disabled');
-            }
-        };
+        // Register click handle.
+        $("instance-start, instance-more-start").on("click", this, function (e) {
+            new InstanceApi($(this).attr("data")).start();
+        });
+        $("instance-more-shutdown").on("click", this, function (e) {
+            new InstanceApi($(this).attr("data")).shutdown();
+        });
+        $("instance-more-reset").on("click", this, function (e) {
+            new InstanceApi($(this).attr("data")).reset();
+        });
+        $("instance-more-suspend").on("click", this, function (e) {
+            new InstanceApi($(this).attr("data")).suspend();
+        });
+        $("instance-more-resume").on("click", this, function (e) {
+            new InstanceApi($(this).attr("data")).resume();
+        });
+        $("instance-more-destroy").on("click", this, function (e) {
+            new InstanceApi($(this).attr("data")).destroy();
+        });
+        $("instance-more-remove").on("click", this, function (e) {
+            new InstanceApi($(this).attr("data")).remove();
+        });
+    }
+}
 
-        let instance_dom = $("instance-on-one input");
-        for (let i = 0; i < instance_dom.length; i++) {
-            instance_dom.eq(i).on("change", this, function(e) {
+
+export class Disk {
+
+    constructor() {
+        this.disks = [];
+
+        let disabled = this.disable;
+        let documentOne = $("disk-on-one input");
+        let documentAll = $("disk-on-all input");
+
+        for (let i = 0; i < documentOne.length; i++) {
+            documentOne.eq(i).on("change", this.disks, function(e) {
                 let uuid = $(this).attr("data");
                 if ($(this).prop("checked")) {
-                    e.data.instanes.push(uuid)
+                    e.data.push(uuid)
                 } else {
-                    e.data.instanes = e.data.instanes.filter(v => v != uuid);
+                    e.data = e.data.filter(v => v != uuid);
                 }
-                disabled(e.data.instanes.length == 0);
+                disabled(e.data.length == 0);
             });
         }
-        $("instance-on-all input").on("change", this, function(e) {
+        documentAll.on("change", this.disks, function(e) {
             if ($(this).prop("checked")) {
-                instance_dom.each(function (index, element) {
-                    e.data.instanes.push($(this).attr("data"));
+                documentOne.each(function (index, element) {
+                    e.data.push($(this).attr("data"));
                     $(element).prop("checked", true);
                 });
             } else {
-                instance_dom.each(function (index, element) {
-                    e.data.instanes = [];
+                documentOne.each(function (index, element) {
+                    e.data = [];
                     $(element).prop("checked", false);
                 });
             }
-            disabled(e.data.instanes.length == 0);
+            disabled(e.data.length == 0);
         });
 
         // Disabled firstly.
-        disabled(this.instanes.length == 0);
-
-        // Register click handle.
-        $("instance-console").on("click", this, function (e) {
-            e.data.console(this);
-        });
-        $("instance-start, instance-more-start").on("click", this, function (e) {
-            e.data.start(this);
-        });
-        $("instance-more-shutdown").on("click", this, function (e) {
-            e.data.shutdown(this);
-        });
-        $("instance-more-reset").on("click", this, function (e) {
-            e.data.reset(this);
-        });
-        $("instance-more-suspend").on("click", this, function (e) {
-            e.data.suspend(this);
-        });
-        $("instance-more-resume").on("click", this, function (e) {
-            e.data.resume(this);
-        });
-        $("instance-more-destroy").on("click", this, function (e) {
-            e.data.destroy(this);
-        });
-        $("instance-more-remove").on("click", this, function (e) {
-            e.data.remove(this);
-        });
+        disabled(this.disks.length === 0);
     }
 
-    start(on) {
-        this.instanes.forEach(function (item, index, err) {
-            let data = {action: 'start'};
+    disable(is) {
+        if (is) {
+            $("disk-edit button").addClass('disabled');
+            $("disk-remove button").addClass('disabled');
+        } else {
+            $("disk-edit button").removeClass('disabled');
+            $("disk-remove button").removeClass('disabled');
+        }
+    }
+}
 
-            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("tasks").append(AlertSuccess(`start instance '${item}' success`));
-            }).fail(function (e) {
-                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+export class Interface {
+
+    constructor() {
+        this.interfaces = [];
+
+        let disabled = this.disable;
+        let documentOne = $("interface-on-one input");
+        let documentAll = $("interface-on-all input");
+
+        for (let i = 0; i < documentOne.length; i++) {
+            documentOne.eq(i).on("change", this.interfaces, function(e) {
+                let uuid = $(this).attr("data");
+                if ($(this).prop("checked")) {
+                    e.data.push(uuid)
+                } else {
+                    e.data = e.data.filter(v => v != uuid);
+                }
+                disabled(e.data.length == 0);
             });
+        }
+
+        documentAll.on("change", this.interfaces, function(e) {
+            if ($(this).prop("checked")) {
+                documentOne.each(function (index, element) {
+                    e.data.push($(this).attr("data"));
+                    $(element).prop("checked", true);
+                });
+            } else {
+                documentOne.each(function (index, element) {
+                    e.data = [];
+                    $(element).prop("checked", false);
+                });
+            }
+            disabled(e.data.length == 0);
         });
+
+        // Disabled firstly.
+        disabled(this.interfaces.length === 0);
     }
 
-    shutdown(on) {
-        this.instanes.forEach(function (item, index, err) {
-            let data = {action: 'shutdown'};
-
-            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("tasks").append(AlertSuccess(`shutdown instance '${item}' success`));
-            }).fail(function (e) {
-                $("tasks").append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
-            });
-        });
-    }
-
-    reset(on) {
-        this.instanes.forEach(function (item, index, err) {
-            let data = {action: 'reset'};
-
-            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("tasks").append(AlertSuccess(`reset instance '${item}' success`));
-            }).fail(function (e) {
-                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
-            });
-        });
-    }
-
-    suspend(on) {
-        this.instanes.forEach(function (item, index, err) {
-            let data = {action: 'suspend'};
-
-            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("tasks").append(AlertSuccess(`suspend instance '${item}' success`));
-            }).fail(function (e) {
-                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
-            });
-        });
-    }
-
-    resume(on) {
-        this.instanes.forEach(function (item, index, err) {
-            let data = {action: 'resume'};
-
-            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("tasks").append(AlertSuccess(`resume instance '${item}' success`));
-            }).fail(function (e) {
-                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
-            })
-        });
-    }
-
-    destroy(on) {
-        this.instanes.forEach(function (item, index, err) {
-            let data = {action: 'destroy'};
-
-            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("tasks").append(AlertSuccess(`destroy instance '${item}' success`));
-            }).fail(function (e) {
-                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
-            })
-        });
-    }
-
-    remove(on) {
-        this.instanes.forEach(function (item, index, err) {
-            let data = {action: 'remove'};
-
-            $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("tasks").append(AlertSuccess(`remove instance '${item}' success`));
-            }).fail(function (e) {
-                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
-            })
-        });
-    }
-
-    console(on) {
-        this.instanes.forEach(function (item, index, err) {
-            window.open("/static/console?instance="+item);
-        });
-    }
-
-    create (data) {
-        $.post("/api/instance", JSON.stringify(data), function (data, status) {
-            $("tasks").append(AlertSuccess(`create instance '${data.name}' success`));
-        }).fail(function (e) {
-            $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
-        })
+    disable(is) {
+        if (is) {
+            $("interface-edit button").addClass('disabled');
+            $("interface-remove button").addClass('disabled');
+        } else {
+            $("interface-edit button").removeClass('disabled');
+            $("interface-remove button").removeClass('disabled');
+        }
     }
 }
