@@ -148,3 +148,11 @@ a {
     /*border-color: #f8f9fa;*/
 }
 
+.disk, .interface {
+    border-color: #dee2e6;
+}
+
+.disk .card-header, .interface .card-header {
+    background-color: #f8f9fa;
+}
+
