@@ -1,6 +1,9 @@
 package schema
 
-import "github.com/danieldin95/lightstar/compute/libvirt"
+import (
+	"github.com/danieldin95/lightstar/compute/libvirt"
+	"github.com/danieldin95/lightstar/storage"
+)
 
 type Instance struct {
 	UUID       string      `json:"uuid"`
@@ -54,7 +57,7 @@ type Disk struct {
 func NewFromDiskXML(xml libvirtdriver.DiskXML) (disk Disk) {
 	disk.Device = xml.Target.Dev
 	disk.Bus = xml.Target.Bus
-	disk.Source = xml.Source.File
+	disk.Source = storage.PATH.Fmt(xml.Source.File)
 	disk.Format = xml.Driver.Type
 	return disk
 }

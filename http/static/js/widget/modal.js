@@ -29,15 +29,15 @@ export class InstanceCreateModal {
     }
 
     fetch() {
-        let cpu_selector = this.view.find("select[name='isoFile']");
-        let cpu_refresh = function(datastore) {
+        let iso_selector = this.view.find("select[name='isoFile']");
+        let iso_refresh = function(datastore) {
             $.getJSON("/api/iso", {datastore: datastore}, function (data) {
-                cpu_selector.find("option").remove();
+                iso_selector.find("option").remove();
                 data.forEach(function (ele, index) {
-                    cpu_selector.append(Option(ele['name'], ele['path']));
+                    iso_selector.append(Option(ele['path'], ele['path']));
                 })
             }).fail(function (e) {
-                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         };
 
@@ -49,15 +49,15 @@ export class InstanceCreateModal {
                     store_selector.append(Option(ele['name'], ele['path']));
                 })
             }).fail(function (e) {
-                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         };
 
         store_refresh();
-        cpu_refresh("datastore/01");
+        iso_refresh("datastore@01");
 
         store_selector.on("change", this, function (e) {
-            cpu_refresh($(this).val());
+            iso_refresh($(this).val());
         });
     }
 

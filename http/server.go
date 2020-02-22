@@ -7,6 +7,7 @@ import (
 	"github.com/danieldin95/lightstar/compute/libvirt"
 	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/storage"
 	"github.com/danieldin95/lightstar/storage/qemu"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
@@ -71,6 +72,7 @@ func (h *Server) LoadRouter() {
 
 	// custom router
 	router.HandleFunc("/ui", h.HandleIndex)
+	router.HandleFunc("/ui/", h.HandleIndex)
 	router.HandleFunc("/ui/index", h.HandleIndex)
 	router.HandleFunc("/ui/instance/{id}", h.HandleInstance)
 
@@ -377,16 +379,12 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Server) GetStore(store, name string) string {
-	if strings.HasPrefix(store, qemuimgdriver.Location) {
-		return store + "/" + name + "/"
-	} else {
-		return qemuimgdriver.Location + store + "/" + name + "/"
-	}
+func (h *Server) GetPath(store, name string) string {
+	return storage.PATH.Unix(store)+ name + "/"
 }
 
 func (h *Server) NewImage(conf *schema.InstanceConf) (*qemuimgdriver.Image, error) {
-	path := h.GetStore(conf.DataStore, conf.Name)
+	path := h.GetPath(conf.DataStore, conf.Name)
 	if err := os.Mkdir(path, os.ModePerm); err != nil {
 		if !os.IsExist(err) {
 			return nil, err
@@ -478,7 +476,7 @@ func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtdriver.Doma
 				Type: "raw",
 			},
 			Source: libvirtdriver.DiskSourceXML{
-				File: conf.IsoFile,
+				File: storage.PATH.Unix(conf.IsoFile),
 			},
 			Target: libvirtdriver.DiskTargetXML{
 				Bus: "ide",
@@ -543,7 +541,7 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
 		return
 	}
-	file := h.GetStore(conf.DataStore, conf.Name) + "/define.xml"
+	file := h.GetPath(conf.DataStore, conf.Name) + "/define.xml"
 	libstar.XML.MarshalSave(xmlObj, file, true)
 
 	if dom, err := hyper.DomainDefineXML(xmlData); err == nil {
@@ -637,7 +635,7 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		} else {
 			if name, err := dom.GetName(); err == nil {
-				path := h.GetStore("datastore/01", name)
+				path := h.GetPath("datastore@01", name)
 				os.RemoveAll(path)
 			}
 		}
@@ -653,9 +651,10 @@ func (h *Server) GetDataStore(w http.ResponseWriter, r *http.Request) {
 func (h *Server) GetISO(w http.ResponseWriter, r *http.Request) {
 	store := h.GetQueryOne(r, "datastore")
 	if store == "" {
-		store = "datastore/01"
+		store = "datastore@01"
 	}
-	h.ResponseJson(w, qemuimgdriver.ISO.ListFiles(store))
+	path := storage.PATH.Unix(store)
+	h.ResponseJson(w, qemuimgdriver.ISO.ListFiles(path))
 }
 
 func (h *Server) GetBridge(w http.ResponseWriter, r *http.Request) {

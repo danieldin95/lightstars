@@ -2,13 +2,12 @@ package qemuimgdriver
 
 import (
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/storage"
 	"github.com/quadrifoglio/go-qemu"
 	"path"
-	"strings"
 )
 
 const GiB = uint64(1024 * 1024 * 1024)
-const Location = "/lightstar/"
 
 type Image struct {
 	Path     string
@@ -43,17 +42,25 @@ type IsoMgr struct {
 	Files []IsoFile `json:"files"`
 }
 
-func (iso IsoMgr) ListFiles(store string) []IsoFile {
+func (iso IsoMgr) ListFiles(dir string) []IsoFile {
 	images := make([]IsoFile, 0, 32)
 
-	if files, err := libstar.DIR.ListFiles(Location+store, ".iso"); err == nil {
+	if files, err := libstar.DIR.ListFiles(dir, ".iso"); err == nil {
 		for _, file := range files {
-			images = append(images, IsoFile{Name: path.Base(file), Path: file})
+			stdFile := IsoFile{
+				Name: path.Base(file),
+				Path: storage.PATH.Fmt(file),
+			}
+			images = append(images, stdFile)
 		}
 	}
-	if files, err := libstar.DIR.ListFiles(Location+store+"/iso", ".iso"); err == nil {
+	if files, err := libstar.DIR.ListFiles(dir+"/iso", ".iso"); err == nil {
 		for _, file := range files {
-			images = append(images, IsoFile{Name: path.Base(file), Path: file})
+			stdFile := IsoFile{
+				Name: path.Base(file),
+				Path: storage.PATH.Fmt(file),
+			}
+			images = append(images, stdFile)
 		}
 	}
 	return images
@@ -75,11 +82,10 @@ type DataStoreMgr struct {
 func (store DataStoreMgr) List() []DataStore {
 	stores := make([]DataStore, 0, 32)
 
-	if dirs, err := libstar.DIR.ListDirs(Location + "datastore"); err == nil {
+	if dirs, err := libstar.DIR.ListDirs(storage.Location + "datastore"); err == nil {
 		for _, dir := range dirs {
-			path := strings.Replace(dir, Location, "", 1)
-			name := strings.Replace(path, "/", ".", 4)
-			stores = append(stores, DataStore{Name: name, Path: path})
+			path := storage.PATH.Fmt(dir)
+			stores = append(stores, DataStore{Name: path, Path: path})
 		}
 	}
 	return stores

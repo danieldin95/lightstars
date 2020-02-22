@@ -10,6 +10,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/quadrifoglio/go-qemu v0.0.0-20170212183343-c95730abf426
 	github.com/shirou/gopsutil v2.20.1+incompatible
+	github.com/stretchr/testify v1.5.1
 	github.com/zchee/go-qcow2 v0.0.0-20170102190316-9a991fd172f0 // indirect
 	golang.org/x/net v0.0.0
 	golang.org/x/sys v0.0.0 // indirect

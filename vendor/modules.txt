@@ -1,5 +1,7 @@
 # github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d
 github.com/StackExchange/wmi
+# github.com/davecgh/go-spew v1.1.0
+github.com/davecgh/go-spew/spew
 # github.com/go-ole/go-ole v1.2.4
 github.com/go-ole/go-ole
 github.com/go-ole/go-ole/oleutil
@@ -7,15 +9,21 @@ github.com/go-ole/go-ole/oleutil
 github.com/gorilla/mux
 # github.com/libvirt/libvirt-go v5.10.0+incompatible
 github.com/libvirt/libvirt-go
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
 # github.com/quadrifoglio/go-qemu v0.0.0-20170212183343-c95730abf426
 github.com/quadrifoglio/go-qemu
 # github.com/shirou/gopsutil v2.20.1+incompatible
-github.com/shirou/gopsutil/mem
 github.com/shirou/gopsutil/cpu
 github.com/shirou/gopsutil/disk
+github.com/shirou/gopsutil/mem
 github.com/shirou/gopsutil/internal/common
+# github.com/stretchr/testify v1.5.1
+github.com/stretchr/testify/assert
 # golang.org/x/net v0.0.0 => github.com/golang/net v0.0.0-20190812203447-cdfb69ac37fc
 golang.org/x/net/websocket
 # golang.org/x/sys v0.0.0 => github.com/golang/sys v0.0.0-20200219091948-cb0a6d8edb6c
 golang.org/x/sys/unix
 golang.org/x/sys/windows
+# gopkg.in/yaml.v2 v2.2.2
+gopkg.in/yaml.v2

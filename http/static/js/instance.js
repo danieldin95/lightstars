@@ -58,7 +58,7 @@ export class Instance {
         $("instance-start, instance-more-start").on("click", this, function (e) {
             e.data.start(this);
         });
-        $("instance-shutdown, instance-more-shutdown").on("click", this, function (e) {
+        $("instance-more-shutdown").on("click", this, function (e) {
             e.data.shutdown(this);
         });
         $("instance-more-reset").on("click", this, function (e) {
@@ -83,9 +83,9 @@ export class Instance {
             let data = {action: 'start'};
 
             $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("infos").append(AlertSuccess(`start instance '${item}' success`));
+                $("tasks").append(AlertSuccess(`start instance '${item}' success`));
             }).fail(function (e) {
-                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         });
     }
@@ -95,9 +95,9 @@ export class Instance {
             let data = {action: 'shutdown'};
 
             $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("infos").append(AlertSuccess(`shutdown instance '${item}' success`));
+                $("tasks").append(AlertSuccess(`shutdown instance '${item}' success`));
             }).fail(function (e) {
-                $("errors").append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         });
     }
@@ -107,9 +107,9 @@ export class Instance {
             let data = {action: 'reset'};
 
             $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("infos").append(AlertSuccess(`reset instance '${item}' success`));
+                $("tasks").append(AlertSuccess(`reset instance '${item}' success`));
             }).fail(function (e) {
-                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         });
     }
@@ -119,9 +119,9 @@ export class Instance {
             let data = {action: 'suspend'};
 
             $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("infos").append(AlertSuccess(`suspend instance '${item}' success`));
+                $("tasks").append(AlertSuccess(`suspend instance '${item}' success`));
             }).fail(function (e) {
-                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         });
     }
@@ -131,9 +131,9 @@ export class Instance {
             let data = {action: 'resume'};
 
             $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("infos").append(AlertSuccess(`resume instance '${item}' success`));
+                $("tasks").append(AlertSuccess(`resume instance '${item}' success`));
             }).fail(function (e) {
-                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             })
         });
     }
@@ -143,9 +143,9 @@ export class Instance {
             let data = {action: 'destroy'};
 
             $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("infos").append(AlertSuccess(`destroy instance '${item}' success`));
+                $("tasks").append(AlertSuccess(`destroy instance '${item}' success`));
             }).fail(function (e) {
-                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             })
         });
     }
@@ -155,9 +155,9 @@ export class Instance {
             let data = {action: 'remove'};
 
             $.put("/api/instance/"+item, JSON.stringify(data), function (data, status) {
-                $("infos").append(AlertSuccess(`remove instance '${item}' success`));
+                $("tasks").append(AlertSuccess(`remove instance '${item}' success`));
             }).fail(function (e) {
-                $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             })
         });
     }
@@ -170,9 +170,9 @@ export class Instance {
 
     create (data) {
         $.post("/api/instance", JSON.stringify(data), function (data, status) {
-            $("infos").append(AlertSuccess(`create instance '${data.name}' success`));
+            $("tasks").append(AlertSuccess(`create instance '${data.name}' success`));
         }).fail(function (e) {
-            $("errors").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
         })
     }
 }

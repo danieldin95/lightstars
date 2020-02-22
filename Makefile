@@ -14,7 +14,7 @@ lightstar:
 rpm:
 	./packaging/auto.sh
 	rpmbuild -ba packaging/lightstar.spec
-	cp -rvf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm ./packaging
+	cp -rvf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm .
 
 
 devel/requirements:
@@ -23,4 +23,5 @@ devel/requirements:
 
 test:
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/libstar
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/storage
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/compute/libvirt
