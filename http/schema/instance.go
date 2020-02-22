@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvir"
+	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/storage"
 )
 
@@ -19,7 +19,7 @@ type Instance struct {
 	Interfaces []Interface `json:"interfaces,omitempty"`
 }
 
-func NewInstance(dom libvir.Domain) Instance {
+func NewInstance(dom libvirtc.Domain) Instance {
 	obj := Instance{
 		Disks: make([]Disk, 0, 32),
 		Interfaces: make([]Interface, 0, 32),
@@ -33,7 +33,7 @@ func NewInstance(dom libvir.Domain) Instance {
 		obj.MaxCpu = info.NrVirtCpu
 		obj.CpuTime = info.CpuTime / 1000000
 	}
-	xmlObj:= libvir.NewDomainXMLFromDom(&dom, true)
+	xmlObj:= libvirtc.NewDomainXMLFromDom(&dom, true)
 	if xmlObj != nil {
 		obj.Arch = xmlObj.OS.Type.Arch
 		obj.Type = xmlObj.Type
@@ -54,7 +54,7 @@ type Disk struct {
 	Bus    string `json:"bus"`
 }
 
-func NewFromDiskXML(xml libvir.DiskXML) (disk Disk) {
+func NewFromDiskXML(xml libvirtc.DiskXML) (disk Disk) {
 	disk.Device = xml.Target.Dev
 	disk.Bus = xml.Target.Bus
 	disk.Source = storage.PATH.Fmt(xml.Source.File)
@@ -69,7 +69,7 @@ type Interface struct {
 	Device string `json:"device"`
 }
 
-func NewFromInterfaceXML(xml libvir.InterfaceXML) (int Interface) {
+func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int Interface) {
 	int.Source = xml.Source.Bridge
 	int.Address = xml.Mac.Address
 	int.Model = xml.Model.Type

@@ -1,4 +1,4 @@
-package qemuimgdriver
+package qemus
 
 import (
 	"github.com/danieldin95/lightstar/libstar"
