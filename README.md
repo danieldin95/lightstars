@@ -19,11 +19,11 @@ This software makes it easier for you to control compute resource.
     systemctl enable lightstar
     systemctl start lightstar
     
-## Configure Default DataStore
+## Configure default datastore
 
     mkdir -p /lighstar/datastore/01
     virsh pool-create-as --name 01 --type dir --target /lightstar/datastore/01
-## Configure Default Network
+## Configure default network
 
     cat > virbr0.xml <<EOF
         <network>
@@ -43,12 +43,12 @@ This software makes it easier for you to control compute resource.
     EOF
     virsh net-create virbr0.xml
 
-## Upload one Linux ISO file
+## Upload a linux ISO file
 
     cd /lightstar/datastore/01
     wget http://mirrors.163.com/archlinux/iso/2020.02.01/archlinux-2020.02.01-x86_64.iso
     
-# Open on Browser
+# Open UI on browser by URL:
 
     https://your-machine-address:10080
     
