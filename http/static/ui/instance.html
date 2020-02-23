@@ -94,10 +94,13 @@
         <div class="card-body no-top">
             <div name="disk" class="card disk">
                 <div class="card-header">
-                    <div>
+                    <button class="btn btn-link btn-block text-left btn-sm"
+                            type="button" data-toggle="collapse"
+                            data-target="#collapseDis" aria-expanded="true" aria-controls="collapseDis">
                         Virtual Disk
-                    </div>
+                    </button>
                 </div>
+                <div id="collapseDis" class="collapse show" aria-labelledby="headingOne" data-parent="#instance">
                 <div class="card-body">
                     <div class="card-header-cnt">
                         <disk-create>
@@ -148,15 +151,19 @@
                         </table>
                     </div>
                 </div>
+                </div>
             </div>
 
             <!-- Interface -->
             <div name="interface" class="card interface">
                 <div class="card-header">
-                    <div>
+                    <button class="btn btn-link btn-block text-left btn-sm"
+                            type="button" data-toggle="collapse"
+                            data-target="#collapseInt" aria-expanded="true" aria-controls="collapseInt">
                         Interface
-                    </div>
+                    </button>
                 </div>
+                <div id="collapseInt" class="collapse show" aria-labelledby="headingOne" data-parent="#instance">
                 <div class="card-body">
                     <div class="card-header-cnt">
                         <interface-create>

@@ -58,7 +58,7 @@ a {
     color: black;
 }
 
-.instances {
+.instances .card-body {
     min-height: 430px;
 }
 

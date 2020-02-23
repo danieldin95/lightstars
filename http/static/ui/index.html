@@ -20,10 +20,13 @@
 <div class="container">
     <div name="system" class="card system">
         <div class="card-header">
-            <div>
+            <button class="btn btn-link btn-block text-left btn-sm"
+                    type="button" data-toggle="collapse"
+                    data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">
                 System Information
-            </div>
+            </button>
         </div>
+        <div id="collapseSys" class="collapse" aria-labelledby="headingOne" data-parent="#index">
         <div class="card-body">
             <dl class="dl-horizontal">
                 <dt>Version:</dt>
@@ -36,16 +39,20 @@
                 <dd>{{ prettyBytes .Hyper.MemTotal }} | {{ prettyBytes .Hyper.MemFree }}</dd>
             </dl>
         </div>
+        </div>
     </div>
     <div class="card-no-border">
         <tasks></tasks>
     </div>
     <div name="instances" class="card instances">
         <div class="card-header">
-            <div>
+            <button class="btn btn-link btn-block text-left btn-sm"
+                    type="button" data-toggle="collapse"
+                    data-target="#collapseIns" aria-expanded="true" aria-controls="collapseIns">
                 Instances
-            </div>
+            </button>
         </div>
+        <div id="collapseIns" class="collapse show" aria-labelledby="headingOne" data-parent="#index">
         <div class="card-body">
             <div class="card-header-cnt">
                 <instance-create>
@@ -119,6 +126,7 @@
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
     </div>
 </div>

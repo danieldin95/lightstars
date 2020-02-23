@@ -13,12 +13,20 @@
     background-color: #ced4da;
 }
 
+.card-header .btn-sm {
+    padding-left: 0;
+}
+
 .dropdown-menu {
     border-color: #1d2124;
 }
 
 .btn-sm {
     font-size: small;
+}
+
+.btn-link {
+    color: inherit;
 }
 
 .alert {
