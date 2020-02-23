@@ -4,13 +4,14 @@
 }
 
 .card {
-    margin: 16px 10px;
+    margin: 15px 10px;
     border-color: #6c757d;
 }
 
 .card-header {
     padding: .25rem 1.25rem;
     background-color: #ced4da;
+    border-color: #6c757d;
 }
 
 .card-header .btn-sm {

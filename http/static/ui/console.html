@@ -29,7 +29,11 @@
             height: 100%;
             background-color: rgb(40, 40, 40);
         }
-
+        a {
+            color: white;
+            /*text-decoration: none;*/
+        }
+        
         #main {
         }
         #top_bar {
@@ -46,10 +50,6 @@
             /*border: 1px outset;*/
             padding: 5px 5px 4px 5px;
             cursor: pointer;
-        }
-        #home a {
-            color: white;
-            text-decoration: none;
         }
         #status {
             text-align: center;
@@ -205,9 +205,13 @@
 <body>
 <div id="main">
     <div id="top_bar">
-        <div id="home"><a href="#" onclick="javascript:history.back();">Back</a></div>
+        <div id="home">
+            <a href="#" onclick="javascript:history.back();">Back</a>
+        </div>
         <div id="status">Loading</div>
-        <div id="sendCtrlAltDelButton">Send CtrlAltDel</div>
+        <div id="sendCtrlAltDelButton">
+            <a href="#" >Send CtrlAltDel</a>
+        </div>
     </div>
     <div id="screen">
         <!-- This is where the remote screen will appear -->
