@@ -23,6 +23,25 @@ This software makes it easier for you to control compute resource.
 
     mkdir -p /lighstar/datastore/01
     virsh pool-create-as --name 01 --type dir --target /lightstar/datastore/01
+## Configure Default Network
+
+    cat > virbr0.xml <<EOF
+        <network>
+          <name>virbr0</name>
+          <forward mode='nat'>
+            <nat>
+              <port start='1024' end='65535'/>
+            </nat>
+          </forward>
+          <bridge name='virbr0' stp='on' delay='0'/>
+          <ip address='172.16.10.1' netmask='255.255.255.0'>
+            <dhcp>
+              <range start='172.16.10.10' end='172.16.10.100'/>
+            </dhcp>
+          </ip>
+        </network>
+    EOF
+    virsh net-create virbr0.xml
 
 ## Upload one Linux ISO file
 
