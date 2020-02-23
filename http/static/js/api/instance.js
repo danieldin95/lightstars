@@ -99,10 +99,9 @@ export class InstanceApi {
 
     remove() {
         let tasks = $(this.tasks);
-        let data = {action: 'remove'};
 
         this.uuids.forEach(function (item, index, err) {
-            $.put("/api/instance/" + item, JSON.stringify(data), function (data, status) {
+            $.delete("/api/instance/" + item, function (data, status) {
                 tasks.append(AlertSuccess(`remove instance '${item}' success`));
             }).fail(function (e) {
                 tasks.append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));

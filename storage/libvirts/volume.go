@@ -72,6 +72,8 @@ func (vol *Volume) Create() error {
 	if _, err := pol.StorageVolCreateXML(volXml.Encode(), 0); err != nil {
 		return err
 	}
+	defer pol.Free()
+
 	return nil
 }
 
@@ -79,15 +81,17 @@ func (vol *Volume) GetXMLObj() (*VolumeXML, error) {
 	if err := vol.Open(); err != nil {
 		return nil, err
 	}
-	pol, err := vol.Conn.LookupStoragePoolByName(vol.Pool)
+	pool, err := vol.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
 		return nil, err
 	}
-	volVir, err := pol.LookupStorageVolByName(vol.Name)
+	defer pool.Free()
+	volume, err := pool.LookupStorageVolByName(vol.Name)
 	if err != nil {
 		return nil, err
 	}
-	xmlData, err := volVir.GetXMLDesc(0)
+	defer volume.Free()
+	xmlData, err := volume.GetXMLDesc(0)
 	if err != nil {
 		return nil, err
 	}

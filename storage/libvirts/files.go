@@ -41,12 +41,13 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 		return images
 	}
 
-	pol, err := iso.Conn.LookupStoragePoolByTargetPath(dir)
+	pool, err := iso.Conn.LookupStoragePoolByTargetPath(dir)
 	if err != nil {
 		libstar.Warn("IsoMgr.ListFiles %s", err)
 		return images
 	}
-	if vols, err := pol.ListAllStorageVolumes(0); err == nil {
+	defer pool.Free()
+	if vols, err := pool.ListAllStorageVolumes(0); err == nil {
 		for _, vol := range vols {
 			file, err := vol.GetPath()
 			if err != nil {
@@ -58,6 +59,7 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 					Path: storage.PATH.Fmt(file),
 				})
 			}
+			vol.Free()
 		}
 	}
 	return images
@@ -103,25 +105,27 @@ func (store *DataStoreMgr) List() []DataStore {
 		return stores
 	}
 	if pools, err := store.Conn.ListAllStoragePools(0); err == nil {
-		for _, pol := range pools {
-			name, err := pol.GetName()
-			if err != nil || IsDomainPool(name) {
-				continue
-			}
-			info, err := pol.GetInfo()
+		for _, pool := range pools {
+			name, err := pool.GetName()
 			if err != nil {
 				continue
 			}
-			path := storage.DataStore + name
-			stores = append(stores,
-				DataStore{
-					Name:       path,
-					Path:       path,
-					State:      int(info.State),
-					Capacity:   info.Capacity,
-					Allocation: info.Allocation,
-					Available:  info.Available,
-				})
+			if !IsDomainPool(name) {
+				info, err := pool.GetInfo()
+				if err == nil {
+					path := storage.DataStore + name
+					stores = append(stores,
+						DataStore{
+							Name:       path,
+							Path:       path,
+							State:      int(info.State),
+							Capacity:   info.Capacity,
+							Allocation: info.Allocation,
+							Available:  info.Available,
+						})
+				}
+			}
+			pool.Free()
 		}
 	}
 	return stores

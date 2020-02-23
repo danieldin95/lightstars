@@ -54,11 +54,9 @@ func (h *Server) Router() *mux.Router {
 	if h.router != nil {
 		return h.router
 	}
-
 	h.router = mux.NewRouter()
 	h.router.NotFoundHandler = http.HandlerFunc(h.Handle404)
 	h.router.Use(h.Middleware)
-
 	return h.router
 }
 
@@ -68,8 +66,7 @@ func (h *Server) LoadRouter() {
 	staticFile := http.StripPrefix("/static/", http.FileServer(http.Dir(h.pubDir)))
 	router.PathPrefix("/static/").Handler(staticFile)
 	// proxy websocket
-	router.Handle("/websockify", websocket.Handler(h.HandleWebSockify))
-
+	router.Handle("/websockify", websocket.Handler(h.HandleSockify))
 	// custom router
 	router.HandleFunc("/", h.HandleIndex)
 	router.HandleFunc("/ui", h.HandleUi)
@@ -77,11 +74,11 @@ func (h *Server) LoadRouter() {
 	router.HandleFunc("/ui/index", h.HandleUi)
 	router.HandleFunc("/ui/console", h.HandleConsole)
 	router.HandleFunc("/ui/instance/{id}", h.HandleInstance)
-
 	// api router
 	router.HandleFunc("/api/instance", h.AddInstance).Methods("POST")
 	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
 	router.HandleFunc("/api/instance/{id}", h.ModInstance).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}", h.DelInstance).Methods("DELETE")
 	router.HandleFunc("/api/iso", h.GetISO).Methods("GET")
 	router.HandleFunc("/api/bridge", h.GetBridge).Methods("GET")
 	router.HandleFunc("/api/datastore", h.GetDataStore).Methods("GET")
@@ -271,6 +268,7 @@ func (h *Server) HandleUi(w http.ResponseWriter, r *http.Request) {
 		for _, dom := range domains {
 			instance := schema.NewInstance(dom)
 			index.Instances = append(index.Instances, instance)
+			dom.Free()
 		}
 	}
 	file := h.GetFile("ui/index.html")
@@ -290,6 +288,7 @@ func (h *Server) HandleConsole(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
+	defer dom.Free()
 	instance := schema.NewInstance(*dom)
 	file := h.GetFile("ui/console.html")
 	if err := h.ParseFiles(w, file, instance); err != nil {
@@ -305,6 +304,7 @@ func (h *Server) HandleInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
+	defer dom.Free()
 	instance := schema.NewInstance(*dom)
 	file := h.GetFile("ui/instance.html")
 	if err := h.ParseFiles(w, file, instance); err != nil {
@@ -329,7 +329,7 @@ func (h *Server) GetTarget(req *http.Request) string {
 		return ""
 	}
 
-	libstar.Info("Server.GetTarget %s", id)
+	libstar.Debug("Server.GetTarget %s", id)
 	hyper, err := libvirtc.GetHyper()
 	if err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
@@ -339,6 +339,7 @@ func (h *Server) GetTarget(req *http.Request) string {
 	if err != nil {
 		return ""
 	}
+	defer dom.Free()
 	instXml := libvirtc.NewDomainXMLFromDom(dom, true)
 	if instXml == nil {
 		return ""
@@ -349,36 +350,36 @@ func (h *Server) GetTarget(req *http.Request) string {
 	return ""
 }
 
-func (h *Server) HandleWebSockify(ws *websocket.Conn) {
+func (h *Server) HandleSockify(ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
 
 	target := h.GetTarget(ws.Request())
 	if target == "" {
-		libstar.Error("Server.HandleWebSockify target not found.")
+		libstar.Error("Server.HandleSockify target not found.")
 		return
 	}
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("Server.HandleWebSockify dial %s", err)
+		libstar.Error("Server.HandleSockify dial %s", err)
 		return
 	}
 	defer conn.Close()
-	libstar.Debug("Server.HandleWebSockify request from %s", ws.RemoteAddr())
-	libstar.Debug("Server.HandleWebSockify connection to %s", conn.LocalAddr())
+	libstar.Info("Server.HandleSockify request from %s", ws.RemoteAddr())
+	libstar.Info("Server.HandleSockify connect to %s", conn.RemoteAddr())
 
 	wait := sync.WaitGroup{}
 	wait.Add(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Error("Server.HandleWebSockify copy from ws %s", err)
+			libstar.Error("Server.HandleSockify copy from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Error("Server.HandleWebSockify copy from target %s", err)
+			libstar.Error("Server.HandleSockify copy from target %s", err)
 		}
 	}()
 	wait.Wait()
@@ -398,7 +399,7 @@ func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-
+	defer dom.Free()
 	format := h.GetQueryOne(r, "format")
 	if format == "xml" {
 		xmlDesc, err := dom.GetXMLDesc(false)
@@ -430,6 +431,14 @@ func (h *Server) NewVolumeAndPool(conf *schema.InstanceConf) (*libvirts.VolumeXM
 		return nil, err
 	}
 	return vol.GetXMLObj()
+}
+
+func (h *Server) DelVolumeAndPool(name string) error {
+	err := libvirts.RemovePool(libvirts.ToDomainPool(name))
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
@@ -578,6 +587,7 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 	libstar.XML.MarshalSave(xmlObj, file, true)
 
 	if dom, err := hyper.DomainDefineXML(xmlData); err == nil {
+		defer dom.Free()
 		if err := dom.Create(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -607,8 +617,9 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-
+	defer dom.Free()
 	defer r.Body.Close()
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -632,14 +643,15 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if dom, err := hyper.DomainDefineXML(xmlData); err == nil {
+		if domNew, err := hyper.DomainDefineXML(xmlData); err == nil {
 			if err := dom.Create(); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
+			domNew.Free()
 		} else {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		return
 	case "shutdown":
 		xmlData, err := dom.GetXMLDesc(false)
 		if err != nil {
@@ -648,35 +660,68 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 		}
 		if err := dom.Shutdown(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		if _, err := hyper.DomainDefineXML(xmlData); err != nil {
+		domNew, err := hyper.DomainDefineXML(xmlData)
+		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		return
+		domNew.Free()
 	case "suspend":
 		if err := dom.Suspend(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		return
 	case "destroy":
 		if err := dom.Destroy(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		return
 	case "resume":
 		if err := dom.Resume(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		return
-	case "remove":
+	case "undefine":
 		if err := dom.Undefine(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-		} else {
-			if name, err := dom.GetName(); err == nil {
-				path := h.GetPath("datastore@01", name)
-				os.RemoveAll(path)
-			}
+			return
 		}
+	}
+	h.ResponseMsg(w, 0, "success")
+}
+
+func (h *Server) DelInstance(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := h.GetArg(r, "id")
+
+	hyper, err := libvirtc.GetHyper()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	dom, err := hyper.LookupDomainByUUIDName(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer dom.Free()
+
+	if ok, _ := dom.IsActive(); ok {
+		http.Error(w, "not allowed with active instance", http.StatusInternalServerError)
+		return
+	}
+	name, err := dom.GetName()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := dom.Undefine(); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := h.DelVolumeAndPool(name); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	h.ResponseMsg(w, 0, "")

@@ -40,6 +40,13 @@ func CreatePool(name, target string) (*Pool, error) {
 	return pol, pol.Create()
 }
 
+func RemovePool(name string) error {
+	pol := &Pool{
+		Name: name,
+	}
+	return pol.Remove()
+}
+
 func (pol *Pool) Open() error {
 	if pol.Conn == nil {
 		hyper, err := libvirtc.GetHyper()
@@ -68,8 +75,33 @@ func (pol *Pool) Create() error {
 			Path: pol.Path,
 		},
 	}
-	if _, err := pol.Conn.StoragePoolCreateXML(polXml.Encode(), libvirt.STORAGE_POOL_CREATE_WITH_BUILD); err != nil {
+	pool, err := pol.Conn.StoragePoolCreateXML(polXml.Encode(), libvirt.STORAGE_POOL_CREATE_WITH_BUILD)
+	if err != nil {
 		return err
+	}
+	defer pool.Free()
+	return nil
+}
+
+func (pol *Pool) Remove() error {
+	if err := pol.Open(); err != nil {
+		return err
+	}
+	if pool, err := pol.Conn.LookupStoragePoolByName(pol.Name); err == nil {
+		vols, err := pool.ListAllStorageVolumes(0)
+		if err != nil {
+			return err
+		}
+		for _, vol := range vols {
+			if err := vol.Delete(0); err != nil {
+				return err
+			}
+			vol.Free()
+		}
+		//pool.Delete(0)
+		pool.Destroy()
+		defer pool.Free()
 	}
 	return nil
 }
+
