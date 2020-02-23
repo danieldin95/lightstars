@@ -100,7 +100,12 @@ func (h *Server) Initialize() {
 			Handler:      r,
 		}
 	}
-
+	path := storage.PATH.RootXML()
+	if err := os.Mkdir(path, os.ModePerm); err != nil {
+		if !os.IsExist(err) {
+			libstar.Warn("Server.Initialize %s", err)
+		}
+	}
 	h.LoadRouter()
 }
 
@@ -583,24 +588,26 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
 		return
 	}
-	file := h.GetPath(conf.DataStore, conf.Name) + "/define.xml"
+	file := storage.PATH.RootXML() + conf.Name + ".xml"
 	libstar.XML.MarshalSave(xmlObj, file, true)
 
-	if dom, err := hyper.DomainDefineXML(xmlData); err == nil {
-		defer dom.Free()
+	dom, err := hyper.DomainDefineXML(xmlData)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dom.Free()
+	if conf.Start == "true" {
 		if err := dom.Create(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		domXML := libvirtc.NewDomainXMLFromDom(dom, true)
-		if domXML != nil {
-			h.ResponseJson(w, domXML)
-		} else {
-			h.ResponseJson(w, xmlObj)
-		}
+	}
+	domXML := libvirtc.NewDomainXMLFromDom(dom, true)
+	if domXML != nil {
+		h.ResponseJson(w, domXML)
 	} else {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		h.ResponseJson(w, xmlObj)
 	}
 }
 

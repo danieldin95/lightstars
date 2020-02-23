@@ -79,4 +79,5 @@ type InstanceConf struct {
 	DiskUnit   string `json:"diskUnit"`
 	IsoFile    string `json:"isoFile"`
 	Interface  string `json:"interface"`
+	Start      string `json:"start"`
 }

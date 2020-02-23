@@ -104,4 +104,3 @@ func (pol *Pool) Remove() error {
 	}
 	return nil
 }
-

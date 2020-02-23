@@ -9,28 +9,28 @@ export class Instances {
 
         // Register click handle.
         $("instance-console").on("click", this.instances, function (e) {
-            new InstanceApi(e.data).console();
+            new InstanceApi(e.data.store).console();
         });
         $("instance-start, instance-more-start").on("click", this.instances, function (e) {
-            new InstanceApi(e.data).start();
+            new InstanceApi(e.data.store).start();
         });
         $("instance-more-shutdown").on("click", this.instances, function (e) {
-            new InstanceApi(e.data).shutdown();
+            new InstanceApi(e.data.store).shutdown();
         });
         $("instance-more-reset").on("click", this.instances, function (e) {
-            new InstanceApi(e.data).reset();
+            new InstanceApi(e.data.store).reset();
         });
         $("instance-more-suspend").on("click", this.instances, function (e) {
-            new InstanceApi(e.data).suspend();
+            new InstanceApi(e.data.store).suspend();
         });
         $("instance-more-resume").on("click", this.instances, function (e) {
-            new InstanceApi(e.data).resume();
+            new InstanceApi(e.data.store).resume();
         });
         $("instance-more-destroy").on("click", this.instances, function (e) {
-            new InstanceApi(e.data).destroy();
+            new InstanceApi(e.data.store).destroy();
         });
         $("instance-more-remove").on("click", this.instances, function (e) {
-            new InstanceApi(e.data).remove();
+            new InstanceApi(e.data.store).remove();
         });
     }
 
@@ -42,19 +42,24 @@ export class Instances {
 export class InstanceOn {
 
     constructor() {
-        this.uuids = [];
+        this.uuids = {store: []};
 
-        let disabled = this.disable;
-        ListenChangeAll(this.uuids, "instance-on-one input", "instance-on-all input", function (e) {
-           disabled(e.data.length == 0);
+        let change = this.change;
+        let record = this.uuids;
+
+        ListenChangeAll("instance-on-one input", "instance-on-all input", function(e) {
+           change(record, e);
         });
 
         // Disabled firstly.
-        disabled(this.uuids.length === 0);
+        change(record, this.uuids);
     }
 
-    disable(is) {
-        if (is) {
+    change(record, from) {
+        record.store = from.store;
+        console.log(record.store);
+
+        if (from.store.length == 0) {
             $("instance-start button").addClass('disabled');
             $("instance-console button").addClass('disabled');
             $("instance-shutdown button").addClass('disabled');

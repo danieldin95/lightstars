@@ -9,6 +9,4 @@ require (
 	golang.org/x/net v0.0.0
 )
 
-replace (
-	golang.org/x/net v0.0.0 => github.com/golang/net v0.0.0-20190812203447-cdfb69ac37fc
-)
+replace golang.org/x/net v0.0.0 => github.com/golang/net v0.0.0-20190812203447-cdfb69ac37fc

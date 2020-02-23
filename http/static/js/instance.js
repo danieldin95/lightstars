@@ -36,19 +36,23 @@ export class Instance {
 export class Disk {
 
     constructor() {
-        this.disks = [];
-        let disabled = this.disable;
+        this.disks = {store: []};
 
-        ListenChangeAll(this.disks, "disk-on-one input", "disk-on-all input", function (e) {
-           disabled(e.data.length == 0);
+        let record = this.disks;
+        let change = this.change;
+
+        ListenChangeAll("disk-on-one input", "disk-on-all input", function (e) {
+           change(record, e);
         });
 
         // Disabled firstly.
-        disabled(this.disks.length === 0);
+        change(record, this.disks);
     }
 
-    disable(is) {
-        if (is) {
+    change(record, from) {
+        record.store = from.store;
+
+        if (from.store.length == 0) {
             $("disk-edit button").addClass('disabled');
             $("disk-remove button").addClass('disabled');
         } else {
@@ -61,19 +65,23 @@ export class Disk {
 export class Interface {
 
     constructor() {
-        this.interfaces = [];
-        let disabled = this.disable;
+        this.interfaces = {store: []};
 
-        ListenChangeAll(this.interfaces, "interface-on-one input", "interface-on-all input", function (e) {
-            disabled(e.data.length == 0);
+        let record = this.interfaces;
+        let change = this.change;
+
+        ListenChangeAll("interface-on-one input", "interface-on-all input", function (e) {
+            change(record, e);
         });
 
         // Disabled firstly.
-        disabled(this.interfaces.length === 0);
+        change(record, this.interfaces);
     }
 
-    disable(is) {
-        if (is) {
+    change(record, from) {
+        record.store = from.store;
+
+        if (from.store == 0) {
             $("interface-edit button").addClass('disabled');
             $("interface-remove button").addClass('disabled');
         } else {

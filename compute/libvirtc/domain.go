@@ -18,6 +18,6 @@ func (d *Domain) GetXMLDesc(secure bool) (string, error) {
 	if secure {
 		return d.Domain.GetXMLDesc(libvirt.DOMAIN_XML_SECURE)
 	} else {
-		return d.Domain.GetXMLDesc(0)
+		return d.Domain.GetXMLDesc(libvirt.DOMAIN_XML_INACTIVE)
 	}
 }

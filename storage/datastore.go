@@ -27,7 +27,7 @@ func (p StorePath) Fmt(path string) string {
 
 func (p StorePath) Unix(path string) string {
 	newPath := path
-	if strings.HasPrefix(path, DataStore) {
+	if strings.HasPrefix(path, "datastore@") {
 		splits := strings.SplitN(newPath, "/", 2)
 		if len(splits) >= 2 {
 			stores := strings.SplitN(splits[0], "@", 2)
@@ -40,4 +40,12 @@ func (p StorePath) Unix(path string) string {
 		}
 	}
 	return newPath
+}
+
+func (p StorePath) Root() string {
+	return Location + "datastore" + "/"
+}
+
+func (p StorePath) RootXML() string {
+	return Location + "datastore" + "/" + "libvirt/"
 }

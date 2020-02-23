@@ -12,7 +12,9 @@ export function Arr2Json(data) {
     return ret;
 }
 
-export function ListenChangeAll(storage, one, all, fn) {
+export function ListenChangeAll(one, all, fn) {
+    let storage = [];
+
     // listen on all one.
     for (let i = 0; i < $(one).length; i++) {
         $(one).eq(i).prop('checked', false);
@@ -21,16 +23,16 @@ export function ListenChangeAll(storage, one, all, fn) {
             if ($(this).prop('checked')) {
                 storage.push(data);
             } else {
-                storage = storage.filter(v => v != data);
+                storage = storage.filter((v) => v !== data);
             }
-            fn({data: storage});
+            fn({store: storage});
         });
     }
 
     // listen on all and change to one.
     $(all).prop('checked', false);
     $(all).on("change", function(e) {
-        storage.splice(0, storage.length); // empty
+        storage = []; // empty
         if ($(this).prop('checked')) {
             $(one).each(function (index, element) {
                 //console.log($(element));
@@ -43,6 +45,6 @@ export function ListenChangeAll(storage, one, all, fn) {
                 $(element).prop('checked', false);
             });
         }
-        fn({data: storage});
+        fn({store: storage});
     });
 }
