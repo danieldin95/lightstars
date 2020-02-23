@@ -90,6 +90,7 @@
                                 <input type="checkbox" aria-label="select all instances">
                             </instance-on-all>
                         </th>
+                        <th>ID</th>
                         <th>UUID</th>
                         <th>CPU Time</th>
                         <th>Name</th>
@@ -99,13 +100,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{ range .Instances }}
+                    {{ range $index, $_ := .Instances }}
                     <tr>
                         <td>
                             <instance-on-one>
                                 <input type="checkbox" aria-label="select {{ .Name }}" data="{{ .UUID }}">
                             </instance-on-one>
                         </td>
+                        <td>{{ $index }}</td>
                         <td><a class="text-decoration-none" href="/ui/instance/{{ .UUID }}">{{ .UUID }}</a></td>
                         <td>{{ .CpuTime }}ms</td>
                         <td>{{ .Name }}</td>

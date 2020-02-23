@@ -75,7 +75,7 @@ func (h *Server) LoadRouter() {
 	router.HandleFunc("/ui", h.HandleUi)
 	router.HandleFunc("/ui/", h.HandleUi)
 	router.HandleFunc("/ui/index", h.HandleUi)
-	router.HandleFunc("/ui/console", h.HandleFile)
+	router.HandleFunc("/ui/console", h.HandleConsole)
 	router.HandleFunc("/ui/instance/{id}", h.HandleInstance)
 
 	// api router
@@ -276,6 +276,24 @@ func (h *Server) HandleUi(w http.ResponseWriter, r *http.Request) {
 	file := h.GetFile("ui/index.html")
 	if err := h.ParseFiles(w, file, index); err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
+	}
+}
+
+func (h *Server) HandleConsole(w http.ResponseWriter, r *http.Request) {
+	uuid := h.GetQueryOne(r, "instance")
+	if uuid == "" {
+		http.Error(w, "Not found instance", http.StatusNotFound)
+		return
+	}
+	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	instance := schema.NewInstance(*dom)
+	file := h.GetFile("ui/console.html")
+	if err := h.ParseFiles(w, file, instance); err != nil {
+		libstar.Error("Server.HandleInstance %s", err)
 	}
 }
 

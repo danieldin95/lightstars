@@ -26,6 +26,7 @@ th, td {
 }
 
 a {
+    color: inherit;
     font-size: small;
 }
 

@@ -13,14 +13,14 @@
     Connect parameters are provided in query string:
         http://example.com/?host=HOST&port=PORT&scale=true
     -->
-    <title>Console | LightStar</title>
+    <title>{{ .Name }} | Console</title>
     <!-- Favicon -->
     <link rel="icon" href="/static/images/favicon.ico">
     <meta charset="utf-8">
     <style>
         body {
             margin: 0;
-            background-color: dimgrey;
+            /*background-color: dimgrey;*/
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -29,17 +29,20 @@
             height: 100%;
         }
 
+        #main {
+
+        }
         #top_bar {
-            background-color: #6e84a3;
+            background-color: #24292e;
             color: white;
             font: bold 12px Helvetica;
-            padding: 6px 5px 4px 5px;
-            border-bottom: 1px outset;
+            padding: 8px;
+            /*border-bottom: 1px outset;*/
         }
         #home {
             position: fixed;
             top: 0px;
-            left: 0px;
+            left: 1rem;
             /*border: 1px outset;*/
             padding: 5px 5px 4px 5px;
             cursor: pointer;
@@ -54,15 +57,14 @@
         #sendCtrlAltDelButton {
             position: fixed;
             top: 0px;
-            right: 0px;
+            right: 1rem;
             /*border: 1px outset;*/
             padding: 5px 5px 4px 5px;
             cursor: pointer;
         }
-
         #screen {
             flex: 1; /* fill remaining space */
-            overflow: hidden;
+            /*overflow: hidden;*/
         }
     </style>
 
@@ -201,6 +203,7 @@
 </head>
 
 <body>
+<div id="main">
     <div id="top_bar">
         <div id="home"><a href="#" onclick="javascript:history.back();">Back</a></div>
         <div id="status">Loading</div>
@@ -209,5 +212,6 @@
     <div id="screen">
         <!-- This is where the remote screen will appear -->
     </div>
+</div>
 </body>
 </html>
