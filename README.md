@@ -46,9 +46,9 @@ This software makes it easier for you to control compute resource.
 ## Upload a linux ISO file
 
     cd /lightstar/datastore/01
-    wget http://mirrors.163.com/archlinux/iso/2020.02.01/archlinux-2020.02.01-x86_64.iso
+    wget http://mirrors.aliyun.com/centos/7.7.1908/isos/x86_64/CentOS-7-x86_64-Minimal-1908.iso
     
-# Open UI on browser by URL:
+# Open UI on browser
 
     https://your-machine-address:10080
     
