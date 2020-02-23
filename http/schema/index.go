@@ -21,7 +21,7 @@ func NewVersion() Version {
 }
 
 type Hyper struct {
-	CpuNum     int     `json:"cpuNum"`
+	CpuNum     uint    `json:"cpuNum"`
 	CpuVendor  string  `json:"cpuVendor"`
 	MemTotal   uint64  `json:"memTotal"`
 	MemFree    uint64  `json:"memFree"`

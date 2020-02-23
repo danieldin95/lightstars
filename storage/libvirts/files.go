@@ -15,8 +15,8 @@ type IsoFile struct {
 }
 
 type IsoMgr struct {
-	Conn  *libvirt.Connect
-	Files []IsoFile `json:"files"`
+	Conn  *libvirt.Connect `json:"-"`
+	Files []IsoFile        `json:"files"`
 }
 
 func (iso *IsoMgr) Open() error {
@@ -53,11 +53,10 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 				continue
 			}
 			if strings.HasSuffix(file, ".iso") || strings.HasSuffix(file, ".ISO") {
-				stdFile := IsoFile{
+				images = append(images, IsoFile{
 					Name: path.Base(file),
 					Path: storage.PATH.Fmt(file),
-				}
-				images = append(images, stdFile)
+				})
 			}
 		}
 	}
@@ -69,13 +68,17 @@ var ISO = IsoMgr{
 }
 
 type DataStore struct {
-	Name string `json:"name"`
-	Path string `json:"path"`
+	Name       string `json:"name"`
+	Path       string `json:"path"`
+	State      int    `json:"state"`
+	Capacity   uint64 `json:"capacity"`
+	Allocation uint64 `json:"allocation"`
+	Available  uint64 `json:"available"`
 }
 
 type DataStoreMgr struct {
-	Conn    *libvirt.Connect
-	Storage []DataStore `json:"storage"`
+	Conn    *libvirt.Connect `json:"-"`
+	Storage []DataStore      `json:"storage"`
 }
 
 func (store *DataStoreMgr) Open() error {
@@ -102,11 +105,23 @@ func (store *DataStoreMgr) List() []DataStore {
 	if pools, err := store.Conn.ListAllStoragePools(0); err == nil {
 		for _, pol := range pools {
 			name, err := pol.GetName()
-			if err != nil || strings.HasPrefix(name, ".") {
+			if err != nil || IsDomainPool(name) {
+				continue
+			}
+			info, err := pol.GetInfo()
+			if err != nil {
 				continue
 			}
 			path := storage.DataStore + name
-			stores = append(stores, DataStore{Name: path, Path: path})
+			stores = append(stores,
+				DataStore{
+					Name:       path,
+					Path:       path,
+					State:      int(info.State),
+					Capacity:   info.Capacity,
+					Allocation: info.Allocation,
+					Available:  info.Available,
+				})
 		}
 	}
 	return stores

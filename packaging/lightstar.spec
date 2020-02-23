@@ -1,5 +1,5 @@
 Name: lightstar
-Version: 0.1.1
+Version: 0.2.11
 Release: 1%{?dist}
 Summary: LightStar's Project Software
 Group: Applications/Communications

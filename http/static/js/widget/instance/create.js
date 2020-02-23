@@ -29,34 +29,35 @@ export class InstanceCreate {
     }
 
     fetch() {
-        let iso_selector = this.view.find("select[name='isoFile']");
+        let iso_sel = this.view.find("select[name='isoFile']");
         let iso_refresh = function(datastore) {
             $.getJSON("/api/iso", {datastore: datastore}, function (data) {
-                iso_selector.find("option").remove();
+                iso_sel.find("option").remove();
                 data.forEach(function (ele, index) {
-                    iso_selector.append(Option(ele['path'], ele['path']));
+                    iso_sel.append(Option(ele['path'], ele['path']));
                 })
             }).fail(function (e) {
                 $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         };
 
-        let store_selector = this.view.find("select[name='datastore']");
+        let store_sel = this.view.find("select[name='datastore']");
         let store_refresh = function () {
             $.getJSON("/api/datastore", function (data) {
-                store_selector.find("option").remove();
+                store_sel.find("option").remove();
                 data.forEach(function (ele, index) {
-                    store_selector.append(Option(ele['name'], ele['path']));
-                })
+                    store_sel.append(Option(ele['name'], ele['path']));
+                });
+                if (data.length > 0) {
+                    iso_refresh(data[0]['name']);
+                }
             }).fail(function (e) {
                 $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
         };
 
         store_refresh();
-        iso_refresh("datastore@01");
-
-        store_selector.on("change", this, function (e) {
+        store_sel.on("change", this, function (e) {
             iso_refresh($(this).val());
         });
     }

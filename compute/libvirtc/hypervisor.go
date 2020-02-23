@@ -3,9 +3,6 @@ package libvirtc
 import (
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
-	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/disk"
-	"github.com/shirou/gopsutil/mem"
 	"strings"
 )
 
@@ -42,6 +39,19 @@ func parseQemuSSH(name string) (address, path string) {
 	return address, path
 }
 
+func (h *HyperVisor) Open() error {
+	if hyper.Conn == nil {
+		conn, err := libvirt.NewConnect(hyper.Name)
+		if err != nil {
+			return err
+		}
+		hyper.Conn = conn
+	}
+	if hyper.Conn == nil {
+		return libstar.NewErr("Not connect.")
+	}
+	return nil
+}
 func (h *HyperVisor) Init() {
 	if h.Name != "" {
 		h.Schema = strings.SplitN(h.Name, ":", 2)[0]
@@ -60,35 +70,41 @@ func (h *HyperVisor) Init() {
 	}
 }
 
-func (h *HyperVisor) GetCPU() (int, string) {
-	if c, err := cpu.Info(); err == nil {
-		return len(c), c[0].VendorID
+func (h *HyperVisor) GetCPU() (uint, string) {
+	if err := h.Open(); err != nil {
+		return 0, ""
+	}
+	if info, err := h.Conn.GetNodeInfo(); err == nil {
+		return info.Cpus, info.Model
 	}
 	return 0, ""
 }
 
-func (h *HyperVisor) GetMem() (uint64, uint64, float64) {
-	if v, err := mem.VirtualMemory(); err == nil {
-		return v.Total, v.Free, v.UsedPercent
+func (h *HyperVisor) GetMem() (t uint64, f uint64, p float64) {
+	if err := h.Open(); err != nil {
+		return 0, 0, 0
 	}
-	return 0, 0, 0
+	if info, err := h.Conn.GetNodeInfo(); err == nil {
+		t = info.Memory * 1024
+	}
+	if free, err := h.Conn.GetFreeMemory(); err == nil {
+		f = free
+	}
+	return t, f, p
 }
 
 func (h *HyperVisor) GetRootfs() string {
-	if parts, err := disk.Partitions(false); err == nil {
-		for _, p := range parts {
-			if p.Mountpoint == "/" {
-				return p.Device
-			}
-		}
+	if err := h.Open(); err != nil {
+		return ""
 	}
 	return ""
 }
 
 func (h *HyperVisor) ListAllDomains() ([]Domain, error) {
-	if h.Conn == nil {
-		return nil, libstar.NewErr("not connected")
+	if err := h.Open(); err != nil {
+		return nil, err
 	}
+
 	domains, err := h.Conn.ListAllDomains(DOMAIN_ALL)
 	if err != nil {
 		return nil, err
@@ -101,10 +117,9 @@ func (h *HyperVisor) ListAllDomains() ([]Domain, error) {
 }
 
 func (h *HyperVisor) LookupDomainByUUIDString(id string) (*Domain, error) {
-	if h.Conn == nil {
-		return nil, libstar.NewErr("not connected")
+	if err := h.Open(); err != nil {
+		return nil, err
 	}
-
 	domain, err := hyper.Conn.LookupDomainByUUIDString(id)
 	if err != nil {
 		return nil, err
@@ -113,10 +128,9 @@ func (h *HyperVisor) LookupDomainByUUIDString(id string) (*Domain, error) {
 }
 
 func (h *HyperVisor) LookupDomainByUUIDName(id string) (*Domain, error) {
-	if h.Conn == nil {
-		return nil, libstar.NewErr("not connected")
+	if err := h.Open(); err != nil {
+		return nil, err
 	}
-
 	domain, err := hyper.Conn.LookupDomainByUUIDString(id)
 	if err != nil {
 		domain, err := hyper.Conn.LookupDomainByName(id)
@@ -129,10 +143,9 @@ func (h *HyperVisor) LookupDomainByUUIDName(id string) (*Domain, error) {
 }
 
 func (h *HyperVisor) LookupDomainByName(id string) (*Domain, error) {
-	if h.Conn == nil {
-		return nil, libstar.NewErr("not connected")
+	if err := h.Open(); err != nil {
+		return nil, err
 	}
-
 	domain, err := hyper.Conn.LookupDomainByName(id)
 	if err != nil {
 		return nil, err
@@ -141,10 +154,9 @@ func (h *HyperVisor) LookupDomainByName(id string) (*Domain, error) {
 }
 
 func (h *HyperVisor) DomainDefineXML(xmlConfig string) (*Domain, error) {
-	if h.Conn == nil {
-		return nil, libstar.NewErr("not connected")
+	if err := h.Open(); err != nil {
+		return nil, err
 	}
-
 	domain, err := h.Conn.DomainDefineXML(xmlConfig)
 	if err != nil {
 		return nil, err
