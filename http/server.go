@@ -75,7 +75,7 @@ func (h *Server) LoadRouter() {
 	router.HandleFunc("/ui", h.HandleUi)
 	router.HandleFunc("/ui/", h.HandleUi)
 	router.HandleFunc("/ui/index", h.HandleUi)
-	router.HandleFunc("/favicon.ico", h.HandleFavicon)
+	router.HandleFunc("/ui/console", h.HandleFile)
 	router.HandleFunc("/ui/instance/{id}", h.HandleInstance)
 
 	// api router
@@ -231,8 +231,11 @@ func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}
 	return nil
 }
 
-func (h *Server) HandleFavicon(w http.ResponseWriter, r *http.Request) {
-	realpath := h.GetFile("images/favicon.ico")
+func (h *Server) HandleFile(w http.ResponseWriter, r *http.Request) {
+	realpath := h.GetFile(r.URL.Path)
+	if _, err := os.Stat(realpath); !os.IsExist(err) {
+		realpath = realpath + ".html"
+	}
 	contents, err := ioutil.ReadFile(realpath)
 	if err != nil {
 		fmt.Fprintf(w, "404")
@@ -270,7 +273,7 @@ func (h *Server) HandleUi(w http.ResponseWriter, r *http.Request) {
 			index.Instances = append(index.Instances, instance)
 		}
 	}
-	file := h.GetFile("index.html")
+	file := h.GetFile("ui/index.html")
 	if err := h.ParseFiles(w, file, index); err != nil {
 		libstar.Error("Server.HandleIndex %s", err)
 	}
@@ -285,7 +288,7 @@ func (h *Server) HandleInstance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	instance := schema.NewInstance(*dom)
-	file := h.GetFile("instance.html")
+	file := h.GetFile("ui/instance.html")
 	if err := h.ParseFiles(w, file, instance); err != nil {
 		libstar.Error("Server.HandleInstance %s", err)
 	}

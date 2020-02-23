@@ -20,7 +20,7 @@
     <div name="" class="card instance">
         <div class="card-header">
             <div class="card-just-left">
-                <a href=".." class="none">Home</a> | <strong>{{.Name}}</strong>
+                <a href="../.." class="none">Home</a> | <strong>{{.Name}}</strong>
             </div>
         </div>
 
@@ -30,7 +30,7 @@
                 <div class="card-header-btn">
                     <instance-console data="{{ .UUID }}">
                         {{ if eq .State "running" }}
-                        <a type="button" class="btn btn-outline-dark btn-sm" href="/static/console?instance={{ .UUID }}">console</a>
+                        <a type="button" class="btn btn-outline-dark btn-sm" href="/ui/console?instance={{ .UUID }}">console</a>
                         {{ else }}
                         <a type="button" class="btn btn-outline-dark btn-sm disabled" href="#">console</a>
                         {{ end }}

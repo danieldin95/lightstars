@@ -112,7 +112,7 @@ export class InstanceApi {
 
     console() {
         this.uuids.forEach(function (item, index, err) {
-            window.open("/static/console?instance="+item);
+            window.open("/ui/console?instance="+item);
         });
     }
 
