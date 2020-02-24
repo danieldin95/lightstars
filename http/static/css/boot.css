@@ -30,6 +30,11 @@
     font-size: inherit;
 }
 
+.col-form-label-sm {
+    font-size: inherit;
+    text-align: right;
+}
+
 .btn-link {
     color: inherit;
 }
@@ -73,10 +78,6 @@ ol, ul, dl {
 .sw-main .sw-container {
     margin: 1.5rem;
     min-height: 200px;
-}
-
-.col-form-label-sm {
-    font-size: inherit;
 }
 
 .custom-select-sm {

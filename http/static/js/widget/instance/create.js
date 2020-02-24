@@ -17,7 +17,7 @@ export class InstanceCreate extends ModalFormBase {
         console.log('forms', this.forms, this.prevbtn, this.nextbtn);
 
         this.render();
-        this.load();
+        this.loading();
         this.fetch();
     }
 
@@ -66,7 +66,6 @@ export class InstanceCreate extends ModalFormBase {
     }
 
     template(props) {
-        console.log('template', this.props, this.wizardId);
         return `
     <div class="modal-dialog modal-lg modal-dialog-centered sw-modal overflow-auto" role="document">
         <div class="modal-content">
@@ -211,7 +210,7 @@ export class InstanceCreate extends ModalFormBase {
         return $(`#${this.wizardId}`);
     }
 
-    load() {
+    loading() {
         let prevbtn = this.prevbtn;
         let nextbtn = this.nextbtn;
 

@@ -115,6 +115,12 @@ a {
     font-size: inherit;
 }
 
+.select-middle {
+    max-width: 50%;
+    padding: 0.375rem 0.75rem;
+    font-size: inherit;
+}
+
 .select-unit-right {
     width: auto;
     min-width: 4rem;
@@ -124,11 +130,11 @@ a {
 }
 
 .input-number {
-    max-width: 64px;
+    max-width: 30%;
 }
 
 .input-number-lg {
-    max-width: 128px;
+    max-width: 50%;
 }
 
 .input-string-sm, .input-select-sm {

@@ -4,8 +4,8 @@ import {ListenChangeAll} from "./com/utils.js";
 export class Instance {
 
     constructor() {
-        this.disk = new Disk();
-        this.interface = new Interface();
+        this.disk = new DiskOn();
+        this.interface = new InterfaceOn();
 
         // Register click handle.
         $("instance-start, instance-more-start").on("click", this, function (e) {
@@ -33,7 +33,7 @@ export class Instance {
 }
 
 
-export class Disk {
+export class DiskOn {
 
     constructor() {
         this.disks = {store: []};
@@ -62,7 +62,7 @@ export class Disk {
     }
 }
 
-export class Interface {
+export class InterfaceOn {
 
     constructor() {
         this.interfaces = {store: []};

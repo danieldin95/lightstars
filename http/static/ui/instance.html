@@ -177,7 +177,7 @@
                     <div class="card-header-cnt">
                         <interface-create>
                             <button type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#instanceCreateModal">
+                                    data-toggle="modal" data-target="#interfaceCreateModal">
                                 create
                             </button>
                         </interface-create>
@@ -223,9 +223,16 @@
                         </table>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
+<!-- Create disk modal -->
+<div id="diskCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+</div>
+<!-- Create interface modal -->
+<div id="interfaceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 </div>
 <!-- JQuery Javascript -->
 <script src="/static/asset/jquery-3.3.1.js"></script>
@@ -233,9 +240,20 @@
 <!-- Bootstrap Javascript -->
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
 <script type="module">
+    import {Arr2Json} from "/static/js/com/utils.js";
     import {Instance} from '/static/js/instance.js'
+    import {DiskCreate} from '/static/js/widget/disk/create.js'
+    import {InterfaceCreate} from '/static/js/widget/interface/create.js'
 
     let instance = new Instance();
+    new DiskCreate({containerId: 'diskCreateModal'})
+        .onSubmit(instance, function (e) {
+            console.log(Arr2Json(e.array));
+        });
+    new InterfaceCreate({containerId: 'interfaceCreateModal'})
+        .onSubmit(instance, function (e) {
+            console.log(Arr2Json(e.array));
+        });
 </script>
 </body>
 </html>
