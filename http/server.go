@@ -481,7 +481,7 @@ func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML
 			}
 		}
 	}
-	dom.VCPUXml = libvirtc.VCPUXML{
+	dom.CPUXml = libvirtc.CPUXML{
 		Placement: "static",
 		Value:     conf.Cpu,
 	}

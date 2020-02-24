@@ -1,31 +1,24 @@
 import {Option} from "../option.js";
 import {AlertDanger} from "../../com/alert.js";
+import {ModalFormBase} from "../form/modal.js";
 
-export class InstanceCreate {
-    constructor () {
-        this.view = this.render();
+export class InstanceCreate extends ModalFormBase {
+    // {containerId: "", wizardId: ""}
+    constructor (props) {
+        super(props);
 
-        this.view.find("select[name='cpu'] option").remove();
-        for (let i = 1; i <= 16; i++) {
-            this.view.find("select[name='cpu']").append(new Option(i, i));
-        }
-        this.container = $("#instanceCreateModal");
-        this.container.html(this.view);
+        this.props.wizardId = props.wizardId || 'instanceCreateWizard';
+        this.wizardId = this.props.wizardId; // id
+        console.log('aa', this.props, this.wizardId);
 
-        this.wizard = $("#instanceCreateWizard");
-        this.forms = $("#instanceCreateWizard form");
-        this.prevbtn = "#instanceCreateWizard #prev-btn";
-        this.nextbtn = "#instanceCreateWizard #next-btn";
-        
+        this.forms = `#${this.wizardId} form`;
+        this.prevbtn = `#${this.wizardId} #prev-btn`;
+        this.nextbtn = `#${this.wizardId} #next-btn`;
+        console.log('forms', this.forms, this.prevbtn, this.nextbtn);
+
+        this.render();
         this.load();
         this.fetch();
-        this.events = {
-            submit: {
-                func: function (e) {
-                },
-                data: undefined,
-            }
-        }
     }
 
     fetch() {
@@ -62,28 +55,25 @@ export class InstanceCreate {
         });
     }
 
-    submit() {
-        if (this.events.submit.func) {
-            this.events.submit.func({
-                data: this.events.submit.data,
-                array: this.forms.serializeArray()
-            });
-        }
-    }
-
-    onSubmit(data, fn) {
-        this.events.submit.data = data;
-        this.events.submit.func = fn;
-    }
-
     render() {
-        return $(`
+        this.view = $(this.template());
+
+        this.view.find("select[name='cpu'] option").remove();
+        for (let i = 1; i <= 16; i++) {
+            this.view.find("select[name='cpu']").append(new Option(i, i));
+        }
+        this.container().html(this.view);
+    }
+
+    template(props) {
+        console.log('template', this.props, this.wizardId);
+        return `
     <div class="modal-dialog modal-lg modal-dialog-centered sw-modal overflow-auto" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="instanceCreateModalLabel">Create Instance</h5>
+                <h5 class="modal-title" id="">Create Instance</h5>
             </div>
-            <div id="instanceCreateWizard" class="modal-body">
+            <div id="${this.wizardId}" class="modal-body">
                 <!-- Wizard navigations -->
                 <ul class="wizard-navs">
                     <li>
@@ -214,15 +204,20 @@ export class InstanceCreate {
                 </div>
             </div>
         </div>
-    </div>`)
+    </div>`
+    }
+
+    wizard() {
+        return $(`#${this.wizardId}`);
     }
 
     load() {
         let prevbtn = this.prevbtn;
         let nextbtn = this.nextbtn;
 
+        console.log(this.wizardId);
         // Step show event
-        this.wizard.on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+        this.wizard().on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
             if (stepPosition === 'first') {
                 $(prevbtn).addClass('disabled');
             } else if (stepPosition === 'final') {
@@ -232,21 +227,22 @@ export class InstanceCreate {
                 $(nextbtn).removeClass('disabled');
             }
         });
+
         // Toolbar extra buttons
         let btnFinish = $('<button id="finish-btn"></button>').text('Finish')
             .addClass('btn btn-outline-success btn-sm')
             .on('click', this, function(e) {
                 e.data.submit();
-                e.data.container.modal("hide");
+                e.data.container().modal("hide");
             });
         let btnCancel = $('<button id="cancel-btn"></button>').text('Cancel')
             .addClass('btn btn-outline-dark btn-sm')
             .on('click', this, function(e) {
-                e.data.container.modal("hide");
+                e.data.container().modal("hide");
             });
 
         // Smart Wizard
-        this.wizard.smartWizard({
+        this.wizard().smartWizard({
             selected: 0,
             theme: 'dots',
             transitionEffect: 'fade',

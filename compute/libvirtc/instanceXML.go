@@ -12,7 +12,7 @@ type DomainXML struct {
 	Name    string     `xml:"name" json:"name"`
 	UUID    string     `xml:"uuid" json:"uuid"`
 	OS      OSXML      `xml:"os" json:"os"`
-	VCPUXml VCPUXML    `xml:"vcpu" json:"vcpu"`
+	CPUXml  CPUXML     `xml:"vcpu" json:"cpu"`
 	Memory  MemXML     `xml:"memory" json:"memory"`
 	CurMem  CurMemXML  `xml:"currentMemory" json:"currentMemory"`
 	Devices DevicesXML `xml:"devices" json:"devices"`
@@ -65,15 +65,15 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 	return "", ""
 }
 
-type VCPUXML struct {
+type CPUXML struct {
 	XMLName   xml.Name `xml:"vcpu" json:"-"`
 	Placement string   `xml:"placement,attr" json:"placement"` // static
 	Value     string   `xml:",chardata" json:"Value"`
 }
 
-func (cpu *VCPUXML) Decode(xmlData string) error {
+func (cpu *CPUXML) Decode(xmlData string) error {
 	if err := xml.Unmarshal([]byte(xmlData), cpu); err != nil {
-		libstar.Error("VCPUXML.Decode %s", err)
+		libstar.Error("CPUXML.Decode %s", err)
 		return err
 	}
 	return nil
