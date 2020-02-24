@@ -1,0 +1,5 @@
+<interface type='bridge'>
+    <source bridge='br-mgt'/>
+    <virtualport type='openvswitch'/>
+    <address type='pci' domain='0x0000' bus='0x01' slot="0x01" />
+</interface>
