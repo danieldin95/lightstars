@@ -18,6 +18,7 @@
 </head>
 <body>
 <div class="container">
+    <!-- System -->
     <div name="system" class="card system">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
@@ -41,9 +42,13 @@
         </div>
         </div>
     </div>
+
+    <!-- Tasks -->
     <div class="card-no-border">
         <tasks></tasks>
     </div>
+
+    <!-- Instances -->
     <div name="instances" class="card instances">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
@@ -54,6 +59,7 @@
         </div>
         <div id="collapseIns" class="collapse show" aria-labelledby="headingOne" data-parent="#index">
         <div class="card-body">
+            <!-- Instances buttons -->
             <div class="card-header-cnt">
                 <instance-create>
                     <button type="button" class="btn btn-outline-dark btn-sm"
@@ -89,6 +95,8 @@
                     </div>
                 </instance-more>
             </div>
+
+            <!-- Instances display -->
             <div class="l-content-body">
                 <table class="table table-striped">
                     <thead>
