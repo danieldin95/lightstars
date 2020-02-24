@@ -23,7 +23,11 @@
 }
 
 .btn-sm {
-    font-size: small;
+    font-size: inherit;
+}
+
+.form-control-sm {
+    font-size: inherit;
 }
 
 .btn-link {
