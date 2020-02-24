@@ -137,8 +137,8 @@ type DevicesXML struct {
 	XMLName     xml.Name        `xml:"devices" json:"-"`
 	Graphics    []GraphicsXML   `xml:"graphics" json:"graphics"`
 	Disks       []DiskXML       `xml:"disk" json:"disk"`
-	Interfaces  []InterfaceXML  `xml:"interface", json:"interface"`
-	controllers []ControllerXML `xml:"controller", json:"controller"`
+	Interfaces  []InterfaceXML  `xml:"interface" json:"interface"`
+	Controllers []ControllerXML `xml:"controller" json:"controller"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -149,16 +149,16 @@ func (devices *DevicesXML) Decode(xmlData string) error {
 	return nil
 }
 
-//Bus 0: root and ide
-//Bus 1: disk
-//Bus 2: interface
-//Bus 3: reverse
+// Bus 0: root
+// Bus 1: disk, ide
+// Bus 2: interface
+// Bus 3: reverse
 type ControllerXML struct {
 	XMLName xml.Name   `xml:"controller" json:"-"`
 	Type    string     `xml:"type,attr" json:"type"`
 	Index   string     `xml:"index,attr" json:"port"`
 	Model   string     `xml:"model,attr" json:"model"` // pci-root, pci-bridge.
-	Address AddressXML `xml:"address", json:"address"`
+	Address AddressXML `xml:"address" json:"address"`
 }
 
 func (ctl *ControllerXML) Decode(xmlData string) error {
@@ -235,7 +235,7 @@ type InterfaceXML struct {
 	Source      InterfaceSourceXML      `xml:"source" json:"source"`
 	Model       InterfaceModelXML       `xml:"model" json:"model"`
 	Target      InterfaceTargetXML      `xml:"target" json:"tatget"`
-	VirtualPort InterfaceVirtualPortXML `xml:"virtualport", json:"virtualport"`
+	VirtualPort InterfaceVirtualPortXML `xml:"virtualport" json:"virtualport"`
 }
 
 func (int *InterfaceXML) Decode(xmlData string) error {

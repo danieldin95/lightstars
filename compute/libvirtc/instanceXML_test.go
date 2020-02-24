@@ -120,7 +120,7 @@ func TestInstanceXML(t *testing.T) {
 		return
 	}
 	fmt.Printf("%s\n", v)
-	fmt.Printf("-- %s\n", v.Encode())
+	//fmt.Printf("-- %s\n", v.Encode())
 
 	if data, err := xml.MarshalIndent(&v, "", "  "); err == nil {
 		fmt.Printf("-- pretty\n%s\n", string(data))
