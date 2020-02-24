@@ -8,9 +8,9 @@ import (
 type DomainXML struct {
 	XMLName xml.Name   `xml:"domain" json:"-"`
 	Id      string     `xml:"id,attr" json:"id"`
-	Type    string     `xml:"type,attr" json:"type"`
+	Type    string     `xml:"type,attr" json:"type"` // kvm
 	Name    string     `xml:"name" json:"name"`
-	Uuid    string     `xml:"uuid" json:"uuid"`
+	UUID    string     `xml:"uuid" json:"uuid"`
 	OS      OSXML      `xml:"os" json:"os"`
 	VCPUXml VCPUXML    `xml:"vcpu" json:"vcpu"`
 	Memory  MemXML     `xml:"memory" json:"memory"`
@@ -67,7 +67,7 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 
 type VCPUXML struct {
 	XMLName   xml.Name `xml:"vcpu" json:"-"`
-	Placement string   `xml:"placement,attr" json:"placement"`
+	Placement string   `xml:"placement,attr" json:"placement"` // static
 	Value     string   `xml:",chardata" json:"Value"`
 }
 
@@ -123,21 +123,22 @@ func (osx *OSXML) Decode(xmlData string) error {
 
 type OSTypeXML struct {
 	XMLName xml.Name `xml:"type" json:"-"`
-	Arch    string   `xml:"arch,attr" json:"arch"`
+	Arch    string   `xml:"arch,attr" json:"arch"` // x86_64
 	Machine string   `xml:"machine,attr" json:"machine"`
-	Value   string   `xml:",chardata" json:"value"`
+	Value   string   `xml:",chardata" json:"value"` // hvm
 }
 
 type OSBootXML struct {
 	XMLName xml.Name `xml:"boot" json:"-"`
-	Dev     string   `xml:"dev,attr" json:"dev"`
+	Dev     string   `xml:"dev,attr" json:"dev"` // hd, cdrom, network
 }
 
 type DevicesXML struct {
-	XMLName    xml.Name       `xml:"devices" json:"-"`
-	Graphics   []GraphicsXML  `xml:"graphics" json:"graphics"`
-	Disks      []DiskXML      `xml:"disk" json:"disk"`
-	Interfaces []InterfaceXML `xml:"interface", json:"interface"`
+	XMLName     xml.Name        `xml:"devices" json:"-"`
+	Graphics    []GraphicsXML   `xml:"graphics" json:"graphics"`
+	Disks       []DiskXML       `xml:"disk" json:"disk"`
+	Interfaces  []InterfaceXML  `xml:"interface", json:"interface"`
+	controllers []ControllerXML `xml:"controller", json:"controller"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -148,9 +149,38 @@ func (devices *DevicesXML) Decode(xmlData string) error {
 	return nil
 }
 
+//Bus 0: root and ide
+//Bus 1: disk
+//Bus 2: interface
+//Bus 3: reverse
+type ControllerXML struct {
+	XMLName xml.Name   `xml:"controller" json:"-"`
+	Type    string     `xml:"type,attr" json:"type"`
+	Index   string     `xml:"index,attr" json:"port"`
+	Model   string     `xml:"model,attr" json:"model"` // pci-root, pci-bridge.
+	Address AddressXML `xml:"address", json:"address"`
+}
+
+func (ctl *ControllerXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), ctl); err != nil {
+		libstar.Error("ControllerXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type AddressXML struct {
+	XMLName  xml.Name `xml:"address" json:"-"`
+	Type     string   `xml:"type,attr,omitempty" json:"type,omitempty"`
+	Domain   string   `xml:"domain,attr,omitempty" json:"domain,omitempty"`
+	Bus      string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
+	Slot     string   `xml:"slot,attr,omitempty" json:"slot,omitempty"`
+	Function string   `xml:"function,attr,omitempty" json:"function,omitempty"`
+}
+
 type GraphicsXML struct {
 	XMLName xml.Name `xml:"graphics" json:"-"`
-	Type    string   `xml:"type,attr" json:"type"`
+	Type    string   `xml:"type,attr" json:"type"` // vnc, spice
 	Port    string   `xml:"port,attr" json:"port"`
 	Listen  string   `xml:"listen,attr" json:"listen"`
 }
@@ -199,16 +229,17 @@ type DiskTargetXML struct {
 }
 
 type InterfaceXML struct {
-	XMLName xml.Name           `xml:"interface" json:"-"`
-	Type    string             `xml:"type,attr" json:"type"`
-	Mac     InterfaceMacXML    `xml:"mac" json:"mac"`
-	Source  InterfaceSourceXML `xml:"source" json:"source"`
-	Model   InterfaceModelXML  `xml:"model" json:"model"`
-	Target  InterfaceTargetXML `xml:"target" json:"tatget"`
+	XMLName     xml.Name                `xml:"interface" json:"-"`
+	Type        string                  `xml:"type,attr" json:"type"`
+	Mac         InterfaceMacXML         `xml:"mac" json:"mac"`
+	Source      InterfaceSourceXML      `xml:"source" json:"source"`
+	Model       InterfaceModelXML       `xml:"model" json:"model"`
+	Target      InterfaceTargetXML      `xml:"target" json:"tatget"`
+	VirtualPort InterfaceVirtualPortXML `xml:"virtualport", json:"virtualport"`
 }
 
-func (intf *InterfaceXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), intf); err != nil {
+func (int *InterfaceXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), int); err != nil {
 		libstar.Error("InterfaceXML.Decode %s", err)
 		return err
 	}
@@ -227,11 +258,16 @@ type InterfaceSourceXML struct {
 
 type InterfaceModelXML struct {
 	XMLName xml.Name `xml:"model" json:"-"`
-	Type    string   `xml:"type,attr" json:"type"`
+	Type    string   `xml:"type,attr" json:"type"` //rtl8139, virtio, e1000
 }
 
 type InterfaceTargetXML struct {
 	XMLName xml.Name `xml:"target" json:"-"`
 	Bus     string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
 	Dev     string   `xml:"dev,attr,omitempty" json:"dev,omitempty"`
+}
+
+type InterfaceVirtualPortXML struct {
+	XMLName xml.Name `xml:"virtualport" json:"-"`
+	Type    string   `xml:"type,attr,omitempty" json:"type,omitempty"` //openvswitch
 }
