@@ -156,11 +156,12 @@
     import {Instances} from '/static/js/index.js';
     import {InstanceCreate} from '/static/js/widget/instance/create.js';
 
+
     $(document).ready(function() {
         let instances = new Instances();
         let createModal = new InstanceCreate({containerId: 'instanceCreateModal'});
 
-        createModal.onSubmit(instances, function (e) {
+        createModal.onsubmit(instances, function (e) {
             e.data.create(Arr2Json(e.array));
         });
     });

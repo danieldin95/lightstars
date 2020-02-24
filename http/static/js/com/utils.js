@@ -1,4 +1,5 @@
 
+
 export function Arr2Json(data) {
     let ret = {};
 
@@ -11,6 +12,7 @@ export function Arr2Json(data) {
     });
     return ret;
 }
+
 
 export function ListenChangeAll(one, all, fn) {
     let storage = [];
@@ -34,15 +36,15 @@ export function ListenChangeAll(one, all, fn) {
     $(all).on("change", function(e) {
         storage = []; // empty
         if ($(this).prop('checked')) {
-            $(one).each(function (index, element) {
+            $(one).each(function (i, e) {
                 //console.log($(element));
-                storage.push($(element).attr('data'));
-                $(element).prop('checked', true);
+                storage.push($(e).attr('data'));
+                $(e).prop('checked', true);
             });
             //console.log(storage);
         } else {
-            $(one).each(function (index, element) {
-                $(element).prop('checked', false);
+            $(one).each(function (i, e) {
+                $(e).prop('checked', false);
             });
         }
         fn({store: storage});

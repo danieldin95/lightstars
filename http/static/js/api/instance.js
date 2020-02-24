@@ -1,6 +1,7 @@
 import {Api} from "./api.js";
 import {AlertDanger, AlertSuccess, AlertWarn} from "../com/alert.js";
 
+
 export class InstanceApi extends Api {
     // {uuids: [], tasks: 'tasks', name: ''}
     constructor(props) {

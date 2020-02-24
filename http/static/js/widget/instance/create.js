@@ -2,6 +2,7 @@ import {Option} from "../option.js";
 import {AlertDanger} from "../../com/alert.js";
 import {ModalFormBase} from "../form/modal.js";
 
+
 export class InstanceCreate extends ModalFormBase {
     // {containerId: "", wizardId: ""}
     constructor (props) {
@@ -214,7 +215,6 @@ export class InstanceCreate extends ModalFormBase {
         let prevbtn = this.prevbtn;
         let nextbtn = this.nextbtn;
 
-        console.log(this.wizardId);
         // Step show event
         this.wizard().on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
             if (stepPosition === 'first') {
@@ -228,19 +228,12 @@ export class InstanceCreate extends ModalFormBase {
         });
 
         // Toolbar extra buttons
-        let btnFinish = $('<button id="finish-btn"></button>').text('Finish')
-            .addClass('btn btn-outline-success btn-sm')
-            .on('click', this, function(e) {
-                e.data.submit();
-                e.data.container().modal("hide");
-            });
-        let btnCancel = $('<button id="cancel-btn"></button>').text('Cancel')
-            .addClass('btn btn-outline-dark btn-sm')
-            .on('click', this, function(e) {
-                e.data.container().modal("hide");
-            });
+        let btnFinish = $('<button name="finish-btn"></button>').text('Finish')
+            .addClass('btn btn-outline-success btn-sm');
+        let btnCancel = $('<button name="cancel-btn"></button>').text('Cancel')
+            .addClass('btn btn-outline-dark btn-sm');
 
-        // Smart Wizard
+        // Smart wizard
         this.wizard().smartWizard({
             selected: 0,
             theme: 'dots',
@@ -252,5 +245,8 @@ export class InstanceCreate extends ModalFormBase {
                 toolbarExtraButtons: [btnFinish, btnCancel],
             }
         });
+
+        // loading super for finish and cancel buttons.
+        super.loading();
     }
 }

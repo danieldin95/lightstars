@@ -3,8 +3,9 @@ import {InterfaceApi} from './api/interface.js';
 import {InstanceApi} from './api/instance.js';
 import {ListenChangeAll} from "./com/utils.js";
 
-export class Instance {
 
+export class Instance {
+    // null
     constructor() {
         let uuid = $('instance').attr("data");
         this.uuid = uuid;
@@ -37,27 +38,30 @@ export class Instance {
     }
 }
 
+
 export class Disk {
-    //
+    //uuid
     constructor(instance, name) {
         this.name = name;
         this.instance = instance;
 
         this.diskOn = new DiskOn();
+        this.disks = this.diskOn.disks;
+
+        $("disk-remove").on("click", this, function (e) {
+            new DiskApi({instance: e.data.instance, uuids: e.data.disks.store}).delete();
+        });
     }
 
     create(data) {
         new DiskApi({instance: this.instance}).create(data);
     }
 
-    delete(data) {
-        new DiskApi({instance: this.instance}).delete(data);
-    }
-
     edit(data) {
         new DiskApi({instance: this.instance}).edit(data);
     }
 }
+
 
 export class DiskOn {
 
@@ -88,6 +92,7 @@ export class DiskOn {
     }
 }
 
+
 export class Interface {
     //
     constructor(instance, name) {
@@ -95,22 +100,25 @@ export class Interface {
         this.instance = instance;
 
         this.interfaceOn = new InterfaceOn();
+        this.interfaces = this.interfaceOn.interfaces;
+
+        $("interface-remove").on("click", this, function (e) {
+            new InterfaceApi({instance: e.data.instance, uuids: e.data.interfaces.store}).delete();
+        });
     }
 
     create(data) {
         new InterfaceApi({instance: this.instance}).create(data);
     }
 
-    delete(data) {
-        new InterfaceApi({instance: this.instance}).delete(data);
-    }
-
     edit(data) {
         new InterfaceApi({instance: this.instance}).edit(data);
     }
 }
-export class InterfaceOn {
 
+
+export class InterfaceOn {
+    // nil
     constructor() {
         this.interfaces = {store: []};
 

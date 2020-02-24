@@ -1,6 +1,7 @@
 import {Api} from "./api.js"
 import {AlertDanger, AlertSuccess, AlertWarn} from "../com/alert.js";
 
+
 export class DiskApi extends Api {
     // {uuids: [], tasks: 'tasks', name: '', instance: ''}
     constructor(props) {
@@ -31,7 +32,7 @@ export class DiskApi extends Api {
 
         this.uuids.forEach(function (uuid, index, err) {
             $.delete(your.url(your.instance, uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove disk '${item}' success`));
+                $(your.tasks).append(AlertSuccess(`remove disk '${uuid}' success`));
             }).fail(function (e) {
                 $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });

@@ -230,14 +230,15 @@
     import {DiskCreate} from '/static/js/widget/disk/create.js';
     import {InterfaceCreate} from '/static/js/widget/interface/create.js';
 
+
     let instance = new Instance();
 
     new DiskCreate({containerId: 'diskCreateModal'})
-        .onSubmit(instance, function (e) {
+        .onsubmit(instance, function (e) {
             e.data.disk.create(Arr2Json(e.array));
         });
     new InterfaceCreate({containerId: 'interfaceCreateModal'})
-        .onSubmit(instance, function (e) {
+        .onsubmit(instance, function (e) {
             e.data.interface.create(Arr2Json(e.array));
         });
 </script>

@@ -1,5 +1,6 @@
 import {Api} from "./api.js"
-import {AlertDanger, AlertSuccess, AlertWarn} from "../com/alert.js";
+import {AlertDanger, AlertSuccess} from "../com/alert.js";
+
 
 export class InterfaceApi extends Api {
     // {uuids: [], tasks: 'tasks', name: '', instance: ''}
@@ -31,7 +32,7 @@ export class InterfaceApi extends Api {
 
         this.uuids.forEach(function (uuid, index, err) {
             $.delete(your.url(your.instance, uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove interface '${item}' success`));
+                $(your.tasks).append(AlertSuccess(`remove interface '${uuid}' success`));
             }).fail(function (e) {
                 $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });

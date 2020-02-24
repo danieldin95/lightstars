@@ -1,5 +1,6 @@
 import {ModalFormBase} from "../form/modal.js";
 
+
 export class DiskCreate extends ModalFormBase {
     //
     constructor (props) {
@@ -7,16 +8,6 @@ export class DiskCreate extends ModalFormBase {
 
         this.render();
         this.loading();
-    }
-
-    loading() {
-        this.container().find('#finish-btn').on('click', this, function(e) {
-            e.data.submit();
-            e.data.container().modal("hide");
-        });
-        this.container().find('#cancel-btn').on('click', this, function(e) {
-            e.data.container().modal("hide");
-        });
     }
 
     template() {
@@ -54,11 +45,12 @@ export class DiskCreate extends ModalFormBase {
                     </div>
                 </div>
             </div>
+            
             <div id="" class="modal-footer">
                 <div class="mr-0" rol="group">
-                    <button id="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
-                    <button id="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
-                    <button id="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
+                    <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                    <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
+                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
                 </div>
             </div>
             </form>

@@ -1,5 +1,6 @@
 import {Api} from "./api.js"
 
+
 export class NetworkApi extends Api {
     // {uuids: [], tasks: 'tasks', name: ''}
     constructor(props) {

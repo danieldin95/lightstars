@@ -1,4 +1,5 @@
 
+
 export class ModalFormBase {
     // {containerId: ''}
     constructor(props) {
@@ -31,17 +32,35 @@ export class ModalFormBase {
         if (this.events.submit.func) {
             this.events.submit.func({
                 data: this.events.submit.data,
-                array: $(this.forms).serializeArray()
+                array: $(this.forms).serializeArray(),
             });
         }
+        return false;
     }
 
     container() {
         return $(`#${this.containerId}`);
     }
 
-    onSubmit(data, fn) {
+    onsubmit(data, fn) {
         this.events.submit.data = data;
         this.events.submit.func = fn;
+    }
+
+    loading() {
+        this.container().find('[name=finish-btn]').on('click', this, function(e) {
+            e.data.submit();
+            e.data.container().modal("hide");
+        });
+        this.container().find('[name=cancel-btn]').on('click', this, function(e) {
+            e.data.container().modal("hide");
+        });
+
+        $(this.forms).each(function (i, e) {
+            console.log("disable form's submit", e);
+            $(e).on('submit', function (e) {
+                return false;
+            });
+        });
     }
 }

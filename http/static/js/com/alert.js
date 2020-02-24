@@ -1,3 +1,5 @@
+
+
 export function Alert(message) {
     return `
     <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -7,6 +9,7 @@ export function Alert(message) {
         </button>
     </div>`
 }
+
 
 export function AlertDanger(message) {
     return `
@@ -18,6 +21,7 @@ export function AlertDanger(message) {
     </div>`
 }
 
+
 export function AlertWarn(message) {
     return $(`
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -28,6 +32,7 @@ export function AlertWarn(message) {
     </div>`)
 }
 
+
 export function AlertSuccess(message) {
     return $(`
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -37,6 +42,7 @@ export function AlertSuccess(message) {
         </button>
     </div>`)
 }
+
 
 export function AlertPrimary(message) {
     return $(`

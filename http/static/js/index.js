@@ -1,6 +1,7 @@
 import {InstanceApi} from "./api/instance.js";
 import {ListenChangeAll} from "./com/utils.js";
 
+
 export class Instances {
 
     constructor() {
@@ -38,6 +39,7 @@ export class Instances {
         new InstanceApi().create(data);
     }
 }
+
 
 export class InstanceOn {
 
