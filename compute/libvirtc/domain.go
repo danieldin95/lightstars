@@ -1,10 +1,12 @@
 package libvirtc
 
 import (
+	"fmt"
 	"github.com/libvirt/libvirt-go"
 )
 
 var DOMAIN_ALL = libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE
+var DOMAIN_DEVICE_MODIFY_SAVE = libvirt.DOMAIN_DEVICE_MODIFY_LIVE | libvirt.DOMAIN_DEVICE_MODIFY_CONFIG
 
 type Domain struct {
 	libvirt.Domain
@@ -21,3 +23,24 @@ func (d *Domain) GetXMLDesc(secure bool) (string, error) {
 		return d.Domain.GetXMLDesc(libvirt.DOMAIN_XML_INACTIVE)
 	}
 }
+
+type Disk struct {
+	//
+}
+
+func (d *Disk) Slot2Dev(bus string, slot uint8) string {
+	prefix := "vd"
+	if bus == "ide" {
+		prefix = "hd"
+	}
+	if slot <= 26 {
+		return prefix + string('a'+slot)
+	}
+	return ""
+}
+
+func (d *Disk) Slot2DiskName(slot uint8) string {
+	return fmt.Sprintf("disk%d.img", slot)
+}
+
+var DISK = &Disk{}

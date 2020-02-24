@@ -78,9 +78,9 @@ func (h *Server) LoadRouter() {
 	router.HandleFunc("/api/iso", h.GetISO).Methods("GET")
 	router.HandleFunc("/api/bridge", h.GetBridge).Methods("GET")
 	router.HandleFunc("/api/datastore", h.GetDataStore).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/disk", h.HandleHi).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/disk", h.AddDisk).Methods("POST")
 	router.HandleFunc("/api/instance/{id}/disk/{id}", h.HandleHi).Methods("DELETE")
-	router.HandleFunc("/api/instance/{id}/interface", h.HandleHi).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/interface", h.AddInterface).Methods("POST")
 	router.HandleFunc("/api/instance/{id}/interface/{id}", h.HandleHi).Methods("DELETE")
 	router.HandleFunc("/api/instance", h.AddInstance).Methods("POST")
 	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
@@ -225,6 +225,8 @@ func (h *Server) ParseFiles(w http.ResponseWriter, name string, data interface{}
 		"prettyBytes":  libstar.PrettyBytes,
 		"prettyKBytes": libstar.PrettyKBytes,
 		"prettySecs":   libstar.PrettySecs,
+		"prettyPCI":    libstar.PrettyPCI,
+		"prettyDrive":  libstar.PrettyDrive,
 	}).ParseFiles(name)
 	if err != nil {
 		fmt.Fprintf(w, "template.ParseFiles %s", err)
@@ -428,20 +430,32 @@ func (h *Server) GetPath(store, name string) string {
 	return storage.PATH.Unix(store) + "/" + name + "/"
 }
 
-func (h *Server) NewVolumeAndPool(conf *schema.InstanceConf) (*libvirts.VolumeXML, error) {
-	path := h.GetPath(conf.DataStore, conf.Name)
-	pol, err := libvirts.CreatePool(libvirts.ToDomainPool(conf.Name), path)
-	if err != nil {
-		return nil, err
-	}
-	size := libstar.ToBytes(conf.DiskSize, conf.DiskUnit)
-	vol, err := libvirts.CreateVolume(pol.Name, "disk0.qcow2", size)
+// name: Domain name.
+func (h *Server) NewVolume(name, disk string, size uint64) (*libvirts.VolumeXML, error) {
+	vol, err := libvirts.CreateVolume(libvirts.ToDomainPool(name), disk, size)
 	if err != nil {
 		return nil, err
 	}
 	return vol.GetXMLObj()
 }
 
+// name: Domain name.
+// store: like: datatore@01
+func (h *Server) NewVolumeAndPool(store, name, disk string, size uint64) (*libvirts.VolumeXML, error) {
+	path := h.GetPath(store, name)
+	pol, err := libvirts.CreatePool(libvirts.ToDomainPool(name), path)
+	if err != nil {
+		return nil, err
+	}
+
+	vol, err := libvirts.CreateVolume(pol.Name, disk, size)
+	if err != nil {
+		return nil, err
+	}
+	return vol.GetXMLObj()
+}
+
+// name: Domain name.
 func (h *Server) DelVolumeAndPool(name string) error {
 	err := libvirts.RemovePool(libvirts.ToDomainPool(name))
 	if err != nil {
@@ -471,7 +485,8 @@ func (h *Server) InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML
 		dom.OS.Type.Arch = "x86_64"
 	}
 	// create new disk firstly.
-	vol, err := h.NewVolumeAndPool(conf)
+	size := libstar.ToBytes(conf.DiskSize, conf.DiskUnit)
+	vol, err := h.NewVolumeAndPool(conf.DataStore, conf.Name, h.Slot2Disk(0), size)
 	if err != nil {
 		return dom, err
 	}
@@ -771,4 +786,136 @@ func (h *Server) HandleHi(w http.ResponseWriter, r *http.Request) {
 	}
 	libstar.Info("id: %s, body: %s", id, body)
 	h.ResponseJson(w, nil)
+}
+
+func (h *Server) Slot2Disk(slot uint8) string {
+	return libvirtc.DISK.Slot2DiskName(slot)
+}
+
+func (h *Server) DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
+	// create new disk firstly.
+	size := libstar.ToBytes(conf.Size, conf.Unit)
+	slot := libstar.H2D8(conf.Slot)
+	vol, err := h.NewVolume(conf.Name, h.Slot2Disk(slot), size)
+	if err != nil {
+		return nil, err
+	}
+	xml := libvirtc.DiskXML{
+		Type:   "file",
+		Device: "disk",
+		Driver: libvirtc.DiskDriverXML{
+			Name: "qemu",
+			Type: vol.Target.Format.Type,
+		},
+		Source: libvirtc.DiskSourceXML{
+			File: vol.Target.Path,
+		},
+		Target: libvirtc.DiskTargetXML{
+			Bus: conf.Bus,
+			Dev: libvirtc.DISK.Slot2Dev(conf.Bus, slot),
+		},
+		Address: libvirtc.AddressXML{
+			Type:   "pci",
+			Domain: "0x0000",
+			Bus:    "0x01", //default is 0x01
+			Slot:   conf.Slot,
+		},
+	}
+	return &xml, nil
+}
+
+func (h *Server) AddDisk(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	conf := &schema.DiskConf{}
+	if err := json.Unmarshal([]byte(body), conf); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	uuid, _ := h.GetArg(r, "id")
+	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dom.Free()
+
+	if conf.Name == "" {
+		conf.Name, _ = dom.GetName()
+	}
+	xmlObj, err := h.DiskConf2XML(conf)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	libstar.Info("Server.AddDisk: %s", xmlObj.Encode())
+	flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	h.ResponseJson(w, "success")
+}
+
+func (h *Server) InterfaceConf2XML(conf *schema.InterfaceConf) (*libvirtc.InterfaceXML, error) {
+	xml := libvirtc.InterfaceXML{
+		Type: "bridge",
+		Source: libvirtc.InterfaceSourceXML{
+			Bridge: conf.Interface,
+		},
+		Model: libvirtc.InterfaceModelXML{
+			Type: conf.Model,
+		},
+		Address: libvirtc.AddressXML{
+			Type: "pci",
+			Bus:  "0x02", //default 02
+			Slot: conf.Slot,
+		},
+	}
+	if conf.Type == "openvswitch" {
+		xml.VirtualPort = &libvirtc.InterfaceVirtualPortXML{
+			Type: conf.Type,
+		}
+	}
+	return &xml, nil
+}
+
+func (h *Server) AddInterface(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	conf := &schema.InterfaceConf{}
+	if err := json.Unmarshal([]byte(body), conf); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	uuid, _ := h.GetArg(r, "id")
+	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dom.Free()
+
+	xmlObj, err := h.InterfaceConf2XML(conf)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	libstar.Info("Server.AddInterface: %s", xmlObj.Encode())
+	flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	h.ResponseJson(w, "success")
 }

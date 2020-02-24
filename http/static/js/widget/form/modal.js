@@ -6,6 +6,7 @@ export class ModalFormBase {
         this.props = props;
         this.containerId = props.containerId;
         this.forms = `#${this.containerId} form`;
+
         this.events = {
             submit: {
                 func: function (e) {
@@ -16,7 +17,7 @@ export class ModalFormBase {
     }
 
     template() {
-        return `<NotImplate></NotImplate>`
+        return `<not-implement></not-implement>`
     }
 
     render() {
@@ -25,7 +26,7 @@ export class ModalFormBase {
     }
 
     fetch() {
-        console.log('NotImplement')
+        console.log('not-implement')
     }
 
     submit() {
@@ -35,16 +36,15 @@ export class ModalFormBase {
                 array: $(this.forms).serializeArray(),
             });
         }
-        return false;
     }
 
     container() {
         return $(`#${this.containerId}`);
     }
 
-    onsubmit(data, fn) {
+    onsubmit(data, func) {
         this.events.submit.data = data;
-        this.events.submit.func = fn;
+        this.events.submit.func = func;
     }
 
     loading() {

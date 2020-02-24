@@ -65,19 +65,3 @@ type Index struct {
 	Hyper     Hyper      `json:"hyper"`
 	Instances []Instance `json:"instances"`
 }
-
-type InstanceConf struct {
-	Action     string `json:"action"` // If is "", means not action.
-	Name       string `json:"name"`
-	Arch       string `json:"arch"`
-	Boots      string `json:"boots"`
-	DataStore  string `json:"datastore"`
-	Cpu        string `json:"cpu"`
-	MemorySize string `json:"memorySize"`
-	MemoryUnit string `json:"memoryUnit"`
-	DiskSize   string `json:"diskSize"`
-	DiskUnit   string `json:"diskUnit"`
-	IsoFile    string `json:"isoFile"`
-	Interface  string `json:"interface"`
-	Start      string `json:"start"`
-}

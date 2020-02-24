@@ -1,4 +1,5 @@
 import {ModalFormBase} from "../form/modal.js";
+import {Option} from "../option.js";
 
 
 export class InterfaceCreate extends ModalFormBase {
@@ -8,6 +9,15 @@ export class InterfaceCreate extends ModalFormBase {
 
         this.render();
         this.loading();
+    }
+
+    render() {
+        this.view = $(this.template());
+        this.view.find("select[name='slot'] option").remove();
+        for (let i = 1; i < 32; i++) {
+            this.view.find("select[name='slot']").append(new Option(i, i));
+        }
+        this.container().html(this.view);
     }
 
     template() {
@@ -23,9 +33,9 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="type" class="col-sm-4 col-form-label-sm">Network type</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-simple select-middle" name="type">
+                            <select class="select-md" name="type">
                                 <option value="bridge" selected>Linux Bridge</option>
-                                <option value="ovs">Open vSwitch</option>
+                                <option value="openvswitch">Open vSwitch</option>
                             </select>
                         </div>
                     </div>
@@ -34,7 +44,7 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="model" class="col-sm-4 col-form-label-sm">Target model</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-simple select-middle" name="model">
+                            <select class="select-md" name="model">
                                 <option value="virtio" selected>Linux Virtual IO</option>
                                 <option value="rtl8139">Realtek rtl8139</option>
                                 <option value="e1000">Intel e1000</option>
@@ -46,7 +56,7 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="source" class="col-sm-4 col-form-label-sm">Bridge source</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-simple select-middle" name="interface">
+                            <select class="select-md" name="interface">
                                 <option value="virbr0" selected>Virtual Bridge0</option>
                                 <option value="virbr1">Virtual Bridge1</option>
                                 <option value="virbr2">Virtual Bridge2</option>
@@ -56,6 +66,18 @@ export class InterfaceCreate extends ModalFormBase {
                             </select>  
                         </div>
                     </div>
+                </div>
+                <div class="form-group row">
+                    <label for="slot" class="col-sm-4 col-form-label-sm ">Bus slot</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <select class="select-md" name="slot">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>  
+                        </div>
+                    </div>              
                 </div>
             </div>
             <div id="" class="modal-footer">

@@ -21,7 +21,7 @@ export class InterfaceApi extends Api {
         let your = this;
 
         $.post(your.url(this.instance), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`start interface '${data.name}' success`));
+            $(your.tasks).append(AlertSuccess(`start interface '${data}' success`));
         }).fail(function (e) {
             $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
         });

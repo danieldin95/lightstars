@@ -170,12 +170,15 @@ func (ctl *ControllerXML) Decode(xmlData string) error {
 }
 
 type AddressXML struct {
-	XMLName  xml.Name `xml:"address" json:"-"`
-	Type     string   `xml:"type,attr,omitempty" json:"type,omitempty"`
-	Domain   string   `xml:"domain,attr,omitempty" json:"domain,omitempty"`
-	Bus      string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
-	Slot     string   `xml:"slot,attr,omitempty" json:"slot,omitempty"`
-	Function string   `xml:"function,attr,omitempty" json:"function,omitempty"`
+	XMLName    xml.Name `xml:"address" json:"-"`
+	Type       string   `xml:"type,attr,omitempty" json:"type,omitempty"` // pci and drive.
+	Domain     string   `xml:"domain,attr,omitempty" json:"domain,omitempty"`
+	Bus        string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
+	Slot       string   `xml:"slot,attr,omitempty" json:"slot,omitempty"`
+	Function   string   `xml:"function,attr,omitempty" json:"function,omitempty"`
+	Target     string   `xml:"target,attr,omitempty" json:"target,omitempty"`
+	Unit       string   `xml:"unit,attr,omitempty" json:"unit,omitempty"`
+	Controller string   `xml:"controller,attr,omitempty" json:"controller,omitempty"`
 }
 
 type GraphicsXML struct {
@@ -200,6 +203,7 @@ type DiskXML struct {
 	Driver  DiskDriverXML `xml:"driver" json:"driver"`
 	Source  DiskSourceXML `xml:"source" json:"source"`
 	Target  DiskTargetXML `xml:"target" json:"target"`
+	Address AddressXML    `xml:"address" json:"address"`
 }
 
 func (disk *DiskXML) Decode(xmlData string) error {
@@ -208,6 +212,15 @@ func (disk *DiskXML) Decode(xmlData string) error {
 		return err
 	}
 	return nil
+}
+
+func (disk *DiskXML) Encode() string {
+	data, err := xml.Marshal(disk)
+	if err != nil {
+		libstar.Error("DiskXML.Encode %s", err)
+		return ""
+	}
+	return string(data)
 }
 
 type DiskDriverXML struct {
@@ -229,13 +242,14 @@ type DiskTargetXML struct {
 }
 
 type InterfaceXML struct {
-	XMLName     xml.Name                `xml:"interface" json:"-"`
-	Type        string                  `xml:"type,attr" json:"type"`
-	Mac         InterfaceMacXML         `xml:"mac" json:"mac"`
-	Source      InterfaceSourceXML      `xml:"source" json:"source"`
-	Model       InterfaceModelXML       `xml:"model" json:"model"`
-	Target      InterfaceTargetXML      `xml:"target" json:"tatget"`
-	VirtualPort InterfaceVirtualPortXML `xml:"virtualport" json:"virtualport"`
+	XMLName     xml.Name                 `xml:"interface" json:"-"`
+	Type        string                   `xml:"type,attr" json:"type"`
+	Mac         InterfaceMacXML          `xml:"mac" json:"mac"`
+	Source      InterfaceSourceXML       `xml:"source" json:"source"`
+	Model       InterfaceModelXML        `xml:"model" json:"model"`
+	Target      InterfaceTargetXML       `xml:"target" json:"tatget"`
+	VirtualPort *InterfaceVirtualPortXML `xml:"virtualport,omitempty" json:"virtualport,omitempty"`
+	Address     AddressXML               `xml:"address" json:"address"`
 }
 
 func (int *InterfaceXML) Decode(xmlData string) error {
@@ -244,6 +258,15 @@ func (int *InterfaceXML) Decode(xmlData string) error {
 		return err
 	}
 	return nil
+}
+
+func (int *InterfaceXML) Encode() string {
+	data, err := xml.Marshal(int)
+	if err != nil {
+		libstar.Error("InterfaceXML.Encode %s", err)
+		return ""
+	}
+	return string(data)
 }
 
 type InterfaceMacXML struct {

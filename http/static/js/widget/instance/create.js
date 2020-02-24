@@ -60,7 +60,7 @@ export class InstanceCreate extends ModalFormBase {
         this.view = $(this.template());
 
         this.view.find("select[name='cpu'] option").remove();
-        for (let i = 1; i <= 16; i++) {
+        for (let i = 1; i < 17; i++) {
             this.view.find("select[name='cpu']").append(new Option(i, i));
         }
         this.container().html(this.view);

@@ -294,3 +294,29 @@ func (d Dir) ListDirs(dirPth string) (dirs []string, err error) {
 
 	return dirs, nil
 }
+
+func H2D8(h string) uint8 {
+	v, err := strconv.ParseUint(h, 0, 8)
+	if err != nil {
+		Warn("H2D16: %s", err)
+		return 0
+	}
+	return uint8(v)
+}
+
+func H2D16(h string) uint16 {
+	v, err := strconv.ParseUint(h, 0, 16)
+	if err != nil {
+		Warn("H2D16: %s", err)
+		return 0
+	}
+	return uint16(v)
+}
+
+func PrettyPCI(dom, bus, slot, fun uint16) string {
+	return fmt.Sprintf("%04x:%02x:%02x.%x", dom, bus, slot, fun)
+}
+
+func PrettyDrive(ctl, bus, tgt, unit uint16) string {
+	return fmt.Sprintf("%04x:%02x:%02x.%x", ctl, bus, tgt, unit)
+}

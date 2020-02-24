@@ -1,4 +1,5 @@
 import {ModalFormBase} from "../form/modal.js";
+import {Option} from "../option.js";
 
 
 export class DiskCreate extends ModalFormBase {
@@ -8,6 +9,15 @@ export class DiskCreate extends ModalFormBase {
 
         this.render();
         this.loading();
+    }
+
+    render() {
+        this.view = $(this.template());
+        this.view.find("select[name='slot'] option").remove();
+        for (let i = 1; i < 27; i++) {
+            this.view.find("select[name='slot']").append(new Option(i, i));
+        }
+        this.container().html(this.view);
     }
 
     template() {
@@ -23,10 +33,22 @@ export class DiskCreate extends ModalFormBase {
                     <label for="bus" class="col-sm-4 col-form-label-sm ">Target bus</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-simple select-middle" name="bus">
+                            <select class="select-md" name="bus">
                                 <option value="virtio" selected>Linux Virtual IO</option>
                                 <option value="scsi">Logical SCSI</option>
                                 <option value="ide">Logial IDE</option>
+                            </select>  
+                        </div>
+                    </div>              
+                </div>
+                <div class="form-group row">
+                    <label for="slot" class="col-sm-4 col-form-label-sm ">Bus slot</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <select class="select-md" name="slot">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
                             </select>  
                         </div>
                     </div>              
@@ -36,7 +58,7 @@ export class DiskCreate extends ModalFormBase {
                     <div class="col-sm-6">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm input-number-lg" name="size" value="10">
-                            <select class="select-simple select-unit-right" name="unit">
+                            <select class="select-unit-right" name="unit">
                                 <option value="Mib">MiB</option>
                                 <option value="GiB" selected>GiB</option>
                                 <option value="TiB">TiB</option>

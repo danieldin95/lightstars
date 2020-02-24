@@ -122,6 +122,7 @@
                                 <th>Bus</th>
                                 <th>Device</th>
                                 <th>Source</th>
+                                <th>Address</th>
                                 <th>Format</th>
                             </tr>
                             </thead>
@@ -137,6 +138,13 @@
                                     <td>{{ .Bus }}</td>
                                     <td>{{ .Device }}</td>
                                     <td>{{ .Source }}</td>
+                                    <td><span>
+                                        {{ if eq .AddrType "pci" }}
+                                            pci:{{ prettyPCI .AddrDomain .AddrBus .AddrSlot .AddrFunc }}
+                                        {{ else if eq .AddrType "drive"}}
+                                            drv:{{ prettyDrive .AddrCtl .AddrBus .AddrTgt .AddrUnit }}
+                                        {{ end }}</span>
+                                    </td>
                                     <td>{{ .Format }}</td>
                                 </tr>
                             {{ end }}
@@ -184,6 +192,7 @@
                                 <th>ID</th>
                                 <th>Model</th>
                                 <th>Device</th>
+                                <th>Mac</th>
                                 <th>Address</th>
                                 <th>Source</th>
                             </tr>
@@ -200,6 +209,11 @@
                                 <td>{{ .Model }}</td>
                                 <td>{{ .Device }}</td>
                                 <td>{{ .Address }}</td>
+                                <td><span>
+                                {{ if eq .AddrType "pci" }}
+                                    pci:{{ prettyPCI .AddrDomain .AddrBus .AddrSlot .AddrFunc }}
+                                {{ end }}</span>
+                                </td>
                                 <td>{{ .Source }}</td>
                             </tr>
                             {{ end }}

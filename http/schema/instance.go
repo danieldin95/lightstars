@@ -2,6 +2,7 @@ package schema
 
 import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
+	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
 )
 
@@ -53,10 +54,18 @@ func NewInstance(dom libvirtc.Domain) Instance {
 }
 
 type Disk struct {
-	Format string `json:"format"`
-	Source string `json:"source"`
-	Device string `json:"device"`
-	Bus    string `json:"bus"`
+	Format     string `json:"format"`
+	Source     string `json:"source"`
+	Device     string `json:"device"`
+	Bus        string `json:"bus"`
+	AddrType   string `json:"addrType"` // pci, and drive
+	AddrSlot   uint16 `json:"addrSlot"`
+	AddrDomain uint16 `json:"addrDomain"`
+	AddrBus    uint16 `json:"addrBus"`
+	AddrFunc   uint16 `json:"addrFunc"`
+	AddrCtl    uint16 `json"addrCtl"`
+	AddrTgt    uint16 `json:"addrTgt"`
+	AddrUnit   uint16 `json:"addrUnit"`
 }
 
 func NewFromDiskXML(xml libvirtc.DiskXML) (disk Disk) {
@@ -64,14 +73,31 @@ func NewFromDiskXML(xml libvirtc.DiskXML) (disk Disk) {
 	disk.Bus = xml.Target.Bus
 	disk.Source = storage.PATH.Fmt(xml.Source.File)
 	disk.Format = xml.Driver.Type
+	disk.AddrType = xml.Address.Type
+	if disk.AddrType == "pci" {
+		disk.AddrDomain = libstar.H2D16(xml.Address.Domain)
+		disk.AddrBus = libstar.H2D16(xml.Address.Bus)
+		disk.AddrSlot = libstar.H2D16(xml.Address.Slot)
+		disk.AddrFunc = libstar.H2D16(xml.Address.Function)
+	} else if xml.Address.Type == "drive" {
+		disk.AddrCtl = libstar.H2D16(xml.Address.Controller)
+		disk.AddrBus = libstar.H2D16(xml.Address.Bus)
+		disk.AddrTgt = libstar.H2D16(xml.Address.Target)
+		disk.AddrUnit = libstar.H2D16(xml.Address.Unit)
+	}
 	return disk
 }
 
 type Interface struct {
-	Address string `json:"address"`
-	Source  string `json:"source"`
-	Model   string `json:"model"`
-	Device  string `json:"device"`
+	Address    string `json:"address"`
+	Source     string `json:"source"`
+	Model      string `json:"model"`
+	Device     string `json:"device"`
+	AddrType   string `json:"addrType"` // now only pci.
+	AddrSlot   uint16 `json:"addrSlot"`
+	AddrDomain uint16 `json:"addrDomain"`
+	AddrBus    uint16 `json:"addrBus"`
+	AddrFunc   uint16 `json:"addrFunc"`
 }
 
 func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int Interface) {
@@ -79,6 +105,13 @@ func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int Interface) {
 	int.Address = xml.Mac.Address
 	int.Model = xml.Model.Type
 	int.Device = xml.Target.Dev
+	int.AddrType = xml.Address.Type
+	if int.AddrType == "pci" {
+		int.AddrDomain = libstar.H2D16(xml.Address.Domain)
+		int.AddrBus = libstar.H2D16(xml.Address.Bus)
+		int.AddrSlot = libstar.H2D16(xml.Address.Slot)
+		int.AddrFunc = libstar.H2D16(xml.Address.Function)
+	}
 	return int
 }
 
@@ -112,4 +145,42 @@ func NewFromAddressXML(xml libvirtc.AddressXML) (addr Address) {
 	addr.Slot = xml.Slot
 	addr.Function = xml.Function
 	return addr
+}
+
+type InstanceConf struct {
+	Action     string `json:"action"` // If is "", means not action.
+	Name       string `json:"name"`
+	Arch       string `json:"arch"`
+	Boots      string `json:"boots"`
+	DataStore  string `json:"datastore"`
+	Cpu        string `json:"cpu"`
+	MemorySize string `json:"memorySize"`
+	MemoryUnit string `json:"memoryUnit"`
+	DiskSize   string `json:"diskSize"`
+	DiskUnit   string `json:"diskUnit"`
+	IsoFile    string `json:"isoFile"`
+	Interface  string `json:"interface"`
+	Start      string `json:"start"`
+}
+
+type DiskConf struct {
+	Action string `json:"action"` // If is "", means not action.
+	Name   string `json:"name"`
+	UUID   string `json:"uuid"`
+	Store  string `json:"datastore"`
+	Size   string `json:"size"`
+	Unit   string `json:"unit"`
+	Bus    string `json:"bus"`
+	Slot   string `json:"slot"`
+}
+
+type InterfaceConf struct {
+	Action    string `json:"action"` // If is "", means not action.
+	Name      string `json:"name"`
+	UUID      string `json:"uuid"`
+	Interface string `json:"interface"`
+	Type      string `json:"type"`
+	Bus       string `json:"bus"`
+	Model     string `json:"model"`
+	Slot      string `json:"slot"`
 }
