@@ -33,7 +33,7 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="type" class="col-sm-4 col-form-label-sm">Network type</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-md" name="type">
+                            <select class="select-lg" name="type">
                                 <option value="bridge" selected>Linux Bridge</option>
                                 <option value="openvswitch">Open vSwitch</option>
                             </select>
@@ -44,7 +44,7 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="model" class="col-sm-4 col-form-label-sm">Target model</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-md" name="model">
+                            <select class="select-lg" name="model">
                                 <option value="virtio" selected>Linux Virtual IO</option>
                                 <option value="rtl8139">Realtek rtl8139</option>
                                 <option value="e1000">Intel e1000</option>
@@ -56,7 +56,7 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="source" class="col-sm-4 col-form-label-sm">Bridge source</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-md" name="interface">
+                            <select class="select-lg" name="interface">
                                 <option value="virbr0" selected>Virtual Bridge0</option>
                                 <option value="virbr1">Virtual Bridge1</option>
                                 <option value="virbr2">Virtual Bridge2</option>
@@ -71,7 +71,7 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="slot" class="col-sm-4 col-form-label-sm ">Bus slot</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-md" name="slot">
+                            <select class="select-lg" name="slot">
                                 <option value="0" selected>0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>

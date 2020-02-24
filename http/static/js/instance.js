@@ -7,11 +7,12 @@ import {ListenChangeAll} from "./com/utils.js";
 export class Instance {
     // null
     constructor() {
+        let name = $('instance').attr("name");
         let uuid = $('instance').attr("data");
         this.uuid = uuid;
-
-        this.disk = new Disk(uuid);
-        this.interface = new Interface(uuid);
+        this.name = name;
+        this.disk = new Disk(uuid, name);
+        this.interface = new Interface(uuid, name);
 
         // Register click handle.
         $("instance-start, instance-more-start").on("click", this, function (e) {
@@ -49,16 +50,19 @@ export class Disk {
         this.disks = this.diskOn.disks;
 
         $("disk-remove").on("click", this, function (e) {
-            new DiskApi({instance: e.data.instance, uuids: e.data.disks.store}).delete();
+            new DiskApi({
+                instance: e.data.instance,
+                uuids: e.data.disks.store,
+                name: e.data.name}).delete();
         });
     }
 
     create(data) {
-        new DiskApi({instance: this.instance}).create(data);
+        new DiskApi({instance: this.instance, name: this.name}).create(data);
     }
 
     edit(data) {
-        new DiskApi({instance: this.instance}).edit(data);
+        new DiskApi({instance: this.instance, name: this.name}).edit(data);
     }
 }
 
@@ -103,16 +107,19 @@ export class Interface {
         this.interfaces = this.interfaceOn.interfaces;
 
         $("interface-remove").on("click", this, function (e) {
-            new InterfaceApi({instance: e.data.instance, uuids: e.data.interfaces.store}).delete();
+            new InterfaceApi({
+                instance: e.data.instance,
+                uuids: e.data.interfaces.store,
+                name: this.name}).delete();
         });
     }
 
     create(data) {
-        new InterfaceApi({instance: this.instance}).create(data);
+        new InterfaceApi({instance: this.instance, name: this.name}).create(data);
     }
 
     edit(data) {
-        new InterfaceApi({instance: this.instance}).edit(data);
+        new InterfaceApi({instance: this.instance, name: this.name}).edit(data);
     }
 }
 

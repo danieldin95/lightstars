@@ -402,6 +402,18 @@ func (h *Server) GetArg(r *http.Request, name string) (string, bool) {
 	return value, ok
 }
 
+func (h *Server) GetData(r *http.Request, v interface{}) error {
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
+	if err := json.Unmarshal([]byte(body), v); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (h *Server) GetInstance(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := h.GetArg(r, "id")
 
@@ -583,15 +595,8 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	conf := &schema.InstanceConf{}
-	if err := json.Unmarshal([]byte(body), conf); err != nil {
+	if err := h.GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -601,7 +606,6 @@ func (h *Server) AddInstance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
 	xmlData := xmlObj.Encode()
 	if xmlData == "" {
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
@@ -645,15 +649,8 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 
-	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	conf := &schema.InstanceConf{}
-	if err := json.Unmarshal([]byte(body), conf); err != nil {
+	if err := h.GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -825,14 +822,8 @@ func (h *Server) DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) 
 }
 
 func (h *Server) AddDisk(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	conf := &schema.DiskConf{}
-	if err := json.Unmarshal([]byte(body), conf); err != nil {
+	if err := h.GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -853,13 +844,13 @@ func (h *Server) AddDisk(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	libstar.Info("Server.AddDisk: %s", xmlObj.Encode())
+	libstar.Debug("Server.AddDisk: %s", xmlObj.Encode())
 	flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	h.ResponseJson(w, "success")
+	h.ResponseMsg(w, 0, "success")
 }
 
 func (h *Server) DelDisk(w http.ResponseWriter, r *http.Request) {
@@ -882,6 +873,14 @@ func (h *Server) DelDisk(w http.ResponseWriter, r *http.Request) {
 				if err := dom.DetachDeviceFlags(disk.Encode(), flags); err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
+				}
+				file := disk.Source.File
+				if strings.HasPrefix(file, storage.Location) &&
+					(strings.HasSuffix(file, ".img") || strings.HasSuffix(file, ".qcow2")) {
+					dir := path.Dir(file)
+					volume := path.Base(file)
+					pool := path.Base(dir)
+					libvirts.RemoveVolume(libvirts.ToDomainPool(pool), volume)
 				}
 			}
 		}
@@ -913,14 +912,8 @@ func (h *Server) InterfaceConf2XML(conf *schema.InterfaceConf) (*libvirtc.Interf
 }
 
 func (h *Server) AddInterface(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	conf := &schema.InterfaceConf{}
-	if err := json.Unmarshal([]byte(body), conf); err != nil {
+	if err := h.GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -938,7 +931,7 @@ func (h *Server) AddInterface(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	libstar.Info("Server.AddInterface: %s", xmlObj.Encode())
+	libstar.Debug("Server.AddInterface: %s", xmlObj.Encode())
 	flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

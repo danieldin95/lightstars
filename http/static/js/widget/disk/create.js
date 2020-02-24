@@ -33,10 +33,10 @@ export class DiskCreate extends ModalFormBase {
                     <label for="bus" class="col-sm-4 col-form-label-sm ">Target bus</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-md" name="bus">
+                            <select class="select-lg" name="bus">
                                 <option value="virtio" selected>Linux Virtual IO</option>
                                 <option value="scsi">Logical SCSI</option>
-                                <option value="ide">Logial IDE</option>
+                                <option value="ide">Logical IDE</option>
                             </select>  
                         </div>
                     </div>              
@@ -45,7 +45,7 @@ export class DiskCreate extends ModalFormBase {
                     <label for="slot" class="col-sm-4 col-form-label-sm ">Bus slot</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-md" name="slot">
+                            <select class="select-lg" name="slot">
                                 <option value="0" selected>0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>

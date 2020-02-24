@@ -35,6 +35,14 @@ func CreateVolume(pool, name string, size uint64) (*Volume, error) {
 	return vol, vol.Create()
 }
 
+func RemoveVolume(pool string, name string) error {
+	vol := &Volume{
+		Pool: pool,
+		Name: name,
+	}
+	return vol.Remove()
+}
+
 func (vol *Volume) Open() error {
 	if vol.Conn == nil {
 		hyper, err := libvirtc.GetHyper()
@@ -65,14 +73,16 @@ func (vol *Volume) Create() error {
 			},
 		},
 	}
-	pol, err := vol.Conn.LookupStoragePoolByName(vol.Pool)
+	pool, err := vol.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
 		return err
 	}
-	if _, err := pol.StorageVolCreateXML(volXml.Encode(), 0); err != nil {
+	defer pool.Free()
+	volume, err := pool.StorageVolCreateXML(volXml.Encode(), 0)
+	if err != nil {
 		return err
 	}
-	defer pol.Free()
+	defer volume.Free()
 
 	return nil
 }
@@ -97,4 +107,24 @@ func (vol *Volume) GetXMLObj() (*VolumeXML, error) {
 	}
 	xmlObj := &VolumeXML{}
 	return xmlObj, xmlObj.Decode(xmlData)
+}
+
+func (vol *Volume) Remove() error {
+	if err := vol.Open(); err != nil {
+		return err
+	}
+	pool, err := vol.Conn.LookupStoragePoolByName(vol.Pool)
+	if err != nil {
+		return err
+	}
+	defer pool.Free()
+
+	volume, err := pool.LookupStorageVolByName(vol.Name)
+	if err != nil {
+		return err
+	}
+	volume.Delete(0)
+	defer volume.Free()
+
+	return nil
 }
