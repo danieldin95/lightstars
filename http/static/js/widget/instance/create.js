@@ -122,7 +122,7 @@ export class InstanceCreate extends ModalFormBase {
                 <div id="step-storage" class="">
                     <form name="storage-config">
                     <div class="form-group row">
-                        <label for="storage" class="col-sm-4 col-form-label-sm">Storage</label>
+                        <label for="datastore" class="col-sm-4 col-form-label-sm">Storage</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <select class="select-simple" name="datastore">
@@ -138,7 +138,7 @@ export class InstanceCreate extends ModalFormBase {
                 <div id="step-custom" class="">
                 <form name="custom-config">
                     <div class="form-group row">
-                        <label for="staticEmail" class="col-sm-4 col-form-label-sm">CPU</label>
+                        <label for="cpu" class="col-sm-4 col-form-label-sm">CPU</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <select class="select-simple select-unit" name="cpu">
@@ -151,7 +151,7 @@ export class InstanceCreate extends ModalFormBase {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label-sm">Memory</label>
+                        <label for="memorySize" class="col-sm-4 col-form-label-sm">Memory</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm input-number-lg" name="memorySize" value="2048">
@@ -163,7 +163,7 @@ export class InstanceCreate extends ModalFormBase {
                         </div>
                     </div>                                
                     <div class="form-group row">
-                        <label for="staticEmail" class="col-sm-4 col-form-label-sm">Hardware disk01</label>
+                        <label for="diskSize" class="col-sm-4 col-form-label-sm">Hardware disk01</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm input-number-lg" name="diskSize" value="10">
@@ -176,7 +176,7 @@ export class InstanceCreate extends ModalFormBase {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-4 col-form-label-sm">Datastore ISO file</label>
+                        <label for="isoFile" class="col-sm-4 col-form-label-sm">Datastore ISO file</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <select class="select-simple" name="isoFile">
@@ -186,7 +186,7 @@ export class InstanceCreate extends ModalFormBase {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="staticEmail" class="col-sm-4 col-form-label-sm">Network interface01</label>
+                        <label for="interface" class="col-sm-4 col-form-label-sm">Network interface01</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <select class="select-simple" name="interface">

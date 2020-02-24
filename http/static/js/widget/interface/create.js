@@ -29,7 +29,7 @@ export class InterfaceCreate extends ModalFormBase {
             <div id="" class="modal-body">
                 <form name="interface-new">
                 <div class="form-group row">
-                    <label for="type" class="col-sm-4 col-form-label-sm ">Interface support</label>
+                    <label for="type" class="col-sm-4 col-form-label-sm">Network type</label>
                     <div class="col-sm-6">
                         <div class="input-group">
                             <select class="select-simple select-middle" name="type">
@@ -40,7 +40,7 @@ export class InterfaceCreate extends ModalFormBase {
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="model" class="col-sm-4 col-form-label-sm">Interface model</label>
+                    <label for="model" class="col-sm-4 col-form-label-sm">Target model</label>
                     <div class="col-sm-6">
                         <div class="input-group">
                             <select class="select-simple select-middle" name="model">
@@ -48,6 +48,21 @@ export class InterfaceCreate extends ModalFormBase {
                                 <option value="rtl8139">Realtek rtl8139</option>
                                 <option value="e1000">Intel e1000</option>
                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="source" class="col-sm-4 col-form-label-sm">Bridge source</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <select class="select-simple select-middle" name="interface">
+                                <option value="virbr0" selected>Virtual Bridge0</option>
+                                <option value="virbr1">Virtual Bridge1</option>
+                                <option value="virbr2">Virtual Bridge2</option>
+                                <option value="br-br1">OpenvSwitch Bridge1</option>
+                                <option value="br-br2">OpenvSwitch Bridge2</option>
+                                <option value="br-mgt">OpenvSwitch Manager Bridge</option>
+                            </select>  
                         </div>
                     </div>
                 </div>

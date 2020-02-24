@@ -29,7 +29,7 @@ export class DiskCreate extends ModalFormBase {
             <div id="" class="modal-body">
                 <form name="disk-new">
                 <div class="form-group row">
-                    <label for="bus" class="col-sm-4 col-form-label-sm ">Disk bus</label>
+                    <label for="bus" class="col-sm-4 col-form-label-sm ">Target bus</label>
                     <div class="col-sm-6">
                         <div class="input-group">
                             <select class="select-simple select-middle" name="bus">
@@ -41,7 +41,7 @@ export class DiskCreate extends ModalFormBase {
                     </div>              
                 </div>
                 <div class="form-group row">
-                    <label for="size" class="col-sm-4 col-form-label-sm">Disk size</label>
+                    <label for="size" class="col-sm-4 col-form-label-sm">Virtual disk size</label>
                     <div class="col-sm-6">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm input-number-lg" name="size" value="10">

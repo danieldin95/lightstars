@@ -17,6 +17,7 @@
     <div class="card-no-border no-bottom">
         <tasks></tasks>
     </div>
+    <instance data="{{ .UUID }}">
     <div name="" class="card instance">
         <div class="card-header">
             <div class="card-just-left">
@@ -29,7 +30,7 @@
         <div class="card-none no-bottom">
             <div class="card no-border no-bottom">
                 <div class="card-header-btn">
-                    <instance-console data="{{ .UUID }}">
+                    <instance-console>
                         {{ if eq .State "running" }}
                         <a type="button" class="btn btn-outline-dark btn-sm"
                            href="/ui/console?instance={{ .UUID }}">console</a>
@@ -37,42 +38,25 @@
                         <a type="button" class="btn btn-outline-dark btn-sm disabled" href="#">console</a>
                         {{ end }}
                     </instance-console>
-                    <instance-start data="{{ .UUID }}">
-                        <button type="button" class="btn btn-outline-dark btn-sm">start</button>
-                    </instance-start>
-                    <instance-refresh data="{{ .UUID }}">
-                        <a type="button" class="btn btn-outline-dark btn-sm"
-                           href="javascript:window.location.reload();">refresh</a>
+                    <instance-start><button type="button" class="btn btn-outline-dark btn-sm">start</button></instance-start>
+                    <instance-refresh>
+                        <a type="button" class="btn btn-outline-dark btn-sm" href="javascript:window.location.reload();">refresh</a>
                     </instance-refresh>
-                    <instance-more data="{{ .UUID }}">
+                    <instance-more>
                         <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             operations
                         </button>
                         <div name="btn-more" class="dropdown-menu">
-                            <instance-more-start data="{{ .UUID }}">
-                                <a class="dropdown-item" href="#">start</a>
-                            </instance-more-start>
-                            <instance-more-shutdown data="{{ .UUID }}">
-                                <a class="dropdown-item" href="#">shutdown</a>
-                            </instance-more-shutdown>
-                            <instance-more-reset data="{{ .UUID }}">
-                                <a class="dropdown-item" href="#">reset</a>
-                            </instance-more-reset>
+                            <instance-more-start><a class="dropdown-item" href="#">start</a></instance-more-start>
+                            <instance-more-shutdown><a class="dropdown-item" href="#">shutdown</a></instance-more-shutdown>
+                            <instance-more-reset><a class="dropdown-item" href="#">reset</a></instance-more-reset>
                             <div class="dropdown-divider"></div>
-                            <instance-more-suspend data="{{ .UUID }}">
-                                <a class="dropdown-item" href="#">suspend</a>
-                            </instance-more-suspend>
-                            <instance-more-resume data="{{ .UUID }}">
-                                <a class="dropdown-item" href="#">resume</a>
-                            </instance-more-resume>
+                            <instance-more-suspend><a class="dropdown-item" href="#">suspend</a></instance-more-suspend>
+                            <instance-more-resume><a class="dropdown-item" href="#">resume</a></instance-more-resume>
                             <div class="dropdown-divider"></div>
-                            <instance-more-destroy data="{{ .UUID }}">
-                                <a class="dropdown-item" href="#">destroy</a>
-                            </instance-more-destroy>
-                            <instance-more-remove data="{{ .UUID }}">
-                                <a class="dropdown-item" href="#">remove</a>
-                            </instance-more-remove>
+                            <instance-more-destroy><a class="dropdown-item" href="#">destroy</a></instance-more-destroy>
+                            <instance-more-remove><a class="dropdown-item" href="#">remove</a></instance-more-remove>
                         </div>
                     </instance-more>
                 </div>
@@ -206,18 +190,18 @@
                             </thead>
                             <tbody>
                             {{ range $index, $_ := .Interfaces }}
-                                <tr>
-                                    <td>
-                                        <interface-on-one>
-                                            <input type="checkbox" aria-label="select {{ .Device }}" data="{{ .Device }}">
-                                        </interface-on-one>
-                                    </td>
-                                    <td>{{ $index }}</td>
-                                    <td>{{ .Model }}</td>
-                                    <td>{{ .Device }}</td>
-                                    <td>{{ .Address }}</td>
-                                    <td>{{ .Source }}</td>
-                                </tr>
+                            <tr>
+                                <td>
+                                    <interface-on-one>
+                                        <input type="checkbox" aria-label="select {{ .Device }}" data="{{ .Device }}">
+                                    </interface-on-one>
+                                </td>
+                                <td>{{ $index }}</td>
+                                <td>{{ .Model }}</td>
+                                <td>{{ .Device }}</td>
+                                <td>{{ .Address }}</td>
+                                <td>{{ .Source }}</td>
+                            </tr>
                             {{ end }}
                             </tbody>
                         </table>
@@ -227,6 +211,7 @@
             </div>
         </div>
     </div>
+    </instance>
 </div>
 <!-- Create disk modal -->
 <div id="diskCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -241,18 +226,19 @@
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
 <script type="module">
     import {Arr2Json} from "/static/js/com/utils.js";
-    import {Instance} from '/static/js/instance.js'
-    import {DiskCreate} from '/static/js/widget/disk/create.js'
-    import {InterfaceCreate} from '/static/js/widget/interface/create.js'
+    import {Instance} from '/static/js/instance.js';
+    import {DiskCreate} from '/static/js/widget/disk/create.js';
+    import {InterfaceCreate} from '/static/js/widget/interface/create.js';
 
     let instance = new Instance();
+
     new DiskCreate({containerId: 'diskCreateModal'})
         .onSubmit(instance, function (e) {
-            console.log(Arr2Json(e.array));
+            e.data.disk.create(Arr2Json(e.array));
         });
     new InterfaceCreate({containerId: 'interfaceCreateModal'})
         .onSubmit(instance, function (e) {
-            console.log(Arr2Json(e.array));
+            e.data.interface.create(Arr2Json(e.array));
         });
 </script>
 </body>

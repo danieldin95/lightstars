@@ -9,28 +9,28 @@ export class Instances {
 
         // Register click handle.
         $("instance-console").on("click", this.instances, function (e) {
-            new InstanceApi(e.data.store).console();
+            new InstanceApi({uuids: e.data.store}).console();
         });
         $("instance-start, instance-more-start").on("click", this.instances, function (e) {
-            new InstanceApi(e.data.store).start();
+            new InstanceApi({uuids: e.data.store}).start();
         });
         $("instance-more-shutdown").on("click", this.instances, function (e) {
-            new InstanceApi(e.data.store).shutdown();
+            new InstanceApi({uuids: e.data.store}).shutdown();
         });
         $("instance-more-reset").on("click", this.instances, function (e) {
-            new InstanceApi(e.data.store).reset();
+            new InstanceApi({uuids: e.data.store}).reset();
         });
         $("instance-more-suspend").on("click", this.instances, function (e) {
-            new InstanceApi(e.data.store).suspend();
+            new InstanceApi({uuids: e.data.store}).suspend();
         });
         $("instance-more-resume").on("click", this.instances, function (e) {
-            new InstanceApi(e.data.store).resume();
+            new InstanceApi({uuids: e.data.store}).resume();
         });
         $("instance-more-destroy").on("click", this.instances, function (e) {
-            new InstanceApi(e.data.store).destroy();
+            new InstanceApi({uuids: e.data.store}).destroy();
         });
         $("instance-more-remove").on("click", this.instances, function (e) {
-            new InstanceApi(e.data.store).remove();
+            new InstanceApi({uuids: e.data.store}).remove();
         });
     }
 

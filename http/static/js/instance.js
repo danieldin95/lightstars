@@ -1,37 +1,63 @@
-import {InstanceApi} from './api/instance.js'
+import {DiskApi} from './api/disk.js';
+import {InterfaceApi} from './api/interface.js';
+import {InstanceApi} from './api/instance.js';
 import {ListenChangeAll} from "./com/utils.js";
 
 export class Instance {
 
     constructor() {
-        this.disk = new DiskOn();
-        this.interface = new InterfaceOn();
+        let uuid = $('instance').attr("data");
+        this.uuid = uuid;
+
+        this.disk = new Disk(uuid);
+        this.interface = new Interface(uuid);
 
         // Register click handle.
         $("instance-start, instance-more-start").on("click", this, function (e) {
-            new InstanceApi($(this).attr("data")).start();
+            new InstanceApi({uuids: uuid}).start();
         });
         $("instance-more-shutdown").on("click", this, function (e) {
-            new InstanceApi($(this).attr("data")).shutdown();
+            new InstanceApi({uuids: uuid}).shutdown();
         });
         $("instance-more-reset").on("click", this, function (e) {
-            new InstanceApi($(this).attr("data")).reset();
+            new InstanceApi({uuids: uuid}).reset();
         });
         $("instance-more-suspend").on("click", this, function (e) {
-            new InstanceApi($(this).attr("data")).suspend();
+            new InstanceApi({uuids: uuid}).suspend();
         });
         $("instance-more-resume").on("click", this, function (e) {
-            new InstanceApi($(this).attr("data")).resume();
+            new InstanceApi({uuids: uuid}).resume();
         });
         $("instance-more-destroy").on("click", this, function (e) {
-            new InstanceApi($(this).attr("data")).destroy();
+            new InstanceApi({uuids: uuid}).destroy();
         });
         $("instance-more-remove").on("click", this, function (e) {
-            new InstanceApi($(this).attr("data")).remove();
+            new InstanceApi({uuids: uuid}).remove();
         });
     }
 }
 
+export class Disk {
+    //
+    constructor(instance, name) {
+        this.name = name;
+        this.instance = instance;
+
+        this.diskOn = new DiskOn();
+    }
+
+    create(data) {
+        new DiskApi({instance: this.instance}).create(data);
+    }
+
+    delete(data) {
+        new DiskApi({instance: this.instance}).delete(data);
+    }
+
+    edit(data) {
+        new DiskApi({instance: this.instance}).edit(data);
+    }
+}
 
 export class DiskOn {
 
@@ -62,6 +88,27 @@ export class DiskOn {
     }
 }
 
+export class Interface {
+    //
+    constructor(instance, name) {
+        this.name = name;
+        this.instance = instance;
+
+        this.interfaceOn = new InterfaceOn();
+    }
+
+    create(data) {
+        new InterfaceApi({instance: this.instance}).create(data);
+    }
+
+    delete(data) {
+        new InterfaceApi({instance: this.instance}).delete(data);
+    }
+
+    edit(data) {
+        new InterfaceApi({instance: this.instance}).edit(data);
+    }
+}
 export class InterfaceOn {
 
     constructor() {

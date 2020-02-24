@@ -75,13 +75,17 @@ func (h *Server) LoadRouter() {
 	router.HandleFunc("/ui/console", h.HandleConsole)
 	router.HandleFunc("/ui/instance/{id}", h.HandleInstance)
 	// api router
+	router.HandleFunc("/api/iso", h.GetISO).Methods("GET")
+	router.HandleFunc("/api/bridge", h.GetBridge).Methods("GET")
+	router.HandleFunc("/api/datastore", h.GetDataStore).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/disk", h.HandleHi).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/disk/{id}", h.HandleHi).Methods("DELETE")
+	router.HandleFunc("/api/instance/{id}/interface", h.HandleHi).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/interface/{id}", h.HandleHi).Methods("DELETE")
 	router.HandleFunc("/api/instance", h.AddInstance).Methods("POST")
 	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
 	router.HandleFunc("/api/instance/{id}", h.ModInstance).Methods("PUT")
 	router.HandleFunc("/api/instance/{id}", h.DelInstance).Methods("DELETE")
-	router.HandleFunc("/api/iso", h.GetISO).Methods("GET")
-	router.HandleFunc("/api/bridge", h.GetBridge).Methods("GET")
-	router.HandleFunc("/api/datastore", h.GetDataStore).Methods("GET")
 }
 
 func (h *Server) SetCert(keyFile, crtFile string) {
@@ -247,7 +251,7 @@ func (h *Server) HandleFile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Server) Handle404(w http.ResponseWriter, r *http.Request) {
-	file := h.GetFile("404.html")
+	file := h.GetFile("ui/404.html")
 	if err := h.ParseFiles(w, file, nil); err != nil {
 		libstar.Error("Server.Handle404 %s", err)
 	}
@@ -625,8 +629,8 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer dom.Free()
-	defer r.Body.Close()
 
+	defer r.Body.Close()
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -753,5 +757,18 @@ func (h *Server) GetISO(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Server) GetBridge(w http.ResponseWriter, r *http.Request) {
+	h.ResponseJson(w, nil)
+}
+
+func (h *Server) HandleHi(w http.ResponseWriter, r *http.Request) {
+	id, _ := h.GetArg(r, "id")
+
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	libstar.Info("id: %s, body: %s", id, body)
 	h.ResponseJson(w, nil)
 }
