@@ -5,8 +5,16 @@ import (
 	"github.com/libvirt/libvirt-go"
 )
 
-var DOMAIN_ALL = libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE
-var DOMAIN_DEVICE_MODIFY_SAVE = libvirt.DOMAIN_DEVICE_MODIFY_LIVE | libvirt.DOMAIN_DEVICE_MODIFY_CONFIG
+var (
+	DOMAIN_ALL                = libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE
+	DOMAIN_DEVICE_MODIFY_SAVE = libvirt.DOMAIN_DEVICE_MODIFY_LIVE | libvirt.DOMAIN_DEVICE_MODIFY_CONFIG
+)
+
+var (
+	ROOT_BUS      = "0x00"
+	DISK_BUS      = "0x01"
+	INTERFACE_BUS = "0x02"
+)
 
 type Domain struct {
 	libvirt.Domain

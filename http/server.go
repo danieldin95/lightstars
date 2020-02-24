@@ -79,9 +79,9 @@ func (h *Server) LoadRouter() {
 	router.HandleFunc("/api/bridge", h.GetBridge).Methods("GET")
 	router.HandleFunc("/api/datastore", h.GetDataStore).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/disk", h.AddDisk).Methods("POST")
-	router.HandleFunc("/api/instance/{id}/disk/{id}", h.HandleHi).Methods("DELETE")
+	router.HandleFunc("/api/instance/{id}/disk/{dev}", h.DelDisk).Methods("DELETE")
 	router.HandleFunc("/api/instance/{id}/interface", h.AddInterface).Methods("POST")
-	router.HandleFunc("/api/instance/{id}/interface/{id}", h.HandleHi).Methods("DELETE")
+	router.HandleFunc("/api/instance/{id}/interface/{dev}", h.DelInterface).Methods("DELETE")
 	router.HandleFunc("/api/instance", h.AddInstance).Methods("POST")
 	router.HandleFunc("/api/instance/{id}", h.GetInstance).Methods("GET")
 	router.HandleFunc("/api/instance/{id}", h.ModInstance).Methods("PUT")
@@ -817,7 +817,7 @@ func (h *Server) DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) 
 		Address: libvirtc.AddressXML{
 			Type:   "pci",
 			Domain: "0x0000",
-			Bus:    "0x01", //default is 0x01
+			Bus:    libvirtc.DISK_BUS,
 			Slot:   conf.Slot,
 		},
 	}
@@ -862,6 +862,33 @@ func (h *Server) AddDisk(w http.ResponseWriter, r *http.Request) {
 	h.ResponseJson(w, "success")
 }
 
+func (h *Server) DelDisk(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := h.GetArg(r, "id")
+	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dom.Free()
+
+	dev, _ := h.GetArg(r, "dev")
+	if xml := libvirtc.NewDomainXMLFromDom(dom, true); xml != nil {
+		if xml.Devices.Disks != nil {
+			for _, disk := range xml.Devices.Disks {
+				if disk.Target.Dev != dev {
+					continue
+				}
+				flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+				if err := dom.DetachDeviceFlags(disk.Encode(), flags); err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+			}
+		}
+	}
+	h.ResponseMsg(w, 0, "success")
+}
+
 func (h *Server) InterfaceConf2XML(conf *schema.InterfaceConf) (*libvirtc.InterfaceXML, error) {
 	xml := libvirtc.InterfaceXML{
 		Type: "bridge",
@@ -873,7 +900,7 @@ func (h *Server) InterfaceConf2XML(conf *schema.InterfaceConf) (*libvirtc.Interf
 		},
 		Address: libvirtc.AddressXML{
 			Type: "pci",
-			Bus:  "0x02", //default 02
+			Bus:  libvirtc.INTERFACE_BUS,
 			Slot: conf.Slot,
 		},
 	}
@@ -917,5 +944,32 @@ func (h *Server) AddInterface(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	h.ResponseJson(w, "success")
+	h.ResponseMsg(w, 0, "success")
+}
+
+func (h *Server) DelInterface(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := h.GetArg(r, "id")
+	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dom.Free()
+
+	dev, _ := h.GetArg(r, "dev")
+	if xml := libvirtc.NewDomainXMLFromDom(dom, true); xml != nil {
+		if xml.Devices.Interfaces != nil {
+			for _, int := range xml.Devices.Interfaces {
+				if int.Target.Dev != dev {
+					continue
+				}
+				flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+				if err := dom.DetachDeviceFlags(int.Encode(), flags); err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+			}
+		}
+	}
+	h.ResponseMsg(w, 0, "success")
 }
