@@ -680,6 +680,11 @@ func (h *Server) ModInstance(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+	case "reset":
+		if err := dom.Reset(0); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	case "destroy":
 		if err := dom.Destroy(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

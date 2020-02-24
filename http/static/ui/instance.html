@@ -20,17 +20,19 @@
     <div name="" class="card instance">
         <div class="card-header">
             <div class="card-just-left">
-                <a href="../.." class="none">Home</a> | <a class="none" href="javascript:window.location.reload();">{{.Name}}</a>
+                <a href="../.." class="none">Home</a> |
+                <a class="none" href="javascript:window.location.reload();">{{.Name}}</a>
             </div>
         </div>
 
-        <!-- Overview -->
-        <div class="card-none">
-            <div class="card no-border">
+        <!-- header buttons -->
+        <div class="card-none no-bottom">
+            <div class="card no-border no-bottom">
                 <div class="card-header-btn">
                     <instance-console data="{{ .UUID }}">
                         {{ if eq .State "running" }}
-                        <a type="button" class="btn btn-outline-dark btn-sm" href="/ui/console?instance={{ .UUID }}">console</a>
+                        <a type="button" class="btn btn-outline-dark btn-sm"
+                           href="/ui/console?instance={{ .UUID }}">console</a>
                         {{ else }}
                         <a type="button" class="btn btn-outline-dark btn-sm disabled" href="#">console</a>
                         {{ end }}
@@ -39,7 +41,8 @@
                         <button type="button" class="btn btn-outline-dark btn-sm">start</button>
                     </instance-start>
                     <instance-refresh data="{{ .UUID }}">
-                        <a type="button" class="btn btn-outline-dark btn-sm" href="javascript:window.location.reload();">refresh</a>
+                        <a type="button" class="btn btn-outline-dark btn-sm"
+                           href="javascript:window.location.reload();">refresh</a>
                     </instance-refresh>
                     <instance-more data="{{ .UUID }}">
                         <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
@@ -73,7 +76,13 @@
                         </div>
                     </instance-more>
                 </div>
-                <div class="card-header-dis">
+            </div>
+        </div>
+
+        <!-- Overview -->
+        <div class="card-body no-top no-bottom">
+            <div name="overview" class="card overview">
+                <div class="card-body">
                     <dl class="dl-horizontal">
                         <dt>UUID:</dt>
                         <dd>{{ .UUID }}</dd>
