@@ -59,6 +59,12 @@ ol, ul, dl {
     overflow: auto!important;
 }
 
+.overflow-auto {
+    overflow: auto!important;
+}
+
+/* wizard */
+
 .sw-modal {
     min-width: 760px;
 }

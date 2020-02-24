@@ -67,7 +67,7 @@ export class InstanceCreate extends ModalFormBase {
 
     template(props) {
         return `
-    <div class="modal-dialog modal-lg modal-dialog-centered sw-modal overflow-auto" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">Create Instance</h5>
@@ -108,7 +108,7 @@ export class InstanceCreate extends ModalFormBase {
                         <label for="family" class="col-sm-4 col-form-label-sm">Guest OS</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="select-simple" name="family">
+                                <select class="select-lg" name="family">
                                     <option value="linux" selected>Linux</option>
                                     <option value="windows">Windows</option>
                                     <option value="other">Other</option>
@@ -125,7 +125,7 @@ export class InstanceCreate extends ModalFormBase {
                         <label for="datastore" class="col-sm-4 col-form-label-sm">Storage</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="select-simple" name="datastore">
+                                <select class="select-lg" name="datastore">
                                     <option value="datastore/01" selected>datastore01</option>
                                     <option value="datastore/02">datastore02</option>
                                 </select>
@@ -141,7 +141,7 @@ export class InstanceCreate extends ModalFormBase {
                         <label for="cpu" class="col-sm-4 col-form-label-sm">CPU</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="select-simple select-unit" name="cpu">
+                                <select class="" name="cpu">
                                     <option value="1">1</option>
                                     <option value="2" selected>2</option>
                                     <option value="3">3</option>
@@ -155,7 +155,7 @@ export class InstanceCreate extends ModalFormBase {
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm input-number-lg" name="memorySize" value="2048">
-                                <select class="select-simple select-unit-right" name="memoryUnit">
+                                <select class="select-unit-right" name="memoryUnit">
                                     <option value="Mib" selected>MiB</option>
                                     <option value="GiB">GiB</option>
                                 </select>       
@@ -167,7 +167,7 @@ export class InstanceCreate extends ModalFormBase {
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm input-number-lg" name="diskSize" value="10">
-                                <select class="select-simple select-unit-right" name="diskUnit">
+                                <select class="select-unit-right" name="diskUnit">
                                     <option value="Mib">MiB</option>
                                     <option value="GiB" selected>GiB</option>
                                     <option value="TiB">TiB</option>
@@ -179,7 +179,7 @@ export class InstanceCreate extends ModalFormBase {
                         <label for="isoFile" class="col-sm-4 col-form-label-sm">Datastore ISO file</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="select-simple" name="isoFile">
+                                <select class="" name="isoFile">
                                     <option value="/dev/sr0">sr0</option>
                                 </select>   
                             </div>
@@ -189,7 +189,7 @@ export class InstanceCreate extends ModalFormBase {
                         <label for="interface" class="col-sm-4 col-form-label-sm">Network interface01</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="select-simple" name="interface">
+                                <select class="" name="interface">
                                     <option value="virbr0" selected>Virtual Bridge0</option>
                                     <option value="virbr1">Virtual Bridge1</option>
                                     <option value="virbr2">Virtual Bridge2</option>

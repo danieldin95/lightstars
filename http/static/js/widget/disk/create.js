@@ -21,13 +21,13 @@ export class DiskCreate extends ModalFormBase {
 
     template() {
         return `
-    <div class="modal-dialog modal-lg modal-dialog-centered sw-modal overflow-auto" role="document">
+    <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">Create Disk</h5>
             </div>
+            <form name="disk-new">
             <div id="" class="modal-body">
-                <form name="disk-new">
                 <div class="form-group row">
                     <label for="bus" class="col-sm-4 col-form-label-sm ">Target bus</label>
                     <div class="col-sm-6">
@@ -53,15 +53,15 @@ export class DiskCreate extends ModalFormBase {
                         </div>
                     </div>
                 </div>
-                </form>
             </div>
             <div id="" class="modal-footer">
-                <div class="btn-group mr-2 sw-btn-group-extra" rol="group">
+                <div class="mr-0" rol="group">
                     <button id="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
-                    <button id="reset-btn" class="btn btn-outline-dark btn-sm">Reset</button>
+                    <button id="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
                     <button id="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
                 </div>
             </div>
+            </form>
         </div>
     </div>`
     }
