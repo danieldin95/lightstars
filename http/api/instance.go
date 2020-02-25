@@ -14,6 +14,67 @@ import (
 type Instance struct {
 }
 
+func NewCDROMXML(file string) libvirtc.DiskXML{
+	return libvirtc.DiskXML{
+		Type:   "block",
+		Device: "cdrom",
+		Driver: libvirtc.DiskDriverXML{
+			Name: "qemu",
+			Type: "raw",
+		},
+		Source: libvirtc.DiskSourceXML{
+			Device: file,
+		},
+		Target: libvirtc.DiskTargetXML{
+			Bus: "ide",
+			Dev: "hda",
+		},
+	}
+}
+
+func NewISOXML(file string) libvirtc.DiskXML {
+	return libvirtc.DiskXML{
+		Type:   "file",
+		Device: "cdrom",
+		Driver: libvirtc.DiskDriverXML{
+			Name: "qemu",
+			Type: "raw",
+		},
+		Source: libvirtc.DiskSourceXML{
+			File: file,
+		},
+		Target: libvirtc.DiskTargetXML{
+			Bus: "ide",
+			Dev: "hda",
+		},
+	}
+}
+
+func NewDiskXML(format, file string) libvirtc.DiskXML {
+	return libvirtc.DiskXML{
+		Type:   "file",
+		Device: "disk",
+		Driver: libvirtc.DiskDriverXML{
+			Name: "qemu",
+			Type: format,
+		},
+		Source: libvirtc.DiskSourceXML{
+			File: file,
+		},
+		Target: libvirtc.DiskTargetXML{
+			Bus: "virtio",
+			Dev: "vda",
+		},
+		Address: &libvirtc.AddressXML{
+			Type:     "pci",
+			Domain:   libvirtc.PCI_DOMAIN,
+			Bus:      libvirtc.PCI_DISK_BUS,
+			Slot:     "0x01",
+			Function: libvirtc.PCI_FUNC,
+		},
+	}
+}
+
 func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 	dom := libvirtc.DomainXML{
 		Type: "kvm",
@@ -86,60 +147,11 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 	}
 	// disks
 	if strings.HasPrefix(conf.IsoFile, "/dev") {
-		dom.Devices.Disks[0] = libvirtc.DiskXML{
-			Type:   "block",
-			Device: "cdrom",
-			Driver: libvirtc.DiskDriverXML{
-				Name: "qemu",
-				Type: "raw",
-			},
-			Source: libvirtc.DiskSourceXML{
-				Device: conf.IsoFile,
-			},
-			Target: libvirtc.DiskTargetXML{
-				Bus: "ide",
-				Dev: "hda",
-			},
-		}
+		dom.Devices.Disks[0] = NewCDROMXML(conf.IsoFile)
 	} else {
-		dom.Devices.Disks[0] = libvirtc.DiskXML{
-			Type:   "file",
-			Device: "cdrom",
-			Driver: libvirtc.DiskDriverXML{
-				Name: "qemu",
-				Type: "raw",
-			},
-			Source: libvirtc.DiskSourceXML{
-				File: storage.PATH.Unix(conf.IsoFile),
-			},
-			Target: libvirtc.DiskTargetXML{
-				Bus: "ide",
-				Dev: "hda",
-			},
-		}
+		dom.Devices.Disks[0] = NewISOXML(conf.IsoFile)
 	}
-	dom.Devices.Disks[1] = libvirtc.DiskXML{
-		Type:   "file",
-		Device: "disk",
-		Driver: libvirtc.DiskDriverXML{
-			Name: "qemu",
-			Type: vol.Target.Format.Type,
-		},
-		Source: libvirtc.DiskSourceXML{
-			File: vol.Target.Path,
-		},
-		Target: libvirtc.DiskTargetXML{
-			Bus: "virtio",
-			Dev: "vda",
-		},
-		Address: &libvirtc.AddressXML{
-			Type:     "pci",
-			Domain:   libvirtc.PCI_DOMAIN,
-			Bus:      libvirtc.PCI_DISK_BUS,
-			Slot:     "0x01",
-			Function: libvirtc.PCI_FUNC,
-		},
-	}
+	dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path)
 	// interfaces
 	dom.Devices.Interfaces[0] = libvirtc.InterfaceXML{
 		Type: "bridge",

@@ -42,7 +42,7 @@ export class DiskCreate extends ModalFormBase {
                     </div>              
                 </div>
                 <div class="form-group row">
-                    <label for="slot" class="col-sm-4 col-form-label-sm ">Slot address</label>
+                    <label for="slot" class="col-sm-4 col-form-label-sm ">Sequence number</label>
                     <div class="col-sm-6">
                         <div class="input-group">
                             <select class="select-lg" name="slot">

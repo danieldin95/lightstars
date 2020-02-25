@@ -57,18 +57,18 @@ export class InterfaceCreate extends ModalFormBase {
                     <div class="col-sm-6">
                         <div class="input-group">
                             <select class="select-lg" name="interface">
-                                <option value="virbr0" selected>Virtual Bridge0</option>
-                                <option value="virbr1">Virtual Bridge1</option>
-                                <option value="virbr2">Virtual Bridge2</option>
-                                <option value="br-br1">OpenvSwitch Bridge1</option>
-                                <option value="br-br2">OpenvSwitch Bridge2</option>
-                                <option value="br-mgt">OpenvSwitch Manager Bridge</option>
+                                <option value="virbr0" selected>Linux Bridge #virbr0</option>
+                                <option value="virbr1">Linux Bridge #virbr1</option>
+                                <option value="virbr2">Linux Bridge #virbr2</option>
+                                <option value="ovs-br1">OpenvSwitch Bridge #ovs-br1</option>
+                                <option value="ovs-br2">OpenvSwitch Bridge #ovs-br2</option>
+                                <option value="br-mgt">OpenvSwitch Bridge #br-mgt</option>
                             </select>  
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="slot" class="col-sm-4 col-form-label-sm ">Slot address</label>
+                    <label for="slot" class="col-sm-4 col-form-label-sm ">Sequence number</label>
                     <div class="col-sm-6">
                         <div class="input-group">
                             <select class="select-lg" name="slot">

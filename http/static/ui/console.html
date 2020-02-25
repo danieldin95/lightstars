@@ -63,7 +63,7 @@
             cursor: pointer;
         }
         #screen {
-            flex: 1; /* fill remaining space */
+            /*flex: 1; !* fill remaining space *!*/
             background-color: inherit;
         }
     </style>
@@ -129,7 +129,8 @@
 
         // Show a status text in the top bar
         function status(text) {
-            document.getElementById('status').textContent = text;
+            // document.getElementById('status').textContent = text;
+            console.log(text);
         }
 
         // This function extracts the value of one variable from the
@@ -153,8 +154,8 @@
             return defaultValue;
         }
 
-        document.getElementById('sendCtrlAltDelButton')
-            .onclick = sendCtrlAltDel;
+        // document.getElementById('sendCtrlAltDelButton')
+        //     .onclick = sendCtrlAltDel;
 
         // Read parameters specified in the URL query string
         // By default, use the host and port of server that served this file
@@ -204,15 +205,15 @@
 
 <body>
 <div id="main">
-    <div id="top_bar">
-        <div id="home">
-            <a href="#" onclick="javascript:history.back();">Back</a>
-        </div>
-        <div id="status">Loading</div>
-        <div id="sendCtrlAltDelButton">
-            <a href="#" >Send CtrlAltDel</a>
-        </div>
-    </div>
+{{/*    <div id="top_bar">*/}}
+{{/*        <div id="home">*/}}
+{{/*            <a href="#" onclick="javascript:history.back();">Back</a>*/}}
+{{/*        </div>*/}}
+{{/*        <div id="status">Loading</div>*/}}
+{{/*        <div id="sendCtrlAltDelButton">*/}}
+{{/*            <a href="#" >Send CtrlAltDel</a>*/}}
+{{/*        </div>*/}}
+{{/*    </div>*/}}
     <div id="screen">
         <!-- This is where the remote screen will appear -->
     </div>
