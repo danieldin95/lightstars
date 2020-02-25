@@ -154,11 +154,11 @@ func (devices *DevicesXML) Decode(xmlData string) error {
 // Bus 2: interface
 // Bus 3: reverse
 type ControllerXML struct {
-	XMLName xml.Name   `xml:"controller" json:"-"`
-	Type    string     `xml:"type,attr" json:"type"`
-	Index   string     `xml:"index,attr" json:"port"`
-	Model   string     `xml:"model,attr" json:"model"` // pci-root, pci-bridge.
-	Address AddressXML `xml:"address" json:"address"`
+	XMLName xml.Name    `xml:"controller" json:"-"`
+	Type    string      `xml:"type,attr" json:"type"`
+	Index   string      `xml:"index,attr" json:"port"`
+	Model   string      `xml:"model,attr" json:"model"` // pci-root, pci-bridge.
+	Address *AddressXML `xml:"address,omitempty" json:"address,omitempty"`
 }
 
 func (ctl *ControllerXML) Decode(xmlData string) error {
@@ -249,7 +249,7 @@ type InterfaceXML struct {
 	Model       InterfaceModelXML        `xml:"model" json:"model"`
 	Target      InterfaceTargetXML       `xml:"target" json:"tatget"`
 	VirtualPort *InterfaceVirtualPortXML `xml:"virtualport,omitempty" json:"virtualport,omitempty"`
-	Address     AddressXML               `xml:"address" json:"address"`
+	Address     *AddressXML              `xml:"address,omitempty" json:"address,omitempty"`
 }
 
 func (int *InterfaceXML) Decode(xmlData string) error {

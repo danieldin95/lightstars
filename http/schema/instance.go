@@ -73,17 +73,19 @@ func NewFromDiskXML(xml libvirtc.DiskXML) (disk Disk) {
 	disk.Bus = xml.Target.Bus
 	disk.Source = storage.PATH.Fmt(xml.Source.File)
 	disk.Format = xml.Driver.Type
-	disk.AddrType = xml.Address.Type
-	if disk.AddrType == "pci" {
-		disk.AddrDomain = libstar.H2D16(xml.Address.Domain)
-		disk.AddrBus = libstar.H2D16(xml.Address.Bus)
-		disk.AddrSlot = libstar.H2D16(xml.Address.Slot)
-		disk.AddrFunc = libstar.H2D16(xml.Address.Function)
-	} else if xml.Address.Type == "drive" {
-		disk.AddrCtl = libstar.H2D16(xml.Address.Controller)
-		disk.AddrBus = libstar.H2D16(xml.Address.Bus)
-		disk.AddrTgt = libstar.H2D16(xml.Address.Target)
-		disk.AddrUnit = libstar.H2D16(xml.Address.Unit)
+	if xml.Address != nil {
+		disk.AddrType = xml.Address.Type
+		if disk.AddrType == "pci" {
+			disk.AddrDomain = libstar.H2D16(xml.Address.Domain)
+			disk.AddrBus = libstar.H2D16(xml.Address.Bus)
+			disk.AddrSlot = libstar.H2D16(xml.Address.Slot)
+			disk.AddrFunc = libstar.H2D16(xml.Address.Function)
+		} else if xml.Address.Type == "drive" {
+			disk.AddrCtl = libstar.H2D16(xml.Address.Controller)
+			disk.AddrBus = libstar.H2D16(xml.Address.Bus)
+			disk.AddrTgt = libstar.H2D16(xml.Address.Target)
+			disk.AddrUnit = libstar.H2D16(xml.Address.Unit)
+		}
 	}
 	return disk
 }
@@ -105,12 +107,14 @@ func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int Interface) {
 	int.Address = xml.Mac.Address
 	int.Model = xml.Model.Type
 	int.Device = xml.Target.Dev
-	int.AddrType = xml.Address.Type
-	if int.AddrType == "pci" {
-		int.AddrDomain = libstar.H2D16(xml.Address.Domain)
-		int.AddrBus = libstar.H2D16(xml.Address.Bus)
-		int.AddrSlot = libstar.H2D16(xml.Address.Slot)
-		int.AddrFunc = libstar.H2D16(xml.Address.Function)
+	if xml.Address != nil {
+		int.AddrType = xml.Address.Type
+		if int.AddrType == "pci" {
+			int.AddrDomain = libstar.H2D16(xml.Address.Domain)
+			int.AddrBus = libstar.H2D16(xml.Address.Bus)
+			int.AddrSlot = libstar.H2D16(xml.Address.Slot)
+			int.AddrFunc = libstar.H2D16(xml.Address.Function)
+		}
 	}
 	return int
 }
@@ -126,7 +130,9 @@ func NewFromControllerXML(xml libvirtc.ControllerXML) (ctl Controller) {
 	ctl.Type = xml.Type
 	ctl.Model = xml.Model
 	ctl.Index = xml.Index
-	ctl.Address = NewFromAddressXML(xml.Address)
+	if xml.Address != nil {
+		ctl.Address = NewFromAddressXML(*xml.Address)
+	}
 	return ctl
 }
 

@@ -52,16 +52,17 @@ func DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
 	switch conf.Bus {
 	case "virtio":
 		xml.Address = &libvirtc.AddressXML{
-			Type:   "pci",
-			Domain: "0x0000",
-			Bus:    libvirtc.DISK_BUS,
-			Slot:   conf.Slot,
+			Type:     "pci",
+			Domain:   libvirtc.PCI_DOMAIN,
+			Bus:      libvirtc.PCI_DISK_BUS,
+			Slot:     conf.Slot,
+			Function: libvirtc.PCI_FUNC,
 		}
 		//case "scsi", "ide": // IDE reverse 1-4
 		//	xml.Address = &libvirtc.AddressXML{
 		//		Type:       "drive",
 		//		Controller: "0",
-		//		Bus:        libvirtc.DISK_BUS_DRV,
+		//		Bus:        libvirtc.DRV_DISK_BUS,
 		//		Target:     "0",
 		//		Unit:       conf.Slot,
 		//	}

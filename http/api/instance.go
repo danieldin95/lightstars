@@ -7,6 +7,7 @@ import (
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -18,9 +19,10 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 		Type: "kvm",
 		Name: conf.Name,
 		Devices: libvirtc.DevicesXML{
-			Disks:      make([]libvirtc.DiskXML, 2),
-			Graphics:   make([]libvirtc.GraphicsXML, 1),
-			Interfaces: make([]libvirtc.InterfaceXML, 1),
+			Disks:       make([]libvirtc.DiskXML, 2),
+			Graphics:    make([]libvirtc.GraphicsXML, 1),
+			Interfaces:  make([]libvirtc.InterfaceXML, 1),
+			Controllers: make([]libvirtc.ControllerXML, 4),
 		},
 		OS: libvirtc.OSXML{
 			Type: libvirtc.OSTypeXML{
@@ -39,6 +41,7 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 	if err != nil {
 		return dom, err
 	}
+	// boot seqs.
 	if conf.Boots == "" {
 		conf.Boots = "hd,cdrom,network"
 	}
@@ -49,6 +52,7 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 			}
 		}
 	}
+	// cpu and memory
 	dom.CPUXml = libvirtc.CPUXML{
 		Placement: "static",
 		Value:     conf.Cpu,
@@ -61,11 +65,26 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 		Value: conf.MemorySize,
 		Type:  conf.MemoryUnit,
 	}
+	// vnc
 	dom.Devices.Graphics[0] = libvirtc.GraphicsXML{
 		Type:   "vnc",
 		Listen: "0.0.0.0",
 		Port:   "-1",
 	}
+	// controllers
+	dom.Devices.Controllers[0] = libvirtc.ControllerXML{
+		Type:  "pci",
+		Index: "0",
+		Model: "pci-root",
+	}
+	for i := 1; i < len(dom.Devices.Controllers); i++ {
+		dom.Devices.Controllers[i] = libvirtc.ControllerXML{
+			Type:  "pci",
+			Index: strconv.Itoa(i),
+			Model: "pci-bridge",
+		}
+	}
+	// disks
 	if strings.HasPrefix(conf.IsoFile, "/dev") {
 		dom.Devices.Disks[0] = libvirtc.DiskXML{
 			Type:   "block",
@@ -113,7 +132,15 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 			Bus: "virtio",
 			Dev: "vda",
 		},
+		Address: &libvirtc.AddressXML{
+			Type:     "pci",
+			Domain:   libvirtc.PCI_DOMAIN,
+			Bus:      libvirtc.PCI_DISK_BUS,
+			Slot:     "0x01",
+			Function: libvirtc.PCI_FUNC,
+		},
 	}
+	// interfaces
 	dom.Devices.Interfaces[0] = libvirtc.InterfaceXML{
 		Type: "bridge",
 		Source: libvirtc.InterfaceSourceXML{
@@ -174,8 +201,10 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	// need release created images if fails.
 	xmlData := xmlObj.Encode()
 	if xmlData == "" {
+		DelVolumeAndPool(conf.Name)
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
 		return
 	}
@@ -184,6 +213,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 
 	dom, err := hyper.DomainDefineXML(xmlData)
 	if err != nil {
+		DelVolumeAndPool(conf.Name)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

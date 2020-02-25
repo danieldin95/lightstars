@@ -12,12 +12,15 @@ var (
 )
 
 var (
-	ROOT_BUS          = "0x00"
-	DISK_BUS          = "0x01"
-	INTERFACE_BUS     = "0x02"
-	ROOT_BUS_DRV      = "0"
-	DISK_BUS_DRV      = "1"
-	INTERFACE_BUS_DRV = "2"
+	PCI_DOMAIN        = "0x00"
+	PCI_ROOT_BUS      = "0x00"
+	PCI_DISK_BUS      = "0x01"
+	PCI_INTERFACE_BUS = "0x02"
+	PCI_FUNC          = "0x00"
+	DRV_CTL           = "0"
+	DRV_ROOT_BUS      = "0"
+	DRV_DISK_BUS      = "1"
+	DRV_INTERFACE_BUS = "2"
 )
 
 type Domain struct {
@@ -46,7 +49,7 @@ func (d *Disk) Slot2Dev(bus string, slot uint8) string {
 		prefix = "hd"
 	}
 	if slot <= 26 {
-		return prefix + string('a'+slot)
+		return prefix + string('a'+slot-1)
 	}
 	return ""
 }

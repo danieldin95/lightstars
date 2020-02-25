@@ -20,10 +20,12 @@ func InterfaceConf2XML(conf *schema.InterfaceConf) (*libvirtc.InterfaceXML, erro
 		Model: libvirtc.InterfaceModelXML{
 			Type: conf.Model,
 		},
-		Address: libvirtc.AddressXML{
-			Type: "pci",
-			Bus:  libvirtc.INTERFACE_BUS,
-			Slot: conf.Slot,
+		Address: &libvirtc.AddressXML{
+			Type:     "pci",
+			Domain:   libvirtc.PCI_DOMAIN,
+			Bus:      libvirtc.PCI_INTERFACE_BUS,
+			Slot:     conf.Slot,
+			Function: libvirtc.PCI_FUNC,
 		},
 	}
 	if conf.Type == "openvswitch" {
