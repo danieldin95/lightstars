@@ -203,7 +203,7 @@ type DiskXML struct {
 	Driver  DiskDriverXML `xml:"driver" json:"driver"`
 	Source  DiskSourceXML `xml:"source" json:"source"`
 	Target  DiskTargetXML `xml:"target" json:"target"`
-	Address AddressXML    `xml:"address" json:"address"`
+	Address *AddressXML    `xml:"address,omitempty" json:"address,omitempty"`
 }
 
 func (disk *DiskXML) Decode(xmlData string) error {

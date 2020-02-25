@@ -16,6 +16,16 @@ type Disk struct {
 
 }
 
+func IsVolume(file string) bool {
+	if !strings.HasPrefix(file, storage.Location) {
+		return false
+	}
+	if strings.HasSuffix(file, ".img") || strings.HasSuffix(file, ".qcow2") {
+		return true
+	}
+	return false
+}
+
 func DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
 	// create new disk firstly.
 	size := libstar.ToBytes(conf.Size, conf.Unit)
@@ -38,13 +48,20 @@ func DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
 			Bus: conf.Bus,
 			Dev: libvirtc.DISK.Slot2Dev(conf.Bus, slot),
 		},
-		Address: libvirtc.AddressXML{
+	}
+
+	switch conf.Bus {
+	case "virtio":
+		xml.Address = &libvirtc.AddressXML{
 			Type:   "pci",
 			Domain: "0x0000",
 			Bus:    libvirtc.DISK_BUS,
 			Slot:   conf.Slot,
-		},
+		}
+	case "scsi", "ide":
+		xml.Address = nil
 	}
+
 	return &xml, nil
 }
 
@@ -79,8 +96,11 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 	libstar.Debug("Disk.POST: %s", xmlObj.Encode())
 	flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
-		volume := path.Base(xmlObj.Target.Dev)
-		libvirts.RemoveVolume(libvirts.ToDomainPool(conf.Name), volume)
+		file := xmlObj.Source.File
+		if IsVolume(file) {
+			volume := path.Base(file)
+			libvirts.RemoveVolume(libvirts.ToDomainPool(conf.Name), volume)
+		}
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -115,8 +135,7 @@ func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			file := disk.Source.File
-			if strings.HasPrefix(file, storage.Location) &&
-				(strings.HasSuffix(file, ".img") || strings.HasSuffix(file, ".qcow2")) {
+			if IsVolume(file) {
 				dir := path.Dir(file)
 				volume := path.Base(file)
 				pool := path.Base(dir)
