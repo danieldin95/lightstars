@@ -79,6 +79,8 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 	libstar.Debug("Disk.POST: %s", xmlObj.Encode())
 	flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
+		volume := path.Base(xmlObj.Target.Dev)
+		libvirts.RemoveVolume(libvirts.ToDomainPool(conf.Name), volume)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

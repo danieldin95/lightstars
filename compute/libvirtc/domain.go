@@ -38,7 +38,7 @@ type Disk struct {
 
 func (d *Disk) Slot2Dev(bus string, slot uint8) string {
 	prefix := "vd"
-	if bus == "ide" {
+	if bus == "ide" || bus == "scsi" {
 		prefix = "hd"
 	}
 	if slot <= 26 {
