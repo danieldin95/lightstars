@@ -125,7 +125,7 @@ func (h *Server) LoadToken() error {
 
 func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	user, pass, ok := r.BasicAuth()
-	libstar.Debug("Server.IsAuth %s:%s", user, pass)
+	libstar.Print("Server.IsAuth %s:%s", user, pass)
 	if !ok || pass != h.adminToken || user != "admin" {
 		w.Header().Set("WWW-Authenticate", "Basic")
 		http.Error(w, "Authorization Required.", http.StatusUnauthorized)

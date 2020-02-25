@@ -91,6 +91,10 @@ var Log = Logger{
 	errors:   list.New(),
 }
 
+func Print(format string, v ...interface{}) {
+	Log.Print(format, v...)
+}
+
 func Error(format string, v ...interface{}) {
 	Log.Error(format, v...)
 }

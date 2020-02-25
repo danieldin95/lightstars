@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http"
+	"github.com/danieldin95/lightstar/libstar"
 	"os"
 	"os/signal"
 	"syscall"
@@ -27,13 +28,17 @@ func main() {
 	authFile := ".auth"
 	listen := "0.0.0.0:10080"
 	hypervisor := "qemu:///system"
+	verbose := 2
 
 	flag.StringVar(&listen, "listen", listen, "the address http listen.")
+	flag.IntVar(&verbose, "log:level", verbose, "logger level")
 	flag.StringVar(&hypervisor, "hyper", hypervisor, "hypervisor connecting to.")
 	flag.StringVar(&crtDir, "crt:dir", crtDir, "he directory X509 certificate file on.")
 	flag.StringVar(&staticDir, "static:dir", staticDir, "the directory to serve files from.")
 	flag.StringVar(&authFile, "auth:file", authFile, "the file saved administrator auth")
 	flag.Parse()
+
+	libstar.Init("lightstar.log", verbose)
 
 	libvirtc.SetHyper(hypervisor)
 	h := http.NewServer(listen, staticDir, authFile)

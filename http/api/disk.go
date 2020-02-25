@@ -58,7 +58,9 @@ func DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
 			Bus:    libvirtc.DISK_BUS,
 			Slot:   conf.Slot,
 		}
-	case "scsi", "ide":
+	case "scsi":
+		xml.Address = nil
+	case "ide": // reverse 1-4
 		xml.Address = nil
 	}
 
@@ -94,7 +96,10 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	libstar.Debug("Disk.POST: %s", xmlObj.Encode())
-	flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+	flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+	if active, _ := dom.IsActive(); !active {
+		flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+	}
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
 		file := xmlObj.Source.File
 		if IsVolume(file) {
@@ -129,7 +134,10 @@ func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			// found deivice
-			flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+			flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+			if active, _ := dom.IsActive(); !active {
+				flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+			}
 			if err := dom.DetachDeviceFlags(disk.Encode(), flags); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return

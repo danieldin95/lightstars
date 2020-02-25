@@ -60,7 +60,10 @@ func (int Interface) POST(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	libstar.Debug("Interface.POST: %s", xmlObj.Encode())
-	flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+	flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+	if active, _ := dom.IsActive(); !active {
+		flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+	}
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -91,7 +94,10 @@ func (int Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// found deivice
-			flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+			flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+			if active, _ := dom.IsActive(); !active {
+				flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+			}
 			if err := dom.DetachDeviceFlags(int.Encode(), flags); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
