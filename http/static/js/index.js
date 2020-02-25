@@ -72,5 +72,12 @@ export class InstanceOn {
             $("instance-shutdown button").removeClass('disabled');
             $("instance-more button").removeClass('disabled');
         }
+
+        if (from.store.length != 1) {
+            $("instance-edit button").addClass('disabled');
+        }
+        else {
+            $("instance-edit button").removeClass('disabled');
+        }
     }
 }

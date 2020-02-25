@@ -87,11 +87,15 @@ export class DiskOn {
         record.store = from.store;
 
         if (from.store.length == 0) {
-            $("disk-edit button").addClass('disabled');
             $("disk-remove button").addClass('disabled');
         } else {
-            $("disk-edit button").removeClass('disabled');
             $("disk-remove button").removeClass('disabled');
+        }
+        if (from.store.length != 1) {
+            $("disk-edit button").addClass('disabled');
+        }
+        else {
+            $("disk-edit button").removeClass('disabled');
         }
     }
 }
@@ -143,12 +147,17 @@ export class InterfaceOn {
     change(record, from) {
         record.store = from.store;
 
-        if (from.store == 0) {
-            $("interface-edit button").addClass('disabled');
+        if (from.store.length == 0) {
             $("interface-remove button").addClass('disabled');
         } else {
-            $("interface-edit button").removeClass('disabled');
+
             $("interface-remove button").removeClass('disabled');
+        }
+        if (from.store.length != 1) {
+            $("interface-edit button").addClass('disabled');
+        }
+        else {
+            $("interface-edit button").removeClass('disabled');
         }
     }
 }
