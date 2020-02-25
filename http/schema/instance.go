@@ -156,6 +156,7 @@ func NewFromAddressXML(xml libvirtc.AddressXML) (addr Address) {
 type InstanceConf struct {
 	Action     string `json:"action"` // If is "", means not action.
 	Name       string `json:"name"`
+	Family     string `json:"family"'`
 	Arch       string `json:"arch"`
 	Boots      string `json:"boots"`
 	DataStore  string `json:"datastore"`

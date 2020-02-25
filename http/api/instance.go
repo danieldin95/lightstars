@@ -45,13 +45,13 @@ func NewISOXML(file string) libvirtc.DiskXML {
 		},
 		Target: libvirtc.DiskTargetXML{
 			Bus: "ide",
-			Dev: "hda",
+			Dev: libvirtc.DISK.Slot2Dev("ide", 1),
 		},
 	}
 }
 
-func NewDiskXML(format, file string) libvirtc.DiskXML {
-	return libvirtc.DiskXML{
+func NewDiskXML(format, file, bus string) libvirtc.DiskXML {
+	disk := libvirtc.DiskXML{
 		Type:   "file",
 		Device: "disk",
 		Driver: libvirtc.DiskDriverXML{
@@ -61,18 +61,27 @@ func NewDiskXML(format, file string) libvirtc.DiskXML {
 		Source: libvirtc.DiskSourceXML{
 			File: file,
 		},
-		Target: libvirtc.DiskTargetXML{
-			Bus: "virtio",
-			Dev: "vda",
-		},
-		Address: &libvirtc.AddressXML{
+	}
+	switch bus {
+	case "virtio":
+		disk.Target = libvirtc.DiskTargetXML{
+			Bus: bus,
+			Dev: libvirtc.DISK.Slot2Dev(bus, 2),
+		}
+		disk.Address = &libvirtc.AddressXML{
 			Type:     "pci",
 			Domain:   libvirtc.PCI_DOMAIN,
 			Bus:      libvirtc.PCI_DISK_BUS,
-			Slot:     "0x01",
+			Slot:     "0x02",
 			Function: libvirtc.PCI_FUNC,
-		},
+		}
+	case "ide", "scsi":
+		disk.Target = libvirtc.DiskTargetXML{
+			Bus: bus,
+			Dev: libvirtc.DISK.Slot2Dev(bus, 2),
+		}
 	}
+	return disk
 }
 
 func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
@@ -161,23 +170,45 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 	} else {
 		dom.Devices.Disks[0] = NewISOXML(storage.PATH.Unix(conf.IsoFile))
 	}
-	dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path)
+	switch conf.Family {
+	case "linux":
+		dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path, "virtio")
+	case "windows": // not scsi.
+		dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path, "ide")
+	default:
+		dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path, "ide")
+	}
+
 	// interfaces
 	dom.Devices.Interfaces[0] = libvirtc.InterfaceXML{
 		Type: "bridge",
 		Source: libvirtc.InterfaceSourceXML{
 			Bridge: conf.Interface,
 		},
-		Model: libvirtc.InterfaceModelXML{
-			Type: "virtio",
+		Target: libvirtc.InterfaceTargetXML{
+			Dev: libvirtc.INTERFACE.Slot2Dev(1),
 		},
-		Address: &libvirtc.AddressXML{
+	}
+	switch conf.Family {
+	case "linux":
+		dom.Devices.Interfaces[0].Model = libvirtc.InterfaceModelXML{
+			Type: "virtio",
+		}
+		dom.Devices.Interfaces[0].Address = &libvirtc.AddressXML{
 			Type:     "pci",
 			Domain:   libvirtc.PCI_DOMAIN,
 			Bus:      libvirtc.PCI_INTERFACE_BUS,
 			Slot:     "0x01",
 			Function: libvirtc.PCI_FUNC,
-		},
+		}
+	case "windows":
+		dom.Devices.Interfaces[0].Model = libvirtc.InterfaceModelXML{
+			Type: "rtl8139", //e1000,rtl8139
+		}
+	default:
+		dom.Devices.Interfaces[0].Model = libvirtc.InterfaceModelXML{
+			Type: "rtl8139",
+		}
 	}
 	// inputs
 	dom.Devices.Inputs[0] = libvirtc.InputXML{

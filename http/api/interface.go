@@ -82,7 +82,7 @@ func (int Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 
-	dev, _ := GetArg(r, "dev")
+	address, _ := GetArg(r, "dev")
 	xml := libvirtc.NewDomainXMLFromDom(dom, true)
 	if xml == nil {
 		http.Error(w, "Cannot get domain's descXML", http.StatusInternalServerError)
@@ -91,10 +91,9 @@ func (int Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 
 	if xml.Devices.Interfaces != nil {
 		for _, int := range xml.Devices.Interfaces {
-			if int.Target.Dev != dev {
+			if int.Mac.Address != address {
 				continue
 			}
-
 			// found deivice
 			flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
 			if active, _ := dom.IsActive(); !active {

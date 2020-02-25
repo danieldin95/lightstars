@@ -59,3 +59,19 @@ func (d *Disk) Slot2DiskName(slot uint8) string {
 }
 
 var DISK = &Disk{}
+
+
+type Interface struct {
+	//
+}
+
+func (int *Interface) Slot2Dev(slot uint8) string {
+	prefix := "vnet"
+	if slot <= 32 {
+		return fmt.Sprintf("%s%d", prefix, slot)
+	}
+	return ""
+}
+
+
+var INTERFACE = &Interface{}

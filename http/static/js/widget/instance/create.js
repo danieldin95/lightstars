@@ -191,10 +191,10 @@ export class InstanceCreate extends ModalFormBase {
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <select class="" name="interface">
-                                    <option value="virbr0" selected>Virtual Bridge0</option>
-                                    <option value="virbr1">Virtual Bridge1</option>
-                                    <option value="virbr2">Virtual Bridge2</option>
-                                    <option value="virbr3">Virtual Bridge3</option>
+                                    <option value="virbr0" selected>Linux Bridge #virbr0</option>
+                                    <option value="virbr1">Linux Bridge #virbr1</option>
+                                    <option value="virbr2">Linux Bridge #virbr2</option>
+                                    <option value="virbr3">Linux Bridge #virbr3</option>
                                 </select>  
                             </div>
                         </div>
