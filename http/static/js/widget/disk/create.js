@@ -14,7 +14,7 @@ export class DiskCreate extends ModalFormBase {
     render() {
         this.view = $(this.template());
         this.view.find("select[name='slot'] option").remove();
-        for (let i = 1; i < 27; i++) {
+        for (let i = 1; i < 9; i++) {
             this.view.find("select[name='slot']").append(new Option(i, i));
         }
         this.container().html(this.view);
@@ -42,7 +42,7 @@ export class DiskCreate extends ModalFormBase {
                     </div>              
                 </div>
                 <div class="form-group row">
-                    <label for="slot" class="col-sm-4 col-form-label-sm ">Bus slot</label>
+                    <label for="slot" class="col-sm-4 col-form-label-sm ">Slot address</label>
                     <div class="col-sm-6">
                         <div class="input-group">
                             <select class="select-lg" name="slot">

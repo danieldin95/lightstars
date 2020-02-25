@@ -21,7 +21,7 @@ export class InterfaceApi extends Api {
         let your = this;
 
         $.post(your.url(this.instance), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`start interface '${data}' success`));
+            $(your.tasks).append(AlertSuccess(`start interface ${data.message}`));
         }).fail(function (e) {
             $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
         });
@@ -32,7 +32,7 @@ export class InterfaceApi extends Api {
 
         this.uuids.forEach(function (uuid, index, err) {
             $.delete(your.url(your.instance, uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove interface '${uuid}' success`));
+                $(your.tasks).append(AlertSuccess(`remove interface '${uuid}' ${data.message}`));
             }).fail(function (e) {
                 $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });
@@ -43,7 +43,7 @@ export class InterfaceApi extends Api {
         let your = this;
 
         $.post(your.url(your.instance, your.uuids[0]), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`edit interface '${data.name}' success`));
+            $(your.tasks).append(AlertSuccess(`edit interface '${data.name}' ${data.message}`));
         }).fail(function (e) {
             $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
         });

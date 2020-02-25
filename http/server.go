@@ -863,25 +863,30 @@ func (h *Server) DelDisk(w http.ResponseWriter, r *http.Request) {
 	defer dom.Free()
 
 	dev, _ := h.GetArg(r, "dev")
-	if xml := libvirtc.NewDomainXMLFromDom(dom, true); xml != nil {
-		if xml.Devices.Disks != nil {
-			for _, disk := range xml.Devices.Disks {
-				if disk.Target.Dev != dev {
-					continue
-				}
-				flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
-				if err := dom.DetachDeviceFlags(disk.Encode(), flags); err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
-				}
-				file := disk.Source.File
-				if strings.HasPrefix(file, storage.Location) &&
-					(strings.HasSuffix(file, ".img") || strings.HasSuffix(file, ".qcow2")) {
-					dir := path.Dir(file)
-					volume := path.Base(file)
-					pool := path.Base(dir)
-					libvirts.RemoveVolume(libvirts.ToDomainPool(pool), volume)
-				}
+	xml := libvirtc.NewDomainXMLFromDom(dom, true)
+	if xml == nil {
+		http.Error(w, "Cann't get domain's descXML", http.StatusInternalServerError)
+		return
+	}
+
+	if xml.Devices.Disks != nil {
+		for _, disk := range xml.Devices.Disks {
+			if disk.Target.Dev != dev {
+				continue
+			}
+			// found deivice
+			flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+			if err := dom.DetachDeviceFlags(disk.Encode(), flags); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			file := disk.Source.File
+			if strings.HasPrefix(file, storage.Location) &&
+				(strings.HasSuffix(file, ".img") || strings.HasSuffix(file, ".qcow2")) {
+				dir := path.Dir(file)
+				volume := path.Base(file)
+				pool := path.Base(dir)
+				libvirts.RemoveVolume(libvirts.ToDomainPool(pool), volume)
 			}
 		}
 	}
@@ -950,17 +955,23 @@ func (h *Server) DelInterface(w http.ResponseWriter, r *http.Request) {
 	defer dom.Free()
 
 	dev, _ := h.GetArg(r, "dev")
-	if xml := libvirtc.NewDomainXMLFromDom(dom, true); xml != nil {
-		if xml.Devices.Interfaces != nil {
-			for _, int := range xml.Devices.Interfaces {
-				if int.Target.Dev != dev {
-					continue
-				}
-				flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
-				if err := dom.DetachDeviceFlags(int.Encode(), flags); err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
-				}
+	xml := libvirtc.NewDomainXMLFromDom(dom, true)
+	if xml == nil {
+		http.Error(w, "Cann't get domain's descXML", http.StatusInternalServerError)
+		return
+	}
+
+	if xml.Devices.Interfaces != nil {
+		for _, int := range xml.Devices.Interfaces {
+			if int.Target.Dev != dev {
+				continue
+			}
+
+			// found deivice
+			flags := libvirtc.DOMAIN_DEVICE_MODIFY_SAVE
+			if err := dom.DetachDeviceFlags(int.Encode(), flags); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 		}
 	}
