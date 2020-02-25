@@ -5,9 +5,7 @@ import (
 	"net/http"
 )
 
-
 type Bridger struct {
-
 }
 
 func (br Bridger) Router(router *mux.Router) {

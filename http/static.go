@@ -10,7 +10,6 @@ import (
 )
 
 type Static struct {
-
 }
 
 func (s Static) Router(router *mux.Router) {

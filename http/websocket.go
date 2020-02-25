@@ -13,7 +13,6 @@ import (
 )
 
 type WebSocket struct {
-
 }
 
 func (w WebSocket) Router(router *mux.Router) {
@@ -84,4 +83,3 @@ func (w WebSocket) Sockify(ws *websocket.Conn) {
 	}()
 	wait.Wait()
 }
-

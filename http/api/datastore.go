@@ -7,7 +7,6 @@ import (
 )
 
 type DataStore struct {
-
 }
 
 func (store DataStore) Router(router *mux.Router) {

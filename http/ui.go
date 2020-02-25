@@ -11,7 +11,6 @@ import (
 )
 
 type UI struct {
-
 }
 
 func (ui UI) Router(router *mux.Router) {
@@ -38,7 +37,6 @@ func (ui UI) Instance(w http.ResponseWriter, r *http.Request) {
 		libstar.Error("UI.Instance %s", err)
 	}
 }
-
 
 func (ui UI) Index(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/ui", http.StatusTemporaryRedirect)
@@ -100,5 +98,3 @@ func (ui UI) Hi(w http.ResponseWriter, r *http.Request) {
 	libstar.Info("UI.Hi id: %s, body: %s", id, body)
 	api.ResponseJson(w, nil)
 }
-
-

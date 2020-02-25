@@ -11,7 +11,6 @@ import (
 )
 
 type Instance struct {
-
 }
 
 func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
