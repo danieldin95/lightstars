@@ -149,6 +149,13 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 		Model: libvirtc.InterfaceModelXML{
 			Type: "virtio",
 		},
+		Address: &libvirtc.AddressXML{
+			Type:     "pci",
+			Domain:   libvirtc.PCI_DOMAIN,
+			Bus:      libvirtc.PCI_INTERFACE_BUS,
+			Slot:     "0x01",
+			Function: libvirtc.PCI_FUNC,
+		},
 	}
 	return dom, nil
 }
