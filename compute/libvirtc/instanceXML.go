@@ -6,16 +6,17 @@ import (
 )
 
 type DomainXML struct {
-	XMLName xml.Name   `xml:"domain" json:"-"`
-	Id      string     `xml:"id,attr" json:"id"`
-	Type    string     `xml:"type,attr" json:"type"` // kvm
-	Name    string     `xml:"name" json:"name"`
-	UUID    string     `xml:"uuid" json:"uuid"`
-	OS      OSXML      `xml:"os" json:"os"`
-	CPUXml  CPUXML     `xml:"vcpu" json:"cpu"`
-	Memory  MemXML     `xml:"memory" json:"memory"`
-	CurMem  CurMemXML  `xml:"currentMemory" json:"currentMemory"`
-	Devices DevicesXML `xml:"devices" json:"devices"`
+	XMLName  xml.Name    `xml:"domain" json:"-"`
+	Id       string      `xml:"id,attr" json:"id"`
+	Type     string      `xml:"type,attr" json:"type"` // kvm
+	Name     string      `xml:"name" json:"name"`
+	UUID     string      `xml:"uuid" json:"uuid"`
+	OS       OSXML       `xml:"os" json:"os"`
+	CPUXml   CPUXML      `xml:"vcpu" json:"cpu"`
+	Memory   MemXML      `xml:"memory" json:"memory"`
+	CurMem   CurMemXML   `xml:"currentMemory" json:"currentMemory"`
+	Devices  DevicesXML  `xml:"devices" json:"devices"`
+	Features FeaturesXML `xml:"features" json:"features"`
 }
 
 func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
@@ -79,6 +80,36 @@ func (cpu *CPUXML) Decode(xmlData string) error {
 	return nil
 }
 
+type FeaturesXML struct {
+	XMLName xml.Name `xml:"features" json:"-"`
+	Acpi    *AcpiXML `xml:"acpi,omitempty" json:"acpi,omitempty"`
+	Apic    *ApicXML `xml:"apic,omitempty" json:"apic,omitempty"`
+	Pae     *PaeXML  `xml:"pae,omitempty" json:"pae,omitempty"`
+}
+
+func (feat *FeaturesXML) Decode(xmlData string) error {
+	if err := xml.Unmarshal([]byte(xmlData), feat); err != nil {
+		libstar.Error("FeaturesXML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+type AcpiXML struct {
+	XMLName xml.Name `xml:"acpi" json:"-"`
+	Value   string   `xml:",chardata" json:"value"`
+}
+
+type ApicXML struct {
+	XMLName xml.Name `xml:"apic" json:"-"`
+	Value   string   `xml:",chardata" json:"value"`
+}
+
+type PaeXML struct {
+	XMLName xml.Name `xml:"pae" json:"-"`
+	Value   string   `xml:",chardata" json:"value"`
+}
+
 type MemXML struct {
 	XMLName xml.Name `xml:"memory" json:"-"`
 	Type    string   `xml:"unit,attr" json:"unit"`
@@ -139,6 +170,7 @@ type DevicesXML struct {
 	Disks       []DiskXML       `xml:"disk" json:"disk"`
 	Interfaces  []InterfaceXML  `xml:"interface" json:"interface"`
 	Controllers []ControllerXML `xml:"controller" json:"controller"`
+	Inputs      []InputXML      `xml:"input" json:"input"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -293,4 +325,10 @@ type InterfaceTargetXML struct {
 type InterfaceVirtualPortXML struct {
 	XMLName xml.Name `xml:"virtualport" json:"-"`
 	Type    string   `xml:"type,attr,omitempty" json:"type,omitempty"` //openvswitch
+}
+
+type InputXML struct {
+	XMLName xml.Name `xml:"input" json:"-"`
+	Type    string   `xml:"type,attr" json:"type"`
+	Bus     string   `xml:"bus,attr" json:"bus"`
 }

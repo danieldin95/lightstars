@@ -38,6 +38,8 @@
 		  <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/> 
 		</interface>
 		<input type='mouse' bus='ps2'/>
+		<input type='tablet' bus='virtio'/>
+
 		<graphics type='vnc' port='-1' autoport='yes' listen = '0.0.0.0' keymap='en-us'/>
 	   </devices>
 </domain>

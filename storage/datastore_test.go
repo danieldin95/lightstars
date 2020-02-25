@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -13,4 +14,7 @@ func TestFmtPath(t *testing.T) {
 	assert.Equal(t, "/lightstar/datastore/01", PATH.Unix("datastore@01"), "")
 	assert.Equal(t, "/lightstar/datastore/01/xx", PATH.Unix("datastore@01:/xx"), "")
 	assert.Equal(t, "/lightstar/datastore/01/xx/bb", PATH.Unix("datastore@01:/xx/bb"), "")
+
+	fmt.Println(PATH.Fmt("/lightstar/datastore/01/cn_windows_7_ultimate_with_sp1_x64_dvd_u_677408.iso"))
+	fmt.Println(PATH.Unix("datastore@01:/cn_windows_7_ultimate_with_sp1_x64_dvd_u_677408.iso"))
 }

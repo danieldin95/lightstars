@@ -14,7 +14,7 @@ import (
 type Instance struct {
 }
 
-func NewCDROMXML(file string) libvirtc.DiskXML{
+func NewCDROMXML(file string) libvirtc.DiskXML {
 	return libvirtc.DiskXML{
 		Type:   "block",
 		Device: "cdrom",
@@ -84,6 +84,7 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 			Graphics:    make([]libvirtc.GraphicsXML, 1),
 			Interfaces:  make([]libvirtc.InterfaceXML, 1),
 			Controllers: make([]libvirtc.ControllerXML, 4),
+			Inputs:      make([]libvirtc.InputXML, 1), // <input type="tablet" bus="usb"/>
 		},
 		OS: libvirtc.OSXML{
 			Type: libvirtc.OSTypeXML{
@@ -112,6 +113,12 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 				Dev: v,
 			}
 		}
+	}
+	// features
+	dom.Features = libvirtc.FeaturesXML{
+		Apic: &libvirtc.ApicXML{},
+		Acpi: &libvirtc.AcpiXML{},
+		Pae:  &libvirtc.PaeXML{},
 	}
 	// cpu and memory
 	dom.CPUXml = libvirtc.CPUXML{
@@ -149,7 +156,7 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 	if strings.HasPrefix(conf.IsoFile, "/dev") {
 		dom.Devices.Disks[0] = NewCDROMXML(conf.IsoFile)
 	} else {
-		dom.Devices.Disks[0] = NewISOXML(conf.IsoFile)
+		dom.Devices.Disks[0] = NewISOXML(storage.PATH.Unix(conf.IsoFile))
 	}
 	dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path)
 	// interfaces
@@ -168,6 +175,11 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 			Slot:     "0x01",
 			Function: libvirtc.PCI_FUNC,
 		},
+	}
+	// inputs
+	dom.Devices.Inputs[0] = libvirtc.InputXML{
+		Type: "tablet",
+		Bus:  "usb",
 	}
 	return dom, nil
 }

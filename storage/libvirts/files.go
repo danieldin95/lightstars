@@ -47,6 +47,7 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 		return images
 	}
 	defer pool.Free()
+	pool.Refresh(0)
 	if vols, err := pool.ListAllStorageVolumes(0); err == nil {
 		for _, vol := range vols {
 			file, err := vol.GetPath()

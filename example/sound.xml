@@ -1,0 +1,15 @@
+
+<--! /usr/libexec/qemu-kvm -soundhw --help
+    ac97        Intel 82801AA AC97 Audio
+    hda         Intel HD Audio
+    pcspk       PC speaker
+-->
+
+<sound model='ac97'>
+    <alias name='sound0'/>
+    <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+</sound>
+
+<sound model='ich6'>
+    <codec type='micro'/>
+</sound>

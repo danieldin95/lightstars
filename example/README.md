@@ -53,4 +53,14 @@ The following that start a new CentOS7 instance.
     virsh create panabit.xml
     virsh list --all
     virsh vncdisplay panabit-01
+    
+    
+## Sound 
+
+    [root@249openstack ~]# cat /etc/libvirt/qemu.conf  | grep host_audio
+    vnc_allow_host_audio = 0
+    #nographics_allow_host_audio = 1
+    [root@249openstack ~]# 
+    
+        
 
