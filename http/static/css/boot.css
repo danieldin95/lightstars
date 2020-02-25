@@ -22,6 +22,12 @@
     border-color: #1d2124;
 }
 
+.table th, .table td {
+    max-width: 20rem;
+    overflow: hidden;
+    white-space: unset;
+}
+
 .btn-sm {
     font-size: inherit;
 }
