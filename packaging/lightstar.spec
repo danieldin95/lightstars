@@ -6,7 +6,7 @@ Group: Applications/Communications
 License: GPL 3.0
 URL: https://github.com/danieldin95/lightstar
 BuildRequires: go
-Requires: libvirt-daemon
+Requires: libvirt-daemon libvirt qemu-kvm qemu-img
 
 %define _source_dir ${RPM_SOURCE_DIR}/lightstar-%{version}
 
