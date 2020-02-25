@@ -8,6 +8,7 @@
 			<boot dev='hd'/>
 			<boot dev='cdrom'/>
 			<boot dev='network'/>
+			<bootmenu enable='yes'/>
 	   </os>
 	   <features>
 		 <acpi/>

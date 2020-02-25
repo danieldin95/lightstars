@@ -92,6 +92,9 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 				Value: "hvm",
 			},
 			Boot: make([]libvirtc.OSBootXML, 3),
+			BootMenu: libvirtc.OSBootMenuXML{
+				Enable: "yes",
+			},
 		},
 	}
 	if dom.OS.Type.Arch == "" {

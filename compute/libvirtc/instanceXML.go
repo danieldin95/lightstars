@@ -139,9 +139,10 @@ func (cmem *CurMemXML) Decode(xmlData string) error {
 }
 
 type OSXML struct {
-	XMLName xml.Name    `xml:"os" json:"-"`
-	Type    OSTypeXML   `xml:"type" json:"type"`
-	Boot    []OSBootXML `xml:"boot" json:"boot"`
+	XMLName  xml.Name      `xml:"os" json:"-"`
+	Type     OSTypeXML     `xml:"type" json:"type"`
+	Boot     []OSBootXML   `xml:"boot" json:"boot"` //<bootmenu enable='yes'/>
+	BootMenu OSBootMenuXML `xml:"bootmenu" json:"bootmenu"`
 }
 
 func (osx *OSXML) Decode(xmlData string) error {
@@ -162,6 +163,11 @@ type OSTypeXML struct {
 type OSBootXML struct {
 	XMLName xml.Name `xml:"boot" json:"-"`
 	Dev     string   `xml:"dev,attr" json:"dev"` // hd, cdrom, network
+}
+
+type OSBootMenuXML struct {
+	XMLName xml.Name `xml:"bootmenu" json:"-"`
+	Enable  string   `xml:"enable,attr" json:"enable"` // yes
 }
 
 type DevicesXML struct {

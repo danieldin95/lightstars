@@ -32,6 +32,7 @@ mkdir -p %{buildroot}/var/lightstar
 cp -R %_source_dir/resource/ca %{buildroot}/var/lightstar
 cp -R %_source_dir/http/static %{buildroot}/var/lightstar
 
+mkdir -p %{buildroot}/lightstar/datastore/01
 
 %pre
 firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {

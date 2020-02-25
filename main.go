@@ -29,6 +29,7 @@ func main() {
 	listen := "0.0.0.0:10080"
 	hypervisor := "qemu:///system"
 	verbose := 2
+	logFile := "/var/log/lightstar.log"
 
 	flag.StringVar(&listen, "listen", listen, "the address http listen.")
 	flag.IntVar(&verbose, "log:level", verbose, "logger level")
@@ -38,7 +39,7 @@ func main() {
 	flag.StringVar(&authFile, "auth:file", authFile, "the file saved administrator auth")
 	flag.Parse()
 
-	libstar.Init("lightstar.log", verbose)
+	libstar.Init(logFile, verbose)
 
 	libvirtc.SetHyper(hypervisor)
 	h := http.NewServer(listen, staticDir, authFile)
