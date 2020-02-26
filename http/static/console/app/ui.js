@@ -93,7 +93,7 @@ const UI = {
 
         document.documentElement.classList.remove("noVNC_loading");
 
-        let autoconnect = WebUtil.getConfigVar('autoconnect', false);
+        let autoconnect = WebUtil.getConfigVar('autoconnect', true);
         if (autoconnect === 'true' || autoconnect == '1') {
             autoconnect = true;
             UI.connect();
@@ -153,7 +153,7 @@ const UI = {
         UI.initSetting('show_dot', false);
         UI.initSetting('path', 'websockify');
         UI.initSetting('repeaterID', '');
-        UI.initSetting('reconnect', false);
+        UI.initSetting('reconnect', true);
         UI.initSetting('reconnect_delay', 5000);
 
         UI.setupSettingLabels();
@@ -1005,7 +1005,8 @@ const UI = {
         if (port) {
             url += ':' + port;
         }
-        url += '/' + path;
+        // url += '/' + path;
+        url += '/' + path + window.location.search;
 
         UI.rfb = new RFB(document.getElementById('noVNC_container'), url,
                          { shared: UI.getSetting('shared'),
@@ -1645,7 +1646,7 @@ l10n.setup(LINGUAS);
 if (l10n.language === "en" || l10n.dictionary !== undefined) {
     UI.prime();
 } else {
-    WebUtil.fetchJSON('app/locale/' + l10n.language + '.json')
+    WebUtil.fetchJSON('/static/console/app/locale/' + l10n.language + '.json')
         .then((translations) => { l10n.dictionary = translations; })
         .catch(err => Log.Error("Failed to load translations: " + err))
         .then(UI.prime);
