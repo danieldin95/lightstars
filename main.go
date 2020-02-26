@@ -6,6 +6,7 @@ import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/storage/libvirts"
 	"os"
 	"os/signal"
 	"syscall"
@@ -45,6 +46,9 @@ func main() {
 	h := http.NewServer(listen, staticDir, authFile)
 	h.SetCert(crtDir+"/private.key", crtDir+"/crt.pem")
 
+	// initialize storage
+	libvirts.DATASTOR.Init()
+	
 	go h.Start()
 
 	Wait()

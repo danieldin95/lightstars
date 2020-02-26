@@ -280,7 +280,7 @@ type DiskDriverXML struct {
 type DiskSourceXML struct {
 	XMLName xml.Name `xml:"source" json:"-"`
 	File    string   `xml:"file,attr,omitempty" json:"file,omitempty"`
-	Device  string   `xml:"device,attr,omitempty" json:"device,omitempty"`
+	Device  string   `xml:"dev,attr,omitempty" json:"device,omitempty"`
 }
 
 type DiskTargetXML struct {

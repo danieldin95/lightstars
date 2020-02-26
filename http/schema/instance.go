@@ -77,7 +77,11 @@ type Disk struct {
 func NewFromDiskXML(xml libvirtc.DiskXML) (disk Disk) {
 	disk.Device = xml.Target.Dev
 	disk.Bus = xml.Target.Bus
-	disk.Source = storage.PATH.Fmt(xml.Source.File)
+	if xml.Source.File != "" {
+		disk.Source = storage.PATH.Fmt(xml.Source.File)
+	} else if xml.Source.Device != "" {
+		disk.Source = storage.PATH.Fmt(xml.Source.Device)
+	}
 	disk.Format = xml.Driver.Type
 	if xml.Address != nil {
 		disk.AddrType = xml.Address.Type

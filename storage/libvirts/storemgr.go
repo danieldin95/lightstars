@@ -98,6 +98,13 @@ func (store *DataStoreMgr) Open() error {
 	return nil
 }
 
+func (store *DataStoreMgr) Init() {
+	_, err := CreatePool("01", storage.PATH.Unix("datastore@01"))
+	if err != nil {
+		libstar.Error("DataStoreMgr.Init CreatePool %s", err)
+	}
+}
+
 func (store *DataStoreMgr) List() []DataStore {
 	stores := make([]DataStore, 0, 32)
 
@@ -111,20 +118,22 @@ func (store *DataStoreMgr) List() []DataStore {
 			if err != nil {
 				continue
 			}
-			if !IsDomainPool(name) {
-				info, err := pool.GetInfo()
-				if err == nil {
-					path := storage.DataStore + name
-					stores = append(stores,
-						DataStore{
-							Name:       path,
-							Path:       path,
-							State:      int(info.State),
-							Capacity:   info.Capacity,
-							Allocation: info.Allocation,
-							Available:  info.Available,
-						})
-				}
+			if IsDomainPool(name) {
+				pool.Free()
+				continue
+			}
+
+			info, err := pool.GetInfo()
+			if err == nil {
+				path := storage.DataStore + name
+				stores = append(stores, DataStore{
+					Name:       path,
+					Path:       path,
+					State:      int(info.State),
+					Capacity:   info.Capacity,
+					Allocation: info.Allocation,
+					Available:  info.Available,
+				})
 			}
 			pool.Free()
 		}
