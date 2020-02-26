@@ -58,6 +58,27 @@ export class InstanceCreate extends ModalFormBase {
             },
         };
 
+        let iface = {
+            fresh: function (){
+                let selector = this.selector;
+
+                $.getJSON("/api/bridge", function (data) {
+                    // selector.find("option").remove();
+                    data.forEach(function (e, i) {
+                        if (e['type'] == 'bridge') {
+                            selector.append(Option(`Linux Bridge #${e['name']}`, e['name']));
+                        } else if (e['type'] == 'openvswith') {
+                            selector.append(Option(`Open vSwitch #${e['name']}`, e['name']));
+                        }
+                    });
+                }).fail(function (e) {
+                    $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                });
+            },
+            selector: this.view.find("select[name='interface']"),
+        };
+
+        iface.fresh();
         store.refresh();
         store.selector.on("change", this, function (e) {
             iso.fresh($(this).val());

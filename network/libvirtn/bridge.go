@@ -7,13 +7,13 @@ import (
 )
 
 type Bridge struct {
-	Name       string `json:"name"`
-	Type      string    `json:"type"` // bridge, ovs etc.
+	Name string `json:"name"`
+	Type string `json:"type"` // bridge, ovs etc.
 }
 
 type BridgeMgr struct {
 	Conn    *libvirt.Connect `json:"-"`
-	Bridges []Bridge      `json:"bridge"`
+	Bridges []Bridge         `json:"bridge"`
 }
 
 func (br *BridgeMgr) Open() error {
@@ -55,4 +55,3 @@ func (br *BridgeMgr) List() []Bridge {
 var BRIDGE = BridgeMgr{
 	Bridges: make([]Bridge, 0, 32),
 }
-

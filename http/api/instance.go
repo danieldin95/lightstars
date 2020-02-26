@@ -133,7 +133,7 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 		Pae:  &libvirtc.PaeXML{},
 	}
 	// cpu and memory
-	dom.CPUXml = libvirtc.CPUXML{
+	dom.VCPUXml = libvirtc.VCPUXML{
 		Placement: "static",
 		Value:     conf.Cpu,
 	}

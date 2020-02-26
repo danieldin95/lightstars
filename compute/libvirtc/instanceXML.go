@@ -12,11 +12,19 @@ type DomainXML struct {
 	Name     string      `xml:"name" json:"name"`
 	UUID     string      `xml:"uuid" json:"uuid"`
 	OS       OSXML       `xml:"os" json:"os"`
-	CPUXml   CPUXML      `xml:"vcpu" json:"cpu"`
+	CPUXml   CPUXML      `xml:"cpu" json:"cpu"`
+	VCPUXml  VCPUXML     `xml:"vcpu" json:"cpu"`
 	Memory   MemXML      `xml:"memory" json:"memory"`
 	CurMem   CurMemXML   `xml:"currentMemory" json:"currentMemory"`
 	Devices  DevicesXML  `xml:"devices" json:"devices"`
 	Features FeaturesXML `xml:"features" json:"features"`
+}
+
+type CPUXML struct {
+	XMLName xml.Name `xml:"cpu" json:"-"`
+	Mode    string   `xml:"mode,attr" json:"mode"`   // host-model, host-passthrough
+	Check   string   `xml:"check,attr" json:"check"` // partial, full
+	Match   string   `xml:"match,attr" json:"match"` // exact
 }
 
 func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
@@ -66,15 +74,15 @@ func (domain *DomainXML) VNCDisplay() (string, string) {
 	return "", ""
 }
 
-type CPUXML struct {
+type VCPUXML struct {
 	XMLName   xml.Name `xml:"vcpu" json:"-"`
 	Placement string   `xml:"placement,attr" json:"placement"` // static
 	Value     string   `xml:",chardata" json:"Value"`
 }
 
-func (cpu *CPUXML) Decode(xmlData string) error {
+func (cpu *VCPUXML) Decode(xmlData string) error {
 	if err := xml.Unmarshal([]byte(xmlData), cpu); err != nil {
-		libstar.Error("CPUXML.Decode %s", err)
+		libstar.Error("VCPUXML.Decode %s", err)
 		return err
 	}
 	return nil

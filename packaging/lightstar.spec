@@ -46,3 +46,4 @@ firewall-cmd --reload || :
 /usr/bin/*
 /usr/lib/systemd/system/*
 /var/lightstar
+/lightstar
