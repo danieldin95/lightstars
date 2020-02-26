@@ -31,16 +31,16 @@
         <div class="card-body">
             <dl class="dl-horizontal">
                 <dt>Version:</dt>
-                <dd>{{ .Version.Version }}</dd>
+                <dd>{{.Version.Version}}</dd>
                 <dt>Built on:</dt>
-                <dd>{{ .Version.Date }}</dd>
+                <dd>{{.Version.Date}}</dd>
                 <dt>Hyper:</dt>
-                <dd>{{ .Hyper.Name }}</dd>
+                <dd>{{.Hyper.Name}}</dd>
                 <dt>CPU:</dt>
-                <dd>{{ .Hyper.CpuNum }} | {{ .Hyper.CpuVendor }}</dd>
+                <dd>{{.Hyper.CpuNum}} | {{.Hyper.CpuVendor}}</dd>
                 <dt>Memory</dt>
                 <dd>
-                    {{ prettyBytes .Hyper.MemTotal }} | {{ prettyBytes .Hyper.MemFree }} | {{ prettyBytes .Hyper.MemCached }}
+                    {{prettyBytes .Hyper.MemTotal}} | {{prettyBytes .Hyper.MemFree}} | {{prettyBytes .Hyper.MemCached}}
                 </dd>
             </dl>
         </div>
@@ -120,22 +120,22 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{ range $index, $_ := .Instances }}
+                    {{range $index, $_ := .Instances}}
                     <tr>
                         <td>
                             <instance-on-one>
-                                <input type="checkbox" aria-label="select {{ .Name }}" data="{{ .UUID }}">
+                                <input type="checkbox" aria-label="select {{.Name}}" data="{{.UUID}}" passwd="{{.Password}}">
                             </instance-on-one>
                         </td>
-                        <td>{{ $index }}</td>
-                        <td><a class="text-decoration-none" href="/ui/instance/{{ .UUID }}">{{ .UUID }}</a></td>
-                        <td>{{ .CpuTime }}ms</td>
-                        <td>{{ .Name }}</td>
-                        <td>{{ .MaxCpu }}</td>
-                        <td>{{ prettyKBytes .MaxMem }}</td>
-                        <td><span class="{{ .State }}">{{ .State }}</span></td>
+                        <td>{{$index}}</td>
+                        <td><a class="text-decoration-none" href="/ui/instance/{{.UUID}}">{{.UUID}}</a></td>
+                        <td>{{.CpuTime}}ms</td>
+                        <td>{{.Name}}</td>
+                        <td>{{.MaxCpu}}</td>
+                        <td>{{prettyKBytes .MaxMem}}</td>
+                        <td><span class="{{.State}}">{{.State}}</span></td>
                     </tr>
-                    {{ end }}
+                    {{end}}
                     </tbody>
                 </table>
             </div>

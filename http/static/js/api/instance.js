@@ -106,8 +106,9 @@ export class InstanceApi extends Api {
     }
 
     console() {
+        let password = this.props.passwd;
         this.uuids.forEach(function (uuid, index, err) {
-            window.open("/ui/console?instance="+uuid);
+            window.open("/ui/console?instance="+uuid+"&password="+password[uuid]);
         });
     }
 

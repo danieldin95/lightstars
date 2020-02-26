@@ -16,18 +16,26 @@ func (s Static) Router(router *mux.Router) {
 	dir := http.Dir(api.GetStatic())
 	staticFile := http.StripPrefix("/static/", http.FileServer(dir))
 	router.PathPrefix("/static/").Handler(staticFile)
+	router.HandleFunc("/favicon.ico", s.Favicon)
 }
 
-func (s Static) HandleFile(w http.ResponseWriter, r *http.Request) {
+func (s Static) Files(w http.ResponseWriter, r *http.Request) {
 	realpath := api.GetFile(r.URL.Path)
 	if _, err := os.Stat(realpath); !os.IsExist(err) {
 		realpath = realpath + ".html"
 	}
-
 	contents, err := ioutil.ReadFile(realpath)
 	if err != nil {
 		fmt.Fprintf(w, "404")
 		return
 	}
 	fmt.Fprintf(w, "%s\n", contents)
+}
+
+func (s Static) Favicon(w http.ResponseWriter, r *http.Request) {
+	realpath := api.GetFile("images/favicon.ico")
+	contents, err := ioutil.ReadFile(realpath)
+	if err == nil {
+		fmt.Fprintf(w, "%s\n", contents)
+	}
 }

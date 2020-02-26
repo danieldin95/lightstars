@@ -10,7 +10,11 @@ export class Instances {
 
         // Register click handle.
         $("instance-console").on("click", this.instances, function (e) {
-            new InstanceApi({uuids: e.data.store}).console();
+            let props = {uuids: e.data.store, passwd: {}};
+            e.data.store.forEach(function (v) {
+                props.passwd[v] = $(`input[data=${v}]`).attr('passwd');
+            });
+            new InstanceApi(props).console();
         });
         $("instance-start, instance-more-start").on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).start();

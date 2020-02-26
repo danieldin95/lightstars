@@ -19,6 +19,7 @@ type Instance struct {
 	Disks       []Disk       `json:"disks,omitempty"`
 	Interfaces  []Interface  `json:"interfaces,omitempty"`
 	Controllers []Controller `json:"controllers,omitempty"`
+	Password    string       `json:"password"`
 }
 
 func NewInstance(dom libvirtc.Domain) Instance {
@@ -48,6 +49,11 @@ func NewInstance(dom libvirtc.Domain) Instance {
 		}
 		for _, x := range xmlObj.Devices.Controllers {
 			obj.Controllers = append(obj.Controllers, NewFromControllerXML(x))
+		}
+		for _, x := range xmlObj.Devices.Graphics {
+			if x.Type == "vnc" {
+				obj.Password = x.Password
+			}
 		}
 	}
 	return obj

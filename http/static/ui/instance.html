@@ -17,7 +17,7 @@
     <div class="card-no-border no-bottom">
         <tasks></tasks>
     </div>
-    <instance data="{{ .UUID }}" name="{{ .Name }}">
+    <instance data="{{.UUID}}" name="{{.Name}}">
     <div name="" class="card instance">
         <div class="card-header">
             <div class="card-just-left">
@@ -31,12 +31,12 @@
             <div class="card no-border no-bottom">
                 <div class="card-header-btn">
                     <instance-console>
-                        {{ if eq .State "running" }}
+                        {{if eq .State "running"}}
                         <a type="button" class="btn btn-outline-dark btn-sm"
-                           href="/ui/console?instance={{ .UUID }}">console</a>
-                        {{ else }}
+                           href="/ui/console?instance={{.UUID}}&password={{.Password}}">console</a>
+                        {{else}}
                         <a type="button" class="btn btn-outline-dark btn-sm disabled" href="#">console</a>
-                        {{ end }}
+                        {{end}}
                     </instance-console>
                     <instance-start><button type="button" class="btn btn-outline-dark btn-sm">start</button></instance-start>
                     <instance-refresh>
@@ -69,15 +69,15 @@
                 <div class="card-body">
                     <dl class="dl-horizontal">
                         <dt>UUID:</dt>
-                        <dd>{{ .UUID }}</dd>
+                        <dd>{{.UUID}}</dd>
                         <dt>Arch:</dt>
-                        <dd>{{ .Arch }} | {{ .Type }}</dd>
+                        <dd>{{.Arch}} | {{.Type}}</dd>
                         <dt>CPU:</dt>
-                        <dd>{{ .MaxCpu }} | {{ .CpuTime }}ms</dd>
+                        <dd>{{.MaxCpu}} | {{.CpuTime}}ms</dd>
                         <dt>Memory</dt>
-                        <dd>{{ prettyKBytes .MaxMem }} | {{ prettyKBytes .Memory }}</dd>
+                        <dd>{{prettyKBytes .MaxMem}} | {{prettyKBytes .Memory}}</dd>
                         <dt>State:</dt>
-                        <dd><span class="{{ .State }}">{{ .State }}</span></dd>
+                        <dd><span class="{{.State}}">{{.State}}</span></dd>
                     </dl>
                 </div>
             </div>
@@ -127,27 +127,27 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {{ range $index, $_ := .Disks }}
+                            {{range $index, $_ := .Disks}}
                                 <tr>
                                     <td>
                                         <disk-on-one>
-                                            <input type="checkbox" aria-label="select {{ .Device }}" data="{{ .Device }}">
+                                            <input type="checkbox" aria-label="select {{.Device}}" data="{{.Device}}">
                                         </disk-on-one>
                                     </td>
-                                    <td>{{ $index }}</td>
-                                    <td>{{ .Bus }}</td>
-                                    <td>{{ .Device }}</td>
-                                    <td>{{ .Source }}</td>
+                                    <td>{{$index}}</td>
+                                    <td>{{.Bus}}</td>
+                                    <td>{{.Device}}</td>
+                                    <td>{{.Source}}</td>
                                     <td><span>
-                                        {{ if eq .AddrType "pci" }}
-                                            pci:{{ prettyPCI .AddrDomain .AddrBus .AddrSlot .AddrFunc }}
-                                        {{ else if eq .AddrType "drive"}}
-                                            drv:{{ prettyDrive .AddrCtl .AddrBus .AddrTgt .AddrUnit }}
-                                        {{ end }}</span>
+                                        {{if eq .AddrType "pci"}}
+                                            pci:{{prettyPCI .AddrDomain .AddrBus .AddrSlot .AddrFunc}}
+                                        {{else if eq .AddrType "drive"}}
+                                            drv:{{prettyDrive .AddrCtl .AddrBus .AddrTgt .AddrUnit}}
+                                        {{end}}</span>
                                     </td>
-                                    <td>{{ .Format }}</td>
+                                    <td>{{.Format}}</td>
                                 </tr>
-                            {{ end }}
+                            {{end}}
                             </tbody>
                         </table>
                     </div>
@@ -198,25 +198,25 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {{ range $index, $_ := .Interfaces }}
+                            {{range $index, $_ := .Interfaces}}
                             <tr>
                                 <td>
                                     <interface-on-one>
-                                        <input type="checkbox" aria-label="select {{ .Device }}:{{ .Address }}" data="{{ .Address }}">
+                                        <input type="checkbox" aria-label="select {{.Device}}:{{.Address}}" data="{{.Address}}">
                                     </interface-on-one>
                                 </td>
-                                <td>{{ $index }}</td>
-                                <td>{{ .Model }}</td>
-                                <td>{{ .Device }}</td>
-                                <td>{{ .Address }}</td>
+                                <td>{{$index}}</td>
+                                <td>{{.Model}}</td>
+                                <td>{{.Device}}</td>
+                                <td>{{.Address}}</td>
                                 <td><span>
-                                {{ if eq .AddrType "pci" }}
-                                    pci:{{ prettyPCI .AddrDomain .AddrBus .AddrSlot .AddrFunc }}
-                                {{ end }}</span>
+                                {{if eq .AddrType "pci"}}
+                                    pci:{{prettyPCI .AddrDomain .AddrBus .AddrSlot .AddrFunc}}
+                                {{end}}</span>
                                 </td>
-                                <td>{{ .Source }}</td>
+                                <td>{{.Source}}</td>
                             </tr>
-                            {{ end }}
+                            {{end}}
                             </tbody>
                         </table>
                     </div>

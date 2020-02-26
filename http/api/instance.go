@@ -147,9 +147,11 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 	}
 	// vnc
 	dom.Devices.Graphics[0] = libvirtc.GraphicsXML{
-		Type:   "vnc",
-		Listen: "0.0.0.0",
-		Port:   "-1",
+		Type:     "vnc",
+		Listen:   "0.0.0.0",
+		Port:     "-1",
+		AutoPort: "yes",
+		Password: libstar.GenToken(16),
 	}
 	// controllers
 	dom.Devices.Controllers[0] = libvirtc.ControllerXML{
@@ -236,7 +238,7 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 	defer dom.Free()
 	format := GetQueryOne(r, "format")
 	if format == "xml" {
-		xmlDesc, err := dom.GetXMLDesc(false)
+		xmlDesc, err := dom.GetXMLDesc(true)
 		if err == nil {
 			ResponseXML(w, xmlDesc)
 		} else {
@@ -320,7 +322,7 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 
 	switch conf.Action {
 	case "start":
-		xmlData, err := dom.GetXMLDesc(false)
+		xmlData, err := dom.GetXMLDesc(true)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

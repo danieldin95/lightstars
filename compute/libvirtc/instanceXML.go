@@ -220,11 +220,12 @@ type AddressXML struct {
 }
 
 type GraphicsXML struct {
-	XMLName xml.Name `xml:"graphics" json:"-"`
-	Type    string   `xml:"type,attr" json:"type"` // vnc, spice
-	Port    string   `xml:"port,attr" json:"port"`
-	Listen  string   `xml:"listen,attr" json:"listen"`
-	Passwd  string   `xml:"passwd,attr,omitempty" json:"passwd,omitempty"`
+	XMLName  xml.Name `xml:"graphics" json:"-"`
+	Type     string   `xml:"type,attr" json:"type"` // vnc, spice
+	Port     string   `xml:"port,attr" json:"port"`
+	AutoPort string   `xml:"autoport,attr,omitempty" json:"autoport"`
+	Listen   string   `xml:"listen,attr" json:"listen"`
+	Password string   `xml:"passwd,attr,omitempty" json:"password,omitempty"`
 }
 
 func (graphics *GraphicsXML) Decode(xmlData string) error {
