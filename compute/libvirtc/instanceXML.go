@@ -224,6 +224,7 @@ type GraphicsXML struct {
 	Type    string   `xml:"type,attr" json:"type"` // vnc, spice
 	Port    string   `xml:"port,attr" json:"port"`
 	Listen  string   `xml:"listen,attr" json:"listen"`
+	Passwd  string   `xml:"passwd,attr,omitempty" json:"passwd,omitempty"`
 }
 
 func (graphics *GraphicsXML) Decode(xmlData string) error {

@@ -344,7 +344,7 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if err := dom.Shutdown(); err != nil {
+		if err := dom.ShutdownFlags(libvirtc.DOMAIN_SHUTDOWN_ACPI); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -365,7 +365,7 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	case "destroy":
-		if err := dom.Destroy(); err != nil {
+		if err := dom.DestroyFlags(libvirtc.DOMAIN_DESTROY_GRACEFUL); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
