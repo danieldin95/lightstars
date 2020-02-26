@@ -1,9 +1,7 @@
 package libvirtn
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/libstar"
-	"github.com/libvirt/libvirt-go"
 )
 
 type Bridge struct {
@@ -12,32 +10,18 @@ type Bridge struct {
 }
 
 type BridgeMgr struct {
-	Conn    *libvirt.Connect `json:"-"`
-	Bridges []Bridge         `json:"bridge"`
-}
-
-func (br *BridgeMgr) Open() error {
-	if br.Conn == nil {
-		hyper, err := libvirtc.GetHyper()
-		if err != nil {
-			return err
-		}
-		br.Conn = hyper.Conn
-	}
-	if br.Conn == nil {
-		return libstar.NewErr("Not found libvirt.Connect")
-	}
-	return nil
+	Bridges []Bridge `json:"bridge"`
 }
 
 func (br *BridgeMgr) List() []Bridge {
 	brs := make([]Bridge, 0, 32)
 
-	if err := br.Open(); err != nil {
+	hyper, err := GetHyper()
+	if err != nil {
 		libstar.Warn("IsoMgr.ListFiles %s", err)
 		return brs
 	}
-	if nets, err := br.Conn.ListAllNetworks(0); err == nil {
+	if nets, err := hyper.Conn.ListAllNetworks(0); err == nil {
 		for _, net := range nets {
 			if is, _ := net.IsActive(); !is {
 				net.Free()

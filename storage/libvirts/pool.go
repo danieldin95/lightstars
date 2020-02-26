@@ -1,8 +1,6 @@
 package libvirts
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
 	"strings"
 )
@@ -16,7 +14,6 @@ func IsDomainPool(name string) bool {
 }
 
 type Pool struct {
-	Conn *libvirt.Connect
 	Type string
 	Name string
 	Size uint64
@@ -47,25 +44,12 @@ func RemovePool(name string) error {
 	return pol.Remove()
 }
 
-func (pol *Pool) Open() error {
-	if pol.Conn == nil {
-		hyper, err := libvirtc.GetHyper()
-		if err != nil {
-			return err
-		}
-		pol.Conn = hyper.Conn
-	}
-	if pol.Conn == nil {
-		return libstar.NewErr("Not found libvirt.Connect")
-	}
-	return nil
-}
-
 func (pol *Pool) Create() error {
-	if err := pol.Open(); err != nil {
+	hyper, err := GetHyper()
+	if err != nil {
 		return err
 	}
-	if _, err := pol.Conn.LookupStoragePoolByName(pol.Name); err == nil {
+	if _, err := hyper.Conn.LookupStoragePoolByName(pol.Name); err == nil {
 		return nil
 	}
 	polXml := PoolXML{
@@ -75,7 +59,7 @@ func (pol *Pool) Create() error {
 			Path: pol.Path,
 		},
 	}
-	pool, err := pol.Conn.StoragePoolCreateXML(polXml.Encode(), libvirt.STORAGE_POOL_CREATE_WITH_BUILD)
+	pool, err := hyper.Conn.StoragePoolCreateXML(polXml.Encode(), libvirt.STORAGE_POOL_CREATE_WITH_BUILD)
 	if err != nil {
 		return err
 	}
@@ -84,10 +68,11 @@ func (pol *Pool) Create() error {
 }
 
 func (pol *Pool) Remove() error {
-	if err := pol.Open(); err != nil {
+	hyper, err := GetHyper()
+	if err != nil {
 		return err
 	}
-	if pool, err := pol.Conn.LookupStoragePoolByName(pol.Name); err == nil {
+	if pool, err := hyper.Conn.LookupStoragePoolByName(pol.Name); err == nil {
 		vols, err := pool.ListAllStorageVolumes(0)
 		if err != nil {
 			return err

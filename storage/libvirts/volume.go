@@ -1,14 +1,10 @@
 package libvirts
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/libvirt/libvirt-go"
 	"strconv"
 )
 
 type Volume struct {
-	Conn     *libvirt.Connect
 	Pool     string
 	Name     string
 	Size     uint64
@@ -43,22 +39,9 @@ func RemoveVolume(pool string, name string) error {
 	return vol.Remove()
 }
 
-func (vol *Volume) Open() error {
-	if vol.Conn == nil {
-		hyper, err := libvirtc.GetHyper()
-		if err != nil {
-			return err
-		}
-		vol.Conn = hyper.Conn
-	}
-	if vol.Conn == nil {
-		return libstar.NewErr("Not found libvirt.Connect")
-	}
-	return nil
-}
-
 func (vol *Volume) Create() error {
-	if err := vol.Open(); err != nil {
+	hyper, err := GetHyper()
+	if err != nil {
 		return err
 	}
 	volXml := VolumeXML{
@@ -73,7 +56,7 @@ func (vol *Volume) Create() error {
 			},
 		},
 	}
-	pool, err := vol.Conn.LookupStoragePoolByName(vol.Pool)
+	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
 		return err
 	}
@@ -88,10 +71,11 @@ func (vol *Volume) Create() error {
 }
 
 func (vol *Volume) GetXMLObj() (*VolumeXML, error) {
-	if err := vol.Open(); err != nil {
+	hyper, err := GetHyper()
+	if err != nil {
 		return nil, err
 	}
-	pool, err := vol.Conn.LookupStoragePoolByName(vol.Pool)
+	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
 		return nil, err
 	}
@@ -110,10 +94,11 @@ func (vol *Volume) GetXMLObj() (*VolumeXML, error) {
 }
 
 func (vol *Volume) Remove() error {
-	if err := vol.Open(); err != nil {
+	hyper, err := GetHyper()
+	if err != nil {
 		return err
 	}
-	pool, err := vol.Conn.LookupStoragePoolByName(vol.Pool)
+	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
 		return err
 	}

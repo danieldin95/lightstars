@@ -6,6 +6,7 @@ import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/danieldin95/lightstar/storage/libvirts"
 	"os"
 	"os/signal"
@@ -28,27 +29,29 @@ func main() {
 	crtDir := "ca"
 	authFile := ".auth"
 	listen := "0.0.0.0:10080"
-	hypervisor := "qemu:///system"
+	hyper := "qemu:///system"
 	verbose := 2
 	logFile := "/var/log/lightstar.log"
 
 	flag.StringVar(&listen, "listen", listen, "the address http listen.")
 	flag.IntVar(&verbose, "log:level", verbose, "logger level")
-	flag.StringVar(&hypervisor, "hyper", hypervisor, "hypervisor connecting to.")
+	flag.StringVar(&hyper, "hyper", hyper, "hypervisor connecting to.")
 	flag.StringVar(&crtDir, "crt:dir", crtDir, "he directory X509 certificate file on.")
 	flag.StringVar(&staticDir, "static:dir", staticDir, "the directory to serve files from.")
 	flag.StringVar(&authFile, "auth:file", authFile, "the file saved administrator auth")
 	flag.Parse()
 
 	libstar.Init(logFile, verbose)
+	libvirtc.SetHyper(hyper)
+	libvirts.SetHyper(hyper)
+	libvirtn.SetHyper(hyper)
 
-	libvirtc.SetHyper(hypervisor)
 	h := http.NewServer(listen, staticDir, authFile)
 	h.SetCert(crtDir+"/private.key", crtDir+"/crt.pem")
 
 	// initialize storage
 	libvirts.DATASTOR.Init()
-	
+
 	go h.Start()
 
 	Wait()

@@ -15,33 +15,19 @@ type IsoFile struct {
 }
 
 type IsoMgr struct {
-	Conn  *libvirt.Connect `json:"-"`
-	Files []IsoFile        `json:"files"`
-}
-
-func (iso *IsoMgr) Open() error {
-	if iso.Conn == nil {
-		hyper, err := libvirtc.GetHyper()
-		if err != nil {
-			return err
-		}
-		iso.Conn = hyper.Conn
-	}
-	if iso.Conn == nil {
-		return libstar.NewErr("Not found libvirt.Connect")
-	}
-	return nil
+	Files []IsoFile `json:"files"`
 }
 
 func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 	images := make([]IsoFile, 0, 32)
 
-	if err := iso.Open(); err != nil {
+	hyper, err := GetHyper()
+	if err != nil {
 		libstar.Warn("IsoMgr.ListFiles %s", err)
 		return images
 	}
 
-	pool, err := iso.Conn.LookupStoragePoolByTargetPath(dir)
+	pool, err := hyper.Conn.LookupStoragePoolByTargetPath(dir)
 	if err != nil {
 		libstar.Warn("IsoMgr.ListFiles %s", err)
 		return images
@@ -85,6 +71,12 @@ type DataStoreMgr struct {
 }
 
 func (store *DataStoreMgr) Open() error {
+	if store.Conn != nil {
+		if _, err := store.Conn.GetVersion(); err != nil {
+			store.Conn.Close()
+			store.Conn = nil
+		}
+	}
 	if store.Conn == nil {
 		hyper, err := libvirtc.GetHyper()
 		if err != nil {

@@ -40,6 +40,13 @@ func parseQemuSSH(name string) (address, path string) {
 }
 
 func (h *HyperVisor) Open() error {
+	if hyper.Conn != nil {
+		if _, err := hyper.Conn.GetVersion(); err != nil {
+			libstar.Error("HyperVisor.Open %s", err)
+			hyper.Conn.Close()
+			hyper.Conn = nil
+		}
+	}
 	if hyper.Conn == nil {
 		conn, err := libvirt.NewConnect(hyper.Name)
 		if err != nil {
@@ -52,6 +59,7 @@ func (h *HyperVisor) Open() error {
 	}
 	return nil
 }
+
 func (h *HyperVisor) Init() {
 	if h.Name != "" {
 		h.Schema = strings.SplitN(h.Name, ":", 2)[0]
@@ -175,14 +183,7 @@ var hyper = HyperVisor{
 }
 
 func GetHyper() (*HyperVisor, error) {
-	if hyper.Conn == nil {
-		conn, err := libvirt.NewConnect(hyper.Name)
-		if err != nil {
-			return &hyper, err
-		}
-		hyper.Conn = conn
-	}
-	return &hyper, nil
+	return &hyper, hyper.Open()
 }
 
 func SetHyper(name string) (*HyperVisor, error) {
