@@ -1,7 +1,6 @@
 package libvirts
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/libvirt/libvirt-go"
@@ -66,45 +65,31 @@ type DataStore struct {
 }
 
 type DataStoreMgr struct {
-	Conn    *libvirt.Connect `json:"-"`
-	Storage []DataStore      `json:"storage"`
-}
-
-func (store *DataStoreMgr) Open() error {
-	if store.Conn != nil {
-		if _, err := store.Conn.GetVersion(); err != nil {
-			store.Conn.Close()
-			store.Conn = nil
-		}
-	}
-	if store.Conn == nil {
-		hyper, err := libvirtc.GetHyper()
-		if err != nil {
-			return err
-		}
-		store.Conn = hyper.Conn
-	}
-	if store.Conn == nil {
-		return libstar.NewErr("Not found libvirt.Connect")
-	}
-	return nil
+	Storage []DataStore `json:"storage"`
 }
 
 func (store *DataStoreMgr) Init() {
-	_, err := CreatePool("01", storage.PATH.Unix("datastore@01"))
-	if err != nil {
-		libstar.Error("DataStoreMgr.Init CreatePool %s", err)
-	}
+	AddHyperListener(HyperListener{
+		Opened: func(Conn *libvirt.Connect) error {
+			_, err := CreatePool("01", storage.PATH.Unix("datastore@01"))
+			if err != nil {
+				libstar.Error("DataStoreMgr.Init CreatePool %s", err)
+			}
+			return nil
+		},
+		Closed: nil,
+	})
 }
 
 func (store *DataStoreMgr) List() []DataStore {
 	stores := make([]DataStore, 0, 32)
 
-	if err := store.Open(); err != nil {
+	hyper, err := GetHyper()
+	if err != nil {
 		libstar.Warn("IsoMgr.ListFiles %s", err)
 		return stores
 	}
-	if pools, err := store.Conn.ListAllStoragePools(0); err == nil {
+	if pools, err := hyper.Conn.ListAllStoragePools(0); err == nil {
 		for _, pool := range pools {
 			name, err := pool.GetName()
 			if err != nil {

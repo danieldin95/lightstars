@@ -6,12 +6,18 @@ import (
 	"strings"
 )
 
+type HyperListener struct {
+	Opened func(Conn *libvirt.Connect) error
+	Closed func(Conn *libvirt.Connect) error
+}
+
 type HyperVisor struct {
-	Name    string
-	Schema  string
-	Address string
-	Path    string
-	Conn    *libvirt.Connect
+	Name     string
+	Schema   string
+	Address  string
+	Path     string
+	Conn     *libvirt.Connect
+	Listener []HyperListener
 }
 
 func parseQemuTCP(name string) (address, path string) {
@@ -53,6 +59,11 @@ func (h *HyperVisor) Open() error {
 			return err
 		}
 		hyper.Conn = conn
+		for _, listen := range h.Listener {
+			if listen.Opened != nil {
+				listen.Opened(h.Conn)
+			}
+		}
 	}
 	if hyper.Conn == nil {
 		return libstar.NewErr("Not connect.")
@@ -60,21 +71,25 @@ func (h *HyperVisor) Open() error {
 	return nil
 }
 
-func (h *HyperVisor) Init() {
-	if h.Name != "" {
-		h.Schema = strings.SplitN(h.Name, ":", 2)[0]
-		switch h.Schema {
-		case "qemu+ssh":
-			h.Address, h.Path = parseQemuSSH(h.Name)
-		case "qemu+tcp", "qemu+tls":
-			h.Address, h.Path = parseQemuTCP(h.Name)
-		default:
-			h.Address = "localhost"
-			h.Path = "system"
-		}
-		if strings.Contains(h.Address, ":") {
-			h.Address = strings.SplitN(h.Address, ":", 2)[0]
-		}
+func (h *HyperVisor) AddListener(listen HyperListener) {
+	h.Listener = append(h.Listener, listen)
+}
+
+func (h *HyperVisor) SetName(name string) {
+	hyper.Name = name
+
+	h.Schema = strings.SplitN(h.Name, ":", 2)[0]
+	switch h.Schema {
+	case "qemu+ssh":
+		h.Address, h.Path = parseQemuSSH(h.Name)
+	case "qemu+tcp", "qemu+tls":
+		h.Address, h.Path = parseQemuTCP(h.Name)
+	default:
+		h.Address = "localhost"
+		h.Path = "system"
+	}
+	if strings.Contains(h.Address, ":") {
+		h.Address = strings.SplitN(h.Address, ":", 2)[0]
 	}
 }
 
@@ -177,9 +192,20 @@ func (h *HyperVisor) DomainDefineXML(xmlConfig string) (*Domain, error) {
 	return &Domain{*domain}, nil
 }
 
+func (h *HyperVisor) Close() {
+	if h.Conn == nil {
+		return
+	}
+	for _, listen := range h.Listener {
+		if listen.Closed != nil {
+			listen.Closed(h.Conn)
+		}
+	}
+	h.Conn = nil
+}
+
 var hyper = HyperVisor{
-	Name:    "qemu:///system",
-	Address: "localhost",
+	Listener: make([]HyperListener, 0, 32),
 }
 
 func GetHyper() (*HyperVisor, error) {
@@ -190,23 +216,9 @@ func SetHyper(name string) (*HyperVisor, error) {
 	if name == hyper.Name {
 		return &hyper, nil
 	}
-	hyper.Name = name
-	hyper.Init()
-
-	conn, err := libvirt.NewConnect(hyper.Name)
-	if err != nil {
-		return &hyper, err
-	}
-	hyper.Conn = conn
-	return &hyper, nil
-}
-
-func CloseHyper(name string) {
-	hyper.Conn.Close()
-}
-
-func init() {
-	hyper.Init()
+	hyper.Close()
+	hyper.SetName(name)
+	return &hyper, hyper.Open()
 }
 
 func LookupDomainByUUIDString(uuid string) (*Domain, error) {
@@ -231,4 +243,12 @@ func LookupDomainByUUIDName(uuid string) (*Domain, error) {
 		return nil, err
 	}
 	return dom, nil
+}
+
+func AddHyperListener(listen HyperListener) {
+	hyper.AddListener(listen)
+}
+
+func init() {
+	hyper.SetName("qemu:///system")
 }

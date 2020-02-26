@@ -42,15 +42,15 @@ func main() {
 	flag.Parse()
 
 	libstar.Init(logFile, verbose)
+	// initialize storage
+	libvirts.DATASTOR.Init()
+
 	libvirtc.SetHyper(hyper)
 	libvirts.SetHyper(hyper)
 	libvirtn.SetHyper(hyper)
 
 	h := http.NewServer(listen, staticDir, authFile)
 	h.SetCert(crtDir+"/private.key", crtDir+"/crt.pem")
-
-	// initialize storage
-	libvirts.DATASTOR.Init()
 
 	go h.Start()
 
