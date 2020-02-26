@@ -128,7 +128,7 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	libstar.Print("Server.IsAuth %s:%s", user, pass)
 	if !ok || pass != h.adminToken || user != "admin" {
 		w.Header().Set("WWW-Authenticate", "Basic")
-		http.Error(w, "Authorization Required.", http.StatusUnauthorized)
+		http.Error(w, "", http.StatusUnauthorized)
 		return false
 	}
 	return true

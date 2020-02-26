@@ -5,17 +5,38 @@
 
 .card {
     margin: 15px 10px;
-    border-color: #6c757d;
+    border-color: #0b3255;
+    border-radius: 0;
+}
+
+.card-header:first-child {
+    border-radius: 0;
 }
 
 .card-header {
     padding: .25rem 1.25rem;
-    background-color: #ced4da;
-    border-color: #6c757d;
+    background-color: #13508d;
+    color: white;
+    /*border-color: #0b3255;*/
+    /*background-color: inherit;*/
+    border-radius: 0;
+    border-bottom: 1px solid #0b3255;
+    /*color: inherit;*/
+    margin-bottom: -1px;
+}
+
+.card-header a {
+    padding: .25rem;
 }
 
 .card-header .btn-sm {
     padding-left: 0;
+}
+
+.card-body {
+    /*border-radius: .25rem .25rem;*/
+    /*border: 1px solid #0b3255;*/
+    /*border-top: none;*/
 }
 
 .dropdown-menu {
@@ -30,6 +51,19 @@
 
 .btn-sm {
     font-size: inherit;
+}
+
+.btn-link:focus, .btn-link.focus {
+    text-decoration: underline;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.btn-link:hover {
+    color: inherit;
+    text-decoration: underline;
+    background-color: transparent;
+    border-color: transparent;
 }
 
 .form-control-sm {
