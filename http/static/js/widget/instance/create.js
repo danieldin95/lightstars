@@ -23,36 +23,44 @@ export class InstanceCreate extends ModalFormBase {
     }
 
     fetch() {
-        let iso_sel = this.view.find("select[name='isoFile']");
-        let iso_refresh = function(datastore) {
-            $.getJSON("/api/iso", {datastore: datastore}, function (data) {
-                iso_sel.find("option").remove();
-                data.forEach(function (ele, index) {
-                    iso_sel.append(Option(ele['path'], ele['path']));
-                })
-            }).fail(function (e) {
-                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
-            });
-        };
+        let iso = {
+            selector: this.view.find("select[name='isoFile']"),
+            fresh: function (datastore) {
+                let selector = this.selector;
 
-        let store_sel = this.view.find("select[name='datastore']");
-        let store_refresh = function () {
-            $.getJSON("/api/datastore", function (data) {
-                store_sel.find("option").remove();
-                data.forEach(function (ele, index) {
-                    store_sel.append(Option(ele['name'], ele['path']));
+                $.getJSON("/api/iso", {datastore: datastore}, function (data) {
+                    selector.find("option").remove();
+                    data.forEach(function (ele, index) {
+                        selector.append(Option(ele['path'], ele['path']));
+                    });
+                }).fail(function (e) {
+                    $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
                 });
-                if (data.length > 0) {
-                    iso_refresh(data[0]['name']);
-                }
-            }).fail(function (e) {
-                $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
-            });
+            },
         };
 
-        store_refresh();
-        store_sel.on("change", this, function (e) {
-            iso_refresh($(this).val());
+        let store = {
+            selector: this.view.find("select[name='datastore']"),
+            refresh: function () {
+                let selector = this.selector;
+
+                $.getJSON("/api/datastore", function (data) {
+                    selector.find("option").remove();
+                    data.forEach(function (ele, index) {
+                        selector.append(Option(ele['name'], ele['path']));
+                    });
+                    if (data.length > 0) {
+                        iso.fresh(data[0]['name']);
+                    }
+                }).fail(function (e) {
+                    $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                });
+            },
+        };
+
+        store.refresh();
+        store.selector.on("change", this, function (e) {
+            iso.fresh($(this).val());
         });
     }
 

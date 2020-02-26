@@ -53,6 +53,11 @@
     font-size: inherit;
 }
 
+.btn-group > .btn, .btn-group-vertical > .btn {
+    font-size: inherit;
+}
+
+
 .btn-link:focus, .btn-link.focus {
     text-decoration: underline;
     border-color: transparent;

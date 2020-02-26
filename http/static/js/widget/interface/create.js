@@ -1,5 +1,6 @@
 import {ModalFormBase} from "../form/modal.js";
 import {Option} from "../option.js";
+import {AlertDanger} from "../../com/alert.js";
 
 
 export class InterfaceCreate extends ModalFormBase {
@@ -13,11 +14,39 @@ export class InterfaceCreate extends ModalFormBase {
 
     render() {
         this.view = $(this.template());
-        this.view.find("select[name='slot'] option").remove();
-        for (let i = 1; i < 17; i++) {
-            this.view.find("select[name='slot']").append(new Option(i, i));
-        }
         this.container().html(this.view);
+
+        let iface = {
+            fresh: function (){
+                let selector = this.selector;
+
+                $.getJSON("/api/bridge", function (data) {
+                    // selector.find("option").remove();
+                    data.forEach(function (e, i) {
+                        if (e['type'] == 'bridge') {
+                            selector.append(Option(`Linux Bridge #${e['name']}`, e['name']));
+                        } else if (e['type'] == 'openvswith') {
+                            selector.append(Option(`Open vSwitch #${e['name']}`, e['name']));
+                        }
+                    });
+                }).fail(function (e) {
+                    $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                });
+            },
+            selector: this.view.find("select[name='interface']"),
+        };
+        let cpu = {
+            fresh: function() {
+                this.selector.find('option').remove();
+                for (let i = 1; i < 17; i++) {
+                    this.selector.append(new Option(i, i));
+                }
+            },
+            selector: this.view.find("select[name='slot']"),
+        };
+
+        cpu.fresh();
+        iface.fresh();
     }
 
     template() {
@@ -57,12 +86,9 @@ export class InterfaceCreate extends ModalFormBase {
                     <div class="col-sm-6">
                         <div class="input-group">
                             <select class="select-lg" name="interface">
-                                <option value="virbr0" selected>Linux Bridge #virbr0</option>
-                                <option value="virbr1">Linux Bridge #virbr1</option>
-                                <option value="virbr2">Linux Bridge #virbr2</option>
-                                <option value="ovs-br1">OpenvSwitch Bridge #ovs-br1</option>
-                                <option value="ovs-br2">OpenvSwitch Bridge #ovs-br2</option>
-                                <option value="br-mgt">OpenvSwitch Bridge #br-mgt</option>
+                                <option value="ovs-br1">Open vSwitch #ovs-br1</option>
+                                <option value="ovs-br2">Open vSwitch #ovs-br2</option>
+                                <option value="br-mgt">Open vSwitch #br-mgt</option>
                             </select>  
                         </div>
                     </div>

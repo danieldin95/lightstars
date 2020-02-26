@@ -12,3 +12,9 @@
     </dhcp>
   </ip>
 </network>
+
+<network>
+  <name>br-mgt</name>
+  <forward mode="bridge"/>
+  <bridge name='br-mgt' stp="on"/>
+</network>

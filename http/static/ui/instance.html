@@ -29,12 +29,20 @@
             <div class="card no-border no-bottom">
                 <div class="card-header-btn">
                     <instance-console>
+                        <div class="btn-group btn-group-sm">
+                        {{$url := "#"}}
                         {{if eq .State "running"}}
-                        <a type="button" class="btn btn-outline-dark btn-sm"
-                           href="/ui/console?instance={{.UUID}}&password={{.Password}}">console</a>
-                        {{else}}
-                        <a type="button" class="btn btn-outline-dark btn-sm disabled" href="#">console</a>
+                            {{ $url = printf "/ui/console?instance=%s&password=%s" .UUID .Password}}
                         {{end}}
+                        <a type="button" class="btn btn-outline-dark btn-sm" href="{{$url}}">console</a>
+                        <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{$url}}" target="_blank">new blank</a>
+                        </div>
+                        </div>
                     </instance-console>
                     <instance-start><button type="button" class="btn btn-outline-dark btn-sm">start</button></instance-start>
                     <instance-refresh>
@@ -55,6 +63,10 @@
                             <div class="dropdown-divider"></div>
                             <instance-more-destroy><a class="dropdown-item" href="#">destroy</a></instance-more-destroy>
                             <instance-more-remove><a class="dropdown-item" href="#">remove</a></instance-more-remove>
+                            <div class="dropdown-divider"></div>
+                            <instance-more-xml>
+                                <a class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">XML file</a>
+                            </instance-more-xml>
                         </div>
                     </instance-more>
                 </div>

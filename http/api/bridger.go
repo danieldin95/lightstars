@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -13,5 +14,5 @@ func (br Bridger) Router(router *mux.Router) {
 }
 
 func (br Bridger) GET(w http.ResponseWriter, r *http.Request) {
-	ResponseJson(w, nil)
+	ResponseJson(w, libvirtn.BRIDGE.List())
 }
