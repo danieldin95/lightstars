@@ -80,17 +80,22 @@ func (h *HyperVisor) GetCPU() (uint, string) {
 	return 0, ""
 }
 
-func (h *HyperVisor) GetMem() (t uint64, f uint64, p float64) {
+func (h *HyperVisor) GetMem() (t uint64, f uint64, c uint64) {
 	if err := h.Open(); err != nil {
 		return 0, 0, 0
 	}
-	if info, err := h.Conn.GetNodeInfo(); err == nil {
-		t = info.Memory * 1024
+	if stats, err := h.Conn.GetMemoryStats(-1, 0); err == nil {
+		if stats.TotalSet {
+			t = stats.Total * 1024
+		}
+		if stats.FreeSet {
+			f = stats.Free * 1024
+		}
+		if stats.CachedSet {
+			c = stats.Cached * 1024
+		}
 	}
-	if free, err := h.Conn.GetFreeMemory(); err == nil {
-		f = free
-	}
-	return t, f, p
+	return t, f, c
 }
 
 func (h *HyperVisor) GetRootfs() string {

@@ -62,7 +62,6 @@ func (d *Disk) Slot2DiskName(slot uint8) string {
 
 var DISK = &Disk{}
 
-
 type Interface struct {
 	//
 }
@@ -74,6 +73,5 @@ func (int *Interface) Slot2Dev(slot uint8) string {
 	}
 	return ""
 }
-
 
 var INTERFACE = &Interface{}

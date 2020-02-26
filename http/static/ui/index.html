@@ -34,10 +34,14 @@
                 <dd>{{ .Version.Version }}</dd>
                 <dt>Built on:</dt>
                 <dd>{{ .Version.Date }}</dd>
+                <dt>Hyper:</dt>
+                <dd>{{ .Hyper.Name }}</dd>
                 <dt>CPU:</dt>
                 <dd>{{ .Hyper.CpuNum }} | {{ .Hyper.CpuVendor }}</dd>
                 <dt>Memory</dt>
-                <dd>{{ prettyBytes .Hyper.MemTotal }} | {{ prettyBytes .Hyper.MemFree }}</dd>
+                <dd>
+                    {{ prettyBytes .Hyper.MemTotal }} | {{ prettyBytes .Hyper.MemFree }} | {{ prettyBytes .Hyper.MemCached }}
+                </dd>
             </dl>
         </div>
         </div>
