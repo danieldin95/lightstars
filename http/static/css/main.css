@@ -126,6 +126,10 @@ select {
     margin-left: 1rem;
 }
 
+.select-twice {
+    margin-left: 1rem;
+}
+
 .input-number {
     max-width: 30%;
 }

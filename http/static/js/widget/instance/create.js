@@ -176,7 +176,11 @@ export class InstanceCreate extends ModalFormBase {
                                     <option value="2" selected>2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
-                                </select>   
+                                </select>
+                                <select class="select-twice" name="cpuMode">
+                                    <option value="" selected>Qemu</option>
+                                    <option value="host-passthrough">Passthrough</option>
+                                </select>
                             </div>
                         </div>
                     </div>

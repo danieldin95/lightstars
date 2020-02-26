@@ -160,20 +160,23 @@ func NewFromAddressXML(xml libvirtc.AddressXML) (addr Address) {
 }
 
 type InstanceConf struct {
-	Action     string `json:"action"` // If is "", means not action.
-	Name       string `json:"name"`
-	Family     string `json:"family"'`
-	Arch       string `json:"arch"`
-	Boots      string `json:"boots"`
-	DataStore  string `json:"datastore"`
-	Cpu        string `json:"cpu"`
-	MemorySize string `json:"memorySize"`
-	MemoryUnit string `json:"memoryUnit"`
-	DiskSize   string `json:"diskSize"`
-	DiskUnit   string `json:"diskUnit"`
-	IsoFile    string `json:"isoFile"`
-	Interface  string `json:"interface"`
-	Start      string `json:"start"`
+	Action       string `json:"action"` // If is "", means not action.
+	Name         string `json:"name"`
+	Family       string `json:"family"'`
+	Arch         string `json:"arch"`
+	Boots        string `json:"boots"`
+	DataStore    string `json:"datastore"`
+	Cpu          string `json:"cpu"`
+	CpuMode      string `json:"cpuMode"`
+	MemorySize   string `json:"memorySize"`
+	MemoryUnit   string `json:"memoryUnit"`
+	DiskSize     string `json:"diskSize"`
+	DiskUnit     string `json:"diskUnit"`
+	DiskBus      string `json:"diskBus"`
+	IsoFile      string `json:"isoFile"`
+	Interface    string `json:"interface"`
+	InterfaceBus string `json:"interfaceBus"`
+	Start        string `json:"start"`
 }
 
 type DiskConf struct {

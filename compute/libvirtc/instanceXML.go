@@ -22,9 +22,9 @@ type DomainXML struct {
 
 type CPUXML struct {
 	XMLName xml.Name `xml:"cpu" json:"-"`
-	Mode    string   `xml:"mode,attr" json:"mode"`   // host-model, host-passthrough
-	Check   string   `xml:"check,attr" json:"check"` // partial, full
-	Match   string   `xml:"match,attr" json:"match"` // exact
+	Mode    string   `xml:"mode,attr,omitempty" json:"mode"`   // host-model, host-passthrough
+	Check   string   `xml:"check,attr,omitempty" json:"check"` // partial, full
+	Match   string   `xml:"match,attr,omitempty" json:"match"` // exact
 }
 
 func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
