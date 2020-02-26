@@ -33,6 +33,7 @@ export class InstanceCreate extends ModalFormBase {
                     data.forEach(function (ele, index) {
                         selector.append(Option(ele['path'], ele['path']));
                     });
+                    selector.append(Option('CDROM dev:/sr0', '/dev/sr0'));
                 }).fail(function (e) {
                     $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
                 });
