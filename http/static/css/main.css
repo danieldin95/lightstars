@@ -150,6 +150,7 @@ select {
 
 .instance .card {
     border-radius: .25rem;
+    border-color: darkgray;
 }
 
 .instance .card .card-header:first-child {
