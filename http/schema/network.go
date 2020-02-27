@@ -8,8 +8,9 @@ type Network struct {
 	UUID    string `json:"uuid"`
 	Name    string `json:"name"`
 	State   string `json:"state"`
-	Address string `json:"network"`
+	Address string `json:"address"`
 	Netmask string `json:"netmask"`
+	Prefix  string `json:"prefix,omitempty"`
 	Mode    string `json:"mode"` // nat, router.
 }
 

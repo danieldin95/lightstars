@@ -58,4 +58,6 @@ type IPv4XML struct {
 type BridgeXML struct {
 	XMLName xml.Name `xml:"bridge" json:"-"`
 	Name    string   `xml:"name,attr" json:"name"`
+	Stp     string   `xml:"stp,attr,omitempty" json:"stp,omitempty"`     // on,off
+	Delay   string   `xml:"delay,attr,omitempty" json:"delay,omitempty"` // 0-32
 }

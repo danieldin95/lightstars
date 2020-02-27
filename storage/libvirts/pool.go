@@ -99,8 +99,12 @@ func (pol *Pool) Remove() error {
 				vol.Free()
 			}
 		}
-		pool.Destroy()
-		pool.Undefine()
+		if err := pool.Destroy(); err != nil {
+			libstar.Warn("Pool.Remove %s", err)
+		}
+		if err := pool.Undefine(); err != nil {
+			libstar.Warn("Pool.Remove %s", err)
+		}
 		defer pool.Free()
 	}
 	return nil

@@ -10,7 +10,7 @@ export class Network {
 
         // register buttons's click.
         $("network-delete").on("click", this.networks, function (e) {
-            new NetworkApi({uuids: e.data.store}).remove();
+            new NetworkApi({uuids: e.data.store}).delete();
         });
     }
 

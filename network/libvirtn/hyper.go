@@ -78,6 +78,34 @@ func (h *HyperVisor) ListAllNetworks() ([]Network, error) {
 	return newNets, nil
 }
 
+func (h *HyperVisor) NetworkDefineXML(xml string) (*Network, error) {
+	if err := h.Open(); err != nil {
+		return nil, err
+	}
+
+	net, err := h.Conn.NetworkDefineXML(xml)
+	if err != nil {
+		return nil, err
+	}
+	return &Network{Network: *net}, nil
+}
+
+// name: uuid, name
+func (h *HyperVisor) LookupNetwork(name string) (*Network, error) {
+	if err := h.Open(); err != nil {
+		return nil, err
+	}
+
+	net, err := h.Conn.LookupNetworkByUUIDString(name)
+	if err != nil {
+		net, err = h.Conn.LookupNetworkByName(name)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &Network{Network: *net}, nil
+}
+
 var hyper = HyperVisor{
 	Name:     "qemu:///system",
 	Listener: make([]HyperListener, 0, 32),
