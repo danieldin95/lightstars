@@ -9,6 +9,7 @@ This software makes it easier for you to control compute resource.
 
 ## Install by RPM packaging
 
+    yum install -y wget bridge-utils
     yum install -y lightstar-x.x.x.rpm
 
 ## Start Libvirtd and LightStar service.
@@ -23,6 +24,7 @@ This software makes it easier for you to control compute resource.
 
     mkdir -p /lighstar/datastore/01
     virsh pool-create-as --name 01 --type dir --target /lightstar/datastore/01
+    
 ## Configure default network
 
     cat > virbr0.xml <<EOF
