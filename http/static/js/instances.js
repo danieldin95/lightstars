@@ -8,7 +8,7 @@ export class Instances {
         this.instanceOn = new InstanceOn();
         this.instances = this.instanceOn.uuids;
 
-        // Register click handle.
+        // register buttons's click.
         $("instance-console").on("click", this.instances, function (e) {
             let props = {uuids: e.data.store, passwd: {}};
             e.data.store.forEach(function (v) {
@@ -57,7 +57,7 @@ export class InstanceOn {
            change(record, e);
         });
 
-        // Disabled firstly.
+        // disabled firstly.
         change(record, this.uuids);
     }
 

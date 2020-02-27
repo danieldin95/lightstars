@@ -1,6 +1,7 @@
 package libvirts
 
 import (
+	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
 	"strings"
 )
@@ -64,11 +65,17 @@ func (pol *Pool) Create() error {
 			Path: pol.Path,
 		},
 	}
-	pool, err := hyper.Conn.StoragePoolCreateXML(polXml.Encode(), libvirt.STORAGE_POOL_CREATE_WITH_BUILD)
+	xml := polXml.Encode()
+	pool, err := hyper.Conn.StoragePoolDefineXML(xml, 0)
 	if err != nil {
 		return err
 	}
-	pool.SetAutostart(true)
+	if err := pool.Create(libvirt.STORAGE_POOL_CREATE_WITH_BUILD); err != nil {
+		return err
+	}
+	if err := pool.SetAutostart(true); err != nil {
+		libstar.Warn("Pool.Create SetAutoStart %s", err)
+	}
 	defer pool.Free()
 	return nil
 }
@@ -78,19 +85,22 @@ func (pol *Pool) Remove() error {
 	if err != nil {
 		return err
 	}
-	if pool, err := hyper.Conn.LookupStoragePoolByName(pol.Name); err == nil {
+	pool, err := hyper.Conn.LookupStoragePoolByUUIDString(pol.Name)
+	if err != nil {
+		pool, err = hyper.Conn.LookupStoragePoolByName(pol.Name)
+	}
+	if err == nil {
 		vols, err := pool.ListAllStorageVolumes(0)
-		if err != nil {
-			return err
-		}
-		for _, vol := range vols {
-			if err := vol.Delete(0); err != nil {
-				return err
+		if err == nil {
+			for _, vol := range vols {
+				if err := vol.Delete(0); err != nil {
+					return err
+				}
+				vol.Free()
 			}
-			vol.Free()
 		}
-		//pool.Delete(0)
 		pool.Destroy()
+		pool.Undefine()
 		defer pool.Free()
 	}
 	return nil

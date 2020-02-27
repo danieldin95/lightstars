@@ -9,6 +9,7 @@ type StorePath struct{}
 
 var PATH = StorePath{}
 
+// path: unix path, /lightstar/datastore/01/xx.xx
 func (p StorePath) Fmt(path string) string {
 	newPath := path
 
@@ -34,9 +35,23 @@ func (p StorePath) Fmt(path string) string {
 	return newPath
 }
 
+// name: datastore@01
+func (p StorePath) IsDataStore(name string) bool {
+	return strings.HasPrefix(name, DataStore)
+}
+
+// name: datastore@01
+func (p StorePath) GetStoreID(name string) string {
+	if p.IsDataStore(name) {
+		return strings.SplitN(name, DataStore, 2)[1]
+	}
+	return ""
+}
+
+// path: datastore@01:/centos.77
 func (p StorePath) Unix(path string) string {
 	newPath := path
-	if strings.HasPrefix(path, "datastore@") {
+	if strings.HasPrefix(path, DataStore) {
 		splits := strings.SplitN(newPath, "/", 2)
 		if len(splits) >= 2 {
 			stores := strings.SplitN(splits[0], "@", 2)

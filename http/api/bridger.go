@@ -16,3 +16,15 @@ func (br Bridger) Router(router *mux.Router) {
 func (br Bridger) GET(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, libvirtn.BRIDGE.List())
 }
+
+func (br Bridger) POST(w http.ResponseWriter, r *http.Request) {
+	ResponseJson(w, nil)
+}
+
+func (br Bridger) PUT(w http.ResponseWriter, r *http.Request) {
+	ResponseJson(w, nil)
+}
+
+func (br Bridger) DELETE(w http.ResponseWriter, r *http.Request) {
+	ResponseJson(w, nil)
+}

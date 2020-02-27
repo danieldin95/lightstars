@@ -17,3 +17,15 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 	nets, _ := libvirtn.ListNetworks()
 	ResponseJson(w, nets)
 }
+
+func (net Network) POST(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}
+
+func (net Network) PUT(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}
+
+func (net Network) DELETE(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}

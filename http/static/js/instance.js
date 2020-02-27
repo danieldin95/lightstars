@@ -14,7 +14,7 @@ export class Instance {
         this.disk = new Disk(uuid, name);
         this.interface = new Interface(uuid, name);
 
-        // Register click handle.
+        // register buttons's click.
         $("instance-start, instance-more-start").on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).start();
         });
@@ -49,6 +49,7 @@ export class Disk {
         this.diskOn = new DiskOn();
         this.disks = this.diskOn.disks;
 
+        // register button's click.
         $("disk-remove").on("click", this, function (e) {
             new DiskApi({
                 instance: e.data.instance,
@@ -79,7 +80,7 @@ export class DiskOn {
            change(record, e);
         });
 
-        // Disabled firstly.
+        // disabled firstly.
         change(record, this.disks);
     }
 
@@ -110,6 +111,7 @@ export class Interface {
         this.interfaceOn = new InterfaceOn();
         this.interfaces = this.interfaceOn.interfaces;
 
+        // register buttons's click
         $("interface-remove").on("click", this, function (e) {
             new InterfaceApi({
                 instance: e.data.instance,
@@ -140,7 +142,7 @@ export class InterfaceOn {
             change(record, e);
         });
 
-        // Disabled firstly.
+        // disabled firstly.
         change(record, this.interfaces);
     }
 

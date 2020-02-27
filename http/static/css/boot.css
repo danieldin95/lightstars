@@ -43,7 +43,8 @@
     border-color: #1d2124;
 }
 
-.table th, .table td {
+.table th,
+.table td {
     max-width: 20rem;
     overflow: hidden;
     white-space: unset;
@@ -53,12 +54,14 @@
     font-size: inherit;
 }
 
-.btn-group > .btn, .btn-group-vertical > .btn {
+.btn-group > .btn,
+.btn-group-vertical > .btn {
     font-size: inherit;
 }
 
 
-.btn-link:focus, .btn-link.focus {
+.btn-link:focus,
+.btn-link.focus {
     text-decoration: underline;
     border-color: transparent;
     box-shadow: none;

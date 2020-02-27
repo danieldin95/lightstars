@@ -8,8 +8,8 @@ export class Network {
         this.networkOn = new NetworkOn();
         this.networks = this.networkOn.uuids;
 
-        // Register click handle.
-        $("network-more-remove").on("click", this.networks, function (e) {
+        // register buttons's click.
+        $("network-delete").on("click", this.networks, function (e) {
             new NetworkApi({uuids: e.data.store}).remove();
         });
     }
@@ -32,7 +32,7 @@ export class NetworkOn {
            change(record, e);
         });
 
-        // Disabled firstly.
+        // disabled firstly.
         change(record, this.uuids);
     }
 

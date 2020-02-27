@@ -19,7 +19,7 @@ export class DataStoreCreate extends ModalFormBase {
         let name = {
             fresh: function() {
                 this.selector.find('option').remove();
-                for (let i = 1; i <= 32; i++) {
+                for (let i = 1; i <= 16; i++) {
                     let alias = "datastore@"+PrintN(i, 2);
                     this.selector.append(new Option(alias, alias));
                 }

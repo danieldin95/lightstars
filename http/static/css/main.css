@@ -20,7 +20,8 @@ body {
     background: #fdfcf8;
 }
 
-th, td {
+th,
+td {
     font-weight: normal;
     font-size: small;
 }
@@ -30,12 +31,14 @@ a {
     font-size: small;
 }
 
-a:hover, a:focus {
+a:hover,
+a:focus {
     color: inherit;
 }
 
 /* Index */
-.card-header-cnt, .card-header-btn {
+.card-header-cnt,
+.card-header-btn {
     margin-bottom: 10px;
 }
 
@@ -45,20 +48,27 @@ a:hover, a:focus {
     padding: 0 1.25rem;
 }
 
-.card-header-dis ol, .card-header-dis ul, .card-header-dis dl {
+.card-header-dis ol,
+.card-header-dis ul,
+.card-header-dis dl {
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
 
-.running, .active {
+.running,
+.active {
     color: darkgreen;
 }
 
-.paused, .blocked, .pm-suspended {
+.paused,
+.blocked,
+.pm-suspended {
     color: chocolate;
 }
 
-.no-state, .crashed, .unknown {
+.no-state,
+.crashed,
+.unknown {
     color: black;
 }
 
@@ -66,7 +76,10 @@ a:hover, a:focus {
     color: chocolate;
 }
 
-.degraded, .inactive, .inaccessible, .unknown {
+.degraded,
+.inactive,
+.inaccessible,
+.unknown {
     color: black;
 }
 
@@ -146,12 +159,51 @@ select {
     max-width: 60%;
 }
 
-.input-string-sm, .input-select-sm {
+.input-string-sm,
+.input-select-sm {
     width: 60%;
 }
 
-.input-string, .input-select {
+.input-string,
+.input-select {
     width: 100%;
+}
+
+
+.system,
+.datastores,
+.networks {
+    border-color: darkgray;
+}
+
+.system .card-header,
+.datastores .card-header,
+.networks .card-header {
+    color: inherit;
+    background-color: inherit;
+    border-bottom: 1px solid #0b3255;;
+}
+
+.system .card-header:first-child,
+.datastores .card-header:first-child,
+.networks .card-header:first-child {
+    border-radius: .25rem;
+}
+
+/* 404 */
+
+.error {
+    border-color: darkgray;
+}
+
+.error .card-header {
+    color: inherit;
+    background-color: inherit;
+    border-bottom: 1px solid #0b3255;;
+}
+
+.error .card-header:first-child {
+    border-radius: .25rem;
 }
 
 /* Instance */
@@ -183,11 +235,13 @@ select {
     /*border-color: #6c757d;*/
 }
 
-.disk .card-header, .interface .card-header {
+.disk .card-header,
+.interface .card-header {
     background-color: inherit;
     border-bottom: 1px solid #0b3255;;
 }
 
-.disk .card-header .btn, .interface .card-header .btn {
+.disk .card-header .btn,
+.interface .card-header .btn {
     color: black;
 }

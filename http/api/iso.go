@@ -22,3 +22,15 @@ func (iso ISO) GET(w http.ResponseWriter, r *http.Request) {
 	path := storage.PATH.Unix(store)
 	ResponseJson(w, libvirts.ISO.ListFiles(path))
 }
+
+func (iso ISO) POST(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}
+
+func (iso ISO) PUT(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}
+
+func (iso ISO) DELETE(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}

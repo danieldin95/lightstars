@@ -8,9 +8,9 @@ export class DataStore {
         this.datastoreOn = new DataStoreOn();
         this.datastores = this.datastoreOn.uuids;
 
-        // Register click handle.
-        $("datastore-more-remove").on("click", this.datastores, function (e) {
-            new DataStoreApi({uuids: e.data.store}).remove();
+        // register buttons's  click.
+        $("datastore-delete").on("click", this.datastores, function (e) {
+            new DataStoreApi({uuids: e.data.store}).delete();
         });
     }
 
@@ -32,7 +32,7 @@ export class DataStoreOn {
            change(record, e);
         });
 
-        // Disabled firstly.
+        // disabled firstly.
         change(record, this.uuids);
     }
 

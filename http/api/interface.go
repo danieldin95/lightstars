@@ -41,6 +41,10 @@ func (int Interface) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance/{id}/interface/{dev}", int.DELETE).Methods("DELETE")
 }
 
+func (int Interface) GET(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}
+
 func (int Interface) POST(w http.ResponseWriter, r *http.Request) {
 	conf := &schema.InterfaceConf{}
 	if err := GetData(r, conf); err != nil {
@@ -71,6 +75,10 @@ func (int Interface) POST(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ResponseMsg(w, 0, "success")
+}
+
+func (int Interface) PUT(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
 }
 
 func (int Interface) DELETE(w http.ResponseWriter, r *http.Request) {

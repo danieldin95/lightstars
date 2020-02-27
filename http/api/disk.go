@@ -15,6 +15,15 @@ import (
 type Disk struct {
 }
 
+func (disk Disk) Router(router *mux.Router) {
+	router.HandleFunc("/api/instance/{id}/disk", disk.POST).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.DELETE).Methods("DELETE")
+}
+
+func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}
+
 func IsVolume(file string) bool {
 	if !strings.HasPrefix(file, storage.Location) {
 		return false
@@ -71,11 +80,6 @@ func DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
 	return &xml, nil
 }
 
-func (disk Disk) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance/{id}/disk", disk.POST).Methods("POST")
-	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.DELETE).Methods("DELETE")
-}
-
 func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 	conf := &schema.DiskConf{}
 	if err := GetData(r, conf); err != nil {
@@ -114,6 +118,10 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ResponseMsg(w, 0, "success")
+}
+
+func (disk Disk) PUT(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
 }
 
 func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
