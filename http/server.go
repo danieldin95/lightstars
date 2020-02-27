@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -126,9 +127,13 @@ func (h *Server) LoadToken() error {
 func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	user, pass, ok := r.BasicAuth()
 	libstar.Print("Server.IsAuth %s:%s", user, pass)
+
+	if strings.HasPrefix(r.URL.Path, "/static") {
+		return true
+	} else if r.URL.Path == "/ui/console" || r.URL.Path == "/websockify" {
+		return true
+	}
 	if !ok || pass != h.adminToken || user != "admin" {
-		w.Header().Set("WWW-Authenticate", "Basic")
-		http.Error(w, "", http.StatusUnauthorized)
 		return false
 	}
 	return true
@@ -136,12 +141,12 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 
 func (h *Server) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		libstar.Info("Server.Middleware:%s %s", r.Method, r.URL.Path)
+		libstar.Info("Server.Middleware %s %s?%s", r.Method, r.URL.Path, r.URL.RawQuery)
 		if h.IsAuth(w, r) {
 			next.ServeHTTP(w, r)
 		} else {
 			w.Header().Set("WWW-Authenticate", "Basic")
-			http.Error(w, "Authorization Required.", http.StatusUnauthorized)
+			http.Error(w, "Authorization Required", http.StatusUnauthorized)
 		}
 	})
 }

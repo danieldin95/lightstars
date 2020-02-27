@@ -157,7 +157,7 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 		Listen:   "0.0.0.0",
 		Port:     "-1",
 		AutoPort: "yes",
-		Password: libstar.GenToken(16),
+		Password: libstar.GenToken(32),
 	}
 	// controllers
 	dom.Devices.Controllers[0] = libvirtc.ControllerXML{

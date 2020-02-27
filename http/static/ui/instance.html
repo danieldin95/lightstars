@@ -65,7 +65,7 @@
                             <instance-more-remove><a class="dropdown-item" href="#">remove</a></instance-more-remove>
                             <div class="dropdown-divider"></div>
                             <instance-more-xml>
-                                <a class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">XML file</a>
+                                <a class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">dump XML</a>
                             </instance-more-xml>
                         </div>
                     </instance-more>
@@ -103,7 +103,7 @@
                         Virtual Disk
                     </button>
                 </div>
-                <div id="collapseDis" class="collapse show" aria-labelledby="headingOne" data-parent="#instance">
+                <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
                 <div class="card-body">
                     <div class="card-header-cnt">
                         <disk-create>
@@ -174,7 +174,7 @@
                         Network Interface
                     </a>
                 </div>
-                <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
+                <div id="collapseInt" class="collapse show" aria-labelledby="headingOne" data-parent="#instance">
                 <div class="card-body">
                     <div class="card-header-cnt">
                         <interface-create>
