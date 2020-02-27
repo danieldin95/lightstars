@@ -31,7 +31,7 @@ func NewInstance(dom libvirtc.Domain) Instance {
 	obj.UUID, _ = dom.GetUUIDString()
 	obj.Name, _ = dom.GetName()
 	if info, err := dom.GetInfo(); err == nil {
-		obj.State = InstanceState2Str(info.State)
+		obj.State = libvirtc.DomainState2Str(info.State)
 		obj.MaxMem = info.MaxMem
 		obj.Memory = info.Memory
 		obj.MaxCpu = info.NrVirtCpu

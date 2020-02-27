@@ -5,6 +5,10 @@ import (
 	"github.com/libvirt/libvirt-go"
 )
 
+var (
+	POOL_ALL = libvirt.CONNECT_LIST_STORAGE_POOLS_ACTIVE | libvirt.CONNECT_LIST_STORAGE_POOLS_INACTIVE
+)
+
 type HyperListener struct {
 	Opened func(Conn *libvirt.Connect) error
 	Closed func(Conn *libvirt.Connect) error
@@ -57,6 +61,27 @@ func (h *HyperVisor) Close() {
 		}
 	}
 	h.Conn = nil
+}
+
+func (h *HyperVisor) ListAllPools() ([]Pool, error) {
+	if err := h.Open(); err != nil {
+		return nil, err
+	}
+
+	pools, err := h.Conn.ListAllStoragePools(POOL_ALL)
+	if err != nil {
+		return nil, err
+	}
+	newPools := make([]Pool, 0, 32)
+	for _, p := range pools {
+		name, err := p.GetName()
+		if err != nil || IsDomainPool(name) {
+			p.Free()
+			continue
+		}
+		newPools = append(newPools, *NewPoolFromVir(&p))
+	}
+	return newPools, nil
 }
 
 var hyper = HyperVisor{

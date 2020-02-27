@@ -5,6 +5,8 @@ import (
 	"github.com/danieldin95/lightstar/http/api"
 	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/network/libvirtn"
+	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
@@ -44,21 +46,32 @@ func (ui UI) Index(w http.ResponseWriter, r *http.Request) {
 
 func (ui UI) Home(w http.ResponseWriter, r *http.Request) {
 	index := schema.Index{
-		Instances: make([]schema.Instance, 0, 32),
+		Instances:  make([]schema.Instance, 0, 32),
+		DataStores: make([]schema.DataStore, 0, 32),
+		Networks:   make([]schema.Network, 0, 32),
 	}
 
-	hyper, err := libvirtc.GetHyper()
-	if err != nil {
-		libstar.Error("UI.Home %s", err)
-		return
-	}
 	index.Version = schema.NewVersion()
 	index.Hyper = schema.NewHyper()
-	if domains, err := hyper.ListAllDomains(); err == nil {
-		for _, dom := range domains {
-			instance := schema.NewInstance(dom)
+	if domains, err := libvirtc.ListDomains(); err == nil {
+		for _, d := range domains {
+			instance := schema.NewInstance(d)
 			index.Instances = append(index.Instances, instance)
-			dom.Free()
+			d.Free()
+		}
+	}
+	if pools, err := libvirts.ListPools(); err == nil {
+		for _, p := range pools {
+			store := schema.NewDataStore(p)
+			index.DataStores = append(index.DataStores, store)
+			p.Free()
+		}
+	}
+	if nets, err := libvirtn.ListNetworks(); err == nil {
+		for _, net := range nets {
+			n := schema.NewNetwork(net)
+			index.Networks = append(index.Networks, n)
+			net.Free()
 		}
 	}
 	file := api.GetFile("ui/index.html")

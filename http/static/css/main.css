@@ -54,11 +54,19 @@ a:hover, a:focus {
     color: darkgreen;
 }
 
-.paused, .blocked, .pmsuspended {
+.paused, .blocked, .pm-suspended {
     color: chocolate;
 }
 
-.nostate, .crashed, .unknown {
+.no-state, .crashed, .unknown {
+    color: black;
+}
+
+.building {
+    color: chocolate;
+}
+
+.degraded, .inactive, .inaccessible, .unknown {
     color: black;
 }
 

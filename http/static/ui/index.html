@@ -140,11 +140,149 @@
         </div>
         </div>
     </div>
+
+    <!-- DataStore -->
+    <div name="datastores" class="card datastores">
+        <div class="card-header">
+            <button class="btn btn-link btn-block text-left btn-sm"
+                    type="button" data-toggle="collapse"
+                    data-target="#collapseStore" aria-expanded="true" aria-controls="collapseStore">
+                Local DataStores
+            </button>
+        </div>
+        <div id="collapseStore" class="collapse" aria-labelledby="headingOne" data-parent="#index">
+            <div class="card-body">
+                <!-- DataStore buttons -->
+                <div class="card-header-cnt">
+                    <datastore-create>
+                        <button type="button" class="btn btn-outline-dark btn-sm"
+                                data-toggle="modal" data-target="#datastoreCreateModal">
+                            create datastore
+                        </button>
+                    </datastore-create>
+                    <datastore-edit>
+                        <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                    </datastore-edit>
+                    <datastore-delete>
+                        <button type="button" class="btn btn-outline-dark btn-sm">delete</button>
+                    </datastore-delete>
+                </div>
+
+                <!-- DataStore display -->
+                <div class="l-content-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                <datastore-on-all>
+                                    <input type="checkbox" aria-label="select all datastores">
+                                </datastore-on-all>
+                            </th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Capacity</th>
+                            <th>Available</th>
+                            <th>State</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range $index, $_ := .DataStores}}
+                            <tr>
+                                <td>
+                                    <datastore-on-one>
+                                        <input type="checkbox" aria-label="select {{.Name}}" data="{{.Name}}">
+                                    </datastore-on-one>
+                                </td>
+                                <td>{{$index}}</td>
+                                <td>{{.Name}}</td>
+                                <td>{{prettyBytes .Capacity}}</td>
+                                <td>{{prettyBytes .Available}}</td>
+                                <td><span class="{{.State}}">{{.State}}</span></td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Network -->
+    <div name="networks" class="card networks">
+        <div class="card-header">
+            <button class="btn btn-link btn-block text-left btn-sm"
+                    type="button" data-toggle="collapse"
+                    data-target="#collapseNet" aria-expanded="true" aria-controls="collapseNet">
+                Virtual Networks
+            </button>
+        </div>
+        <div id="collapseNet" class="collapse" aria-labelledby="headingOne" data-parent="#index">
+            <div class="card-body">
+                <!-- Network buttons -->
+                <div class="card-header-cnt">
+                    <network-create>
+                        <button type="button" class="btn btn-outline-dark btn-sm"
+                                data-toggle="modal" data-target="#networkCreateModal">
+                            create network
+                        </button>
+                    </network-create>
+                    <network-edit>
+                        <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                    </network-edit>
+                    <network-delete>
+                        <button type="button" class="btn btn-outline-dark btn-sm">delete</button>
+                    </network-delete>
+                </div>
+
+                <!-- Network display -->
+                <div class="l-content-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                <network-on-all>
+                                    <input type="checkbox" aria-label="select all networks">
+                                </network-on-all>
+                            </th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Mode</th>
+                            <th>State</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range $index, $_ := .Networks}}
+                            <tr>
+                                <td>
+                                    <network-on-one>
+                                        <input type="checkbox" aria-label="select {{.Name}}" data="{{.Name}}">
+                                    </network-on-one>
+                                </td>
+                                <td>{{$index}}</td>
+                                <td>{{.Name}}</td>
+                                <td>{{.Address}}</td>
+                                <td>{{.Mode}}</td>
+                                <td><span class="{{.State}}">{{.State}}</span></td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Create instance modal -->
-<div id="instanceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-</div>
+<div id="instanceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<!-- Create datastore modal -->
+<div id="datastoreCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<!-- Create network modal -->
+<div id="networkCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
 <!-- JQuery Javascript -->
 <script src="/static/asset/jquery-3.3.1.js"></script>
 <script src="/static/asset/popper.js/1.12.9/umd/popper.js"></script>

@@ -14,6 +14,7 @@ func IsDomainPool(name string) bool {
 }
 
 type Pool struct {
+	libvirt.StoragePool
 	Type string
 	Name string
 	Size uint64
@@ -26,6 +27,10 @@ func NewPool(name, target string) Pool {
 		Name: name,
 		Path: target,
 	}
+}
+
+func NewPoolFromVir(pool *libvirt.StoragePool) *Pool {
+	return &Pool{StoragePool: *pool}
 }
 
 func CreatePool(name, target string) (*Pool, error) {
@@ -88,4 +93,29 @@ func (pol *Pool) Remove() error {
 		defer pool.Free()
 	}
 	return nil
+}
+
+func ListPools() ([]Pool, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
+	}
+	return hyper.ListAllPools()
+}
+
+func PoolState2Str(state libvirt.StoragePoolState) string {
+	switch state {
+	case libvirt.STORAGE_POOL_BUILDING:
+		return "building"
+	case libvirt.STORAGE_POOL_INACTIVE:
+		return "inactive"
+	case libvirt.STORAGE_POOL_RUNNING:
+		return "running"
+	case libvirt.STORAGE_POOL_DEGRADED:
+		return "degraded"
+	case libvirt.STORAGE_POOL_INACCESSIBLE:
+		return "inaccessible"
+	default:
+		return "unknown"
+	}
 }

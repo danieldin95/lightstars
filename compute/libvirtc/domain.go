@@ -1,7 +1,6 @@
 package libvirtc
 
 import (
-	"fmt"
 	"github.com/libvirt/libvirt-go"
 )
 
@@ -41,37 +40,33 @@ func (d *Domain) GetXMLDesc(secure bool) (string, error) {
 	}
 }
 
-type Disk struct {
-	//
-}
-
-func (d *Disk) Slot2Dev(bus string, slot uint8) string {
-	prefix := "vd"
-	if bus == "ide" || bus == "scsi" {
-		prefix = "hd"
+func ListDomains() ([]Domain, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
 	}
-	if slot <= 26 {
-		return prefix + string('a'+slot-1)
+	return hyper.ListAllDomains()
+}
+
+func DomainState2Str(state libvirt.DomainState) string {
+	switch state {
+	case libvirt.DOMAIN_NOSTATE:
+		return "no-state"
+	case libvirt.DOMAIN_RUNNING:
+		return "running"
+	case libvirt.DOMAIN_BLOCKED:
+		return "blocked"
+	case libvirt.DOMAIN_PAUSED:
+		return "paused"
+	case libvirt.DOMAIN_SHUTDOWN:
+		return "shutdown"
+	case libvirt.DOMAIN_CRASHED:
+		return "crashed"
+	case libvirt.DOMAIN_PMSUSPENDED:
+		return "pm-suspended"
+	case libvirt.DOMAIN_SHUTOFF:
+		return "shutoff"
+	default:
+		return "unknown"
 	}
-	return ""
 }
-
-func (d *Disk) Slot2DiskName(slot uint8) string {
-	return fmt.Sprintf("disk%d.img", slot)
-}
-
-var DISK = &Disk{}
-
-type Interface struct {
-	//
-}
-
-func (int *Interface) Slot2Dev(slot uint8) string {
-	prefix := "vnet"
-	if slot <= 32 {
-		return fmt.Sprintf("%s%d", prefix, slot)
-	}
-	return ""
-}
-
-var INTERFACE = &Interface{}

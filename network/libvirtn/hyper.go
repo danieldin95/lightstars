@@ -5,6 +5,10 @@ import (
 	"github.com/libvirt/libvirt-go"
 )
 
+var (
+	NETWORK_ALL = libvirt.CONNECT_LIST_NETWORKS_ACTIVE | libvirt.CONNECT_LIST_NETWORKS_INACTIVE
+)
+
 type HyperListener struct {
 	Opened func(Conn *libvirt.Connect) error
 	Closed func(Conn *libvirt.Connect) error
@@ -56,6 +60,22 @@ func (h *HyperVisor) Close() {
 		}
 	}
 	h.Conn = nil
+}
+
+func (h *HyperVisor) ListAllNetworks() ([]Network, error) {
+	if err := h.Open(); err != nil {
+		return nil, err
+	}
+
+	nets, err := h.Conn.ListAllNetworks(NETWORK_ALL)
+	if err != nil {
+		return nil, err
+	}
+	newNets := make([]Network, 0, 32)
+	for _, n := range nets {
+		newNets = append(newNets, *NewNetworkFromVir(&n))
+	}
+	return newNets, nil
 }
 
 var hyper = HyperVisor{

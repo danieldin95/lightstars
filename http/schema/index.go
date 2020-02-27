@@ -3,7 +3,6 @@ package schema
 import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/libstar"
-	"github.com/libvirt/libvirt-go"
 )
 
 type Version struct {
@@ -40,31 +39,10 @@ func NewHyper() (hs Hyper) {
 	return hs
 }
 
-func InstanceState2Str(state libvirt.DomainState) string {
-	switch state {
-	case libvirt.DOMAIN_NOSTATE:
-		return "nostate"
-	case libvirt.DOMAIN_RUNNING:
-		return "running"
-	case libvirt.DOMAIN_BLOCKED:
-		return "blocked"
-	case libvirt.DOMAIN_PAUSED:
-		return "paused"
-	case libvirt.DOMAIN_SHUTDOWN:
-		return "shutdown"
-	case libvirt.DOMAIN_CRASHED:
-		return "crashed"
-	case libvirt.DOMAIN_PMSUSPENDED:
-		return "pmsuspended"
-	case libvirt.DOMAIN_SHUTOFF:
-		return "shutoff"
-	default:
-		return "unknown"
-	}
-}
-
 type Index struct {
-	Version   Version    `json:"version"`
-	Hyper     Hyper      `json:"hyper"`
-	Instances []Instance `json:"instances"`
+	Version    Version     `json:"version"`
+	Hyper      Hyper       `json:"hyper"`
+	Instances  []Instance  `json:"instances"`
+	DataStores []DataStore `json:"datastores"`
+	Networks   []Network   `json:"networks"`
 }
