@@ -28,8 +28,17 @@ func NetworkConf2XML(conf schema.Network) libvirtn.NetworkXML {
 		addr, mask := libstar.ParseIP4Netmask(conf.Address, conf.Prefix)
 		if addr != nil && mask != nil {
 			xmlObj.IPv4 = libvirtn.IPv4XML{
-				Address: addr.String(),
+				Address: conf.Address,
 				Netmask: mask.String(),
+			}
+		}
+		if conf.DHCP != "no" {
+			start, end := libstar.IP4Network2Range(addr, mask)
+			xmlObj.IPv4.DHCP = &libvirtn.DHCPXML{
+				Range: libvirtn.DHCPRangeXML{
+					Start: start.String(),
+					End:   end.String(),
+				},
 			}
 		}
 	}

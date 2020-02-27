@@ -19,7 +19,7 @@ export class NetworkCreate extends ModalFormBase {
         let prefix = {
             fresh: function() {
                 this.selector.find('option').remove();
-                for (let i = 30; i >= 8; i--) {
+                for (let i = 26; i >= 8; i--) {
                     let alias = "/"+i;
                     this.selector.append(new Option(alias, i));
                 }
@@ -82,6 +82,17 @@ export class NetworkCreate extends ModalFormBase {
                             <input type="text" class="form-control form-control-sm input-number-lg" name="address" value="172.16.1.1">
                             <select class="select-unit-right" name="prefix">
                                 <option value="24" selected>/24</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="dhcp" class="col-sm-4 col-form-label-sm">Enable DHCP</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <select class="" name="dhcp">
+                                <option value="yes" selected>Yes</option>
+                                <option value="no">No</option>
                             </select>
                         </div>
                     </div>

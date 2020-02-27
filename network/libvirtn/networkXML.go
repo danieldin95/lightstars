@@ -53,6 +53,7 @@ type IPv4XML struct {
 	XMLName xml.Name `xml:"ip" json:"-"`
 	Address string   `xml:"address,attr" json:"address"`
 	Netmask string   `xml:"netmask,attr" json:"netmask"`
+	DHCP    *DHCPXML `xml:"dhcp,omitempty" json:"dhcp,omitempty"`
 }
 
 type BridgeXML struct {
@@ -60,4 +61,15 @@ type BridgeXML struct {
 	Name    string   `xml:"name,attr" json:"name"`
 	Stp     string   `xml:"stp,attr,omitempty" json:"stp,omitempty"`     // on,off
 	Delay   string   `xml:"delay,attr,omitempty" json:"delay,omitempty"` // 0-32
+}
+
+type DHCPXML struct {
+	XMLName xml.Name     `xml:"dhcp" json:"-"`
+	Range   DHCPRangeXML `xml:"range" json:"range"`
+}
+
+type DHCPRangeXML struct {
+	XMLName xml.Name `xml:"range" json:"-"`
+	Start   string   `xml:"start,attr,omitempty" json:"start,omitempty"`
+	End     string   `xml:"end,attr,omitempty" json:"end,omitempty"`
 }

@@ -11,6 +11,7 @@ type Network struct {
 	Address string `json:"address"`
 	Netmask string `json:"netmask"`
 	Prefix  string `json:"prefix,omitempty"`
+	DHCP    string `json:"dhcp,omitempty"`
 	Mode    string `json:"mode"` // nat, router.
 }
 
