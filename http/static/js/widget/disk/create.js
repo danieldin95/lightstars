@@ -13,9 +13,9 @@ export class DiskCreate extends ModalFormBase {
 
     render() {
         this.view = $(this.template());
-        this.view.find("select[name='slot'] option").remove();
+        this.view.find("select[name='seq'] option").remove();
         for (let i = 1; i < 16; i++) {
-            this.view.find("select[name='slot']").append(new Option(i, i));
+            this.view.find("select[name='seq']").append(new Option(i, i));
         }
         this.container().html(this.view);
     }
@@ -45,7 +45,7 @@ export class DiskCreate extends ModalFormBase {
                     <label for="slot" class="col-sm-4 col-form-label-sm ">Sequence number</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-lg" name="slot">
+                            <select class="select-lg" name="seq">
                                 <option value="0" selected>0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -58,7 +58,7 @@ export class DiskCreate extends ModalFormBase {
                     <div class="col-sm-6">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm input-number-lg" name="size" value="10">
-                            <select class="select-unit-right" name="unit">
+                            <select class="select-unit-right" name="sizeUnit">
                                 <option value="Mib">MiB</option>
                                 <option value="GiB" selected>GiB</option>
                                 <option value="TiB">TiB</option>

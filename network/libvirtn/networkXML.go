@@ -10,7 +10,7 @@ type NetworkXML struct {
 	Name    string     `xml:"name" json:"name"`
 	UUID    string     `xml:"uuid" json:"uuid"`
 	Forward ForwardXML `xml:"forward" json:"forward"`
-	IPv4    IPv4XML    `xml:"ip" json:"ipv4"`
+	IPv4    *IPv4XML    `xml:"ip,omitempty" json:"ipv4"`
 	Bridge  BridgeXML  `xml:"bridge" json:"bridge"`
 }
 

@@ -11,11 +11,11 @@ import (
 type Interface struct {
 }
 
-func InterfaceConf2XML(conf *schema.InterfaceConf) (*libvirtc.InterfaceXML, error) {
+func Interface2XML(conf *schema.Interface) (*libvirtc.InterfaceXML, error) {
 	xml := libvirtc.InterfaceXML{
 		Type: "bridge",
 		Source: libvirtc.InterfaceSourceXML{
-			Bridge: conf.Interface,
+			Bridge: conf.Source,
 		},
 		Model: libvirtc.InterfaceModelXML{
 			Type: conf.Model,
@@ -24,7 +24,7 @@ func InterfaceConf2XML(conf *schema.InterfaceConf) (*libvirtc.InterfaceXML, erro
 			Type:     "pci",
 			Domain:   libvirtc.PCI_DOMAIN,
 			Bus:      libvirtc.PCI_INTERFACE_BUS,
-			Slot:     conf.Slot,
+			Slot:     conf.Seq,
 			Function: libvirtc.PCI_FUNC,
 		},
 	}
@@ -46,7 +46,7 @@ func (int Interface) GET(w http.ResponseWriter, r *http.Request) {
 }
 
 func (int Interface) POST(w http.ResponseWriter, r *http.Request) {
-	conf := &schema.InterfaceConf{}
+	conf := &schema.Interface{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -60,7 +60,7 @@ func (int Interface) POST(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 
-	xmlObj, err := InterfaceConf2XML(conf)
+	xmlObj, err := Interface2XML(conf)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -34,10 +34,10 @@ func IsVolume(file string) bool {
 	return false
 }
 
-func DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
+func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 	// create new disk firstly.
-	size := libstar.ToBytes(conf.Size, conf.Unit)
-	slot := libstar.H2D8(conf.Slot)
+	size := libstar.ToBytes(conf.Size, conf.SizeUnit)
+	slot := libstar.H2D8(conf.Seq)
 	vol, err := NewVolume(conf.Name, Slot2Disk(slot), size)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
 			Type:     "pci",
 			Domain:   libvirtc.PCI_DOMAIN,
 			Bus:      libvirtc.PCI_DISK_BUS,
-			Slot:     conf.Slot,
+			Slot:     conf.Seq,
 			Function: libvirtc.PCI_FUNC,
 		}
 		//case "scsi", "ide": // IDE reverse 1-4
@@ -81,7 +81,7 @@ func DiskConf2XML(conf *schema.DiskConf) (*libvirtc.DiskXML, error) {
 }
 
 func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
-	conf := &schema.DiskConf{}
+	conf := &schema.Disk{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -98,7 +98,7 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 	if conf.Name == "" {
 		conf.Name, _ = dom.GetName()
 	}
-	xmlObj, err := DiskConf2XML(conf)
+	xmlObj, err := Disk2XML(conf)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

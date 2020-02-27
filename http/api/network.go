@@ -5,12 +5,24 @@ import (
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/gorilla/mux"
+	"net"
 	"net/http"
 )
 
-type Network struct{}
+type Network struct {
+}
 
-func NetworkConf2XML(conf schema.Network) libvirtn.NetworkXML {
+func IsUnicast(address string) bool {
+	addr := net.ParseIP(address)
+	if addr == nil {
+		return false
+	}
+	if addr.IsMulticast() || addr.IsLoopback() || addr.IsUnspecified() {
+		return false
+	}
+	return true
+}
+func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 	xmlObj := libvirtn.NetworkXML{
 		Name: conf.Name,
 		Bridge: libvirtn.BridgeXML{
@@ -24,10 +36,11 @@ func NetworkConf2XML(conf schema.Network) libvirtn.NetworkXML {
 		xmlObj.Bridge.Stp = "on"
 		xmlObj.Bridge.Delay = "0"
 	}
-	if conf.Address != "" {
+
+	if IsUnicast(conf.Address) && conf.Mode == "nat" {
 		addr, mask := libstar.ParseIP4Netmask(conf.Address, conf.Prefix)
 		if addr != nil && mask != nil {
-			xmlObj.IPv4 = libvirtn.IPv4XML{
+			xmlObj.IPv4 = &libvirtn.IPv4XML{
 				Address: conf.Address,
 				Netmask: mask.String(),
 			}
@@ -62,7 +75,7 @@ func (net Network) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	xmlObj := NetworkConf2XML(conf)
+	xmlObj := Network2XML(conf)
 	libstar.Debug("Network.POST %s", xmlObj.Encode())
 	hyper, err := libvirtn.GetHyper()
 	if err != nil {

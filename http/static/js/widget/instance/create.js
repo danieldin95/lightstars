@@ -24,7 +24,7 @@ export class InstanceCreate extends ModalFormBase {
 
     fetch() {
         let iso = {
-            selector: this.view.find("select[name='isoFile']"),
+            selector: this.view.find("select[name='disk0File']"),
             fresh: function (datastore) {
                 let selector = this.selector;
 
@@ -76,7 +76,7 @@ export class InstanceCreate extends ModalFormBase {
                     $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
                 });
             },
-            selector: this.view.find("select[name='interface']"),
+            selector: this.view.find("select[name='interface0Source']"),
         };
 
         iface.fresh();
@@ -186,11 +186,11 @@ export class InstanceCreate extends ModalFormBase {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="memorySize" class="col-sm-4 col-form-label-sm">Memory</label>
+                        <label for="MaxMem" class="col-sm-4 col-form-label-sm">Memory</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <input type="text" class="form-control form-control-sm input-number-lg" name="memorySize" value="2048">
-                                <select class="select-unit-right" name="memoryUnit">
+                                <input type="text" class="form-control form-control-sm input-number-lg" name="memSize" value="2048">
+                                <select class="select-unit-right" name="memUnit">
                                     <option value="Mib" selected>MiB</option>
                                     <option value="GiB">GiB</option>
                                 </select>       
@@ -201,8 +201,8 @@ export class InstanceCreate extends ModalFormBase {
                         <label for="diskSize" class="col-sm-4 col-form-label-sm">Hardware disk01</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <input type="text" class="form-control form-control-sm input-number-lg" name="diskSize" value="10">
-                                <select class="select-unit-right" name="diskUnit">
+                                <input type="text" class="form-control form-control-sm input-number-lg" name="disk1Size" value="10">
+                                <select class="select-unit-right" name="disk1Unit">
                                     <option value="Mib">MiB</option>
                                     <option value="GiB" selected>GiB</option>
                                     <option value="TiB">TiB</option>
@@ -211,20 +211,20 @@ export class InstanceCreate extends ModalFormBase {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="isoFile" class="col-sm-4 col-form-label-sm">Datastore ISO file</label>
+                        <label for="disk0File" class="col-sm-4 col-form-label-sm">Datastore ISO file</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="" name="isoFile">
+                                <select class="" name="disk0File">
                                     <option value="/dev/sr0">sr0</option>
                                 </select>   
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="interface" class="col-sm-4 col-form-label-sm">Network interface01</label>
+                        <label for="interface0Source" class="col-sm-4 col-form-label-sm">Network interface01</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="" name="interface">
+                                <select class="" name="interface0Source">
                                     <option value="virbr0" selected>Linux Bridge #virbr0</option>
                                     <option value="virbr1">Linux Bridge #virbr1</option>
                                     <option value="virbr2">Linux Bridge #virbr2</option>

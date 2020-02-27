@@ -7,11 +7,27 @@ import (
 )
 
 type Instance struct {
-	UUID        string       `json:"uuid"`
-	Name        string       `json:"name"`
-	State       string       `json:"state"`
-	Arch        string       `json:"arch"`
-	Type        string       `json:"type"`
+	Action           string `json:"action,omitempty"` // If is "", means not action.
+	UUID             string `json:"uuid"`
+	Name             string `json:"name"`
+	Family           string `json:"family"'` // configure
+	State            string `json:"state"`
+	Arch             string `json:"arch"` // configure: x86_64 or i386
+	Type             string `json:"type"`
+	Boots            string `json:"boots,omitempty"`     // configure: hd,cdrom,network.
+	DataStore        string `json:"datastore"`           // configure
+	Cpu              string `json:"cpu,omitempty"`       // configure
+	MemSize          string `json:"memSize,omitempty"`   // configure
+	MemUnit          string `json:"memUnit,omitempty"`   // configure
+	CpuMode          string `json:"cpuMode"`             // configure
+	Disk0File        string `json:"disk0File,omitempty"` // configure
+	Disk1Size        string `json:"disk1Size,omitempty"` // configure
+	Disk1Unit        string `json:"disk1Unit,omitempty"` // configure
+	Disk1Bus         string `json:"disk1Bus,omitempty"`  // configure
+	Interface0Source string `json:"interface0Source,omitempty"`
+	Interface0Bus    string `json:"interface0Bus,omitempty"`
+	Start            string `json:"start,omitempty"` //configure
+
 	MaxCpu      uint         `json:"maxCpu"`
 	MaxMem      uint64       `json:"maxMem"`  // Kbytes
 	Memory      uint64       `json:"memory"`  // KBytes
@@ -60,10 +76,17 @@ func NewInstance(dom libvirtc.Domain) Instance {
 }
 
 type Disk struct {
+	Action     string `json:"action,omitempty"`
+	Seq        string `json:"seq,omitempty"`       //configure
+	Name       string `json:"name,omitempty"`      // instance name
+	UUID       string `json:"uuid,omitempty"`      // instance UUID
+	Store      string `json:"datastore,omitempty"` // disk saved to datastore
+	Size       string `json:"size"`                // configure
+	SizeUnit   string `json:"sizeUnit,omitempty"`  //configure
 	Format     string `json:"format"`
 	Source     string `json:"source"`
 	Device     string `json:"device"`
-	Bus        string `json:"bus"`
+	Bus        string `json:"bus"`      //configre
 	AddrType   string `json:"addrType"` // pci, and drive
 	AddrSlot   uint16 `json:"addrSlot"`
 	AddrDomain uint16 `json:"addrDomain"`
@@ -101,9 +124,14 @@ func NewFromDiskXML(xml libvirtc.DiskXML) (disk Disk) {
 }
 
 type Interface struct {
+	Action     string `json:"action,omitempty"` // If is "", means not action.
+	Seq        string `json:"seq,omitempty"`    //configure
+	Name       string `json:"name,omitempty"`
+	UUID       string `json:"uuid,omitempty"`
+	Type       string `json:"type,omitempty"` //bridge or openvswitch
 	Address    string `json:"address"`
 	Source     string `json:"source"`
-	Model      string `json:"model"`
+	Model      string `json:"model"` // configure
 	Device     string `json:"device"`
 	AddrType   string `json:"addrType"` // now only pci.
 	AddrSlot   uint16 `json:"addrSlot"`
@@ -161,46 +189,4 @@ func NewFromAddressXML(xml libvirtc.AddressXML) (addr Address) {
 	addr.Slot = xml.Slot
 	addr.Function = xml.Function
 	return addr
-}
-
-type InstanceConf struct {
-	Action       string `json:"action"` // If is "", means not action.
-	Name         string `json:"name"`
-	Family       string `json:"family"'`
-	Arch         string `json:"arch"`
-	Boots        string `json:"boots"`
-	DataStore    string `json:"datastore"`
-	Cpu          string `json:"cpu"`
-	CpuMode      string `json:"cpuMode"`
-	MemorySize   string `json:"memorySize"`
-	MemoryUnit   string `json:"memoryUnit"`
-	DiskSize     string `json:"diskSize"`
-	DiskUnit     string `json:"diskUnit"`
-	DiskBus      string `json:"diskBus"`
-	IsoFile      string `json:"isoFile"`
-	Interface    string `json:"interface"`
-	InterfaceBus string `json:"interfaceBus"`
-	Start        string `json:"start"`
-}
-
-type DiskConf struct {
-	Action string `json:"action"` // If is "", means not action.
-	Name   string `json:"name"`
-	UUID   string `json:"uuid"`
-	Store  string `json:"datastore"`
-	Size   string `json:"size"`
-	Unit   string `json:"unit"`
-	Bus    string `json:"bus"`
-	Slot   string `json:"slot"`
-}
-
-type InterfaceConf struct {
-	Action    string `json:"action"` // If is "", means not action.
-	Name      string `json:"name"`
-	UUID      string `json:"uuid"`
-	Interface string `json:"interface"`
-	Type      string `json:"type"`
-	Bus       string `json:"bus"`
-	Model     string `json:"model"`
-	Slot      string `json:"slot"`
 }

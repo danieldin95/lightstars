@@ -84,7 +84,7 @@ func NewDiskXML(format, file, bus string) libvirtc.DiskXML {
 	return disk
 }
 
-func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
+func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	dom := libvirtc.DomainXML{
 		Type: "kvm",
 		Name: conf.Name,
@@ -110,12 +110,12 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 		dom.OS.Type.Arch = "x86_64"
 	}
 	// create new disk firstly.
-	size := libstar.ToBytes(conf.DiskSize, conf.DiskUnit)
+	size := libstar.ToBytes(conf.Disk1Size, conf.Disk1Unit)
 	vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, Slot2Disk(0), size)
 	if err != nil {
 		return dom, err
 	}
-	// boot seqs.
+	// boot sequence.
 	if conf.Boots == "" {
 		conf.Boots = "hd,cdrom,network"
 	}
@@ -144,12 +144,12 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 		Value:     conf.Cpu,
 	}
 	dom.Memory = libvirtc.MemXML{
-		Value: conf.MemorySize,
-		Type:  conf.MemoryUnit,
+		Value: conf.MemSize,
+		Type:  conf.MemUnit,
 	}
 	dom.CurMem = libvirtc.CurMemXML{
-		Value: conf.MemorySize,
-		Type:  conf.MemoryUnit,
+		Value: conf.MemSize,
+		Type:  conf.MemUnit,
 	}
 	// vnc
 	dom.Devices.Graphics[0] = libvirtc.GraphicsXML{
@@ -173,10 +173,10 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 		}
 	}
 	// disks
-	if strings.HasPrefix(conf.IsoFile, "/dev") {
-		dom.Devices.Disks[0] = NewCDROMXML(conf.IsoFile)
+	if strings.HasPrefix(conf.Disk0File, "/dev") {
+		dom.Devices.Disks[0] = NewCDROMXML(conf.Disk0File)
 	} else {
-		dom.Devices.Disks[0] = NewISOXML(storage.PATH.Unix(conf.IsoFile))
+		dom.Devices.Disks[0] = NewISOXML(storage.PATH.Unix(conf.Disk0File))
 	}
 	switch conf.Family {
 	case "linux":
@@ -191,7 +191,7 @@ func InstanceConf2XML(conf *schema.InstanceConf) (libvirtc.DomainXML, error) {
 	dom.Devices.Interfaces[0] = libvirtc.InterfaceXML{
 		Type: "bridge",
 		Source: libvirtc.InterfaceSourceXML{
-			Bridge: conf.Interface,
+			Bridge: conf.Interface0Source,
 		},
 		Target: libvirtc.InterfaceTargetXML{
 			Dev: libvirtc.INTERFACE.Slot2Dev(1),
@@ -263,13 +263,13 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	conf := &schema.InstanceConf{}
+	conf := &schema.Instance{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	xmlObj, err := InstanceConf2XML(conf)
+	xmlObj, err := Instance2XML(conf)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -320,7 +320,7 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 
-	conf := &schema.InstanceConf{}
+	conf := &schema.Instance{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

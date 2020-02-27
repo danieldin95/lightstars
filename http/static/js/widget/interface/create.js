@@ -33,7 +33,7 @@ export class InterfaceCreate extends ModalFormBase {
                     $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
                 });
             },
-            selector: this.view.find("select[name='interface']"),
+            selector: this.view.find("select[name='source']"),
         };
         let cpu = {
             fresh: function() {
@@ -42,7 +42,7 @@ export class InterfaceCreate extends ModalFormBase {
                     this.selector.append(new Option(i, i));
                 }
             },
-            selector: this.view.find("select[name='slot']"),
+            selector: this.view.find("select[name='seq']"),
         };
 
         cpu.fresh();
@@ -85,7 +85,7 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="source" class="col-sm-4 col-form-label-sm">Bridge source</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-lg" name="interface">
+                            <select class="select-lg" name="source">
                                 <option value="ovs-br1">Open vSwitch #ovs-br1</option>
                                 <option value="ovs-br2">Open vSwitch #ovs-br2</option>
                                 <option value="br-mgt">Open vSwitch #br-mgt</option>
@@ -97,7 +97,7 @@ export class InterfaceCreate extends ModalFormBase {
                     <label for="slot" class="col-sm-4 col-form-label-sm ">Sequence number</label>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            <select class="select-lg" name="slot">
+                            <select class="select-lg" name="seq">
                                 <option value="0" selected>0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
