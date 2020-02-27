@@ -55,3 +55,12 @@ This software makes it easier for you to control compute resource.
     https://your-machine-address:10080
     
     
+# Welcome Donate
+
+<img src="https://raw.githubusercontent.com/danieldin95/openlan-go/master/resource/donation.jpg" width="46%">
+
+
+WeChat: DanielDin
+
+Email: danieldin95@163.com
+
