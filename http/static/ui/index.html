@@ -179,6 +179,7 @@
                                 </datastore-on-all>
                             </th>
                             <th>ID</th>
+                            <th>UUID</th>
                             <th>Name</th>
                             <th>Capacity</th>
                             <th>Available</th>
@@ -190,10 +191,11 @@
                             <tr>
                                 <td>
                                     <datastore-on-one>
-                                        <input type="checkbox" aria-label="select {{.Name}}" data="{{.Name}}">
+                                        <input type="checkbox" aria-label="select {{.Name}}" data="{{.UUID}}">
                                     </datastore-on-one>
                                 </td>
                                 <td>{{$index}}</td>
+                                <td><a href="/ui/datastore/{{.UUID}}">{{.UUID}}</a></td>
                                 <td>{{.Name}}</td>
                                 <td>{{prettyBytes .Capacity}}</td>
                                 <td>{{prettyBytes .Available}}</td>
@@ -245,6 +247,7 @@
                                 </network-on-all>
                             </th>
                             <th>ID</th>
+                            <th>UUID</th>
                             <th>Name</th>
                             <th>Address</th>
                             <th>Mode</th>
@@ -256,12 +259,17 @@
                             <tr>
                                 <td>
                                     <network-on-one>
-                                        <input type="checkbox" aria-label="select {{.Name}}" data="{{.Name}}">
+                                        <input type="checkbox" aria-label="select {{.Name}}" data="{{.UUID}}">
                                     </network-on-one>
                                 </td>
                                 <td>{{$index}}</td>
+                                <td><a href="/ui/network/{{.UUID}}">{{.UUID}}</a></td>
                                 <td>{{.Name}}</td>
-                                <td>{{.Address}}</td>
+                                <td>{{if eq .Address ""}}
+                                    --
+                                    {{else}}
+                                    {{.Address}}/{{.Netmask}}
+                                </td>{{end}}
                                 <td>{{.Mode}}</td>
                                 <td><span class="{{.State}}">{{.State}}</span></td>
                             </tr>
@@ -293,15 +301,30 @@
 
 <script type="module">
     import {Arr2Json} from "/static/js/com/utils.js";
-    import {Instances} from '/static/js/index.js';
+    import {Instances} from '/static/js/instances.js';
+    import {Network} from "/static/js/network.js";
+    import {DataStore} from "/static/js/datastore.js";
     import {InstanceCreate} from '/static/js/widget/instance/create.js';
+    import {NetworkCreate} from "/static/js/widget/network/create.js";
+    import {DataStoreCreate} from "/static/js/widget/datastore/create.js";
 
 
     $(document).ready(function() {
-        let instances = new Instances();
+        let ins = new Instances();
         let createModal = new InstanceCreate({containerId: 'instanceCreateModal'});
+        createModal.onsubmit(ins, function (e) {
+            e.data.create(Arr2Json(e.array));
+        });
 
-        createModal.onsubmit(instances, function (e) {
+        let net = new Network();
+        let createNetwork = new NetworkCreate({containerId: 'networkCreateModal'});
+        createNetwork.onsubmit(net, function (e) {
+            e.data.create(Arr2Json(e.array));
+        });
+
+        let store = new DataStore();
+        let createStore = new DataStoreCreate({containerId: 'datastoreCreateModal'});
+        createStore.onsubmit(store, function (e) {
             e.data.create(Arr2Json(e.array));
         });
     });

@@ -1,5 +1,7 @@
 package libvirtn
 
+import "github.com/libvirt/libvirt-go"
+
 type DHCP struct {
-	//TODO
+	libvirt.NetworkDHCPLease
 }

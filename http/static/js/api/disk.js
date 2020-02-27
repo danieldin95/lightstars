@@ -3,7 +3,12 @@ import {AlertDanger, AlertSuccess, AlertWarn} from "../com/alert.js";
 
 
 export class DiskApi extends Api {
-    // {uuids: [], tasks: 'tasks', name: '', instance: ''}
+    // {
+    //   instance: 'uuid',
+    //   uuids: [uuid],
+    //   tasks: 'tasks',
+    //   name: ''
+    // }
     constructor(props) {
         super(props);
 

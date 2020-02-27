@@ -2,7 +2,7 @@ import {Api} from "./api.js"
 import {AlertDanger, AlertSuccess} from "../com/alert.js";
 
 
-export class NetworkApi extends Api {
+export class DataStoreApi extends Api {
     // {
     //   uuids: [],
     //   tasks: 'tasks',
@@ -14,16 +14,16 @@ export class NetworkApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return `/api/network/${uuid}`
+            return `/api/datastore/${uuid}`
         }
-        return 'api/network'
+        return 'api/datastore'
     }
 
     create(data) {
         let your = this;
 
         $.post(your.url(), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`create network ${data.message}`));
+            $(your.tasks).append(AlertSuccess(`create datastore ${data.message}`));
         }).fail(function (e) {
             $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
         });
@@ -34,7 +34,7 @@ export class NetworkApi extends Api {
 
         this.uuids.forEach(function (uuid, index, err) {
             $.delete(your.url(uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove network '${uuid}' ${data.message}`));
+                $(your.tasks).append(AlertSuccess(`remove datastore '${uuid}' ${data.message}`));
             }).fail(function (e) {
                 $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
             });

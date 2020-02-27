@@ -50,3 +50,7 @@ export function ListenChangeAll(one, all, fn) {
         fn({store: storage});
     });
 }
+
+export function PrintN(num, n) {
+    return (Array(n).join(0) + num).slice(-n);
+}

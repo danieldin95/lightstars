@@ -64,6 +64,7 @@ func (h *Server) LoadRouter() {
 	api.ISO{}.Router(router)
 	api.Bridger{}.Router(router)
 	api.DataStore{}.Router(router)
+	api.Network{}.Router(router)
 	api.Disk{}.Router(router)
 	api.Interface{}.Router(router)
 	api.Instance{}.Router(router)

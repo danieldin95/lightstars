@@ -68,6 +68,7 @@ func (pol *Pool) Create() error {
 	if err != nil {
 		return err
 	}
+	pool.SetAutostart(true)
 	defer pool.Free()
 	return nil
 }

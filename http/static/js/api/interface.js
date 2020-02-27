@@ -3,7 +3,11 @@ import {AlertDanger, AlertSuccess} from "../com/alert.js";
 
 
 export class InterfaceApi extends Api {
-    // {uuids: [], tasks: 'tasks', name: '', instance: ''}
+    // {
+    //   uuids: [],
+    //   tasks: 'tasks',
+    //   name: ''
+    // }
     constructor(props) {
         super(props);
 
