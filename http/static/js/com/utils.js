@@ -37,9 +37,10 @@ export class CheckBoxTop {
         let storage = [];
 
         // listen on all one.
-        for (let i = 0; i < $(your.one).length; i++) {
-            $(your.one).eq(i).prop('checked', false);
-            $(your.one).eq(i).on("change", function(e) {
+        console.log($(your.one));
+        $(your.one).each(function (i, e) {
+            $(e).prop('checked', false);
+            $(e).on("change", function(e) {
                 let data = $(this).attr('data');
                 if ($(this).prop('checked')) {
                     storage.push(data);
@@ -48,7 +49,7 @@ export class CheckBoxTop {
                 }
                 your.func({store: storage});
             });
-        }
+        });
 
         // listen on all and change to one.
         $(your.all).prop('checked', false);

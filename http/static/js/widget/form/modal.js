@@ -2,12 +2,12 @@
 
 export class ModalFormBase {
     // {
-    //   containerId: ''
-    //   }
+    //   id: '#disk'
+    // }
     constructor(props) {
         this.props = props;
-        this.containerId = props.containerId;
-        this.forms = `#${this.containerId} form`;
+        this.id = props.id;
+        this.forms = `${this.id} form`;
 
         this.events = {
             submit: {
@@ -41,7 +41,7 @@ export class ModalFormBase {
     }
 
     container() {
-        return $(`#${this.containerId}`);
+        return $(this.id);
     }
 
     onsubmit(data, func) {

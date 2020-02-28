@@ -5,35 +5,46 @@ import {CheckBoxTop} from "./com/utils.js";
 
 
 export class Instance {
-    // nil
-    constructor() {
-        let name = $('instance').attr("name");
-        let uuid = $('instance').attr("data");
+    // {
+    //   id: '#instance'
+    //   disks: {
+    //     id: '#disks'
+    //   },
+    //   interfaces: {
+    //     id: "#interfaces"
+    //   },
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.props = props;
+        let name = $(this.id).attr("name");
+        let uuid = $(this.id).attr("data");
         this.uuid = uuid;
         this.name = name;
-        this.disk = new Disk(uuid, name);
-        this.interface = new Interface(uuid, name);
+
+        this.disk = new Disk({id: props.disks.id, uuid, name});
+        this.interface = new Interface({id: props.interfaces.id, uuid, name});
 
         // register buttons's click.
-        $("instance-start, instance-more-start").on("click", this, function (e) {
+        $(`${this.id} #start, ${this.id} #more-start`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).start();
         });
-        $("instance-more-shutdown").on("click", this, function (e) {
+        $(`${this.id} #shutdown`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).shutdown();
         });
-        $("instance-more-reset").on("click", this, function (e) {
+        $(`${this.id} #reset`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).reset();
         });
-        $("instance-more-suspend").on("click", this, function (e) {
+        $(`${this.id} #suspend`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).suspend();
         });
-        $("instance-more-resume").on("click", this, function (e) {
+        $(`${this.id} #resume`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).resume();
         });
-        $("instance-more-destroy").on("click", this, function (e) {
+        $(`${this.id} #destroy`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).destroy();
         });
-        $("instance-more-remove").on("click", this, function (e) {
+        $(`${this.id} #remove`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).remove();
         });
     }
@@ -41,16 +52,21 @@ export class Instance {
 
 
 export class Disk {
-    //uuid
-    constructor(instance, name) {
-        this.name = name;
-        this.instance = instance;
+    // {
+    //   id: '#instance #disk',
+    //   uuid: uuid of instance,
+    //   name: name of instance,
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.name = props.name;
+        this.instance = props.uuid;
 
-        this.diskOn = new DiskOn();
+        this.diskOn = new DiskOn(props);
         this.disks = this.diskOn.disks;
 
         // register button's click.
-        $("disk-remove").on("click", this, function (e) {
+        $(`${this.id} #remove`).on("click", this, function (e) {
             new DiskApi({
                 instance: e.data.instance,
                 uuids: e.data.disks.store,
@@ -69,16 +85,19 @@ export class Disk {
 
 
 export class DiskOn {
-    // nil
-    constructor() {
-        this.disks = {store: []};
+    // {
+    //   id: '#instane #disk'
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.disks = {store: [], id: this.id};
 
         let record = this.disks;
         let change = this.change;
 
         new CheckBoxTop({
-            one: "disk-on-one input",
-            all: "disk-on-all input",
+            one: `${this.id} #on-one`,
+            all: `${this.id} #on-all`,
             change: function (e) {
                 change(record, e);
             },
@@ -92,31 +111,36 @@ export class DiskOn {
         record.store = from.store;
 
         if (from.store.length == 0) {
-            $("disk-remove button").addClass('disabled');
+            $(`${record.id} #remove`).addClass('disabled');
         } else {
-            $("disk-remove button").removeClass('disabled');
+            $(`${record.id} #remove`).removeClass('disabled');
         }
         if (from.store.length != 1) {
-            $("disk-edit button").addClass('disabled');
-        }
-        else {
-            $("disk-edit button").removeClass('disabled');
+            $(`${record.id} #edit`).addClass('disabled');
+        } else {
+            $(`${record.id} #edit`).removeClass('disabled');
         }
     }
 }
 
 
 export class Interface {
-    //
-    constructor(instance, name) {
-        this.name = name;
-        this.instance = instance;
+    // {
+    //   id: '#instance #interface',
+    //   uuid: uuid of instance,
+    //   name: name of instance,
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.props = props;
+        this.name = props.name;
+        this.instance = props.uuid;
 
-        this.interfaceOn = new InterfaceOn();
+        this.interfaceOn = new InterfaceOn(props);
         this.interfaces = this.interfaceOn.interfaces;
 
         // register buttons's click
-        $("interface-remove").on("click", this, function (e) {
+        $(`${this.id} #remove`).on("click", this, function (e) {
             new InterfaceApi({
                 instance: e.data.instance,
                 uuids: e.data.interfaces.store,
@@ -135,16 +159,20 @@ export class Interface {
 
 
 export class InterfaceOn {
-    // nil
-    constructor() {
-        this.interfaces = {store: []};
+    // {
+    //   id: '#instane #disk'
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.props = props;
+        this.interfaces = {store: [], id: this.id};
 
         let record = this.interfaces;
         let change = this.change;
 
         new CheckBoxTop({
-            one: "interface-on-one input",
-            all: "interface-on-all input",
+            one: `${this.id} #on-one`,
+            all: `${this.id} #on-all`,
             change: function (e) {
                 change(record, e);
             }
@@ -158,16 +186,14 @@ export class InterfaceOn {
         record.store = from.store;
 
         if (from.store.length == 0) {
-            $("interface-remove button").addClass('disabled');
+            $(`${record.id} #remove`).addClass('disabled');
         } else {
-
-            $("interface-remove button").removeClass('disabled');
+            $(`${record.id} #remove`).removeClass('disabled');
         }
         if (from.store.length != 1) {
-            $("interface-edit button").addClass('disabled');
-        }
-        else {
-            $("interface-edit button").removeClass('disabled');
+            $(`${record.id} #edit`).addClass('disabled');
+        }  else {
+            $(`${record.id} #edit`).removeClass('disabled');
         }
     }
 }

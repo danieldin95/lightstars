@@ -32,7 +32,7 @@
                 <dd>{{.Version.Version}}</dd>
                 <dt>Built on:</dt>
                 <dd>{{.Version.Date}}</dd>
-                <dt>Hyper:</dt>
+                <dt>Hypervisor:</dt>
                 <dd>{{.Hyper.Name}}</dd>
                 <dt>CPU:</dt>
                 <dd>{{.Hyper.CpuNum}} | {{.Hyper.CpuVendor}}</dd>
@@ -51,7 +51,7 @@
     </div>
 
     <!-- Instances -->
-    <div name="instances" class="card instances">
+    <div id="instances" class="card instances">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
                     type="button" data-toggle="collapse"
@@ -63,39 +63,29 @@
         <div class="card-body">
             <!-- Instances buttons -->
             <div class="card-header-cnt">
-                <instance-create>
-                    <button type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#instanceCreateModal">
-                        create instance
-                    </button>
-                </instance-create>
-                <instance-console>
-                    <button type="button" class="btn btn-outline-dark btn-sm">console</button>
-                </instance-console>
-                <instance-start>
-                    <button type="button" class="btn btn-outline-dark btn-sm">start</button>
-                </instance-start>
-                <instance-refresh>
-                    <a type="button" class="btn btn-outline-dark btn-sm"
-                       href="javascript:window.location.reload();">refresh</a>
-                </instance-refresh>
-                <instance-more>
-                    <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        operations
-                    </button>
-                    <div name="btn-more" class="dropdown-menu">
-                        <instance-more-start><a class="dropdown-item" href="#">start</a></instance-more-start>
-                        <instance-more-shutdown><a class="dropdown-item" href="#">shutdown</a></instance-more-shutdown>
-                        <instance-more-reset><a class="dropdown-item" href="#">reset</a></instance-more-reset>
-                        <div class="dropdown-divider"></div>
-                        <instance-more-suspend><a class="dropdown-item" href="#">suspend</a></instance-more-suspend>
-                        <instance-more-resume><a class="dropdown-item" href="#">resume</a></instance-more-resume>
-                        <div class="dropdown-divider"></div>
-                        <instance-more-destroy><a class="dropdown-item" href="#">destroy</a></instance-more-destroy>
-                        <instance-more-remove><a class="dropdown-item" href="#">remove</a></instance-more-remove>
-                    </div>
-                </instance-more>
+                <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                        data-toggle="modal" data-target="#instanceCreateModal">
+                    create instance
+                </button>
+                <button id="console" type="button" class="btn btn-outline-dark btn-sm">console</button>
+                <button id="start" type="button" class="btn btn-outline-dark btn-sm">start</button>
+                <a id="refresh" type="button"
+                   class="btn btn-outline-dark btn-sm" href="javascript:window.location.reload();">refresh</a>
+                <button id="more" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    operations
+                </button>
+                <div name="btn-more" class="dropdown-menu">
+                    <a id="more-start" class="dropdown-item" href="#">start</a>
+                    <a id="more-shutdown" class="dropdown-item" href="#">shutdown</a>
+                    <a id="more-reset" class="dropdown-item" href="#">reset</a>
+                    <div class="dropdown-divider"></div>
+                    <a id="more-suspend" class="dropdown-item" href="#">suspend</a>
+                    <a id="more-resume" class="dropdown-item" href="#">resume</a>
+                    <div class="dropdown-divider"></div>
+                    <a id="more-destroy" class="dropdown-item" href="#">destroy</a>
+                    <a id="more-remove" class="dropdown-item" href="#">remove</a>
+                </div>
             </div>
 
             <!-- Instances display -->
@@ -104,9 +94,7 @@
                     <thead>
                     <tr>
                         <th>
-                            <instance-on-all>
-                                <input type="checkbox" aria-label="select all instances">
-                            </instance-on-all>
+                            <input id="on-all" type="checkbox" aria-label="select all instances">
                         </th>
                         <th>ID</th>
                         <th>UUID</th>
@@ -121,9 +109,7 @@
                     {{range $index, $_ := .Instances}}
                     <tr>
                         <td>
-                            <instance-on-one>
-                                <input type="checkbox" aria-label="select {{.Name}}" data="{{.UUID}}" passwd="{{.Password}}">
-                            </instance-on-one>
+                            <input id="on-one" type="checkbox" aria-label="" data="{{.UUID}}" passwd="{{.Password}}">
                         </td>
                         <td>{{$index}}</td>
                         <td><a class="text-decoration-none" href="/ui/instance/{{.UUID}}">{{.UUID}}</a></td>
@@ -142,7 +128,7 @@
     </div>
 
     <!-- DataStore -->
-    <div name="datastores" class="card datastores">
+    <div id="datastores" class="card datastores">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
                     type="button" data-toggle="collapse"
@@ -154,18 +140,12 @@
             <div class="card-body">
                 <!-- DataStore buttons -->
                 <div class="card-header-cnt">
-                    <datastore-create>
-                        <button type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#datastoreCreateModal">
-                            create datastore
-                        </button>
-                    </datastore-create>
-                    <datastore-edit>
-                        <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                    </datastore-edit>
-                    <datastore-delete>
-                        <button type="button" class="btn btn-outline-dark btn-sm">delete</button>
-                    </datastore-delete>
+                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                            data-toggle="modal" data-target="#datastoreCreateModal">
+                        create datastore
+                    </button>
+                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                    <button id="delete" type="button" class="btn btn-outline-dark btn-sm">delete</button>
                 </div>
 
                 <!-- DataStore display -->
@@ -173,11 +153,7 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>
-                                <datastore-on-all>
-                                    <input type="checkbox" aria-label="select all datastores">
-                                </datastore-on-all>
-                            </th>
+                            <th><input id="on-all" type="checkbox"></th>
                             <th>ID</th>
                             <th>UUID</th>
                             <th>Name</th>
@@ -189,11 +165,7 @@
                         <tbody>
                         {{range $index, $_ := .DataStores}}
                             <tr>
-                                <td>
-                                    <datastore-on-one>
-                                        <input type="checkbox" aria-label="select {{.Name}}" data="{{.UUID}}">
-                                    </datastore-on-one>
-                                </td>
+                                <td><input id="on-one" type="checkbox" data="{{.UUID}}"></td>
                                 <td>{{$index}}</td>
                                 <td><a href="/ui/datastore/{{.UUID}}">{{.UUID}}</a></td>
                                 <td>{{.Name}}</td>
@@ -210,7 +182,7 @@
     </div>
 
     <!-- Network -->
-    <div name="networks" class="card networks">
+    <div id="networks" class="card networks">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
                     type="button" data-toggle="collapse"
@@ -222,18 +194,12 @@
             <div class="card-body">
                 <!-- Network buttons -->
                 <div class="card-header-cnt">
-                    <network-create>
-                        <button type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#networkCreateModal">
-                            create network
-                        </button>
-                    </network-create>
-                    <network-edit>
-                        <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                    </network-edit>
-                    <network-delete>
-                        <button type="button" class="btn btn-outline-dark btn-sm">delete</button>
-                    </network-delete>
+                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                            data-toggle="modal" data-target="#networkCreateModal">
+                        create network
+                    </button>
+                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                    <button id="delete" type="button" class="btn btn-outline-dark btn-sm">delete</button>
                 </div>
 
                 <!-- Network display -->
@@ -241,11 +207,7 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>
-                                <network-on-all>
-                                    <input type="checkbox" aria-label="select all networks">
-                                </network-on-all>
-                            </th>
+                            <th><input id="on-all" type="checkbox"></th>
                             <th>ID</th>
                             <th>UUID</th>
                             <th>Name</th>
@@ -257,11 +219,7 @@
                         <tbody>
                         {{range $index, $_ := .Networks}}
                             <tr>
-                                <td>
-                                    <network-on-one>
-                                        <input type="checkbox" aria-label="select {{.Name}}" data="{{.UUID}}">
-                                    </network-on-one>
-                                </td>
+                                <td><input id="on-one" type="checkbox" data="{{.UUID}}"></td>
                                 <td>{{$index}}</td>
                                 <td><a href="/ui/network/{{.UUID}}">{{.UUID}}</a></td>
                                 <td>{{.Name}}</td>
@@ -310,19 +268,19 @@
 
 
     $(document).ready(function() {
-        let ins = new Instances();
+        let ins = new Instances({id: '#instances'});
         let createModal = new InstanceCreate({containerId: 'instanceCreateModal'});
         createModal.onsubmit(ins, function (e) {
             e.data.create(Utils.toJSON(e.array));
         });
 
-        let net = new Network();
+        let net = new Network({id: '#networks'});
         let createNetwork = new NetworkCreate({containerId: 'networkCreateModal'});
         createNetwork.onsubmit(net, function (e) {
             e.data.create(Utils.toJSON(e.array));
         });
 
-        let store = new DataStore();
+        let store = new DataStore({id: '#datastores'});
         let createStore = new DataStoreCreate({containerId: 'datastoreCreateModal'});
         createStore.onsubmit(store, function (e) {
             e.data.create(Utils.toJSON(e.array));

@@ -15,8 +15,7 @@
     <div class="card-no-border no-bottom">
         <tasks></tasks>
     </div>
-    <instance data="{{.UUID}}" name="{{.Name}}">
-    <div name="" class="card instance">
+    <div id="instance" class="card instance" data="{{.UUID}}" name="{{.Name}}">
         <div class="card-header">
             <div class="card-just-left">
                 <a href="../.." class="none">Home</a> |
@@ -28,47 +27,42 @@
         <div class="card-none no-bottom">
             <div class="card no-border no-bottom">
                 <div class="card-header-btn">
-                    <instance-console>
-                        <div class="btn-group btn-group-sm">
+                    <div id="console" class="btn-group btn-group-sm">
                         {{$url := "#"}}
                         {{if eq .State "running"}}
                             {{ $url = printf "/ui/console?instance=%s&password=%s" .UUID .Password}}
                         {{end}}
                         <a type="button" class="btn btn-outline-dark btn-sm" href="{{$url}}">console</a>
-                        <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button id="console-more" type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" data-target="console-more" aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu" aria-labelledby="console-more">
                             <a class="dropdown-item" href="{{$url}}" target="_blank">new blank</a>
                         </div>
-                        </div>
-                    </instance-console>
-                    <instance-start><button type="button" class="btn btn-outline-dark btn-sm">start</button></instance-start>
-                    <instance-refresh>
-                        <a type="button" class="btn btn-outline-dark btn-sm" href="javascript:window.location.reload();">refresh</a>
-                    </instance-refresh>
-                    <instance-more>
-                        <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </div>
+                    <button id="start" type="button" class="btn btn-outline-dark btn-sm">start</button>
+                    <a id="refresh" type="button" class="btn btn-outline-dark btn-sm"
+                       href="javascript:window.location.reload();">refresh</a>
+                    <div id="console" class="btn-group" role="gropu">
+                        <button id="btns-more" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
+                                data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
                             operations
                         </button>
-                        <div name="btn-more" class="dropdown-menu">
-                            <instance-more-start><a class="dropdown-item" href="#">start</a></instance-more-start>
-                            <instance-more-shutdown><a class="dropdown-item" href="#">shutdown</a></instance-more-shutdown>
-                            <instance-more-reset><a class="dropdown-item" href="#">reset</a></instance-more-reset>
+                        <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
+                            <a id="more-start" class="dropdown-item" href="#">start</a>
+                            <a id="shutdown" class="dropdown-item" href="#">shutdown</a>
+                            <a id="reset" class="dropdown-item" href="#">reset</a>
                             <div class="dropdown-divider"></div>
-                            <instance-more-suspend><a class="dropdown-item" href="#">suspend</a></instance-more-suspend>
-                            <instance-more-resume><a class="dropdown-item" href="#">resume</a></instance-more-resume>
+                            <a id="suspend" class="dropdown-item" href="#">suspend</a>
+                            <a id="resume" class="dropdown-item" href="#">resume</a>
                             <div class="dropdown-divider"></div>
-                            <instance-more-destroy><a class="dropdown-item" href="#">destroy</a></instance-more-destroy>
-                            <instance-more-remove><a class="dropdown-item" href="#">remove</a></instance-more-remove>
+                            <a id="destroy" class="dropdown-item" href="#">destroy</a>
+                            <a id="remove" class="dropdown-item" href="#">remove</a>
                             <div class="dropdown-divider"></div>
-                            <instance-more-xml>
-                                <a class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">dump XML</a>
-                            </instance-more-xml>
+                            <a id="dumpxml" class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">dump XML</a>
                         </div>
-                    </instance-more>
+                    </div>
                 </div>
             </div>
         </div>
@@ -95,7 +89,7 @@
 
         <div class="card-body no-top">
             <!-- Virtual Disk -->
-            <div name="disk" class="card disk">
+            <div id="disk" class="card disk">
                 <div class="card-header">
                     <button class="btn btn-link btn-block text-left btn-sm"
                             type="button" data-toggle="collapse"
@@ -106,28 +100,18 @@
                 <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
                 <div class="card-body">
                     <div class="card-header-cnt">
-                        <disk-create>
-                            <button type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#diskCreateModal">
-                                create
-                            </button>
-                        </disk-create>
-                        <disk-edit>
-                            <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                        </disk-edit>
-                        <disk-remove>
-                            <button type="button" class="btn btn-outline-dark btn-sm">remove</button>
-                        </disk-remove>
+                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                                data-toggle="modal" data-target="#diskCreateModal">
+                            create
+                        </button>
+                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">remove</button>
                     </div>
                     <div class="l-content-body">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>
-                                    <disk-on-all>
-                                        <input type="checkbox" aria-label="select all disks">
-                                    </disk-on-all>
-                                </th>
+                                <th><input id="on-all" type="checkbox"></th>
                                 <th>ID</th>
                                 <th>Bus</th>
                                 <th>Device</th>
@@ -139,11 +123,7 @@
                             <tbody>
                             {{range $index, $_ := .Disks}}
                                 <tr>
-                                    <td>
-                                        <disk-on-one>
-                                            <input type="checkbox" aria-label="select {{.Device}}" data="{{.Device}}">
-                                        </disk-on-one>
-                                    </td>
+                                    <td><input id="on-one" type="checkbox" data="{{.Device}}"></td>
                                     <td>{{$index}}</td>
                                     <td>{{.Bus}}</td>
                                     <td>{{.Device}}</td>
@@ -166,7 +146,7 @@
             </div>
 
             <!-- Interface -->
-            <div name="interface" class="card interface">
+            <div id="interface" class="card interface">
                 <div class="card-header">
                     <button class="btn btn-link btn-block text-left btn-sm"
                             type="button" data-toggle="collapse" href="#interface"
@@ -177,28 +157,18 @@
                 <div id="collapseInt" class="collapse show" aria-labelledby="headingOne" data-parent="#instance">
                 <div class="card-body">
                     <div class="card-header-cnt">
-                        <interface-create>
-                            <button type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#interfaceCreateModal">
-                                create
-                            </button>
-                        </interface-create>
-                        <interface-edit>
-                            <button type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                        </interface-edit>
-                        <interface-remove>
-                            <button type="button" class="btn btn-outline-dark btn-sm">remove</button>
-                        </interface-remove>
+                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                                data-toggle="modal" data-target="#interfaceCreateModal">
+                            create
+                        </button>
+                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">remove</button>
                     </div>
                     <div class="l-content-body">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>
-                                    <interface-on-all>
-                                        <input type="checkbox" aria-label="select all interfaces">
-                                    </interface-on-all>
-                                </th>
+                                <th><input id="on-all" type="checkbox" aria-label="select all interfaces"></th>
                                 <th>ID</th>
                                 <th>Model</th>
                                 <th>Device</th>
@@ -210,11 +180,7 @@
                             <tbody>
                             {{range $index, $_ := .Interfaces}}
                             <tr>
-                                <td>
-                                    <interface-on-one>
-                                        <input type="checkbox" aria-label="select {{.Device}}:{{.Address}}" data="{{.Address}}">
-                                    </interface-on-one>
-                                </td>
+                                <td><input id="on-one" type="checkbox" data="{{.Address}}"></td>
                                 <td>{{$index}}</td>
                                 <td>{{.Model}}</td>
                                 <td>{{.Device}}</td>
@@ -255,13 +221,17 @@
     import {InterfaceCreate} from '/static/js/widget/interface/create.js';
 
 
-    let instance = new Instance();
+    let instance = new Instance({
+        id: "#instance",
+        disks: {id: "#disk"},
+        interfaces: {id: "#interface"},
+    });
 
-    new DiskCreate({containerId: 'diskCreateModal'})
+    new DiskCreate({id: '#diskCreateModal'})
         .onsubmit(instance, function (e) {
             e.data.disk.create(Utils.toJSON(e.array));
         });
-    new InterfaceCreate({containerId: 'interfaceCreateModal'})
+    new InterfaceCreate({id: '#interfaceCreateModal'})
         .onsubmit(instance, function (e) {
             e.data.interface.create(Utils.toJSON(e.array));
         });

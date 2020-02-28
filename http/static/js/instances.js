@@ -3,38 +3,41 @@ import {CheckBoxTop} from "./com/utils.js";
 
 
 export class Instances {
-    // nil
-    constructor() {
-        this.instanceOn = new InstanceOn();
+    // {
+    //   id: '#instances'
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.instanceOn = new InstanceOn(props);
         this.instances = this.instanceOn.uuids;
 
         // register buttons's click.
-        $("instance-console").on("click", this.instances, function (e) {
+        $(`${this.id} #console`).on("click", this.instances, function (e) {
             let props = {uuids: e.data.store, passwd: {}};
             e.data.store.forEach(function (v) {
                 props.passwd[v] = $(`input[data=${v}]`).attr('passwd');
             });
             new InstanceApi(props).console();
         });
-        $("instance-start, instance-more-start").on("click", this.instances, function (e) {
+        $(`${this.id} #start, ${this.id} #more-start`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).start();
         });
-        $("instance-more-shutdown").on("click", this.instances, function (e) {
+        $(`${this.id} #more-shutdown`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).shutdown();
         });
-        $("instance-more-reset").on("click", this.instances, function (e) {
+        $(`${this.id} #more-reset`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).reset();
         });
-        $("instance-more-suspend").on("click", this.instances, function (e) {
+        $(`${this.id} #more-suspend`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).suspend();
         });
-        $("instance-more-resume").on("click", this.instances, function (e) {
+        $(`${this.id} #more-resume`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).resume();
         });
-        $("instance-more-destroy").on("click", this.instances, function (e) {
+        $(`${this.id} #more-destroy`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).destroy();
         });
-        $("instance-more-remove").on("click", this.instances, function (e) {
+        $(`${this.id} #more-remove`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).remove();
         });
     }
@@ -46,16 +49,19 @@ export class Instances {
 
 
 export class InstanceOn {
-    // nil
-    constructor() {
-        this.uuids = {store: []};
+    // {
+    //   id: '#instances'
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.uuids = {store: [], id: this.id};
 
         let change = this.change;
         let record = this.uuids;
 
         new CheckBoxTop({
-            one: "instance-on-one input",
-            all: "instance-on-all input",
+            one: `${this.id} #on-one`,
+            all: `${this.id} #on-all`,
             change: function(e) {
                 change(record, e);
             }
@@ -70,22 +76,20 @@ export class InstanceOn {
         console.log(record.store);
 
         if (from.store.length == 0) {
-            $("instance-start button").addClass('disabled');
-            $("instance-console button").addClass('disabled');
-            $("instance-shutdown button").addClass('disabled');
-            $("instance-more button").addClass('disabled');
+            $(`${record.id} #start`).addClass('disabled');
+            $(`${record.id} #console`).addClass('disabled');
+            $(`${record.id} #shutdown`).addClass('disabled');
+            $(`${record.id} #more`).addClass('disabled');
         } else {
-            $("instance-start button").removeClass('disabled');
-            $("instance-console button").removeClass('disabled');
-            $("instance-shutdown button").removeClass('disabled');
-            $("instance-more button").removeClass('disabled');
+            $(`${record.id} #start`).removeClass('disabled');
+            $(`${record.id} #console`).removeClass('disabled');
+            $(`${record.id} #shutdown`).removeClass('disabled');
+            $(`${record.id} #more`).removeClass('disabled');
         }
-
         if (from.store.length != 1) {
-            $("instance-edit button").addClass('disabled');
-        }
-        else {
-            $("instance-edit button").removeClass('disabled');
+            $(`${record.id} #edit`).addClass('disabled');
+        } else {
+            $(`${record.id} #edit`).removeClass('disabled');
         }
     }
 }

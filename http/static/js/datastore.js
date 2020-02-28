@@ -3,13 +3,17 @@ import {CheckBoxTop} from "./com/utils.js";
 
 
 export class DataStore {
-    // nil
-    constructor() {
-        this.datastoreOn = new DataStoreOn();
+    // {
+    //   id: "#datastores"
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.props = props;
+        this.datastoreOn = new DataStoreOn(props);
         this.datastores = this.datastoreOn.uuids;
 
         // register buttons's  click.
-        $("datastore-delete").on("click", this.datastores, function (e) {
+        $(`${this.id} #delete`).on("click", this.datastores, function (e) {
             new DataStoreApi({uuids: e.data.store}).delete();
         });
     }
@@ -21,16 +25,20 @@ export class DataStore {
 
 
 export class DataStoreOn {
-
-    constructor() {
-        this.uuids = {store: []};
+    // {
+    //   id: "#datastores"
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.props = props;
+        this.uuids = {store: [], id: this.id};
 
         let change = this.change;
         let record = this.uuids;
 
         new CheckBoxTop({
-            one: "datastore-on-one input",
-            all: "datastore-on-all input",
+            one: `${this.id} #on-one`,
+            all: `${this.id} #on-all`,
             change: function (e) {
                 change(record, e);
             }
@@ -45,18 +53,16 @@ export class DataStoreOn {
         console.log(record.store);
 
         if (from.store.length == 0) {
-            $("datastore-edit button").addClass('disabled');
-            $("datastore-delete button").addClass('disabled');
+            $(`${record.id} #edit`).addClass('disabled');
+            $(`${record.id} #delete`).addClass('disabled');
         } else {
-            $("datastore-edit button").removeClass('disabled');
-            $("datastore-delete button").removeClass('disabled');
+            $(`${record.id} #edit`).removeClass('disabled');
+            $(`${record.id} #delete`).removeClass('disabled');
         }
-
         if (from.store.length != 1) {
-            $("datastore-edit button").addClass('disabled');
-        }
-        else {
-            $("datastore-edit button").removeClass('disabled');
+            $(`${record.id} #edit`).addClass('disabled');
+        } else {
+            $(`${record.id} #edit`).removeClass('disabled');
         }
     }
 }

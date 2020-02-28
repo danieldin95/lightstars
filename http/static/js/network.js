@@ -3,13 +3,17 @@ import {CheckBoxTop} from "./com/utils.js";
 
 
 export class Network {
-    // nil
-    constructor() {
-        this.networkOn = new NetworkOn();
+    // {
+    //   id: "#networks"
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.props = props;
+        this.networkOn = new NetworkOn(props);
         this.networks = this.networkOn.uuids;
 
         // register buttons's click.
-        $("network-delete").on("click", this.networks, function (e) {
+        $(`${this.id} #delete`).on("click", this.networks, function (e) {
             new NetworkApi({uuids: e.data.store}).delete();
         });
     }
@@ -21,16 +25,20 @@ export class Network {
 
 
 export class NetworkOn {
-    // nil
-    constructor() {
-        this.uuids = {store: []};
+    // {
+    //   id: "#networks"
+    // }
+    constructor(props) {
+        this.id = props.id;
+        this.props = props;
+        this.uuids = {store: [], id: this.id};
 
         let change = this.change;
         let record = this.uuids;
 
         new CheckBoxTop({
-            one: "network-on-one input",
-            all: "network-on-all input",
+            one: `${this.id} #on-one`,
+            all: `${this.id} #on-all`,
             change: function (e) {
                 change(record, e);
             },
@@ -42,21 +50,18 @@ export class NetworkOn {
 
     change(record, from) {
         record.store = from.store;
-        console.log(record.store);
 
         if (from.store.length == 0) {
-            $("network-edit button").addClass('disabled');
-            $("network-delete button").addClass('disabled');
+            $(`${record.id} #edit`).addClass('disabled');
+            $(`${record.id} #delete`).addClass('disabled');
         } else {
-            $("network-edit button").removeClass('disabled');
-            $("network-delete button").removeClass('disabled');
+            $(`${record.id} #edit`).removeClass('disabled');
+            $(`${record.id} #delete`).removeClass('disabled');
         }
-
         if (from.store.length != 1) {
-            $("network-edit button").addClass('disabled');
-        }
-        else {
-            $("network-edit button").removeClass('disabled');
+            $(`${record.id} #edit`).addClass('disabled');
+        } else {
+            $(`${record.id} #edit`).removeClass('disabled');
         }
     }
 }
