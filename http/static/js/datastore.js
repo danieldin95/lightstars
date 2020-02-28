@@ -10,8 +10,8 @@ export class DataStore {
     constructor(props) {
         this.id = props.id;
         this.props = props;
-        this.datastoreOn = new DataStoreOn(props);
-        this.datastores = this.datastoreOn.uuids;
+        this.checkbox = new DataStoreOn(props);
+        this.datastores = this.checkbox.uuids;
         this.table = new DataStoreTable({id: `${this.id} #display-table`});
 
         // register buttons's  click.
@@ -21,7 +21,7 @@ export class DataStore {
 
         // refresh table and register refresh click.
         let refresh = function (your) {
-            your.table.refresh(your.datastoreOn, function (e) {
+            your.table.refresh(your.checkbox, function (e) {
                 e.data.refresh();
             });
         };

@@ -61,8 +61,8 @@ export class Disk {
         this.name = props.name;
         this.instance = props.uuid;
 
-        this.diskOn = new DiskOn(props);
-        this.disks = this.diskOn.disks;
+        this.checkbox = new DiskOn(props);
+        this.disks = this.checkbox.disks;
 
         // register button's click.
         $(`${this.id} #remove`).on("click", this, function (e) {

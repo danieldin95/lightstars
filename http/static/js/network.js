@@ -10,8 +10,8 @@ export class Network {
     constructor(props) {
         this.id = props.id;
         this.props = props;
-        this.networkOn = new NetworkOn(props);
-        this.networks = this.networkOn.uuids;
+        this.checkbox = new NetworkOn(props);
+        this.networks = this.checkbox.uuids;
         this.table = new NetworkTable({id: `${this.id} #display-table`});
 
         // register buttons's click.
@@ -21,7 +21,7 @@ export class Network {
 
         // refresh table and register refresh click.
         let refresh = function (your) {
-            your.table.refresh(your.networkOn, function (e) {
+            your.table.refresh(your.checkbox, function (e) {
                 e.data.refresh();
             });
         };

@@ -9,8 +9,8 @@ export class Instances {
     // }
     constructor(props) {
         this.id = props.id;
-        this.instanceOn = new InstanceOn(props);
-        this.instances = this.instanceOn.uuids;
+        this.checkbox = new InstanceOn(props);
+        this.instances = this.checkbox.uuids;
         this.table = new InstanceTable({id: `${this.id} #display-body`});
 
         // register buttons's click.
@@ -45,7 +45,7 @@ export class Instances {
 
         // refresh table and register refresh click.
         let refresh = function (your) {
-            your.table.refresh(your.instanceOn, function (e) {
+            your.table.refresh(your.checkbox, function (e) {
                 e.data.refresh();
             });
         };
