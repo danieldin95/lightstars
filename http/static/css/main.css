@@ -148,6 +148,7 @@ select {
 }
 
 .select-twice {
+    width: auto;
     margin-left: 1rem;
 }
 

@@ -169,8 +169,8 @@ export class InstanceCreate extends ModalFormBase {
                 <div id="step-custom" class="">
                 <form name="custom-config">
                     <div class="form-group row">
-                        <label for="cpu" class="col-sm-2 col-md-4 col-form-label-sm">CPU settings</label>
-                        <div class="col-sm-10 col-md-7">
+                        <label for="cpu" class="col-sm-2 col-md-4 col-form-label-sm">CPU and model</label>
+                        <div class="col-sm-10 col-md-6">
                             <div class="input-group">
                                 <select class="" name="cpu">
                                     <option value="1">1</option>
@@ -180,14 +180,15 @@ export class InstanceCreate extends ModalFormBase {
                                 </select>
                                 <select class="select-twice" name="cpuMode">
                                     <option value="" selected>Qemu</option>
-                                    <option value="host-passthrough">Intel VT-x/AMD-V</option>
+                                    <option value="host-passthrough">Intel VT-x</option>
+                                    <option value="host-passthrough">AMD-V</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="MaxMem" class="col-sm-4 col-md-4 col-form-label-sm">Memory size</label>
-                        <div class="col-sm-10 col-md-7">
+                        <label for="MaxMem" class="col-sm-4 col-md-4 col-form-label-sm">Memory</label>
+                        <div class="col-sm-10 col-md-6">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm input-number-lg" name="memSize" value="2048">
                                 <select class="select-unit-right" name="memUnit">
@@ -199,7 +200,7 @@ export class InstanceCreate extends ModalFormBase {
                     </div>                                
                     <div class="form-group row">
                         <label for="diskSize" class="col-sm-4 col-md-4 col-form-label-sm">Hardware disk01</label>
-                        <div class="col-sm-10 col-md-7">
+                        <div class="col-sm-10 col-md-6">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm input-number-lg" name="disk1Size" value="10">
                                 <select class="select-unit-right" name="disk1Unit">
@@ -212,7 +213,7 @@ export class InstanceCreate extends ModalFormBase {
                     </div>
                     <div class="form-group row">
                         <label for="disk0File" class="col-sm-4 col-md-4 col-form-label-sm">Datastore ISO file</label>
-                        <div class="col-sm-10 col-md-7">
+                        <div class="col-sm-10 col-md-6">
                             <div class="input-group">
                                 <select class="" name="disk0File">
                                     <option value="/dev/sr0">sr0</option>
@@ -222,7 +223,7 @@ export class InstanceCreate extends ModalFormBase {
                     </div>
                     <div class="form-group row">
                         <label for="interface0Source" class="col-sm-4 col-md-4 col-form-label-sm">Network interface01</label>
-                        <div class="col-sm-10 col-md-7">
+                        <div class="col-sm-10 col-md-6">
                             <div class="input-group">
                                 <select class="" name="interface0Source">
                                     <option value="virbr0" selected>Linux Bridge #virbr0</option>
