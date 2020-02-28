@@ -1,5 +1,6 @@
 import {DataStoreApi} from "./api/datastore.js";
 import {CheckBoxTop} from "./com/utils.js";
+import {DataStoreTable} from "./widget/datastore/table.js";
 
 
 export class DataStore {
@@ -11,11 +12,23 @@ export class DataStore {
         this.props = props;
         this.datastoreOn = new DataStoreOn(props);
         this.datastores = this.datastoreOn.uuids;
+        this.table = new DataStoreTable({id: `${this.id} #display-table`});
 
         // register buttons's  click.
         $(`${this.id} #delete`).on("click", this.datastores, function (e) {
             new DataStoreApi({uuids: e.data.store}).delete();
         });
+
+        // refresh table and register refresh click.
+        let refresh = function (your) {
+            your.table.refresh(your.datastoreOn, function (e) {
+                e.data.refresh();
+            });
+        };
+        $(`${this.id} #refresh`).on("click", this, function (e) {
+            refresh(e.data);
+        });
+        refresh(this);
     }
 
     create(data) {
@@ -36,7 +49,7 @@ export class DataStoreOn {
         let change = this.change;
         let record = this.uuids;
 
-        new CheckBoxTop({
+        this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
             change: function (e) {
@@ -46,6 +59,10 @@ export class DataStoreOn {
 
         // disabled firstly.
         change(record, this.uuids);
+    }
+
+    refresh() {
+        this.top.refresh();
     }
 
     change(record, from) {

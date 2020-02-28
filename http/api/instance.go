@@ -238,21 +238,21 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
 	if !ok {
 		// list all instances.
-		ints := schema.Instances{
-			Items: make([]schema.Instance, 0, 32),
-			Meta:  schema.MetaData{},
+		list := schema.List{
+			Items: make([]interface{}, 0, 32),
+			Metadata:  schema.MetaData{},
 		}
 		if domains, err := libvirtc.ListDomains(); err == nil {
 			// TODO support pages by offset and size.
 			for _, d := range domains {
 				int := schema.NewInstance(d)
-				ints.Items = append(ints.Items, int)
+				list.Items = append(list.Items, int)
 				d.Free()
 			}
 		}
-		ints.Meta.Size = len(ints.Items)
-		ints.Meta.Total = len(ints.Items)
-		ResponseJson(w, ints)
+		list.Metadata.Size = len(list.Items)
+		list.Metadata.Total = len(list.Items)
+		ResponseJson(w, list)
 		return
 	}
 

@@ -2,6 +2,7 @@ import {InstanceApi} from "./api/instance.js";
 import {CheckBoxTop} from "./com/utils.js";
 import {InstanceTable} from "./widget/instance/table.js";
 
+
 export class Instances {
     // {
     //   id: '#instances'
@@ -12,9 +13,6 @@ export class Instances {
         this.instances = this.instanceOn.uuids;
         this.table = new InstanceTable({id: `${this.id} #display-body`});
 
-        this.table.refresh(this.instanceOn, function (e) {
-            e.data.refresh();
-        });
         // register buttons's click.
         $(`${this.id} #console`).on("click", this.instances, function (e) {
             let props = {uuids: e.data.store, passwd: {}};
@@ -44,11 +42,17 @@ export class Instances {
         $(`${this.id} #more-remove`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).remove();
         });
-        $(`${this.id} #refresh`).on("click", this, function (e) {
-            e.data.table.refresh(e.data.instanceOn, function (e) {
+
+        // refresh table and register refresh click.
+        let refresh = function (your) {
+            your.table.refresh(your.instanceOn, function (e) {
                 e.data.refresh();
             });
+        };
+        $(`${this.id} #refresh`).on("click", this, function (e) {
+            refresh(e.data);
         });
+        refresh(this);
     }
 
     create(data) {

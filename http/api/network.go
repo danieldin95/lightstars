@@ -65,8 +65,33 @@ func (net Network) Router(router *mux.Router) {
 }
 
 func (net Network) GET(w http.ResponseWriter, r *http.Request) {
-	nets, _ := libvirtn.ListNetworks()
-	ResponseJson(w, nets)
+	uuid, ok := GetArg(r, "id")
+	format := GetQueryOne(r, "format")
+	if !ok {
+		// list all instances.
+		if format == "schema" {
+			list := schema.List{
+				Items: make([]interface{}, 0, 32),
+				Metadata:  schema.MetaData{},
+			}
+			if nets, err := libvirtn.ListNetworks(); err == nil {
+				for _, net := range nets {
+					n := schema.NewNetwork(net)
+					list.Items = append(list.Items, n)
+					net.Free()
+				}
+				list.Metadata.Size = len(list.Items)
+				list.Metadata.Total = len(list.Items)
+			}
+			ResponseJson(w, list)
+		} else {
+			nets, _ := libvirtn.ListNetworks()
+			ResponseJson(w, nets)
+		}
+		return
+	}
+	// TODO
+	ResponseJson(w, uuid)
 }
 
 func (net Network) POST(w http.ResponseWriter, r *http.Request) {

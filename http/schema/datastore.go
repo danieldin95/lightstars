@@ -10,7 +10,7 @@ type DataStore struct {
 	Name       string `json:"name"`
 	State      string `json:"state"`
 	Capacity   uint64 `json:"capacity"`  // bytes
-	Allocation uint64 `json:"capacity"`  // bytes
+	Allocation uint64 `json:"allocation"`  // bytes
 	Available  uint64 `json:"available"` // Bytes
 }
 

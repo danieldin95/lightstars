@@ -1,7 +1,7 @@
-import {InstanceApi} from "../../api/instance.js";
+import {DataStoreApi} from "../../api/datastore.js";
 
 
-export class InstanceTable {
+export class DataStoreTable {
     // {
     //   id: '#xx'.
     // }
@@ -12,13 +12,13 @@ export class InstanceTable {
     }
 
     loading() {
-        return `<tr><td colspan="9" style="text-align: center">Loading...</td></tr>`
+        return `<tr><td colspan="7" style="text-align: center">Loading...</td></tr>`
     }
 
     refresh(data, func) {
         $(this.id).html(this.loading());
-        console.log("InstanceTable.refresh", data, func);
-        new InstanceApi({tasks: this.tasks}).list(this,function (e) {
+        console.log("DataStoreTable.refresh", data, func);
+        new DataStoreApi({tasks: this.tasks}).list(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             func({data, resp: e.resp});
         });
@@ -28,15 +28,12 @@ export class InstanceTable {
         return template.compile(`
         {{each items v i}}
             <tr>
-                <td>
-                    <input id="on-one" type="checkbox" aria-label="" data="{{v.uuid}}" passwd="{{v.password}}">
-                </td>
+                <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
                 <td>{{i+1}}</td>
-                <td><a class="text-decoration-none" href="/ui/instance/{{v.uuid}}">{{v.uuid}}</a></td>
-                <td>{{v.cpuTime}}ms</td>
+                <td><a href="/ui/datastore/{{v.uuid}}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
-                <td>{{v.maxCpu}}</td>
-                <td>{{v.maxMem}}KiB</td>
+                <td>{{v.capacity}}B</td>
+                <td>{{v.available}}B</td>
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}

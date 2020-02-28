@@ -18,7 +18,33 @@ func (store DataStore) Router(router *mux.Router) {
 }
 
 func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
-	ResponseJson(w, libvirts.DATASTOR.List())
+	uuid, ok := GetArg(r, "id")
+	format := GetQueryOne(r, "format")
+	if !ok {
+		// list all instances.
+		if format == "schema" {
+			list := schema.List{
+				Items: make([]interface{}, 0, 32),
+				Metadata:  schema.MetaData{},
+			}
+			if pools, err := libvirts.ListPools(); err == nil {
+				for _, p := range pools {
+					store := schema.NewDataStore(p)
+					list.Items = append(list.Items, store)
+					p.Free()
+				}
+				list.Metadata.Size = len(list.Items)
+				list.Metadata.Total = len(list.Items)
+			}
+			ResponseJson(w, list)
+		} else {
+			ResponseJson(w, libvirts.DATASTOR.List())
+		}
+		return
+	}
+
+	//TODO
+	ResponseJson(w, uuid)
 }
 
 func (store DataStore) POST(w http.ResponseWriter, r *http.Request) {

@@ -19,6 +19,16 @@ export class NetworkApi extends Api {
         return 'api/network'
     }
 
+    list(data, func) {
+        let your = this;
+
+        $.get(your.url(), {format: 'schema'}, function (resp, status) {
+            func({data, resp});
+        }).fail(function (e) {
+            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        });
+    }
+
     create(data) {
         let your = this;
 
