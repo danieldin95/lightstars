@@ -7,6 +7,11 @@ This software makes it easier for you to control compute resource.
 
 # CentOS7
 
+## Check Intel VT-x or AMD-V
+
+    lscpu | egrep '(vmx|svm)'
+
+
 ## Install by RPM packaging
 
     yum install -y wget
@@ -15,11 +20,15 @@ This software makes it easier for you to control compute resource.
     yum install -y ./lightstar-0.2.23-1.el7.x86_64.rpm
 
 
-## Start Libvirtd and LightStar service.
+## Start Libvirtd service.
 
     systemctl enable libvirtd
     systemctl start libvirtd
     
+
+## Start LightStar service.
+
+
     systemctl enable lightstar
     systemctl start lightstar
 
@@ -33,4 +42,9 @@ This software makes it easier for you to control compute resource.
 # Open UI on browser
 
     https://your-machine-address:10080
+
+
+## Get admin's password
+
+    cat /etc/lightstar.auth
 
