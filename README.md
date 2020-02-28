@@ -24,7 +24,7 @@ This software makes it easier for you to control compute resource.
     systemctl start lightstar
 
 
-## Upload a linux ISO file
+## Upload a Linux ISO file
 
     cd /lightstar/datastore/01
     wget http://mirrors.aliyun.com/centos/7.7.1908/isos/x86_64/CentOS-7-x86_64-Minimal-1908.iso
