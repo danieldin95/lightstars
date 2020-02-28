@@ -1,7 +1,9 @@
 
 
 export class ModalFormBase {
-    // {containerId: ''}
+    // {
+    //   containerId: ''
+    //   }
     constructor(props) {
         this.props = props;
         this.containerId = props.containerId;

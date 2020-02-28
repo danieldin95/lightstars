@@ -300,7 +300,7 @@
 <script src="/static/asset/smartwizard/js/jquery.smartWizard.js"></script>
 
 <script type="module">
-    import {Arr2Json} from "/static/js/com/utils.js";
+    import {Utils} from "/static/js/com/utils.js";
     import {Instances} from '/static/js/instances.js';
     import {Network} from "/static/js/network.js";
     import {DataStore} from "/static/js/datastore.js";
@@ -313,19 +313,19 @@
         let ins = new Instances();
         let createModal = new InstanceCreate({containerId: 'instanceCreateModal'});
         createModal.onsubmit(ins, function (e) {
-            e.data.create(Arr2Json(e.array));
+            e.data.create(Utils.toJSON(e.array));
         });
 
         let net = new Network();
         let createNetwork = new NetworkCreate({containerId: 'networkCreateModal'});
         createNetwork.onsubmit(net, function (e) {
-            e.data.create(Arr2Json(e.array));
+            e.data.create(Utils.toJSON(e.array));
         });
 
         let store = new DataStore();
         let createStore = new DataStoreCreate({containerId: 'datastoreCreateModal'});
         createStore.onsubmit(store, function (e) {
-            e.data.create(Arr2Json(e.array));
+            e.data.create(Utils.toJSON(e.array));
         });
     });
 </script>

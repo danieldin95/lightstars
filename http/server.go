@@ -81,9 +81,9 @@ func (h *Server) Initialize() {
 	if h.server == nil {
 		h.server = &http.Server{
 			Addr:         h.listen,
-			WriteTimeout: time.Second * 60 * 2,
-			ReadTimeout:  time.Second * 60 * 2,
-			IdleTimeout:  time.Second * 120 * 5,
+			WriteTimeout: time.Second * 60 * 5,
+			ReadTimeout:  time.Second * 60 * 5,
+			IdleTimeout:  time.Second * 60 * 30,
 			Handler:      r,
 		}
 	}

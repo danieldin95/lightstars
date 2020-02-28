@@ -249,7 +249,7 @@
 <!-- Bootstrap Javascript -->
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
 <script type="module">
-    import {Arr2Json} from "/static/js/com/utils.js";
+    import {Utils} from "/static/js/com/utils.js";
     import {Instance} from '/static/js/instance.js';
     import {DiskCreate} from '/static/js/widget/disk/create.js';
     import {InterfaceCreate} from '/static/js/widget/interface/create.js';
@@ -259,11 +259,11 @@
 
     new DiskCreate({containerId: 'diskCreateModal'})
         .onsubmit(instance, function (e) {
-            e.data.disk.create(Arr2Json(e.array));
+            e.data.disk.create(Utils.toJSON(e.array));
         });
     new InterfaceCreate({containerId: 'interfaceCreateModal'})
         .onsubmit(instance, function (e) {
-            e.data.interface.create(Arr2Json(e.array));
+            e.data.interface.create(Utils.toJSON(e.array));
         });
 </script>
 </body>

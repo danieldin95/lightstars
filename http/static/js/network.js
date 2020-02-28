@@ -1,5 +1,5 @@
 import {NetworkApi} from "./api/network.js";
-import {ListenChangeAll} from "./com/utils.js";
+import {CheckBoxTop} from "./com/utils.js";
 
 
 export class Network {
@@ -21,15 +21,19 @@ export class Network {
 
 
 export class NetworkOn {
-
+    // nil
     constructor() {
         this.uuids = {store: []};
 
         let change = this.change;
         let record = this.uuids;
 
-        ListenChangeAll("network-on-one input", "network-on-all input", function(e) {
-           change(record, e);
+        new CheckBoxTop({
+            one: "network-on-one input",
+            all: "network-on-all input",
+            change: function (e) {
+                change(record, e);
+            },
         });
 
         // disabled firstly.

@@ -4,7 +4,10 @@ import {ModalFormBase} from "../form/modal.js";
 
 
 export class InstanceCreate extends ModalFormBase {
-    // {containerId: "", wizardId: ""}
+    // {
+    //   containerId: "",
+    //   wizardId: "",
+    // }
     constructor (props) {
         super(props);
 

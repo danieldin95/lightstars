@@ -1,5 +1,5 @@
 import {DataStoreApi} from "./api/datastore.js";
-import {ListenChangeAll} from "./com/utils.js";
+import {CheckBoxTop} from "./com/utils.js";
 
 
 export class DataStore {
@@ -28,8 +28,12 @@ export class DataStoreOn {
         let change = this.change;
         let record = this.uuids;
 
-        ListenChangeAll("datastore-on-one input", "datastore-on-all input", function(e) {
-           change(record, e);
+        new CheckBoxTop({
+            one: "datastore-on-one input",
+            all: "datastore-on-all input",
+            change: function (e) {
+                change(record, e);
+            }
         });
 
         // disabled firstly.

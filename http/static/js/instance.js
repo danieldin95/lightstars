@@ -1,11 +1,11 @@
 import {DiskApi} from './api/disk.js';
 import {InterfaceApi} from './api/interface.js';
 import {InstanceApi} from './api/instance.js';
-import {ListenChangeAll} from "./com/utils.js";
+import {CheckBoxTop} from "./com/utils.js";
 
 
 export class Instance {
-    // null
+    // nil
     constructor() {
         let name = $('instance').attr("name");
         let uuid = $('instance').attr("data");
@@ -69,15 +69,19 @@ export class Disk {
 
 
 export class DiskOn {
-
+    // nil
     constructor() {
         this.disks = {store: []};
 
         let record = this.disks;
         let change = this.change;
 
-        ListenChangeAll("disk-on-one input", "disk-on-all input", function (e) {
-           change(record, e);
+        new CheckBoxTop({
+            one: "disk-on-one input",
+            all: "disk-on-all input",
+            change: function (e) {
+                change(record, e);
+            },
         });
 
         // disabled firstly.
@@ -138,8 +142,12 @@ export class InterfaceOn {
         let record = this.interfaces;
         let change = this.change;
 
-        ListenChangeAll("interface-on-one input", "interface-on-all input", function (e) {
-            change(record, e);
+        new CheckBoxTop({
+            one: "interface-on-one input",
+            all: "interface-on-all input",
+            change: function (e) {
+                change(record, e);
+            }
         });
 
         // disabled firstly.
