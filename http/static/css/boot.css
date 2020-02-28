@@ -4,7 +4,7 @@
 }
 
 .card {
-    margin: 15px 10px;
+    margin: 1.25rem -1px 1.25rem 0;
     border-color: #0b3255;
     border-radius: 0;
 }
