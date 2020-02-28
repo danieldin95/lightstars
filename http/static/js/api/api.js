@@ -10,7 +10,6 @@ export class Api {
         if (!props) {
             props = {};
         }
-
         if (props.tasks) {
             this.tasks = props.tasks;
         } else {
@@ -23,6 +22,7 @@ export class Api {
         }
         this.name = props.name;
         this.props = props;
+
         console.log('Api.constructor', this.props);
     }
 

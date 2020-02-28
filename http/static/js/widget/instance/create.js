@@ -5,7 +5,7 @@ import {ModalFormBase} from "../form/modal.js";
 
 export class InstanceCreate extends ModalFormBase {
     // {
-    //   containerId: "",
+    //   id: "#instanceCrateModal",
     //   wizardId: "",
     // }
     constructor (props) {
@@ -13,7 +13,7 @@ export class InstanceCreate extends ModalFormBase {
 
         this.props.wizardId = props.wizardId || 'instanceCreateWizard';
         this.wizardId = this.props.wizardId; // id
-        console.log('aa', this.props, this.wizardId);
+        console.log('InstanceCreate.constructor', this.props, this.wizardId);
 
         this.forms = `#${this.wizardId} form`;
         this.prevbtn = `#${this.wizardId} #prev-btn`;

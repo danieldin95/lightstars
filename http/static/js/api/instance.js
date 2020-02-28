@@ -19,6 +19,16 @@ export class InstanceApi extends Api {
         return 'api/instance'
     }
 
+    list(data, func) {
+        let your = this;
+
+        $.get(your.url(), function (resp, status) {
+            func({data, resp});
+        }).fail(function (e) {
+            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        });
+    }
+
     start() {
         let your = this;
         let data = JSON.stringify({action: 'start'});

@@ -53,13 +53,6 @@ func (ui UI) Home(w http.ResponseWriter, r *http.Request) {
 
 	index.Version = schema.NewVersion()
 	index.Hyper = schema.NewHyper()
-	if domains, err := libvirtc.ListDomains(); err == nil {
-		for _, d := range domains {
-			instance := schema.NewInstance(d)
-			index.Instances = append(index.Instances, instance)
-			d.Free()
-		}
-	}
 	if pools, err := libvirts.ListPools(); err == nil {
 		for _, p := range pools {
 			store := schema.NewDataStore(p)

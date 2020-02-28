@@ -1,6 +1,6 @@
 import {InstanceApi} from "./api/instance.js";
 import {CheckBoxTop} from "./com/utils.js";
-
+import {InstanceTable} from "./widget/instance/table.js";
 
 export class Instances {
     // {
@@ -10,7 +10,11 @@ export class Instances {
         this.id = props.id;
         this.instanceOn = new InstanceOn(props);
         this.instances = this.instanceOn.uuids;
+        this.table = new InstanceTable({id: `${this.id} #display-body`});
 
+        this.table.refresh(this.instanceOn, function (e) {
+            e.data.refresh();
+        });
         // register buttons's click.
         $(`${this.id} #console`).on("click", this.instances, function (e) {
             let props = {uuids: e.data.store, passwd: {}};
@@ -40,6 +44,11 @@ export class Instances {
         $(`${this.id} #more-remove`).on("click", this.instances, function (e) {
             new InstanceApi({uuids: e.data.store}).remove();
         });
+        $(`${this.id} #refresh`).on("click", this, function (e) {
+            e.data.table.refresh(e.data.instanceOn, function (e) {
+                e.data.refresh();
+            });
+        });
     }
 
     create(data) {
@@ -59,7 +68,7 @@ export class InstanceOn {
         let change = this.change;
         let record = this.uuids;
 
-        new CheckBoxTop({
+        this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
             change: function(e) {
@@ -71,9 +80,13 @@ export class InstanceOn {
         change(record, this.uuids);
     }
 
+    refresh() {
+        this.top.refresh();
+    }
+
     change(record, from) {
         record.store = from.store;
-        console.log(record.store);
+        console.log("InstanceOn.change", record.store);
 
         if (from.store.length == 0) {
             $(`${record.id} #start`).addClass('disabled');

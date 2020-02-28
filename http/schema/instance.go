@@ -15,11 +15,11 @@ type Instance struct {
 	Arch             string `json:"arch"` // configure: x86_64 or i386
 	Type             string `json:"type"`
 	Boots            string `json:"boots,omitempty"`     // configure: hd,cdrom,network.
-	DataStore        string `json:"datastore"`           // configure
+	DataStore        string `json:"datastore,omitempty"` // configure
 	Cpu              string `json:"cpu,omitempty"`       // configure
 	MemSize          string `json:"memSize,omitempty"`   // configure
 	MemUnit          string `json:"memUnit,omitempty"`   // configure
-	CpuMode          string `json:"cpuMode"`             // configure
+	CpuMode          string `json:"cpuMode,omitempty"`   // configure
 	Disk0File        string `json:"disk0File,omitempty"` // configure
 	Disk1Size        string `json:"disk1Size,omitempty"` // configure
 	Disk1Unit        string `json:"disk1Unit,omitempty"` // configure

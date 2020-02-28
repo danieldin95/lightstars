@@ -37,7 +37,7 @@ export class CheckBoxTop {
         let storage = [];
 
         // listen on all one.
-        console.log($(your.one));
+        console.log("CheckBoxTop.refresh", $(your.one));
         $(your.one).each(function (i, e) {
             $(e).prop('checked', false);
             $(e).on("change", function(e) {

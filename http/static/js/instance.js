@@ -3,7 +3,6 @@ import {InterfaceApi} from './api/interface.js';
 import {InstanceApi} from './api/instance.js';
 import {CheckBoxTop} from "./com/utils.js";
 
-
 export class Instance {
     // {
     //   id: '#instance'

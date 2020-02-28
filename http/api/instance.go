@@ -227,6 +227,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 }
 
 func (ins Instance) Router(router *mux.Router) {
+	router.HandleFunc("/api/instance", ins.GET).Methods("GET")
 	router.HandleFunc("/api/instance", ins.POST).Methods("POST")
 	router.HandleFunc("/api/instance/{id}", ins.GET).Methods("GET")
 	router.HandleFunc("/api/instance/{id}", ins.PUT).Methods("PUT")
@@ -234,7 +235,26 @@ func (ins Instance) Router(router *mux.Router) {
 }
 
 func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
-	uuid, _ := GetArg(r, "id")
+	uuid, ok := GetArg(r, "id")
+	if !ok {
+		// list all instances.
+		ints := schema.Instances{
+			Items: make([]schema.Instance, 0, 32),
+			Meta:  schema.MetaData{},
+		}
+		if domains, err := libvirtc.ListDomains(); err == nil {
+			// TODO support pages by offset and size.
+			for _, d := range domains {
+				int := schema.NewInstance(d)
+				ints.Items = append(ints.Items, int)
+				d.Free()
+			}
+		}
+		ints.Meta.Size = len(ints.Items)
+		ints.Meta.Total = len(ints.Items)
+		ResponseJson(w, ints)
+		return
+	}
 
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {

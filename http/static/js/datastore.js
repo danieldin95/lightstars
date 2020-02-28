@@ -50,7 +50,7 @@ export class DataStoreOn {
 
     change(record, from) {
         record.store = from.store;
-        console.log(record.store);
+        console.log("DataStoreOn.change", record.store);
 
         if (from.store.length == 0) {
             $(`${record.id} #edit`).addClass('disabled');

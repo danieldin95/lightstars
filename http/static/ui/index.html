@@ -69,8 +69,7 @@
                 </button>
                 <button id="console" type="button" class="btn btn-outline-dark btn-sm">console</button>
                 <button id="start" type="button" class="btn btn-outline-dark btn-sm">start</button>
-                <a id="refresh" type="button"
-                   class="btn btn-outline-dark btn-sm" href="javascript:window.location.reload();">refresh</a>
+                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
                 <button id="more" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     operations
@@ -89,7 +88,7 @@
             </div>
 
             <!-- Instances display -->
-            <div class="l-content-body">
+            <div class="">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -105,21 +104,10 @@
                         <th>State</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {{range $index, $_ := .Instances}}
+                    <tbody id="display-body">
                     <tr>
-                        <td>
-                            <input id="on-one" type="checkbox" aria-label="" data="{{.UUID}}" passwd="{{.Password}}">
-                        </td>
-                        <td>{{$index}}</td>
-                        <td><a class="text-decoration-none" href="/ui/instance/{{.UUID}}">{{.UUID}}</a></td>
-                        <td>{{.CpuTime}}ms</td>
-                        <td>{{.Name}}</td>
-                        <td>{{.MaxCpu}}</td>
-                        <td>{{prettyKBytes .MaxMem}}</td>
-                        <td><span class="{{.State}}">{{.State}}</span></td>
+                        <td colspan="9" style="text-align: center">loading...</td>
                     </tr>
-                    {{end}}
                     </tbody>
                 </table>
             </div>
@@ -256,6 +244,8 @@
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
 <!-- SmartWizard Javascript -->
 <script src="/static/asset/smartwizard/js/jquery.smartWizard.js"></script>
+<!-- ART Template Javascript -->
+<script src="/static/asset/template-web.js"></script>
 
 <script type="module">
     import {Utils} from "/static/js/com/utils.js";
@@ -268,20 +258,21 @@
 
 
     $(document).ready(function() {
+
         let ins = new Instances({id: '#instances'});
-        let createModal = new InstanceCreate({containerId: 'instanceCreateModal'});
+        let createModal = new InstanceCreate({id: '#instanceCreateModal'});
         createModal.onsubmit(ins, function (e) {
             e.data.create(Utils.toJSON(e.array));
         });
 
         let net = new Network({id: '#networks'});
-        let createNetwork = new NetworkCreate({containerId: 'networkCreateModal'});
+        let createNetwork = new NetworkCreate({id: '#networkCreateModal'});
         createNetwork.onsubmit(net, function (e) {
             e.data.create(Utils.toJSON(e.array));
         });
 
         let store = new DataStore({id: '#datastores'});
-        let createStore = new DataStoreCreate({containerId: 'datastoreCreateModal'});
+        let createStore = new DataStoreCreate({id: '#datastoreCreateModal'});
         createStore.onsubmit(store, function (e) {
             e.data.create(Utils.toJSON(e.array));
         });
