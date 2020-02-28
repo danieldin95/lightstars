@@ -31,34 +31,34 @@ export class DataStoreCreate extends ModalFormBase {
     }
 
     template() {
-        return `
-    <div class="modal-dialog modal-dialog-centered model-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="">Create DataStore</h5>
-            </div>
-            <form name="datastore-new">
-            <div id="" class="modal-body">
-                <div class="form-group row">
-                    <label for="name" class="col-sm-4 col-form-label-sm ">name</label>
-                    <div class="col-sm-6">
-                        <div class="input-group">
-                            <select class="" name="name">
-                                <option value="datastore@01" selected>datastore@01</option>
-                            </select>  
+        return (`
+        <div class="modal-dialog modal-dialog-centered model-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">Create DataStore</h5>
+                </div>
+                <form name="datastore-new">
+                <div id="" class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-4 col-form-label-sm ">name</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <select class="" name="name">
+                                    <option value="datastore@01" selected>datastore@01</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>              
+                    </div>
                 </div>
-            </div>
-            <div id="" class="modal-footer">
-                <div class="mr-0" rol="group">
-                    <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
-                    <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
-                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
+                <div id="" class="modal-footer">
+                    <div class="mr-0" rol="group">
+                        <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                        <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
+                        <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
+                    </div>
                 </div>
+                </form>
             </div>
-            </form>
-        </div>
-    </div>`
+        </div>`);
     }
 }

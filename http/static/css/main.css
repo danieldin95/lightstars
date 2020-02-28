@@ -88,7 +88,7 @@ a:focus {
 }
 
 .card-no-border {
-    margin: 16px 10px;
+    margin: 1.25rem -1px 1.25rem 0;
 }
 
 .card-none {

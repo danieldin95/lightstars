@@ -96,150 +96,6 @@ export class InstanceCreate extends ModalFormBase {
         this.container().html(this.view);
     }
 
-    template(props) {
-        return `
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="">Create Instance</h5>
-            </div>
-            <div id="${this.wizardId}" class="modal-body">
-                <!-- Wizard navigations -->
-                <ul class="wizard-navs">
-                    <li>
-                        <a href="#step-os">Select name<br />
-                            <small>Configure name and guest OS</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-storage">Select storage<br />
-                            <small>Select one datastore for storage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-custom">Custom configuration<br />
-                            <small>Configure VM's hardware disk, interface and others</small>
-                        </a>
-                    </li>
-                </ul>
-                <!-- Wizard content -->
-                <div class="wizard-main">
-                <!-- Gust OS -->
-                <div id="step-os" class="">
-                    <form name="os-config">
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label-sm">Name</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" name="name" value="guest.01">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="family" class="col-sm-4 col-form-label-sm">Guest OS</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <select class="select-lg" name="family">
-                                    <option value="linux" selected>Linux</option>
-                                    <option value="windows">Windows</option>
-                                    <option value="other">Other</option>
-                                </select>  
-                            </div>
-                        </div>
-                    </div>                        
-                    </form>
-                </div>
-                <!-- DataStore -->
-                <div id="step-storage" class="">
-                    <form name="storage-config">
-                    <div class="form-group row">
-                        <label for="datastore" class="col-sm-4 col-form-label-sm">Storage</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <select class="select-lg" name="datastore">
-                                    <option value="datastore/01" selected>datastore01</option>
-                                    <option value="datastore/02">datastore02</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    </form>
-                </div>
-                <!-- Custom instance -->
-                <div id="step-custom" class="">
-                <form name="custom-config">
-                    <div class="form-group row">
-                        <label for="cpu" class="col-sm-2 col-md-4 col-form-label-sm">Processors</label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <select class="" name="cpu">
-                                    <option value="1">1</option>
-                                    <option value="2" selected>2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                </select>
-                                <select class="select-twice-md" name="cpuMode">
-                                    <option value="" selected>Default</option>
-                                    <option value="host-passthrough">Enable Intel VT-x or AMD-V</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="MaxMem" class="col-sm-4 col-md-4 col-form-label-sm">Memory</label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm input-number-lg" name="memSize" value="2048">
-                                <select class="select-unit-right" name="memUnit">
-                                    <option value="Mib" selected>MiB</option>
-                                    <option value="GiB">GiB</option>
-                                </select>       
-                            </div>
-                        </div>
-                    </div>                                
-                    <div class="form-group row">
-                        <label for="diskSize" class="col-sm-4 col-md-4 col-form-label-sm">Hardware disk01</label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm input-number-lg" name="disk1Size" value="10">
-                                <select class="select-unit-right" name="disk1Unit">
-                                    <option value="Mib">MiB</option>
-                                    <option value="GiB" selected>GiB</option>
-                                    <option value="TiB">TiB</option>
-                                </select>                                                                                     
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="disk0File" class="col-sm-4 col-md-4 col-form-label-sm">Datastore ISO file</label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <select class="" name="disk0File">
-                                    <option value="/dev/sr0">sr0</option>
-                                </select>   
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="interface0Source" class="col-sm-4 col-md-4 col-form-label-sm">Network interface01</label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <select class="" name="interface0Source">
-                                    <option value="virbr0" selected>Linux Bridge #virbr0</option>
-                                    <option value="virbr1">Linux Bridge #virbr1</option>
-                                    <option value="virbr2">Linux Bridge #virbr2</option>
-                                    <option value="virbr3">Linux Bridge #virbr3</option>
-                                </select>  
-                            </div>
-                        </div>
-                    </div>
-                    </form>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>`
-    }
 
     wizard() {
         return $(`#${this.wizardId}`);
@@ -282,5 +138,163 @@ export class InstanceCreate extends ModalFormBase {
 
         // loading super for finish and cancel buttons.
         super.loading();
+    }
+
+    template(props) {
+        return (`
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">Create Instance</h5>
+                </div>
+                <div id="${this.wizardId}" class="modal-body">
+                    <!-- Wizard navigations -->
+                    <ul class="wizard-navs">
+                        <li>
+                            <a href="#step-os">Select name<br />
+                                <small>Configure name and guest OS</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#step-storage">Select storage<br />
+                                <small>Select one datastore for storage</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#step-custom">Custom configuration<br />
+                                <small>Configure VM's hardware disk, interface and others</small>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Wizard content -->
+                    <div class="wizard-main">
+                    <!-- Gust OS -->
+                    <div id="step-os" class="">
+                        <form name="os-config">
+                        <div class="form-group row">
+                            <label for="name" class="col-sm-4 col-form-label-sm">Name</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm"
+                                           name="name" value="guest.01"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="family" class="col-sm-4 col-form-label-sm">Guest OS</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <select class="select-lg" name="family">
+                                        <option value="linux" selected>Linux</option>
+                                        <option value="windows">Windows</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    <!-- DataStore -->
+                    <div id="step-storage" class="">
+                        <form name="storage-config">
+                        <div class="form-group row">
+                            <label for="datastore" class="col-sm-4 col-form-label-sm">
+                                Storage
+                            </label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <select class="select-lg" name="datastore">
+                                        <option value="datastore/01" selected>datastore01</option>
+                                        <option value="datastore/02">datastore02</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    <!-- Custom instance -->
+                    <div id="step-custom" class="">
+                    <form name="custom-config">
+                        <div class="form-group row">
+                            <label for="cpu" class="col-sm-2 col-md-4 col-form-label-sm">
+                                Processors
+                            </label>
+                            <div class="col-sm-10 col-md-6">
+                                <div class="input-group">
+                                    <select class="" name="cpu">
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                    <select class="select-twice-md" name="cpuMode">
+                                        <option value="" selected>Default</option>
+                                        <option value="host-passthrough">Enable Intel VT-x or AMD-V</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="MaxMem" class="col-sm-4 col-md-4 col-form-label-sm">Memory</label>
+                            <div class="col-sm-10 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm input-number-lg"
+                                           name="memSize" value="2048"/>
+                                    <select class="select-unit-right" name="memUnit">
+                                        <option value="Mib" selected>MiB</option>
+                                        <option value="GiB">GiB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="diskSize" class="col-sm-4 col-md-4 col-form-label-sm">
+                                Hardware disk01
+                            </label>
+                            <div class="col-sm-10 col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm input-number-lg"
+                                           name="disk1Size" value="10"/>
+                                    <select class="select-unit-right" name="disk1Unit">
+                                        <option value="Mib">MiB</option>
+                                        <option value="GiB" selected>GiB</option>
+                                        <option value="TiB">TiB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="disk0File" class="col-sm-4 col-md-4 col-form-label-sm">
+                                Datastore ISO file
+                            </label>
+                            <div class="col-sm-10 col-md-6">
+                                <div class="input-group">
+                                    <select class="" name="disk0File">
+                                        <option value="/dev/sr0">sr0</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="interface0Source" class="col-sm-4 col-md-4 col-form-label-sm">
+                                Network interface01
+                            </label>
+                            <div class="col-sm-10 col-md-6">
+                                <div class="input-group">
+                                    <select class="" name="interface0Source">
+                                        <option value="virbr0" selected>Linux Bridge #virbr0</option>
+                                        <option value="virbr1">Linux Bridge #virbr1</option>
+                                        <option value="virbr2">Linux Bridge #virbr2</option>
+                                        <option value="virbr3">Linux Bridge #virbr3</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>`);
     }
 }

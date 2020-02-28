@@ -17,7 +17,7 @@ export class ModalFormBase {
     }
 
     template() {
-        return `<not-implement></not-implement>`
+        return (`<not-implement></not-implement>`);
     }
 
     render() {
