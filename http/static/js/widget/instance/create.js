@@ -169,7 +169,7 @@ export class InstanceCreate extends ModalFormBase {
                 <div id="step-custom" class="">
                 <form name="custom-config">
                     <div class="form-group row">
-                        <label for="cpu" class="col-sm-2 col-md-4 col-form-label-sm">CPU and model</label>
+                        <label for="cpu" class="col-sm-2 col-md-4 col-form-label-sm">Processors</label>
                         <div class="col-sm-10 col-md-6">
                             <div class="input-group">
                                 <select class="" name="cpu">
@@ -178,10 +178,9 @@ export class InstanceCreate extends ModalFormBase {
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                <select class="select-twice" name="cpuMode">
-                                    <option value="" selected>Qemu</option>
-                                    <option value="host-passthrough">Intel VT-x</option>
-                                    <option value="host-passthrough">AMD-V</option>
+                                <select class="select-twice-md" name="cpuMode">
+                                    <option value="" selected>Default</option>
+                                    <option value="host-passthrough">Enable Intel VT-x or AMD-V</option>
                                 </select>
                             </div>
                         </div>

@@ -147,8 +147,9 @@ select {
     margin-left: 1rem;
 }
 
-.select-twice {
+.select-twice-md {
     width: auto;
+    max-width: 100px;
     margin-left: 1rem;
 }
 
