@@ -148,7 +148,7 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 			if q, _ := url.QueryUnescape(r.URL.RawQuery); q != "" {
 				path += "?" + q
 			}
-			libstar.Info("Server.Middleware %s %s", r.Method, path)
+			libstar.Info("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
 		}
 		if h.IsAuth(w, r) {
 			next.ServeHTTP(w, r)
