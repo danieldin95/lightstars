@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -142,7 +143,13 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 
 func (h *Server) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		libstar.Info("Server.Middleware %s %s?%s", r.Method, r.URL.Path, r.URL.RawQuery)
+		if r.Method != "GET" || !strings.HasPrefix(r.URL.Path, "/static") {
+			path := r.URL.Path
+			if q, _ := url.QueryUnescape(r.URL.RawQuery); q != "" {
+				path += "?" + q
+			}
+			libstar.Info("Server.Middleware %s %s", r.Method, path)
+		}
 		if h.IsAuth(w, r) {
 			next.ServeHTTP(w, r)
 		} else {
