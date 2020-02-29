@@ -34,9 +34,8 @@
 }
 
 .card-body {
-    /*border-radius: .25rem .25rem;*/
-    /*border: 1px solid #0b3255;*/
-    /*border-top: none;*/
+    overflow: auto;
+    margin-top: .25rem;
 }
 
 .dropdown-menu {

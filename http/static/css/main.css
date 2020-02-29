@@ -83,10 +83,6 @@ a:focus {
     color: black;
 }
 
-.instances .card-body {
-    min-height: 430px;
-}
-
 .card-no-border {
     margin: 1.25rem -1px 1.25rem 0;
 }
@@ -172,6 +168,8 @@ select {
 }
 
 
+/* instances */
+
 .system,
 .datastores,
 .networks {
@@ -191,6 +189,22 @@ select {
 .networks .card-header:first-child {
     border-radius: .25rem;
 }
+
+.instances .card-body {
+    min-height: 430px;
+    max-height: 430px;
+}
+
+.datastores .card-body {
+    min-height: 430px;
+    max-height: 430px;
+}
+
+.networks .card-body {
+    min-height: 430px;
+    min-height: 430px;
+}
+
 
 /* 404 */
 
