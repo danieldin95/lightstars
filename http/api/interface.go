@@ -37,12 +37,45 @@ func Interface2XML(conf *schema.Interface) (*libvirtc.InterfaceXML, error) {
 }
 
 func (int Interface) Router(router *mux.Router) {
+	router.HandleFunc("/api/instance/{id}/interface", int.GET).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/interface", int.POST).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/interface/{dev}", int.GET).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/interface/{dev}", int.DELETE).Methods("DELETE")
 }
 
 func (int Interface) GET(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
+	uuid, _ := GetArg(r, "id")
+	dev, ok := GetArg(r, "dev")
+	format := GetQueryOne(r, "format")
+	if !ok {
+		dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
+		defer dom.Free()
+		instance := schema.NewInstance(*dom)
+		if format == "schema" {
+			list := schema.List{
+				Items: make([]interface{}, 0, 32),
+				Metadata:  schema.MetaData{},
+			}
+			for _, int := range instance.Interfaces {
+				list.Items = append(list.Items, int)
+			}
+			list.Metadata.Size = len(list.Items)
+			list.Metadata.Total = len(list.Items)
+			ResponseJson(w, list)
+		} else {
+			if instance.XMLObj == nil {
+				http.Error(w, "Get DescXML failed.", http.StatusInternalServerError)
+				return
+			}
+			ResponseJson(w, instance.XMLObj.Devices.Interfaces)
+		}
+		return
+	}
+	ResponseMsg(w, 0, dev)
 }
 
 func (int Interface) POST(w http.ResponseWriter, r *http.Request) {

@@ -1,8 +1,8 @@
-import {ModalFormBase} from "../form/modal.js";
+import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
 
 
-export class DiskCreate extends ModalFormBase {
+export class DiskCreate extends FormModal {
     //
     constructor (props) {
         super(props);

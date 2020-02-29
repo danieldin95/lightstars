@@ -1,5 +1,6 @@
 import {DiskApi} from "./api/disk.js";
 import {CheckBoxTop} from "./com/utils.js";
+import {DiskTable} from "./widget/disk/table.js";
 
 export class Disk {
     // {
@@ -14,6 +15,10 @@ export class Disk {
 
         this.checkbox = new Checkbox(props);
         this.disks = this.checkbox.disks;
+        this.table = new DiskTable({
+            id: `${this.id} #display-table`,
+            instance: this.instance,
+        });
 
         // register button's click.
         $(`${this.id} #remove`).on("click", this, function (e) {
@@ -22,6 +27,17 @@ export class Disk {
                 uuids: e.data.disks.store,
                 name: e.data.name}).delete();
         });
+
+        // refresh table and register refresh click.
+        let refresh = function (your) {
+            your.table.refresh(your.checkbox, function (e) {
+                e.data.refresh();
+            });
+        };
+        $(`${this.id} #refresh`).on("click", this, function (e) {
+            refresh(e.data);
+        });
+        refresh(this);
     }
 
     create(data) {
@@ -45,7 +61,7 @@ export class Checkbox {
         let record = this.disks;
         let change = this.change;
 
-        new CheckBoxTop({
+        this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
             change: function (e) {
@@ -55,6 +71,10 @@ export class Checkbox {
 
         // disabled firstly.
         change(record, this.disks);
+    }
+
+    refresh() {
+        this.top.refresh();
     }
 
     change(record, from) {

@@ -16,12 +16,45 @@ type Disk struct {
 }
 
 func (disk Disk) Router(router *mux.Router) {
+	router.HandleFunc("/api/instance/{id}/disk", disk.GET).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/disk", disk.POST).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.GET).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.DELETE).Methods("DELETE")
 }
 
 func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
+	uuid, _ := GetArg(r, "id")
+	dev, ok := GetArg(r, "dev")
+	format := GetQueryOne(r, "format")
+	if !ok {
+		dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
+		defer dom.Free()
+		instance := schema.NewInstance(*dom)
+		if format == "schema" {
+			list := schema.List{
+				Items: make([]interface{}, 0, 32),
+				Metadata:  schema.MetaData{},
+			}
+			for _, disk := range instance.Disks {
+				list.Items = append(list.Items, disk)
+			}
+			list.Metadata.Size = len(list.Items)
+			list.Metadata.Total = len(list.Items)
+			ResponseJson(w, list)
+		} else {
+			if instance.XMLObj == nil {
+				http.Error(w, "Get DescXML failed.", http.StatusInternalServerError)
+				return
+			}
+			ResponseJson(w, instance.XMLObj.Devices.Disks)
+		}
+		return
+	}
+	ResponseMsg(w, 0, dev)
 }
 
 func IsVolume(file string) bool {

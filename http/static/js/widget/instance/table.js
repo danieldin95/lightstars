@@ -36,7 +36,7 @@ export class InstanceTable {
                 <td>{{v.cpuTime}}ms</td>
                 <td>{{v.name}}</td>
                 <td>{{v.maxCpu}}</td>
-                <td>{{v.maxMem}}KiB</td>
+                <td>{{v.maxMem | prettyKiB}}</td>
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}

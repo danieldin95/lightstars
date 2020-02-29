@@ -1,9 +1,9 @@
 import {Option} from "../option.js";
 import {AlertDanger} from "../../com/alert.js";
-import {ModalFormBase} from "../form/modal.js";
+import {FormModal} from "../form/modal.js";
 
 
-export class InstanceCreate extends ModalFormBase {
+export class InstanceCreate extends FormModal {
     // {
     //   id: "#instanceCrateModal",
     //   wizardId: "",

@@ -1,9 +1,8 @@
-import {ModalFormBase} from "../form/modal.js";
+import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
-import {AlertDanger} from "../../com/alert.js";
 
 
-export class NetworkCreate extends ModalFormBase {
+export class NetworkCreate extends FormModal {
     //
     constructor (props) {
         super(props);

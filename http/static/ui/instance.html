@@ -120,24 +120,8 @@
                                 <th>Format</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            {{range $index, $_ := .Disks}}
-                                <tr>
-                                    <td><input id="on-one" type="checkbox" data="{{.Device}}"></td>
-                                    <td>{{$index}}</td>
-                                    <td>{{.Bus}}</td>
-                                    <td>{{.Device}}</td>
-                                    <td>{{.Source}}</td>
-                                    <td><span>
-                                        {{if eq .AddrType "pci"}}
-                                            pci:{{prettyPCI .AddrDomain .AddrBus .AddrSlot .AddrFunc}}
-                                        {{else if eq .AddrType "drive"}}
-                                            drv:{{prettyDrive .AddrCtl .AddrBus .AddrTgt .AddrUnit}}
-                                        {{end}}</span>
-                                    </td>
-                                    <td>{{.Format}}</td>
-                                </tr>
-                            {{end}}
+                            <tbody id="display-table">
+                            <!-- Loading... -->
                             </tbody>
                         </table>
                     </div>
@@ -177,22 +161,8 @@
                                 <th>Source</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            {{range $index, $_ := .Interfaces}}
-                            <tr>
-                                <td><input id="on-one" type="checkbox" data="{{.Address}}"></td>
-                                <td>{{$index}}</td>
-                                <td>{{.Model}}</td>
-                                <td>{{.Device}}</td>
-                                <td>{{.Address}}</td>
-                                <td><span>
-                                {{if eq .AddrType "pci"}}
-                                    pci:{{prettyPCI .AddrDomain .AddrBus .AddrSlot .AddrFunc}}
-                                {{end}}</span>
-                                </td>
-                                <td>{{.Source}}</td>
-                            </tr>
-                            {{end}}
+                            <tbody id="display-table">
+                            <!-- Loading -->
                             </tbody>
                         </table>
                     </div>
@@ -214,28 +184,35 @@
 <script src="/static/asset/popper.js/1.12.9/umd/popper.js"></script>
 <!-- Bootstrap Javascript -->
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
+<!-- ART Template Javascript -->
+<script src="/static/asset/template-web.js"></script>
+
 <script type="module">
     import {Utils} from "/static/js/com/utils.js";
     import {Instance} from '/static/js/instance.js';
     import {DiskCreate} from '/static/js/widget/disk/create.js';
     import {InterfaceCreate} from '/static/js/widget/interface/create.js';
+    import {Filters} from "/static/js/filter.js"
 
+    $(document).ready(function() {
+        new Filters();
 
-    let instance = new Instance({
-        id: "#instance",
-        header: {id: "#header"},
-        disks: {id: "#disk"},
-        interfaces: {id: "#interface"},
+        let instance = new Instance({
+            id: "#instance",
+            header: {id: "#header"},
+            disks: {id: "#disk"},
+            interfaces: {id: "#interface"},
+        });
+
+        new DiskCreate({id: '#diskCreateModal'})
+            .onsubmit(instance, function (e) {
+                e.data.disk.create(Utils.toJSON(e.array));
+            });
+        new InterfaceCreate({id: '#interfaceCreateModal'})
+            .onsubmit(instance, function (e) {
+                e.data.interface.create(Utils.toJSON(e.array));
+            });
     });
-
-    new DiskCreate({id: '#diskCreateModal'})
-        .onsubmit(instance, function (e) {
-            e.data.disk.create(Utils.toJSON(e.array));
-        });
-    new InterfaceCreate({id: '#interfaceCreateModal'})
-        .onsubmit(instance, function (e) {
-            e.data.interface.create(Utils.toJSON(e.array));
-        });
 </script>
 </body>
 </html>

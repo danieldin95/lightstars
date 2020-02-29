@@ -22,6 +22,16 @@ export class DiskApi extends Api {
         return `/api/instance/${instance}/disk`
     }
 
+    list(data, func) {
+        let your = this;
+
+        $.get(your.url(this.instance), {format: 'schema'}, function (resp, status) {
+            func({data, resp});
+        }).fail(function (e) {
+            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        });
+    }
+
     create(data) {
         let your = this;
 

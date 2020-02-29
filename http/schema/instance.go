@@ -36,6 +36,8 @@ type Instance struct {
 	Interfaces  []Interface  `json:"interfaces,omitempty"`
 	Controllers []Controller `json:"controllers,omitempty"`
 	Password    string       `json:"password"`
+
+	XMLObj  *libvirtc.DomainXML `json:"-"`
 }
 
 func NewInstance(dom libvirtc.Domain) Instance {
@@ -72,6 +74,7 @@ func NewInstance(dom libvirtc.Domain) Instance {
 			}
 		}
 	}
+	obj.XMLObj = xmlObj
 	return obj
 }
 

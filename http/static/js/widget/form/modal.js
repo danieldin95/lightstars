@@ -1,6 +1,6 @@
 
 
-export class ModalFormBase {
+export class FormModal {
     // {
     //   id: '#disk'
     // }

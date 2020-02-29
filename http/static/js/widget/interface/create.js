@@ -1,9 +1,9 @@
-import {ModalFormBase} from "../form/modal.js";
+import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
 import {AlertDanger} from "../../com/alert.js";
 
 
-export class InterfaceCreate extends ModalFormBase {
+export class InterfaceCreate extends FormModal {
     //
     constructor (props) {
         super(props);

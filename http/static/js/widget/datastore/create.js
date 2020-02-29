@@ -1,8 +1,8 @@
-import {ModalFormBase} from "../form/modal.js";
+import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
 import {Utils} from "../../com/utils.js";
 
-export class DataStoreCreate extends ModalFormBase {
+export class DataStoreCreate extends FormModal {
     //
     constructor (props) {
         super(props);
@@ -19,7 +19,7 @@ export class DataStoreCreate extends ModalFormBase {
             fresh: function() {
                 this.selector.find('option').remove();
                 for (let i = 1; i <= 16; i++) {
-                    let alias = "datastore@"+Utils.toN(i, 2);
+                    let alias = "datastore@"+Utils.iton(i, 2);
                     this.selector.append(new Option(alias, alias));
                 }
             },

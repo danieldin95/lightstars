@@ -1,7 +1,20 @@
 
 export let Utils = {
-    toN: function (num, n) {
-        return (Array(n).join(0) + num).slice(-n);
+    // num: int
+    iton: function (data, n) {
+        return (Array(n).join(0) + data).slice(-n);
+    },
+    // num: string
+    aton: function(data, n) {
+        let num = "" + data;
+        if (num.length > n) {
+            return num
+        }
+        let ret = "";
+        for (let i = 0; i < n - num.length; i++) {
+            ret += "0"
+        }
+        return ret + num;
     },
     toJSON: function (data) {
         let ret = {};

@@ -1,5 +1,6 @@
 import {InterfaceApi} from "./api/interface.js";
 import {CheckBoxTop} from "./com/utils.js";
+import {InterfaceTable} from "./widget/interface/table.js";
 
 export class Interface {
     // {
@@ -13,8 +14,12 @@ export class Interface {
         this.name = props.name;
         this.instance = props.uuid;
 
-        this.interfaceOn = new Checkbox(props);
-        this.interfaces = this.interfaceOn.interfaces;
+        this.checkbox = new Checkbox(props);
+        this.interfaces = this.checkbox.interfaces;
+        this.table = new InterfaceTable({
+            id: `${this.id} #display-table`,
+            instance: this.instance,
+        });
 
         // register buttons's click
         $(`${this.id} #remove`).on("click", this, function (e) {
@@ -23,6 +28,17 @@ export class Interface {
                 uuids: e.data.interfaces.store,
                 name: this.name}).delete();
         });
+
+        // refresh table and register refresh click.
+        let refresh = function (your) {
+            your.table.refresh(your.checkbox, function (e) {
+                e.data.refresh();
+            });
+        };
+        $(`${this.id} #refresh`).on("click", this, function (e) {
+            refresh(e.data);
+        });
+        refresh(this);
     }
 
     create(data) {
@@ -47,16 +63,19 @@ export class Checkbox {
         let record = this.interfaces;
         let change = this.change;
 
-        new CheckBoxTop({
+        this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
             change: function (e) {
                 change(record, e);
             }
         });
-
         // disabled firstly.
         change(record, this.interfaces);
+    }
+
+    refresh() {
+        this.top.refresh();
     }
 
     change(record, from) {

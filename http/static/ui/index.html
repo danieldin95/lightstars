@@ -233,9 +233,10 @@
     import {InstanceCreate} from '/static/js/widget/instance/create.js';
     import {NetworkCreate} from "/static/js/widget/network/create.js";
     import {DataStoreCreate} from "/static/js/widget/datastore/create.js";
-
+    import {Filters} from "/static/js/filter.js"
 
     $(document).ready(function() {
+        new Filters();
 
         let ins = new Instances({id: '#instances'});
         let createModal = new InstanceCreate({id: '#instanceCreateModal'});
