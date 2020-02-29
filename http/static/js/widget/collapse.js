@@ -1,5 +1,5 @@
 
-export class Collapse{
+export class Collapse {
     // {
     //   default: page,
     //   pages: [ {id: '#', name: ""} ],
@@ -39,6 +39,6 @@ export class Collapse{
         let pages = path.split('#', 2);
 
         name = name || "";
-        return pages.length == 2 ? pages[1] : name;
+        return (pages.length == 2 && pages[1] != "") ? pages[1] : name;
     }
 }
