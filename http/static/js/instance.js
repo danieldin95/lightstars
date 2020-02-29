@@ -22,6 +22,7 @@ export class Instance {
         let uuid = $(this.id).attr("data");
         this.uuid = uuid;
         this.name = name;
+        this.tasks = props.tasks || "tasks";
 
         this.disk = new Disk({id: props.disks.id, uuid, name});
         this.interface = new Interface({id: props.interfaces.id, uuid, name});
@@ -48,6 +49,20 @@ export class Instance {
         });
         $(`${this.head} #remove`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).remove();
+        });
+
+        // console
+        $(`${this.head} #console-self`).on('click', this, function (e) {
+            let url = $(this).attr('data');
+            window.open(url, '_self');
+        });
+        $(`${this.head} #console-blank`).on('click', this, function (e) {
+            let url = $(this).attr('data');
+            window.open(url, '_blank');
+        });
+        $(`${this.head} #console-window`).on('click', this, function (e) {
+            let url = $(this).attr('data');
+            window.open(url, e.data.name,'width=873,height=655');
         });
     }
 }
