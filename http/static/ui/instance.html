@@ -38,7 +38,10 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="console-more">
-                            <a class="dropdown-item" href="{{$url}}" target="_blank">new blank</a>
+                            <a class="dropdown-item" href="{{$url}}" target="_self">open console</a>
+                            <a class="dropdown-item" href="{{$url}}" target="_blank">open console in new blank</a>
+                            <a class="dropdown-item" href="#" target=""
+                               onclick="window.open('{{$url}}','{{.Name}}','width=800,height=600')">open console in new window</a>
                         </div>
                     </div>
                     <button id="start" type="button" class="btn btn-outline-dark btn-sm">start</button>
