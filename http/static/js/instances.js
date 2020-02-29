@@ -1,7 +1,7 @@
 import {InstanceApi} from "./api/instance.js";
 import {CheckBoxTop} from "./com/utils.js";
 import {InstanceTable} from "./widget/instance/table.js";
-
+import {Utils} from "./com/utils.js";
 
 export class Instances {
     // {
@@ -9,6 +9,7 @@ export class Instances {
     // }
     constructor(props) {
         this.id = props.id;
+        this.props = props;
         this.checkbox = new Checkbox(props);
         this.instances = this.checkbox.uuids;
         this.table = new InstanceTable({id: `${this.id} #display-body`});

@@ -153,7 +153,7 @@
                         Network Interface
                     </button>
                 </div>
-                <div id="collapseInt" class="collapse show" aria-labelledby="headingOne" data-parent="#instance">
+                <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
                 <div class="card-body">
                     <div class="card-header-cnt">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
@@ -208,11 +208,19 @@
     import {Instance} from '/static/js/instance.js';
     import {DiskCreate} from '/static/js/widget/disk/create.js';
     import {InterfaceCreate} from '/static/js/widget/interface/create.js';
-    import {Filters} from "/static/js/filter.js"
+    import {Filters} from "/static/js/filter.js";
+    import {Collapse} from "/static/js/widget/collapse.js";
+
 
     $(document).ready(function() {
         new Filters();
-
+        new Collapse({
+            pages: [
+                {id: '#collapseInt', name: 'interface'},
+                {id: '#collapseDis', name: 'disk'},
+            ],
+            default: "interface",
+        });
         let instance = new Instance({
             id: "#instance",
             header: {id: "#header"},
