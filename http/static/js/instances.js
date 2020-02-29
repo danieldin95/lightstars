@@ -9,7 +9,7 @@ export class Instances {
     // }
     constructor(props) {
         this.id = props.id;
-        this.checkbox = new InstanceOn(props);
+        this.checkbox = new Checkbox(props);
         this.instances = this.checkbox.uuids;
         this.table = new InstanceTable({id: `${this.id} #display-body`});
 
@@ -61,7 +61,7 @@ export class Instances {
 }
 
 
-export class InstanceOn {
+export class Checkbox {
     // {
     //   id: '#instances'
     // }
@@ -90,7 +90,7 @@ export class InstanceOn {
 
     change(record, from) {
         record.store = from.store;
-        console.log("InstanceOn.change", record.store);
+        console.log("Checkbox.change", record.store);
 
         if (from.store.length == 0) {
             $(`${record.id} #start`).addClass('disabled');

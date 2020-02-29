@@ -10,7 +10,7 @@ export class Network {
     constructor(props) {
         this.id = props.id;
         this.props = props;
-        this.checkbox = new NetworkOn(props);
+        this.checkbox = new Checkbox(props);
         this.networks = this.checkbox.uuids;
         this.table = new NetworkTable({id: `${this.id} #display-table`});
 
@@ -37,7 +37,7 @@ export class Network {
 }
 
 
-export class NetworkOn {
+export class Checkbox {
     // {
     //   id: "#networks"
     // }

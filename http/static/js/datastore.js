@@ -10,7 +10,7 @@ export class DataStore {
     constructor(props) {
         this.id = props.id;
         this.props = props;
-        this.checkbox = new DataStoreOn(props);
+        this.checkbox = new Checkbox(props);
         this.datastores = this.checkbox.uuids;
         this.table = new DataStoreTable({id: `${this.id} #display-table`});
 
@@ -36,8 +36,7 @@ export class DataStore {
     }
 }
 
-
-export class DataStoreOn {
+export class Checkbox {
     // {
     //   id: "#datastores"
     // }
@@ -67,7 +66,7 @@ export class DataStoreOn {
 
     change(record, from) {
         record.store = from.store;
-        console.log("DataStoreOn.change", record.store);
+        console.log("Checkbox.change", record.store);
 
         if (from.store.length == 0) {
             $(`${record.id} #edit`).addClass('disabled');

@@ -24,7 +24,7 @@
         </div>
 
         <!-- Header buttons -->
-        <div class="card-none no-bottom">
+        <div id="header" class="card-none no-bottom">
             <div class="card no-border no-bottom">
                 <div class="card-header-btn">
                     <div id="console" class="btn-group btn-group-sm">
@@ -68,7 +68,7 @@
         </div>
 
         <!-- Overview -->
-        <div class="card-body no-top no-bottom">
+        <div id="overview" class="card-body no-top no-bottom">
             <div name="overview" class="card overview no-top no-bottom">
                 <div class="card-body">
                     <dl class="dl-horizontal">
@@ -87,7 +87,7 @@
             </div>
         </div>
 
-        <div class="card-body no-top">
+        <div id="devices" class="card-body no-top">
             <!-- Virtual Disk -->
             <div id="disk" class="card disk">
                 <div class="card-header">
@@ -223,6 +223,7 @@
 
     let instance = new Instance({
         id: "#instance",
+        header: {id: "#header"},
         disks: {id: "#disk"},
         interfaces: {id: "#interface"},
     });
