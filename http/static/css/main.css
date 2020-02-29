@@ -253,3 +253,9 @@ select {
 .interface .card-header .btn {
     color: black;
 }
+
+.disk .card-body,
+.interface .card-body {
+    min-height: 300px;
+    max-height: 430px;
+}
