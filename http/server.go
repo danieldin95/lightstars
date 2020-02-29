@@ -141,15 +141,23 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
+func (h *Server) LogRequest(r *http.Request) {
+	if strings.HasPrefix(r.URL.Path, "/static") ||
+		strings.HasSuffix(r.URL.Path, ".ico") ||
+		strings.HasSuffix(r.URL.Path, ".png") ||
+		strings.HasSuffix(r.URL.Path, ".gif") {
+		return
+	}
+	path := r.URL.Path
+	if q, _ := url.QueryUnescape(r.URL.RawQuery); q != "" {
+		path += "?" + q
+	}
+	libstar.Info("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
+}
+
 func (h *Server) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "GET" || !strings.HasPrefix(r.URL.Path, "/static") {
-			path := r.URL.Path
-			if q, _ := url.QueryUnescape(r.URL.RawQuery); q != "" {
-				path += "?" + q
-			}
-			libstar.Info("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
-		}
+		h.LogRequest(r)
 		if h.IsAuth(w, r) {
 			next.ServeHTTP(w, r)
 		} else {
