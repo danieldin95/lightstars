@@ -36,7 +36,7 @@ export class DiskApi extends Api {
         let your = this;
 
         $.post(your.url(this.instance), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`start disk ${data.message}`));
+            $(your.tasks).append(AlertSuccess(`create disk ${data.message}`));
         }).fail(function (e) {
             $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
         });
