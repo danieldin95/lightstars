@@ -7,6 +7,7 @@
     <!-- LightStar theme -->
     <link rel="stylesheet" href="/static/css/boot.css">
     <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/instance.css">
 </head>
 
 <body>
@@ -23,170 +24,170 @@
             </div>
         </div>
 
-        <!-- Header buttons -->
-        <div id="header" class="card-none no-bottom">
-            <div class="card no-border no-bottom">
-                <div class="card-header-btn">
-                    <div id="console" class="btn-group btn-group-sm">
-                        {{$url := "#"}}
-                        {{$class := "disabled"}}
-                        {{if eq .State "running"}}
-                            {{$class = ""}}
-                            {{ $url = printf "/ui/console?instance=%s&password=%s" .UUID .Password}}
-                        {{end}}
-                        <button id="console-modal" type="button" class="btn btn-outline-dark btn-sm {{$class}}"
-                                data-target="#consoleModal" data="{{$url}}">
-                            console
-                        </button>
-                        <button id="console-more" type="button"
-                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
-                                data-toggle="dropdown" data-target="console-more" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="console-more">
-                            <a id="console-self" class="dropdown-item" href="#" data="{{$url}}">
-                                open console
-                            </a>
-                            <a id="console-blank" class="dropdown-item" href="#" data="{{$url}}">
-                                open console in new blank
-                            </a>
-                            <a id="console-window" class="dropdown-item" href="#" data="{{$url}}">
-                                open console in new window
-                            </a>
-                        </div>
-                    </div>
-                    <button id="start" type="button" class="btn btn-outline-dark btn-sm">start</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">refresh</button>
-                    <div id="console" class="btn-group" role="group">
-                        <button id="btns-more" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
-                                data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
-                            operations
-                        </button>
-                        <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                            <a id="more-start" class="dropdown-item" href="#">start</a>
-                            <a id="shutdown" class="dropdown-item" href="#">shutdown</a>
-                            <a id="reset" class="dropdown-item" href="#">reset</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="suspend" class="dropdown-item" href="#">suspend</a>
-                            <a id="resume" class="dropdown-item" href="#">resume</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="destroy" class="dropdown-item" href="#">destroy</a>
-                            <a id="remove" class="dropdown-item" href="#">remove</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="dumpxml" class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">dump XML</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Overview -->
-        <div id="overview" class="card-body no-top no-bottom">
-            <div name="overview" class="card overview no-top no-bottom">
-                <div class="card-body">
-                    <dl class="dl-horizontal">
-                        <dt>UUID:</dt>
-                        <dd>{{.UUID}}</dd>
-                        <dt>Arch:</dt>
-                        <dd>{{.Arch}} | {{.Type}}</dd>
-                        <dt>CPU:</dt>
-                        <dd>{{.MaxCpu}} | {{.CpuTime}}ms</dd>
-                        <dt>Memory</dt>
-                        <dd>{{prettyKBytes .MaxMem}} | {{prettyKBytes .Memory}}</dd>
-                        <dt>State:</dt>
-                        <dd><span class="{{.State}}">{{.State}}</span></dd>
-                    </dl>
+
+        <div class="card-body">
+            <!-- Header buttons -->
+            <div class="card-header-btn">
+                <div id="console" class="btn-group btn-group-sm">
+                    {{$url := "#"}}
+                    {{$class := "disabled"}}
+                    {{if eq .State "running"}}
+                        {{$class = ""}}
+                        {{ $url = printf "/ui/console?instance=%s&password=%s" .UUID .Password}}
+                    {{end}}
+                    <button id="console-modal" type="button" class="btn btn-outline-dark btn-sm {{$class}}"
+                            data-target="#consoleModal" data="{{$url}}">
+                        console
+                    </button>
+                    <button id="console-more" type="button"
+                            class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
+                            data-toggle="dropdown" data-target="console-more" aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="console-more">
+                        <a id="console-self" class="dropdown-item" href="#" data="{{$url}}">
+                            open console
+                        </a>
+                        <a id="console-blank" class="dropdown-item" href="#" data="{{$url}}">
+                            open console in new blank
+                        </a>
+                        <a id="console-window" class="dropdown-item" href="#" data="{{$url}}">
+                            open console in new window
+                        </a>
+                    </div>
+                </div>
+                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">refresh</button>
+                <div id="power-more" class="btn-group btn-group-sm" role="group">
+                    <button id="start" type="button" class="btn btn-outline-dark">
+                        power
+                    </button>
+                    <button id="power-more" type="button"
+                            class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
+                            data-toggle="dropdown" data-target="power-more" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div name="power-more" class="dropdown-menu" aria-labelledby="btns-more">
+                        <a id="start" class="dropdown-item" href="#">start</a>
+                        <a id="shutdown" class="dropdown-item" href="#">shutdown</a>
+                        <a id="reset" class="dropdown-item" href="#">reset</a>
+                        <div class="dropdown-divider"></div>
+                        <a id="destroy" class="dropdown-item" href="#">destroy</a>
+                    </div>
+                </div>
+                <div id="btns-more" class="btn-group btn-group-sm" role="group">
+                    <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
+                            data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
+                        more
+                    </button>
+                    <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
+                        <a id="suspend" class="dropdown-item" href="#">suspend</a>
+                        <a id="resume" class="dropdown-item" href="#">resume</a>
+                        <div class="dropdown-divider"></div>
+                        <a id="remove" class="dropdown-item" href="#">remove</a>
+                        <a id="dumpxml" class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">dump XML</a>
+                    </div>
                 </div>
             </div>
+            <dl class="dl-horizontal">
+                <dt>State:</dt>
+                <dd><span class="{{.State}}">{{.State}}</span></dd>
+                <dt>UUID:</dt>
+                <dd>{{.UUID}}</dd>
+                <dt>Arch:</dt>
+                <dd>{{.Arch}} | {{.Type}}</dd>
+                <dt>Processor:</dt>
+                <dd>{{.MaxCpu}} | {{.CpuTime}}ms</dd>
+                <dt>Memory:</dt>
+                <dd>{{prettyKBytes .MaxMem}} | {{prettyKBytes .Memory}}</dd>
+            </dl>
         </div>
 
-        <div id="devices" class="card-body no-top">
-            <!-- Virtual Disk -->
-            <div id="disk" class="card disk">
-                <div class="card-header">
-                    <button class="btn btn-link btn-block text-left btn-sm"
-                            type="button" data-toggle="collapse"
-                            data-target="#collapseDis" aria-expanded="true" aria-controls="collapseDis">
-                        Virtual Disk
-                    </button>
-                </div>
-                <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
-                <div class="card-body">
-                    <div class="card-header-cnt">
-                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#diskCreateModal">
-                            create
-                        </button>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">remove</button>
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
-                    </div>
-                    <div class="">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th><input id="on-all" type="checkbox"></th>
-                                <th>ID</th>
-                                <th>Bus</th>
-                                <th>Device</th>
-                                <th>Source</th>
-                                <th>Address</th>
-                                <th>Format</th>
-                            </tr>
-                            </thead>
-                            <tbody id="display-table">
-                            <!-- Loading... -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                </div>
-            </div>
+    </div>
 
-            <!-- Interface -->
-            <div id="interface" class="card interface">
-                <div class="card-header">
-                    <button class="btn btn-link btn-block text-left btn-sm"
-                            type="button" data-toggle="collapse"
-                            data-target="#collapseInt" aria-expanded="true" aria-controls="collapseInt">
-                        Network Interface
-                    </button>
-                </div>
-                <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
-                <div class="card-body">
-                    <div class="card-header-cnt">
-                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#interfaceCreateModal">
-                            create
-                        </button>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">remove</button>
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
-                    </div>
-                    <div class="">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th><input id="on-all" type="checkbox" aria-label="select all interfaces"></th>
-                                <th>ID</th>
-                                <th>Model</th>
-                                <th>Device</th>
-                                <th>Mac</th>
-                                <th>Address</th>
-                                <th>Source</th>
-                            </tr>
-                            </thead>
-                            <tbody id="display-table">
-                            <!-- Loading -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                </div>
+    <!-- Virtual Disk -->
+    <div id="disk" class="card disk">
+        <div class="card-header">
+            <button class="btn btn-link btn-block text-left btn-sm"
+                    type="button" data-toggle="collapse"
+                    data-target="#collapseDis" aria-expanded="true" aria-controls="collapseDis">
+                Virtual Disk
+            </button>
+        </div>
+        <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
+        <div class="card-body">
+            <div class="card-header-cnt">
+                <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                        data-toggle="modal" data-target="#diskCreateModal">
+                    create
+                </button>
+                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">remove</button>
+                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
             </div>
+            <div class="">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th><input id="on-all" type="checkbox"></th>
+                        <th>ID</th>
+                        <th>Bus</th>
+                        <th>Device</th>
+                        <th>Source</th>
+                        <th>Address</th>
+                        <th>Format</th>
+                    </tr>
+                    </thead>
+                    <tbody id="display-table">
+                    <!-- Loading... -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
         </div>
     </div>
-    </instance>
+
+    <!-- Interface -->
+    <div id="interface" class="card interface">
+        <div class="card-header">
+            <button class="btn btn-link btn-block text-left btn-sm"
+                    type="button" data-toggle="collapse"
+                    data-target="#collapseInt" aria-expanded="true" aria-controls="collapseInt">
+                Network Interface
+            </button>
+        </div>
+        <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
+        <div class="card-body">
+            <div class="card-header-cnt">
+                <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                        data-toggle="modal" data-target="#interfaceCreateModal">
+                    create
+                </button>
+                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
+                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">remove</button>
+                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
+            </div>
+            <div class="">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th><input id="on-all" type="checkbox" aria-label="select all interfaces"></th>
+                        <th>ID</th>
+                        <th>Model</th>
+                        <th>Device</th>
+                        <th>Mac</th>
+                        <th>Address</th>
+                        <th>Source</th>
+                    </tr>
+                    </thead>
+                    <tbody id="display-table">
+                    <!-- Loading -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
 </div>
 
 <!-- Console modal -->
@@ -236,7 +237,6 @@
         });
         let instance = new Instance({
             id: "#instance",
-            header: {id: "#header"},
             disks: {id: "#disk"},
             interfaces: {id: "#interface"},
         });

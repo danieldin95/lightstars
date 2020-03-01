@@ -27,10 +27,8 @@ export class Instance {
         this.disk = new Disk({id: props.disks.id, uuid, name});
         this.interface = new Interface({id: props.interfaces.id, uuid, name});
 
-        this.head = props.header.id;
-
         // register buttons's click.
-        $(`${this.head} #console-modal`).on("click", this, function (e) {
+        $(`${this.id} #console-modal`).on("click", this, function (e) {
             if ($(this).hasClass('disabled')) {
                 return
             }
@@ -43,42 +41,42 @@ export class Instance {
                 $(target).find("iframe").removeAttr("src");
             });
         });
-        $(`${this.head} #refresh`).on("click", this, function (e) {
+        $(`${this.id} #refresh`).on("click", this, function (e) {
             window.location.reload();
         });
-        $(`${this.head} #start, ${this.id} #more-start`).on("click", this, function (e) {
+        $(`${this.id} #start, ${this.id} #more-start`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).start();
         });
-        $(`${this.head} #shutdown`).on("click", this, function (e) {
+        $(`${this.id} #shutdown`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).shutdown();
         });
-        $(`${this.head} #reset`).on("click", this, function (e) {
+        $(`${this.id} #reset`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).reset();
         });
-        $(`${this.head} #suspend`).on("click", this, function (e) {
+        $(`${this.id} #suspend`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).suspend();
         });
-        $(`${this.head} #resume`).on("click", this, function (e) {
+        $(`${this.id} #resume`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).resume();
         });
-        $(`${this.head} #destroy`).on("click", this, function (e) {
+        $(`${this.id} #destroy`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).destroy();
         });
-        $(`${this.head} #remove`).on("click", this, function (e) {
+        $(`${this.id} #remove`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).remove();
         });
 
 
         // console
-        $(`${this.head} #console-self`).on('click', this, function (e) {
+        $(`${this.id} #console-self`).on('click', this, function (e) {
             let url = $(this).attr('data');
             window.open(url, '_self');
         });
-        $(`${this.head} #console-blank`).on('click', this, function (e) {
+        $(`${this.id} #console-blank`).on('click', this, function (e) {
             let url = $(this).attr('data');
             window.open(url, '_blank');
         });
-        $(`${this.head} #console-window`).on('click', this, function (e) {
+        $(`${this.id} #console-window`).on('click', this, function (e) {
             let url = $(this).attr('data');
             window.open(url, e.data.name,'width=873,height=655');
         });
