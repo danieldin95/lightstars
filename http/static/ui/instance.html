@@ -60,7 +60,7 @@
                 </div>
                 <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">refresh</button>
                 <div id="power-btns" class="btn-group btn-group-sm" role="group">
-                    <button id="start" type="button" class="btn btn-outline-dark">
+                    <button id="start" type="button" class="btn btn-outline-dark {{$class}}">
                         power
                     </button>
                     <button id="power" type="button"
@@ -82,8 +82,8 @@
                         more
                     </button>
                     <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                        <a id="suspend" class="dropdown-item" href="#">suspend</a>
-                        <a id="resume" class="dropdown-item" href="#">resume</a>
+                        <a id="suspend" class="dropdown-item {{$class}}" href="#">suspend</a>
+                        <a id="resume" class="dropdown-item {{$class}}" href="#">resume</a>
                         <div class="dropdown-divider"></div>
                         <a id="remove" class="dropdown-item" href="#">remove</a>
                         <a id="dumpxml" class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">dump XML</a>

@@ -65,6 +65,12 @@
     border-color: transparent;
 }
 
+.btn-outline-dark {
+    color: #343a40;
+    background-color: white;
+    border-color: #343a40;
+}
+
 .form-control-sm {
     font-size: inherit;
 }

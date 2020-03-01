@@ -54,9 +54,15 @@ export class Instance {
             new InstanceApi({uuids: uuid}).reset();
         });
         $(`${this.id} #suspend`).on("click", this, function (e) {
+            if ($(this).hasClass('disabled')) {
+                return
+            }
             new InstanceApi({uuids: uuid}).suspend();
         });
         $(`${this.id} #resume`).on("click", this, function (e) {
+            if ($(this).hasClass('disabled')) {
+                return
+            }
             new InstanceApi({uuids: uuid}).resume();
         });
         $(`${this.id} #destroy`).on("click", this, function (e) {
