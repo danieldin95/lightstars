@@ -207,7 +207,9 @@
 <div id="interfaceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 </div>
 <!-- JQuery Javascript -->
-<script src="/static/asset/jquery-3.3.1.js"></script>
+{{/*<script src="/static/asset/jquery-3.3.1.js"></script>*/}}
+<script src="/static/asset/jquery-1.12.4.js"></script>
+<script src="/static/asset/ui/1.12.1/jquery-ui.js"></script>
 <script src="/static/asset/popper.js/1.12.9/umd/popper.js"></script>
 <!-- Bootstrap Javascript -->
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
@@ -237,6 +239,10 @@
             header: {id: "#header"},
             disks: {id: "#disk"},
             interfaces: {id: "#interface"},
+        });
+
+        $(function(e) {
+            $('#consoleModal').draggable();
         });
 
         new DiskCreate({id: '#diskCreateModal'})

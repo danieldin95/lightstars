@@ -39,7 +39,7 @@ export class DataStoreCreate extends FormModal {
                 <form name="datastore-new">
                 <div id="" class="modal-body">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label-sm ">name</label>
+                        <label for="name" class="col-sm-4 col-form-label-sm ">Select datastore</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <select class="" name="name">
