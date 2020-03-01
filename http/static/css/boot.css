@@ -25,14 +25,6 @@
     margin-bottom: -1px;
 }
 
-.card-header a {
-    padding: .25rem;
-}
-
-.card-header .btn-sm {
-    padding-left: 0;
-}
-
 .card-body {
     overflow: auto;
     margin-top: .25rem;
