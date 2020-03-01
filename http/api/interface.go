@@ -57,8 +57,8 @@ func (int Interface) GET(w http.ResponseWriter, r *http.Request) {
 		instance := schema.NewInstance(*dom)
 		if format == "schema" {
 			list := schema.List{
-				Items: make([]interface{}, 0, 32),
-				Metadata:  schema.MetaData{},
+				Items:    make([]interface{}, 0, 32),
+				Metadata: schema.MetaData{},
 			}
 			for _, int := range instance.Interfaces {
 				list.Items = append(list.Items, int)

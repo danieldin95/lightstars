@@ -9,9 +9,9 @@ type DataStore struct {
 	UUID       string `json:"uuid"`
 	Name       string `json:"name"`
 	State      string `json:"state"`
-	Capacity   uint64 `json:"capacity"`  // bytes
-	Allocation uint64 `json:"allocation"`  // bytes
-	Available  uint64 `json:"available"` // Bytes
+	Capacity   uint64 `json:"capacity"`   // bytes
+	Allocation uint64 `json:"allocation"` // bytes
+	Available  uint64 `json:"available"`  // Bytes
 }
 
 func IsDigit(s string) bool {

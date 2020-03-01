@@ -223,6 +223,10 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		Type: "tablet",
 		Bus:  "usb",
 	}
+	// sound
+	dom.Devices.Sound = libvirtc.SoundXML{
+		Model: "ich6",
+	}
 	return dom, nil
 }
 
@@ -239,8 +243,8 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		// list all instances.
 		list := schema.List{
-			Items: make([]interface{}, 0, 32),
-			Metadata:  schema.MetaData{},
+			Items:    make([]interface{}, 0, 32),
+			Metadata: schema.MetaData{},
 		}
 		if domains, err := libvirtc.ListDomains(); err == nil {
 			// TODO support pages by offset and size.

@@ -28,7 +28,22 @@ export class Instance {
         this.interface = new Interface({id: props.interfaces.id, uuid, name});
 
         this.head = props.header.id;
+
         // register buttons's click.
+        $(`${this.head} #console-modal`).on("click", this, function (e) {
+            let url = $(this).attr('data');
+            let target = $(this).attr('data-target');
+
+            console.log(target);
+            $(target).modal('show');
+            $(`${target} iframe`).attr("src", url);
+            $(target).on('hidden.bs.modal', function (e) {
+                $(target).find("iframe").removeAttr("src");
+            });
+        });
+        $(`${this.head} #refresh`).on("click", this, function (e) {
+            window.location.reload();
+        });
         $(`${this.head} #start, ${this.id} #more-start`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).start();
         });
@@ -50,6 +65,7 @@ export class Instance {
         $(`${this.head} #remove`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).remove();
         });
+
 
         // console
         $(`${this.head} #console-self`).on('click', this, function (e) {

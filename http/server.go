@@ -61,6 +61,7 @@ func (h *Server) LoadRouter() {
 	WebSocket{}.Router(router)
 	// ui router
 	UI{}.Router(router)
+	api.Upload{}.Router(router)
 	// api router
 	api.ISO{}.Router(router)
 	api.Bridger{}.Router(router)

@@ -35,7 +35,7 @@ export class FormModal {
         if (this.events.submit.func) {
             this.events.submit.func({
                 data: this.events.submit.data,
-                array: $(this.forms).serializeArray(),
+                form: $(this.forms).serializeArray(),
             });
         }
     }

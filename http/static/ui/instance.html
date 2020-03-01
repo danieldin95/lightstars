@@ -34,10 +34,10 @@
                             {{$class = ""}}
                             {{ $url = printf "/ui/console?instance=%s&password=%s" .UUID .Password}}
                         {{end}}
-                        <a id="console-self" type="button"
-                           class="btn btn-outline-dark btn-sm {{$class}}" href="#" data="{{$url}}">
+                        <button id="console-modal" type="button" class="btn btn-outline-dark btn-sm"
+                                data-target="#consoleModal" data="{{$url}}">
                             console
-                        </a>
+                        </button>
                         <button id="console-more" type="button"
                                 class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
                                 data-toggle="dropdown" data-target="console-more" aria-expanded="false">
@@ -56,9 +56,8 @@
                         </div>
                     </div>
                     <button id="start" type="button" class="btn btn-outline-dark btn-sm">start</button>
-                    <a id="refresh" type="button" class="btn btn-outline-dark btn-sm"
-                       href="javascript:window.location.reload();">refresh</a>
-                    <div id="console" class="btn-group" role="gropu">
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">refresh</button>
+                    <div id="console" class="btn-group" role="group">
                         <button id="btns-more" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
                                 data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
                             operations
@@ -189,6 +188,18 @@
     </div>
     </instance>
 </div>
+
+<!-- Console modal -->
+<div id="consoleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-console">
+        <div class="modal-content">
+            <div class="modal-body">
+                <iframe width="800px" height="600px" src="#" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Create disk modal -->
 <div id="diskCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 </div>
@@ -230,11 +241,11 @@
 
         new DiskCreate({id: '#diskCreateModal'})
             .onsubmit(instance, function (e) {
-                e.data.disk.create(Utils.toJSON(e.array));
+                e.data.disk.create(Utils.toJSON(e.form));
             });
         new InterfaceCreate({id: '#interfaceCreateModal'})
             .onsubmit(instance, function (e) {
-                e.data.interface.create(Utils.toJSON(e.array));
+                e.data.interface.create(Utils.toJSON(e.form));
             });
     });
 </script>

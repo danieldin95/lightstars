@@ -1,7 +1,8 @@
 import {DataStoreApi} from "./api/datastore.js";
 import {CheckBoxTop} from "./com/utils.js";
 import {DataStoreTable} from "./widget/datastore/table.js";
-
+import {FileUpload} from "./widget/datastore/upload.js";
+import {UploadApi} from "./api/upload.js";
 
 export class DataStore {
     // {
@@ -13,7 +14,12 @@ export class DataStore {
         this.checkbox = new Checkbox(props);
         this.datastores = this.checkbox.uuids;
         this.table = new DataStoreTable({id: `${this.id} #display-table`});
+        this.upload = new FileUpload({id: props.upload});
 
+        this.upload.onsubmit(this.datastores, function (e) {
+            console.log(e.data, e.form);
+            new UploadApi({uuids: e.data.store, id: '#process'}).upload(e.form);
+        });
         // register buttons's  click.
         $(`${this.id} #delete`).on("click", this.datastores, function (e) {
             new DataStoreApi({uuids: e.data.store}).delete();
@@ -77,8 +83,10 @@ export class Checkbox {
         }
         if (from.store.length != 1) {
             $(`${record.id} #edit`).addClass('disabled');
+            $(`${record.id} #upload`).addClass('disabled');
         } else {
             $(`${record.id} #edit`).removeClass('disabled');
+            $(`${record.id} #upload`).removeClass('disabled');
         }
     }
 }

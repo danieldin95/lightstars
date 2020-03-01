@@ -185,6 +185,7 @@ type DevicesXML struct {
 	Interfaces  []InterfaceXML  `xml:"interface" json:"interface"`
 	Controllers []ControllerXML `xml:"controller" json:"controller"`
 	Inputs      []InputXML      `xml:"input" json:"input"`
+	Sound       SoundXML        `xml:"sound" json:"sound"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -347,4 +348,9 @@ type InputXML struct {
 	XMLName xml.Name `xml:"input" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"`
 	Bus     string   `xml:"bus,attr" json:"bus"`
+}
+
+type SoundXML struct {
+	XMLName xml.Name `xml:"sound" json:"-"`
+	Model   string   `xml:"model,attr" json:"model"` // ac97, ich6
 }

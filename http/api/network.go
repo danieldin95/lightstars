@@ -71,8 +71,8 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 		// list all instances.
 		if format == "schema" {
 			list := schema.List{
-				Items: make([]interface{}, 0, 32),
-				Metadata:  schema.MetaData{},
+				Items:    make([]interface{}, 0, 32),
+				Metadata: schema.MetaData{},
 			}
 			if nets, err := libvirtn.ListNetworks(); err == nil {
 				for _, net := range nets {

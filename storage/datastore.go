@@ -1,6 +1,8 @@
 package storage
 
-import "strings"
+import (
+	"strings"
+)
 
 const Location = "/lightstar/"
 const DataStore = "datastore@"
@@ -48,10 +50,26 @@ func (p StorePath) GetStoreID(name string) string {
 	return ""
 }
 
-// path: datastore@01:/centos.77
+func IsStoreID(name string) bool {
+	if len(name) != 2 {
+		return false
+	}
+	if name[0] < '0' || name[0] > '9' {
+		return false
+	}
+	if name[1] < '0' || name[1] > '9' {
+		return false
+	}
+	return true
+}
+
+// path: datastore@01:/centos.77 or 01.
 func (p StorePath) Unix(path string) string {
 	newPath := path
-	if strings.HasPrefix(path, DataStore) {
+	if IsStoreID(path) {
+		newPath = DataStore + path
+	}
+	if p.IsDataStore(newPath) {
 		splits := strings.SplitN(newPath, "/", 2)
 		if len(splits) >= 2 {
 			stores := strings.SplitN(splits[0], "@", 2)

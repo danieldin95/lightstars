@@ -7,6 +7,6 @@ type MetaData struct {
 }
 
 type List struct {
-	Items []interface{} `json:"items"`
-	Metadata  MetaData   `json:"metadata"`
+	Items    []interface{} `json:"items"`
+	Metadata MetaData      `json:"metadata"`
 }

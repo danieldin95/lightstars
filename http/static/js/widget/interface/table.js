@@ -24,7 +24,7 @@ export class InterfaceTable {
             tasks: this.tasks,
             instance: this.instance,
         }).list(this,function (e) {
-            $(e.data.id).fadeIn;
+            $(e.data.id).html(e.data.render(e.resp));
             func({data, resp: e.resp});
         });
     }

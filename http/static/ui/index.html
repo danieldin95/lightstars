@@ -113,7 +113,8 @@
         </div>
         </div>
     </div>
-
+    <div id="process" class="card-no-border">
+    </div>
     <!-- DataStore -->
     <div id="datastores" class="card datastores">
         <div class="card-header">
@@ -131,9 +132,13 @@
                             data-toggle="modal" data-target="#datastoreCreateModal">
                         create datastore
                     </button>
+                    <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
+                            data-toggle="modal" data-target="#fileUploadModal">
+                        upload
+                    </button>
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
                     <button id="delete" type="button" class="btn btn-outline-dark btn-sm">delete</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
                 </div>
 
                 <!-- DataStore display -->
@@ -177,8 +182,8 @@
                         create network
                     </button>
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
                     <button id="delete" type="button" class="btn btn-outline-dark btn-sm">delete</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
                 </div>
 
                 <!-- Network display -->
@@ -211,6 +216,8 @@
 
 <!-- Create datastore modal -->
 <div id="datastoreCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<!-- Upload file modal -->
+<div id="fileUploadModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
 <!-- Create network modal -->
 <div id="networkCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
@@ -253,19 +260,22 @@
         });
         let createModal = new InstanceCreate({id: '#instanceCreateModal'});
         createModal.onsubmit(ins, function (e) {
-            e.data.create(Utils.toJSON(e.array));
+            e.data.create(Utils.toJSON(e.form));
         });
 
         let net = new Network({id: '#networks'});
         let createNetwork = new NetworkCreate({id: '#networkCreateModal'});
         createNetwork.onsubmit(net, function (e) {
-            e.data.create(Utils.toJSON(e.array));
+            e.data.create(Utils.toJSON(e.form));
         });
 
-        let store = new DataStore({id: '#datastores'});
+        let store = new DataStore({
+            id: '#datastores',
+            upload: '#fileUploadModal',
+        });
         let createStore = new DataStoreCreate({id: '#datastoreCreateModal'});
         createStore.onsubmit(store, function (e) {
-            e.data.create(Utils.toJSON(e.array));
+            e.data.create(Utils.toJSON(e.form));
         });
     });
 </script>
