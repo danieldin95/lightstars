@@ -227,7 +227,6 @@
     import {Filters} from "/static/js/filter.js";
     import {Collapse} from "/static/js/widget/collapse.js";
 
-
     $(document).ready(function() {
         new Filters();
         new Collapse({
@@ -237,6 +236,7 @@
             ],
             default: "interface",
         });
+
         let instance = new Instance({
             id: "#instance",
             disks: {id: "#disk"},

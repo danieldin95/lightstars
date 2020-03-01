@@ -27,13 +27,13 @@
             </button>
         </div>
         <div id="collapseSys" class="collapse" aria-labelledby="headingOne" data-parent="#index">
-        <div class="card-body">
+        <div id="overview" class="card-body">
             <dl class="dl-horizontal">
                 <dt>Version:</dt>
                 <dd>{{.Version.Version}}</dd>
                 <dt>Built on:</dt>
                 <dd>{{.Version.Date}}</dd>
-                <dt>Hyperviisor:</dt>
+                <dt>Hypervisor:</dt>
                 <dd>{{.Hyper.Name}}</dd>
                 <dt>Processor:</dt>
                 <dd>{{.Hyper.CpuNum}} | {{.Hyper.CpuVendor}}</dd>
@@ -244,6 +244,7 @@
     import {DataStoreCreate} from "/static/js/widget/datastore/create.js";
     import {Filters} from "/static/js/filter.js";
     import {Collapse} from "/static/js/widget/collapse.js";
+    import {Overview} from "/static/js/widget/index/overview.js";
 
 
     $(document).ready(function() {
@@ -257,6 +258,15 @@
             ],
             default: "instances",
         });
+
+        let view = new Overview({
+            id: '#overview',
+        });
+
+        $('#collapseSys').on('hidden.bs.collapse', view, function (e) {
+            e.data.refresh();
+        });
+
         let ins = new Instances({
             id: '#instances',
         });
