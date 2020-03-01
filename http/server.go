@@ -11,7 +11,6 @@ import (
 	"net/url"
 	"os"
 	"strings"
-	"time"
 )
 
 type Server struct {
@@ -82,9 +81,6 @@ func (h *Server) Initialize() {
 	if h.server == nil {
 		h.server = &http.Server{
 			Addr:         h.listen,
-			WriteTimeout: time.Second * 60 * 5,
-			ReadTimeout:  time.Second * 60 * 5,
-			IdleTimeout:  time.Second * 60 * 30,
 			Handler:      r,
 		}
 	}
