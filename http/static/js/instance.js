@@ -28,7 +28,7 @@ export class Instance {
         this.interface = new Interface({id: props.interfaces.id, uuid, name});
 
         // register buttons's click.
-        $(`${this.id} #console-modal`).on("click", this, function (e) {
+        $(`${this.id} #console`).on("click", this, function (e) {
             if ($(this).hasClass('disabled')) {
                 return
             }

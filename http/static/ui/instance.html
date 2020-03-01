@@ -26,25 +26,27 @@
 
         <!-- Overview -->
         <div class="card-body">
+            {{$class := "disabled"}}
+            {{if eq .State "running"}}
+                {{$class = ""}}
+            {{end}}
             <!-- Header buttons -->
             <div class="card-header-btn">
-                <div id="console" class="btn-group btn-group-sm">
+                <div id="console-btns" class="btn-group btn-group-sm" role="group">
                     {{$url := "#"}}
-                    {{$class := "disabled"}}
                     {{if eq .State "running"}}
-                        {{$class = ""}}
                         {{ $url = printf "/ui/console?instance=%s&password=%s" .UUID .Password}}
                     {{end}}
-                    <button id="console-modal" type="button" class="btn btn-outline-dark btn-sm {{$class}}"
+                    <button id="console" type="button" class="btn btn-outline-dark {{$class}}"
                             data-target="#consoleModal" data="{{$url}}">
                         console
                     </button>
-                    <button id="console-more" type="button"
+                    <button id="consoles" type="button"
                             class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
-                            data-toggle="dropdown" data-target="console-more" aria-expanded="false">
-                    <span class="sr-only">Toggle Dropdown</span>
+                            data-toggle="dropdown" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="console-more">
+                    <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
                         <a id="console-self" class="dropdown-item" href="#" data="{{$url}}">
                             open console
                         </a>
@@ -57,16 +59,16 @@
                     </div>
                 </div>
                 <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">refresh</button>
-                <div id="power-more" class="btn-group btn-group-sm" role="group">
+                <div id="power-btns" class="btn-group btn-group-sm" role="group">
                     <button id="start" type="button" class="btn btn-outline-dark">
                         power
                     </button>
-                    <button id="power-more" type="button"
+                    <button id="power" type="button"
                             class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
-                            data-toggle="dropdown" data-target="power-more" aria-expanded="false">
+                            data-toggle="dropdown" aria-expanded="false">
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
-                    <div name="power-more" class="dropdown-menu" aria-labelledby="btns-more">
+                    <div id="power-more" class="dropdown-menu" aria-labelledby="power">
                         <a id="start" class="dropdown-item" href="#">start</a>
                         <a id="shutdown" class="dropdown-item" href="#">shutdown</a>
                         <a id="reset" class="dropdown-item" href="#">reset</a>
