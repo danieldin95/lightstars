@@ -198,14 +198,16 @@ select {
     width: 100%;
 }
 
-.btn-text {
+.btn-spot {
     border: 1px solid #6c757d;
     padding: 0px;
     border-radius: .5rem;
+    min-height: 1rem;
+    min-width: 1.25rem;
 }
 
-.btn-text:hover,
-.btn-text:focus{
+.btn-spot:hover,
+.btn-spot:focus{
     text-decoration: none;
     /*background-color: black;*/
     /*color: #b21f2d;*/
