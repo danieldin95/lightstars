@@ -198,6 +198,19 @@ select {
     width: 100%;
 }
 
+.btn-text {
+    border: 1px solid #E0E0E0;
+    padding: 0px;
+    border-radius: .5rem;
+}
+
+.btn-text:hover,
+.btn-text:focus{
+    text-decoration: none;
+    /*background-color: black;*/
+    /*color: #b21f2d;*/
+    border-color: #06386a;
+}
 
 /* instances */
 
@@ -228,6 +241,11 @@ select {
     max-height: 430px;
 }
 
+.system .card-header div {
+    margin-left: .25rem;
+    padding: .25rem 0;
+    font-size: inherit;
+}
 
 /* 404 */
 

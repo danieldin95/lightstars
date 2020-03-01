@@ -11,8 +11,13 @@ export class Overview {
         this.tasks = props.tasks;
     }
 
-    refresh(data, func) {
-        console.log("Overview.refresh", data, func);
+    loading() {
+        return (``);
+    }
+
+    refresh(func) {
+        $(this.id).html(this.loading());
+        console.log("Overview.refresh", func);
         new HyperApi({tasks: this.tasks}).get(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             if (func) {

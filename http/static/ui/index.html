@@ -20,28 +20,15 @@
     <!-- System -->
     <div name="system" class="card system">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left btn-sm"
-                    type="button" data-toggle="collapse"
-                    data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">
-                System Information
-            </button>
+            <div class="">
+                <a id="system-col" href="#" data-toggle="collapse"
+                   data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">{{.Hyper.Name}}</a>
+                <a class="btn-text float-right" id="system-ref" href="#system">Ccc</a>
+            </div>
         </div>
         <div id="collapseSys" class="collapse" aria-labelledby="headingOne" data-parent="#index">
         <div id="overview" class="card-body">
-            <dl class="dl-horizontal">
-                <dt>Version:</dt>
-                <dd>{{.Version.Version}}</dd>
-                <dt>Built on:</dt>
-                <dd>{{.Version.Date}}</dd>
-                <dt>Hypervisor:</dt>
-                <dd>{{.Hyper.Name}}</dd>
-                <dt>Processor:</dt>
-                <dd>{{.Hyper.CpuNum}} | {{.Hyper.CpuVendor}}</dd>
-                <dt>Memory</dt>
-                <dd>
-                    {{prettyBytes .Hyper.MemTotal}} | {{prettyBytes .Hyper.MemFree}} | {{prettyBytes .Hyper.MemCached}}
-                </dd>
-            </dl>
+        <!-- Loading -->
         </div>
         </div>
     </div>
@@ -263,8 +250,10 @@
             id: '#overview',
         });
 
-        $('#collapseSys').on('hidden.bs.collapse', view, function (e) {
+        view.refresh();
+        $('#system-ref').on('click', view, function (e) {
             e.data.refresh();
+            $('#collapseSys').collapse('show');
         });
 
         let ins = new Instances({
