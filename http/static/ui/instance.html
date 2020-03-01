@@ -34,7 +34,7 @@
                             {{$class = ""}}
                             {{ $url = printf "/ui/console?instance=%s&password=%s" .UUID .Password}}
                         {{end}}
-                        <button id="console-modal" type="button" class="btn btn-outline-dark btn-sm"
+                        <button id="console-modal" type="button" class="btn btn-outline-dark btn-sm {{$class}}"
                                 data-target="#consoleModal" data="{{$url}}">
                             console
                         </button>

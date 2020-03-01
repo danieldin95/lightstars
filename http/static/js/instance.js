@@ -31,10 +31,12 @@ export class Instance {
 
         // register buttons's click.
         $(`${this.head} #console-modal`).on("click", this, function (e) {
+            if ($(this).hasClass('disabled')) {
+                return
+            }
             let url = $(this).attr('data');
             let target = $(this).attr('data-target');
 
-            console.log(target);
             $(target).modal('show');
             $(`${target} iframe`).attr("src", url);
             $(target).on('hidden.bs.modal', function (e) {
