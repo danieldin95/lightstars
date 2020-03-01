@@ -22,7 +22,10 @@ export class InstanceCreate extends FormModal {
 
         this.render();
         this.loading();
-        this.fetch();
+
+        $(this.id).on('show.bs.modal', this, function (e) {
+            e.data.fetch();
+        });
     }
 
     fetch() {
