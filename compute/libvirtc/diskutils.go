@@ -1,6 +1,9 @@
 package libvirtc
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/danieldin95/lightstar/libstar"
+)
 
 type Disk struct {
 	//
@@ -18,7 +21,8 @@ func (d *Disk) Slot2Dev(bus string, slot uint8) string {
 }
 
 func (d *Disk) Slot2DiskName(slot uint8) string {
-	return fmt.Sprintf("disk%d.img", slot)
+	rand := libstar.GenToken(8)
+	return fmt.Sprintf("disk-%s-%d.img", rand, slot)
 }
 
 var DISK = &Disk{}

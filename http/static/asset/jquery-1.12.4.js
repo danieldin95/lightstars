@@ -9876,7 +9876,7 @@ jQuery.extend( {
 	}
 } );
 
-jQuery.each( [ "get", "post" ], function( i, method ) {
+jQuery.each( [ "get", "post", "put", "delete", "patch"], function( i, method ) {
 	jQuery[ method ] = function( url, data, callback, type ) {
 
 		// shift arguments if data argument was omitted

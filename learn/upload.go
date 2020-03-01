@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	fmt.Printf("%d", 100 << 20)
+	fmt.Printf("%d", 100<<20)
 	http.HandleFunc("/upload", uploadHandler)
 	http.ListenAndServe(":5050", nil)
 }
@@ -30,6 +30,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
+	//ioutil.TempFile()
 	tempFile, err := os.OpenFile("temp/"+handler.Filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0600)
 	if err != nil {
 		fmt.Println(err)
