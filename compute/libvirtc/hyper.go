@@ -4,6 +4,8 @@ import (
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
 	"strings"
+	"sync"
+	"time"
 )
 
 type HyperListener struct {
@@ -18,6 +20,12 @@ type HyperVisor struct {
 	Path     string
 	Conn     *libvirt.Connect
 	Listener []HyperListener
+
+	lock     sync.RWMutex
+	ticker   *time.Ticker
+	cpuSts   *libvirt.NodeCPUStats
+	done     chan bool
+	idleUtil uint64
 }
 
 func parseQemuTCP(name string) (address, path string) {
@@ -45,7 +53,7 @@ func parseQemuSSH(name string) (address, path string) {
 	return address, path
 }
 
-func (h *HyperVisor) Open() error {
+func (h *HyperVisor) OpenNotSafe() error {
 	if hyper.Conn != nil {
 		if _, err := hyper.Conn.GetVersion(); err != nil {
 			libstar.Error("HyperVisor.Open %s", err)
@@ -71,6 +79,12 @@ func (h *HyperVisor) Open() error {
 	return nil
 }
 
+func (h *HyperVisor) Open() error {
+	h.lock.Lock()
+	defer h.lock.Unlock()
+	return h.OpenNotSafe()
+}
+
 func (h *HyperVisor) AddListener(listen HyperListener) {
 	h.Listener = append(h.Listener, listen)
 }
@@ -93,14 +107,65 @@ func (h *HyperVisor) SetName(name string) {
 	}
 }
 
-func (h *HyperVisor) GetCPU() (uint, string) {
+func (h *HyperVisor) FigureCPU() (err error) {
+	h.lock.Lock()
+	defer h.lock.Unlock()
+
+	if err := h.OpenNotSafe(); err != nil {
+		return err
+	}
+	if h.cpuSts == nil {
+		h.cpuSts, err = h.Conn.GetCPUStats(-1, 0)
+		if err != nil {
+			libstar.Warn("HyperVisor.FigureCpu %s", err)
+			return err
+		}
+	}
+	newerSts, err := h.Conn.GetCPUStats(-1, 0)
+	if err != nil {
+		libstar.Warn("HyperVisor.FigureCpu %s", err)
+		return err
+	}
+	older := h.cpuSts.User
+	older += h.cpuSts.Idle
+	older += h.cpuSts.Kernel
+	older += h.cpuSts.Intr
+	older += h.cpuSts.Iowait
+
+	newer := newerSts.User
+	newer += newerSts.Idle
+	newer += newerSts.Kernel
+	newer += newerSts.Intr
+	newer += newerSts.Iowait
+
+	h.idleUtil = 1000 * (newerSts.Idle - h.cpuSts.Idle) / (newer - older)
+	// record last statics
+	h.cpuSts = newerSts
+	return nil
+}
+
+func (h *HyperVisor) LoopForever() {
+	for {
+		select {
+		case <-h.done:
+			return
+		case <-h.ticker.C:
+			h.FigureCPU()
+		}
+	}
+}
+
+func (h *HyperVisor) GetCPU() (uint, string, uint64) {
 	if err := h.Open(); err != nil {
-		return 0, ""
+		return 0, "", 1000
 	}
+
+	h.lock.RLock()
+	defer h.lock.RUnlock()
 	if info, err := h.Conn.GetNodeInfo(); err == nil {
-		return info.Cpus, info.Model
+		return info.Cpus, info.Model, h.idleUtil
 	}
-	return 0, ""
+	return 0, "", 1000
 }
 
 func (h *HyperVisor) GetMem() (t uint64, f uint64, c uint64) {
@@ -206,6 +271,9 @@ func (h *HyperVisor) Close() {
 
 var hyper = HyperVisor{
 	Listener: make([]HyperListener, 0, 32),
+	ticker:   time.NewTicker(2 * time.Second),
+	done:     make(chan bool),
+	idleUtil: 1000,
 }
 
 func GetHyper() (*HyperVisor, error) {
@@ -251,4 +319,5 @@ func AddHyperListener(listen HyperListener) {
 
 func init() {
 	hyper.SetName("qemu:///system")
+	go hyper.LoopForever()
 }

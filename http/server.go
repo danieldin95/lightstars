@@ -81,8 +81,8 @@ func (h *Server) Initialize() {
 	r := h.Router()
 	if h.server == nil {
 		h.server = &http.Server{
-			Addr:         h.listen,
-			Handler:      r,
+			Addr:    h.listen,
+			Handler: r,
 		}
 	}
 	path := storage.PATH.RootXML()

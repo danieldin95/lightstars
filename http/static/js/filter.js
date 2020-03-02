@@ -42,5 +42,8 @@ export class Filters {
             dec = dec / 1024;
             return dec.toFixed(2) + "TiB"
         };
+        template.defaults.imports.figureCpuUsed = function (free, total) {
+            return ((1000 - free) / 1000 * total).toFixed(2)
+        };
     }
 }

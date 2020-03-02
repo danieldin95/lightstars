@@ -23,6 +23,7 @@ type Hyper struct {
 	Name       string  `json:"name"`
 	CpuNum     uint    `json:"cpuNum"`
 	CpuVendor  string  `json:"cpuVendor"`
+	CpuUtils   uint64  `json:"cpuUtils"`
 	MemTotal   uint64  `json:"memTotal"`
 	MemFree    uint64  `json:"memFree"`
 	MemCached  uint64  `json:"memCached"`
@@ -33,7 +34,7 @@ func NewHyper() (hs Hyper) {
 	hyper, _ := libvirtc.GetHyper()
 
 	hs.Name = hyper.Name
-	hs.CpuNum, hs.CpuVendor = hyper.GetCPU()
+	hs.CpuNum, hs.CpuVendor, hs.CpuUtils = hyper.GetCPU()
 	hs.MemTotal, hs.MemFree, hs.MemCached = hyper.GetMem()
 
 	return hs

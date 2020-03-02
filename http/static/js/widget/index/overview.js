@@ -35,7 +35,7 @@ export class Overview {
                 <dt>Hypervisor:</dt>
                 <dd>{{hyper.name}}</dd>
                 <dt>Processor:</dt>
-                <dd>{{hyper.cpuNum}} | {{hyper.cpuVendor}}</dd>
+                <dd>{{hyper.cpuNum}} | {{hyper.cpuUtils | figureCpuUsed hyper.cpuNum}} | {{hyper.cpuVendor}}</dd>
                 <dt>Memory</dt>
                 <dd>
                     {{hyper.memTotal | prettyByte}} | {{hyper.memFree | prettyByte}} | {{hyper.memCached | prettyByte}}
