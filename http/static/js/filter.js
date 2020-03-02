@@ -45,5 +45,8 @@ export class Filters {
         template.defaults.imports.figureCpuUsed = function (free, total) {
             return ((1000 - free) / 1000 * total).toFixed(2)
         };
+        template.defaults.imports.figureCpuFree = function (free, total) {
+            return (free / 1000 * total).toFixed(2)
+        };
     }
 }
