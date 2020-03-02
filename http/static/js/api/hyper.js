@@ -16,7 +16,7 @@ export class HyperApi extends Api {
         if (uuid) {
             return `/api/hyper/${uuid}`
         }
-        return 'api/hyper'
+        return '/api/hyper'
     }
 
     get(data, func) {

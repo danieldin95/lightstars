@@ -16,7 +16,7 @@ export class InstanceApi extends Api {
         if (uuid) {
             return `/api/instance/${uuid}`
         }
-        return 'api/instance'
+        return '/api/instance'
     }
 
     list(data, func) {

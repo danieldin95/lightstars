@@ -16,7 +16,7 @@ export class DataStoreApi extends Api {
         if (uuid) {
             return `/api/datastore/${uuid}`
         }
-        return 'api/datastore'
+        return '/api/datastore'
     }
 
     list(data, func) {

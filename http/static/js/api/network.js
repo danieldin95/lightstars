@@ -16,7 +16,7 @@ export class NetworkApi extends Api {
         if (uuid) {
             return `/api/network/${uuid}`
         }
-        return 'api/network'
+        return '/api/network'
     }
 
     list(data, func) {

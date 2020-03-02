@@ -15,6 +15,6 @@ export class ImageApi extends Api {
         if (uuid) {
             return `/api/image/${uuid}`
         }
-        return 'api/image'
+        return '/api/image'
     }
 }
