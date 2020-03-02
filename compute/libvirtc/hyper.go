@@ -26,6 +26,7 @@ type HyperVisor struct {
 	cpuSts   *libvirt.NodeCPUStats
 	done     chan bool
 	idleUtil uint64
+	domsUtil map[string]uint64
 }
 
 func parseQemuTCP(name string) (address, path string) {
@@ -274,6 +275,7 @@ var hyper = HyperVisor{
 	ticker:   time.NewTicker(2 * time.Second),
 	done:     make(chan bool),
 	idleUtil: 1000,
+	domsUtil: make(map[string]uint64, 32),
 }
 
 func GetHyper() (*HyperVisor, error) {

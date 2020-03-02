@@ -162,7 +162,7 @@ export class InstanceCreate extends FormModal {
                             </a>
                         </li>
                         <li>
-                            <a href="#step-storage">Select storage<br />
+                            <a href="#step-storage">Select Datastore<br />
                                 <small>Select one datastore for storage</small>
                             </a>
                         </li>
@@ -178,15 +178,6 @@ export class InstanceCreate extends FormModal {
                     <div id="step-os" class="">
                         <form name="os-config">
                         <div class="form-group row">
-                            <label for="name" class="col-sm-4 col-form-label-sm">Name</label>
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm"
-                                           name="name" value="guest.01"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label for="family" class="col-sm-4 col-form-label-sm">Guest OS</label>
                             <div class="col-sm-6">
                                 <div class="input-group">
@@ -198,6 +189,15 @@ export class InstanceCreate extends FormModal {
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="name" class="col-sm-4 col-form-label-sm">Guest Name</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm"
+                                           name="name" value="guest.01"/>
+                                </div>
+                            </div>
+                        </div>
                         </form>
                     </div>
                     <!-- DataStore -->
@@ -205,7 +205,7 @@ export class InstanceCreate extends FormModal {
                         <form name="storage-config">
                         <div class="form-group row">
                             <label for="datastore" class="col-sm-4 col-form-label-sm">
-                                Storage
+                                Datastore
                             </label>
                             <div class="col-sm-6">
                                 <div class="input-group">

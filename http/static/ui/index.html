@@ -53,25 +53,25 @@
             <div class="card-header-cnt">
                 <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                         data-toggle="modal" data-target="#instanceCreateModal">
-                    create instance
+                    Create new instance
                 </button>
-                <button id="console" type="button" class="btn btn-outline-dark btn-sm">console</button>
-                <button id="start" type="button" class="btn btn-outline-dark btn-sm">start</button>
-                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
+                <button id="console" type="button" class="btn btn-outline-dark btn-sm">Console</button>
+                <button id="start" type="button" class="btn btn-outline-dark btn-sm">Power on</button>
+                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
                 <button id="more" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    operations
+                    Actions
                 </button>
                 <div name="btn-more" class="dropdown-menu">
-                    <a id="more-start" class="dropdown-item" href="#">start</a>
-                    <a id="more-shutdown" class="dropdown-item" href="#">shutdown</a>
-                    <a id="more-reset" class="dropdown-item" href="#">reset</a>
+                    <a id="more-start" class="dropdown-item" href="#">Power on</a>
+                    <a id="more-shutdown" class="dropdown-item" href="#">Power off</a>
+                    <a id="more-reset" class="dropdown-item" href="#">Reset</a>
                     <div class="dropdown-divider"></div>
-                    <a id="more-suspend" class="dropdown-item" href="#">suspend</a>
-                    <a id="more-resume" class="dropdown-item" href="#">resume</a>
+                    <a id="more-suspend" class="dropdown-item" href="#">Suspend</a>
+                    <a id="more-resume" class="dropdown-item" href="#">Resume</a>
                     <div class="dropdown-divider"></div>
-                    <a id="more-destroy" class="dropdown-item" href="#">destroy</a>
-                    <a id="more-remove" class="dropdown-item" href="#">remove</a>
+                    <a id="more-destroy" class="dropdown-item" href="#">Destroy</a>
+                    <a id="more-remove" class="dropdown-item" href="#">Remove</a>
                 </div>
             </div>
 
@@ -107,7 +107,7 @@
             <button class="btn btn-link btn-block text-left btn-sm"
                     type="button" data-toggle="collapse"
                     data-target="#collapseStore" aria-expanded="true" aria-controls="collapseStore">
-                Local DataStores
+                Local Datastores
             </button>
         </div>
         <div id="collapseStore" class="collapse" aria-labelledby="headingOne" data-parent="#index">
@@ -116,15 +116,15 @@
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#datastoreCreateModal">
-                        create datastore
+                        New a datastore
                     </button>
                     <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#fileUploadModal">
-                        upload
+                        Upload
                     </button>
-                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                    <button id="delete" type="button" class="btn btn-outline-dark btn-sm">delete</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
+                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
+                    <button id="delete" type="button" class="btn btn-outline-dark btn-sm">Delete</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
                 </div>
 
                 <!-- DataStore display -->
@@ -165,11 +165,11 @@
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#networkCreateModal">
-                        create network
+                        Create network
                     </button>
-                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                    <button id="delete" type="button" class="btn btn-outline-dark btn-sm">delete</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
+                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
+                    <button id="delete" type="button" class="btn btn-outline-dark btn-sm">Delete</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
                 </div>
 
                 <!-- Network display -->
@@ -210,12 +210,12 @@
 
 <!-- Context menu -->
 <div class="dropdown-menu contextmenu">
-    <a id="refresh" class="dropdown-item" href="#" onclick="javascript:window.location.reload();">refresh</a>
+    <a id="refresh" class="dropdown-item" href="#" onclick="javascript:window.location.reload();">Refresh</a>
     <div class="dropdown-divider"></div>
-    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.back();">back</a>
-    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.forward();">forward</a>
+    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.back();">Go back</a>
+    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.forward();">Go forward</a>
     <div class="dropdown-divider"></div>
-    <a id="home" class="dropdown-item" href="#" onclick="javascript:window.open('..', '_self')">home</a>
+    <a id="home" class="dropdown-item" href="#" onclick="javascript:window.open('..', '_self')">Go home</a>
 </div>
 
 <!-- JQuery Javascript -->
@@ -256,11 +256,12 @@
             default: "instances",
         });
 
+        // laod overview.
         let view = new Overview({
             id: '#overview',
         });
-
         view.refresh();
+        // register click on overview.
         $('#system-ref').on('click', view, function (e) {
             e.data.refresh();
             $('#collapseSys').collapse('show');
@@ -274,6 +275,7 @@
             e.data.create(Utils.toJSON(e.form));
         });
 
+        // load network and datastore.
         let net = new Network({id: '#networks'});
         let createNetwork = new NetworkCreate({id: '#networkCreateModal'});
         createNetwork.onsubmit(net, function (e) {
@@ -289,11 +291,15 @@
             e.data.create(Utils.toJSON(e.form));
         });
 
-        $(document).bind("contextmenu",function(e){
+        // register context menu.
+        $(document).on("contextmenu", function (e) {
             $('.contextmenu').css("left", e.clientX);
             $('.contextmenu').css("top", e.clientY);
             $('.contextmenu').show();
             return false;
+        });
+        $(document).on("click", function (e) {
+            $('.contextmenu').hide();
         });
     });
 </script>

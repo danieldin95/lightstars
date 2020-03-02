@@ -40,7 +40,7 @@
                     {{end}}
                     <button id="console" type="button" class="btn btn-outline-dark {{$class}}"
                             data-target="#consoleModal" data="{{$url}}">
-                        console
+                        Console
                     </button>
                     <button id="consoles" type="button"
                             class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
@@ -49,20 +49,20 @@
                     </button>
                     <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
                         <a id="console-self" class="dropdown-item" href="#" data="{{$url}}">
-                            open console
+                            Open console
                         </a>
                         <a id="console-blank" class="dropdown-item" href="#" data="{{$url}}">
-                            open console in new blank
+                            Open console in new blank
                         </a>
                         <a id="console-window" class="dropdown-item" href="#" data="{{$url}}">
-                            open console in new window
+                            Open console in new window
                         </a>
                     </div>
                 </div>
-                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">refresh</button>
+                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">Refresh</button>
                 <div id="power-btns" class="btn-group btn-group-sm" role="group">
                     <button id="start" type="button" class="btn btn-outline-dark">
-                        power
+                        Power
                     </button>
                     <button id="power" type="button"
                             class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
@@ -70,24 +70,24 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div id="power-more" class="dropdown-menu" aria-labelledby="power">
-                        <a id="start" class="dropdown-item" href="#">start</a>
-                        <a id="shutdown" class="dropdown-item" href="#">shutdown</a>
-                        <a id="reset" class="dropdown-item" href="#">reset</a>
+                        <a id="start" class="dropdown-item" href="#">Power on</a>
+                        <a id="shutdown" class="dropdown-item" href="#">Power off</a>
+                        <a id="reset" class="dropdown-item" href="#">Reset</a>
                         <div class="dropdown-divider"></div>
-                        <a id="destroy" class="dropdown-item" href="#">destroy</a>
+                        <a id="destroy" class="dropdown-item" href="#">Destroy</a>
                     </div>
                 </div>
                 <div id="btns-more" class="btn-group btn-group-sm" role="group">
                     <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
                             data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
-                        more
+                        Actions
                     </button>
                     <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                        <a id="suspend" class="dropdown-item {{$class}}" href="#">suspend</a>
-                        <a id="resume" class="dropdown-item {{$class}}" href="#">resume</a>
+                        <a id="suspend" class="dropdown-item {{$class}}" href="#">Suspend</a>
+                        <a id="resume" class="dropdown-item {{$class}}" href="#">Resume</a>
                         <div class="dropdown-divider"></div>
-                        <a id="remove" class="dropdown-item" href="#">remove</a>
-                        <a id="dumpxml" class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">dump XML</a>
+                        <a id="remove" class="dropdown-item" href="#">Remove</a>
+                        <a id="dumpxml" class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">Dump XML</a>
                     </div>
                 </div>
             </div>
@@ -122,11 +122,11 @@
             <div class="card-header-cnt">
                 <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                         data-toggle="modal" data-target="#diskCreateModal">
-                    create
+                    Attach disk
                 </button>
-                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">remove</button>
-                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
+                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
+                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">Remove</button>
+                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
             </div>
             <div class="">
                 <table class="table table-striped">
@@ -164,11 +164,11 @@
             <div class="card-header-cnt">
                 <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                         data-toggle="modal" data-target="#interfaceCreateModal">
-                    create
+                    Attach one
                 </button>
-                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">edit</button>
-                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">remove</button>
-                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >refresh</button>
+                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
+                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">Remove</button>
+                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
             </div>
             <div class="">
                 <table class="table table-striped">
@@ -212,12 +212,12 @@
 
 <!-- Context menu -->
 <div class="dropdown-menu contextmenu">
-    <a id="refresh" class="dropdown-item" href="#" onclick="javascript:window.location.reload();">refresh</a>
+    <a id="refresh" class="dropdown-item" href="#" onclick="javascript:window.location.reload();">Refresh</a>
     <div class="dropdown-divider"></div>
-    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.back();">back</a>
-    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.forward();">forward</a>
+    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.back();">Go back</a>
+    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.forward();">Go forward</a>
     <div class="dropdown-divider"></div>
-    <a id="home" class="dropdown-item" href="#" onclick="javascript:window.open('..', '_self')">home</a>
+    <a id="home" class="dropdown-item" href="#" onclick="javascript:window.open('..', '_self')">Go home</a>
 </div>
 
 <!-- JQuery Javascript -->
@@ -254,10 +254,7 @@
             interfaces: {id: "#interface"},
         });
 
-        $(function(e) {
-            $('#consoleModal').draggable();
-        });
-
+        // load disks and interfaces.
         new DiskCreate({id: '#diskCreateModal'})
             .onsubmit(instance, function (e) {
                 e.data.disk.create(Utils.toJSON(e.form));
@@ -267,11 +264,20 @@
                 e.data.interface.create(Utils.toJSON(e.form));
             });
 
-        $(document).bind("contextmenu",function(e){
+        // register console draggable.
+        $(function (e) {
+            $('#consoleModal').draggable();
+        });
+
+        // register context menu.
+        $(document).on("contextmenu", function (e) {
             $('.contextmenu').css("left", e.clientX);
             $('.contextmenu').css("top", e.clientY);
             $('.contextmenu').show();
             return false;
+        });
+        $(document).on("click", function (e) {
+            $('.contextmenu').hide();
         });
     });
 </script>
