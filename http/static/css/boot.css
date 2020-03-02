@@ -71,6 +71,10 @@
     border-color: #343a40;
 }
 
+.card-header-cnt .btn-outline-dark {
+    border: none;
+}
+
 .form-control-sm {
     font-size: inherit;
 }
