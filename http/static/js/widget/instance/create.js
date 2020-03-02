@@ -178,6 +178,15 @@ export class InstanceCreate extends FormModal {
                     <div id="step-os" class="">
                         <form name="os-config">
                         <div class="form-group row">
+                            <label for="name" class="col-sm-4 col-form-label-sm">Name</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm"
+                                           name="name" value="guest.01"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="family" class="col-sm-4 col-form-label-sm">Guest OS</label>
                             <div class="col-sm-6">
                                 <div class="input-group">
@@ -186,15 +195,6 @@ export class InstanceCreate extends FormModal {
                                         <option value="windows">Windows</option>
                                         <option value="other">Other</option>
                                     </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-4 col-form-label-sm">Guest Name</label>
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm"
-                                           name="name" value="guest.01"/>
                                 </div>
                             </div>
                         </div>
