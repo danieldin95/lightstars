@@ -12,10 +12,15 @@ export class Collapse {
         for (let i = 0;  i < this.collapse.pages.length; i++){
             let v = this.collapse.pages[i];
             if (page == v.name) {
-                $(v.id).collapse('show');
+                $(v.id).fadeIn('slow');
+                $(v.id).collapse();
             }
-            $(v.id).on('show.bs.collapse',  this,function (e) {
+            $(v.id).on('show.bs.collapse', this, function (e) {
                 e.data.set(v.name);
+                $(this).fadeIn('slow');
+            });
+            $(v.id).on('hide.bs.collapse', this, function (e) {
+                $(this).fadeOut('fast');
             });
         }
     }
