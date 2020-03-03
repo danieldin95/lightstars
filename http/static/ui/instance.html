@@ -22,10 +22,12 @@
                 <a href="../.." class="none">Home</a>
                 &nbsp;&brvbar;&nbsp;
                 <a class="none" href="javascript:window.location.reload();">{{.Name}}</a>
+                <a class="btn-spot float-right" id="instance-ref" href="javascript:window.location.reload();"></a>
             </div>
         </div>
 
         <!-- Overview -->
+        <div id="collapseOver" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
         <div class="card-body">
             {{$class := "disabled"}}
             {{if eq .State "running"}}
@@ -103,6 +105,7 @@
                 <dt>Memory:</dt>
                 <dd>{{prettyKBytes .MaxMem}} | {{prettyKBytes .Memory}}</dd>
             </dl>
+        </div>
         </div>
     </div>
 
@@ -239,6 +242,10 @@
 
     $(document).ready(function() {
         new Filters();
+
+        // collapse
+        $('#collapseOver').fadeIn('slow');
+        $('#collapseOver').collapse('show');
         new Collapse({
             pages: [
                 {id: '#collapseInt', name: 'interface'},

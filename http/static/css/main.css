@@ -242,6 +242,10 @@ select {
     border-radius: .25rem;
 }
 
+.system .card-body {
+    min-height: 210px;
+}
+
 .instances .card-body,
 .datastores .card-body,
 .networks .card-body {
