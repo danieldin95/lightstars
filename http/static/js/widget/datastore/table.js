@@ -32,6 +32,7 @@ export class DataStoreTable {
                 <td>{{i+1}}</td>
                 <td><a href="/ui/datastore/{{v.uuid}}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
+                <td>{{v.source}}</td>
                 <td>{{v.capacity | prettyByte}}</td>
                 <td>{{v.available | prettyByte}}</td>
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
