@@ -1,0 +1,10 @@
+<pool type='disk'>
+    <name>guest_images_disk</name>
+    <source>
+        <device path='/dev/sdb'/>
+        <format type='gpt'/>
+    </source>
+    <target>
+        <path>/dev</path>
+    </target>
+</pool>

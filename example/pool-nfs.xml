@@ -1,0 +1,12 @@
+
+<pool type="netfs">
+    <name>10</name>
+    <source>
+        <host name='192.168.4.249'/>
+        <dir path='/lightstar/nfs/01'/>
+        <format type='nfs'/>
+    </source>
+    <target>
+        <path>/lightstar/datastore/10</path>
+    </target>
+</pool>
