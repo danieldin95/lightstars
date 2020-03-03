@@ -11,6 +11,14 @@ This software makes it easier for you to control compute resource.
 
     lscpu | egrep '(vmx|svm)'
 
+## Disable SElinux firstly
+
+    cat > /etc/sysconfig/selinux <<EOF
+    SELINUX=disabled
+    SELINUXTYPE=targeted
+    EOF
+    
+    reboot
 
 ## Install by RPM packaging
 

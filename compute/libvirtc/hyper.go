@@ -132,16 +132,17 @@ func (h *HyperVisor) FigureCPU() (err error) {
 	older += h.cpuSts.Kernel
 	older += h.cpuSts.Intr
 	older += h.cpuSts.Iowait
-
 	newer := newerSts.User
 	newer += newerSts.Idle
 	newer += newerSts.Kernel
 	newer += newerSts.Intr
 	newer += newerSts.Iowait
-
-	h.idleUtil = 1000 * (newerSts.Idle - h.cpuSts.Idle) / (newer - older)
-	// record last statics
-	h.cpuSts = newerSts
+	dt := newer - older
+	if dt > 0 {
+		h.idleUtil = 1000 * (newerSts.Idle - h.cpuSts.Idle) / dt
+		// record last statics
+		h.cpuSts = newerSts
+	}
 	return nil
 }
 
