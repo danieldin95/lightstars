@@ -88,7 +88,7 @@ func (pol *Pool) Create() error {
 	return nil
 }
 
-func (pol *Pool) Remove() error {
+func (pol *Pool) Clean() error {
 	hyper, err := GetHyper()
 	if err != nil {
 		return err
@@ -107,6 +107,21 @@ func (pol *Pool) Remove() error {
 				vol.Free()
 			}
 		}
+		defer pool.Free()
+	}
+	return nil
+}
+
+func (pol *Pool) Remove() error {
+	hyper, err := GetHyper()
+	if err != nil {
+		return err
+	}
+	pool, err := hyper.Conn.LookupStoragePoolByUUIDString(pol.Name)
+	if err != nil {
+		pool, err = hyper.Conn.LookupStoragePoolByName(pol.Name)
+	}
+	if err == nil {
 		if err := pool.Destroy(); err != nil {
 			libstar.Warn("Pool.Remove %s", err)
 		}
