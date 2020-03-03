@@ -6,6 +6,7 @@ import (
 	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
 	"net/http"
+	"sort"
 )
 
 type DataStore struct {
@@ -33,6 +34,9 @@ func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
 					list.Items = append(list.Items, store)
 					p.Free()
 				}
+				sort.SliceStable(list.Items, func(i, j int) bool {
+					return list.Items[i].(schema.DataStore).Name < list.Items[j].(schema.DataStore).Name
+				})
 				list.Metadata.Size = len(list.Items)
 				list.Metadata.Total = len(list.Items)
 			}

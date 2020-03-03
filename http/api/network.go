@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"net"
 	"net/http"
+	"sort"
 )
 
 type Network struct {
@@ -80,6 +81,9 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 					list.Items = append(list.Items, n)
 					net.Free()
 				}
+				sort.SliceStable(list.Items, func(i, j int) bool {
+					return list.Items[i].(schema.Network).Name < list.Items[j].(schema.Network).Name
+				})
 				list.Metadata.Size = len(list.Items)
 				list.Metadata.Total = len(list.Items)
 			}

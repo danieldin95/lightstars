@@ -40,7 +40,7 @@ func (up Upload) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 	modes := os.O_RDWR | os.O_CREATE | os.O_EXCL
-	tempFile, err := os.OpenFile(path+"/"+handler.Filename, modes, 0600)
+	tempFile, err := os.OpenFile(path+"/"+handler.Filename, modes, 0660)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		libstar.Error("Upload.Upload: %v", err)

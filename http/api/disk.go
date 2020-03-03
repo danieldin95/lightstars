@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"path"
+	"sort"
 	"strings"
 )
 
@@ -42,6 +43,9 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 			for _, disk := range instance.Disks {
 				list.Items = append(list.Items, disk)
 			}
+			sort.SliceStable(list.Items, func(i, j int) bool {
+				return list.Items[i].(schema.Disk).Device < list.Items[j].(schema.Disk).Device
+			})
 			list.Metadata.Size = len(list.Items)
 			list.Metadata.Total = len(list.Items)
 			ResponseJson(w, list)

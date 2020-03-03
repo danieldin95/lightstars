@@ -7,6 +7,7 @@ import (
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -107,7 +108,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		},
 	}
 	if dom.OS.Type.Arch == "" {
-		dom.OS.Type.Arch = "x86_64"
+		dom.OS.Type.Arch = "x86_64" // i386
 	}
 	// create new disk firstly.
 	size := libstar.ToBytes(conf.Disk1Size, conf.Disk1Unit)
@@ -254,6 +255,9 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 				d.Free()
 			}
 		}
+		sort.SliceStable(list.Items, func(i, j int) bool {
+			return list.Items[i].(schema.Instance).Name < list.Items[j].(schema.Instance).Name
+		})
 		list.Metadata.Size = len(list.Items)
 		list.Metadata.Total = len(list.Items)
 		ResponseJson(w, list)

@@ -80,9 +80,9 @@ func NewInstance(dom libvirtc.Domain) Instance {
 
 type Disk struct {
 	Action     string `json:"action,omitempty"`
-	Seq        string `json:"seq,omitempty"`       //configure
-	Name       string `json:"name,omitempty"`      // instance name
-	UUID       string `json:"uuid,omitempty"`      // instance UUID
+	Seq        string `json:"seq,omitempty"`       // configure
+	Name       string `json:"name,omitempty"`      // disk name
+	UUID       string `json:"uuid,omitempty"`      // disk UUID
 	Store      string `json:"datastore,omitempty"` // disk saved to datastore
 	Size       string `json:"size"`                // configure
 	SizeUnit   string `json:"sizeUnit,omitempty"`  //configure

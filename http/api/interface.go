@@ -6,6 +6,7 @@ import (
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/gorilla/mux"
 	"net/http"
+	"sort"
 )
 
 type Interface struct {
@@ -36,14 +37,14 @@ func Interface2XML(conf *schema.Interface) (*libvirtc.InterfaceXML, error) {
 	return &xml, nil
 }
 
-func (int Interface) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance/{id}/interface", int.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/interface", int.POST).Methods("POST")
-	router.HandleFunc("/api/instance/{id}/interface/{dev}", int.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/interface/{dev}", int.DELETE).Methods("DELETE")
+func (in Interface) Router(router *mux.Router) {
+	router.HandleFunc("/api/instance/{id}/interface", in.GET).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/interface", in.POST).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/interface/{dev}", in.GET).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/interface/{dev}", in.DELETE).Methods("DELETE")
 }
 
-func (int Interface) GET(w http.ResponseWriter, r *http.Request) {
+func (in Interface) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dev, ok := GetArg(r, "dev")
 	format := GetQueryOne(r, "format")
@@ -60,9 +61,12 @@ func (int Interface) GET(w http.ResponseWriter, r *http.Request) {
 				Items:    make([]interface{}, 0, 32),
 				Metadata: schema.MetaData{},
 			}
-			for _, int := range instance.Interfaces {
-				list.Items = append(list.Items, int)
+			for _, intf := range instance.Interfaces {
+				list.Items = append(list.Items, intf)
 			}
+			sort.SliceStable(list.Items, func(i, j int) bool {
+				return list.Items[i].(schema.Interface).Device < list.Items[j].(schema.Interface).Device
+			})
 			list.Metadata.Size = len(list.Items)
 			list.Metadata.Total = len(list.Items)
 			ResponseJson(w, list)
@@ -78,7 +82,7 @@ func (int Interface) GET(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, dev)
 }
 
-func (int Interface) POST(w http.ResponseWriter, r *http.Request) {
+func (in Interface) POST(w http.ResponseWriter, r *http.Request) {
 	conf := &schema.Interface{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -110,11 +114,11 @@ func (int Interface) POST(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "success")
 }
 
-func (int Interface) PUT(w http.ResponseWriter, r *http.Request) {
+func (in Interface) PUT(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (int Interface) DELETE(w http.ResponseWriter, r *http.Request) {
+func (in Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
@@ -131,8 +135,8 @@ func (int Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if xml.Devices.Interfaces != nil {
-		for _, int := range xml.Devices.Interfaces {
-			if int.Mac.Address != address {
+		for _, intf := range xml.Devices.Interfaces {
+			if intf.Mac.Address != address {
 				continue
 			}
 			// found deivice
@@ -140,7 +144,7 @@ func (int Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 			if active, _ := dom.IsActive(); !active {
 				flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
 			}
-			if err := dom.DetachDeviceFlags(int.Encode(), flags); err != nil {
+			if err := dom.DetachDeviceFlags(intf.Encode(), flags); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
