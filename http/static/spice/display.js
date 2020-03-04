@@ -982,7 +982,7 @@ function handle_draw_jpeg_onload()
         this.o.sc.surfaces[this.o.base.surface_id].draw_count++;
     }
 
-    if (this.o.sc.streams[this.o.id] && "report" in this.o.sc.streams[this.o.id])
+    if (this.o.sc.streams && this.o.id && this.o.sc.streams[this.o.id] && "report" in this.o.sc.streams[this.o.id])
         process_stream_data_report(this.o.sc, this.o.id, this.o.msg_mmtime, this.o.msg_mmtime - this.o.sc.parent.relative_now());
 }
 
