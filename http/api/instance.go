@@ -91,7 +91,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		Name: conf.Name,
 		Devices: libvirtc.DevicesXML{
 			Disks:       make([]libvirtc.DiskXML, 2),
-			Graphics:    make([]libvirtc.GraphicsXML, 1),
+			Graphics:    make([]libvirtc.GraphicsXML, 2), // vnc and spice
 			Interfaces:  make([]libvirtc.InterfaceXML, 1),
 			Controllers: make([]libvirtc.ControllerXML, 4),
 			Inputs:      make([]libvirtc.InputXML, 1), // <input type="tablet" bus="usb"/>
@@ -155,6 +155,14 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	// vnc
 	dom.Devices.Graphics[0] = libvirtc.GraphicsXML{
 		Type:     "vnc",
+		Listen:   "0.0.0.0",
+		Port:     "-1",
+		AutoPort: "yes",
+		Password: libstar.GenToken(32),
+	}
+	// spice
+	dom.Devices.Graphics[1] = libvirtc.GraphicsXML{
+		Type:     "spice",
 		Listen:   "0.0.0.0",
 		Port:     "-1",
 		AutoPort: "yes",

@@ -37,8 +37,10 @@
             <div class="card-header-cnt">
                 <div id="console-btns" class="btn-group btn-group-sm" role="group">
                     {{$url := "#"}}
+                    {{$spice := "#"}}
                     {{if eq .State "running"}}
-                        {{ $url = printf "/ui/console?instance=%s&password=%s" .UUID .Password}}
+                        {{ $url = printf "/ui/console?id=%s&password=%s" .UUID .Password}}
+                        {{ $spice = printf "/ui/spice?id=%s&password=%s&type=spice" .UUID .Spice.Password}}
                     {{end}}
                     <button id="console" type="button" class="btn btn-outline-dark {{$class}}"
                             data-target="#consoleModal" data="{{$url}}">
@@ -58,6 +60,9 @@
                         </a>
                         <a id="console-window" class="dropdown-item" href="#" data="{{$url}}">
                             Open console in new window
+                        </a>
+                        <a id="console-spice" class="dropdown-item" href="#" data="{{$spice}}">
+                            Open console by spice
                         </a>
                     </div>
                 </div>

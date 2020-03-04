@@ -19,6 +19,7 @@ func (ui UI) Router(router *mux.Router) {
 	router.HandleFunc("/ui/", ui.Home)
 	router.HandleFunc("/ui/index", ui.Home)
 	router.HandleFunc("/ui/console", ui.Console)
+	router.HandleFunc("/ui/spice", ui.Spice)
 	router.HandleFunc("/ui/instance/{id}", ui.Instance)
 }
 
@@ -53,21 +54,26 @@ func (ui UI) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ui UI) Console(w http.ResponseWriter, r *http.Request) {
-	uuid := api.GetQueryOne(r, "instance")
+	uuid := api.GetQueryOne(r, "id")
 	if uuid == "" {
 		http.Error(w, "Not found instance", http.StatusNotFound)
 		return
 	}
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+	file := api.GetFile("ui/console.html")
+	if err := api.ParseFiles(w, file, nil); err != nil {
+		libstar.Error("UI.Console %s", err)
+	}
+}
+
+func (ui UI) Spice(w http.ResponseWriter, r *http.Request) {
+	uuid := api.GetQueryOne(r, "id")
+	if uuid == "" {
+		http.Error(w, "Not found instance", http.StatusNotFound)
 		return
 	}
-	defer dom.Free()
-	instance := schema.NewInstance(*dom)
-	file := api.GetFile("ui/console.html")
-	if err := api.ParseFiles(w, file, instance); err != nil {
-		libstar.Error("UI.Console %s", err)
+	file := api.GetFile("ui/spice.html")
+	if err := api.ParseFiles(w, file, nil); err != nil {
+		libstar.Error("UI.Spice %s", err)
 	}
 }
 

@@ -6,6 +6,13 @@ import (
 	"github.com/danieldin95/lightstar/storage"
 )
 
+type Graphics struct {
+	Type     string `json:"type"`
+	Password string `json:"password"`
+	Listen   string `json:"listen"`
+	Port     string `json:"port"`
+}
+
 type Instance struct {
 	Action           string `json:"action,omitempty"` // If is "", means not action.
 	UUID             string `json:"uuid"`
@@ -36,6 +43,8 @@ type Instance struct {
 	Interfaces  []Interface  `json:"interfaces,omitempty"`
 	Controllers []Controller `json:"controllers,omitempty"`
 	Password    string       `json:"password"`
+	Vnc         Graphics     `json:"vnc"`
+	Spice       Graphics     `json:"spice"`
 
 	XMLObj *libvirtc.DomainXML `json:"-"`
 }
@@ -71,6 +80,15 @@ func NewInstance(dom libvirtc.Domain) Instance {
 		for _, x := range xmlObj.Devices.Graphics {
 			if x.Type == "vnc" {
 				obj.Password = x.Password
+				obj.Vnc.Type = x.Type
+				obj.Vnc.Listen = x.Listen
+				obj.Vnc.Password = x.Password
+				obj.Vnc.Port = x.Port
+			} else if x.Type == "spice" {
+				obj.Spice.Type = x.Type
+				obj.Spice.Listen = x.Listen
+				obj.Spice.Password = x.Password
+				obj.Spice.Port = x.Port
 			}
 		}
 	}

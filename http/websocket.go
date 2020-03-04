@@ -20,15 +20,15 @@ func (w WebSocket) Router(router *mux.Router) {
 }
 
 func (w WebSocket) GetTarget(r *http.Request) string {
-	if t := api.GetQueryOne(r, "target"); t != "" {
-		return t
-	}
-	id := api.GetQueryOne(r, "instance")
+	id := api.GetQueryOne(r, "id")
 	if id == "" {
 		return ""
 	}
-
-	libstar.Debug("UI.GetTarget %s", id)
+	format := api.GetQueryOne(r, "type")
+	if format == "" {
+		format = "vnc"
+	}
+	libstar.Debug("UI.GetTarget %s://%s", format, id)
 	hyper, err := libvirtc.GetHyper()
 	if err != nil {
 		libstar.Error("UI.GetTarget %s", err)
@@ -43,7 +43,7 @@ func (w WebSocket) GetTarget(r *http.Request) string {
 	if instXml == nil {
 		return ""
 	}
-	if _, port := instXml.VNCDisplay(); port != "" {
+	if _, port := instXml.GraphicsAddr(format); port != "" {
 		return hyper.Address + ":" + port
 	}
 	return ""

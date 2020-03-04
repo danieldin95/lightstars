@@ -50,7 +50,9 @@ func main() {
 	libvirtn.SetHyper(hyper)
 
 	h := http.NewServer(listen, staticDir, authFile)
-	h.SetCert(crtDir+"/private.key", crtDir+"/crt.pem")
+	if _, err := os.Stat(crtDir); !os.IsNotExist(err) {
+		h.SetCert(crtDir+"/private.key", crtDir+"/crt.pem")
+	}
 
 	go h.Start()
 

@@ -1012,7 +1012,7 @@ const UI = {
                          { shared: UI.getSetting('shared'),
                            showDotCursor: UI.getSetting('show_dot'),
                            repeaterID: UI.getSetting('repeaterID'),
-                           credentials: { password: password } });
+                           credentials: { password } });
         UI.rfb.addEventListener("connect", UI.connectFinished);
         UI.rfb.addEventListener("disconnect", UI.disconnectFinished);
         UI.rfb.addEventListener("credentialsrequired", UI.credentials);

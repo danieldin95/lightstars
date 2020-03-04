@@ -167,13 +167,14 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 
 func (h *Server) Start() error {
 	h.Initialize()
-	libstar.Info("Server.Start %s", h.listen)
 	if h.keyFile == "" || h.crtFile == "" {
+		libstar.Info("Server.Start http://%s", h.listen)
 		if err := h.server.ListenAndServe(); err != nil {
 			libstar.Error("Server.Start on %s: %s", h.listen, err)
 			return err
 		}
 	} else {
+		libstar.Info("Server.Start https://%s", h.listen)
 		if err := h.server.ListenAndServeTLS(h.crtFile, h.keyFile); err != nil {
 			libstar.Error("Server.Start on %s: %s", h.listen, err)
 			return err

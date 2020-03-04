@@ -86,5 +86,9 @@ export class Instance {
             let url = $(this).attr('data');
             window.open(url, e.data.name,'width=873,height=655');
         });
+        $(`${this.id} #console-spice`).on('click', this, function (e) {
+            let url = $(this).attr('data');
+            window.open(url, '_blank');
+        });
     }
 }

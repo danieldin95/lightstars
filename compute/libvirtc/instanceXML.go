@@ -62,12 +62,12 @@ func (domain *DomainXML) Encode() string {
 	return string(data)
 }
 
-func (domain *DomainXML) VNCDisplay() (string, string) {
+func (domain *DomainXML) GraphicsAddr(format string) (string, string) {
 	if len(domain.Devices.Graphics) == 0 {
 		return "", ""
 	}
 	for _, g := range domain.Devices.Graphics {
-		if g.Type == "vnc" {
+		if g.Type == format {
 			return g.Listen, g.Port
 		}
 	}
