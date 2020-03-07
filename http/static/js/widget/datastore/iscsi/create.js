@@ -1,8 +1,8 @@
-import {FormModal} from "../form/modal.js";
-import {Option} from "../option.js";
-import {Utils} from "../../com/utils.js";
+import {FormModal} from "../../form/modal.js";
+import {Option} from "../../option.js";
+import {Utils} from "../../../com/utils.js";
 
-export class DirCreate extends FormModal {
+export class iSCSICreate extends FormModal {
     //
     constructor (props) {
         super(props);
@@ -16,7 +16,7 @@ export class DirCreate extends FormModal {
         let name = {
             fresh: function() {
                 this.selector.find('option').remove();
-                for (let i = 1; i <= 9; i++) {
+                for (let i = 1; i <= 16; i++) {
                     let alias = "datastore@"+Utils.iton(i, 2);
                     this.selector.append(new Option(alias, alias));
                 }
@@ -32,10 +32,9 @@ export class DirCreate extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="">New DataStore</h5>
+                    <h5 class="modal-title" id="">New DataStore by iSCSI</h5>
                 </div>
                 <form name="datastore-new">
-                <input type="text" class="d-none" name="type" value="dir"/>
                 <div id="" class="modal-body">
                     <div class="form-group row">
                         <label for="name" class="col-sm-4 col-form-label-sm ">Select datastore</label>

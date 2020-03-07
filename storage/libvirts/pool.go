@@ -20,6 +20,7 @@ type Pool struct {
 	Name string
 	Size uint64
 	Path string
+	XML  string
 }
 
 func NewPool(name, target string) Pool {
@@ -48,6 +49,14 @@ func CreatePool(name, target string) (*Pool, error) {
 		Name: name,
 		Path: target,
 	}
+	polXml := PoolXML{
+		Type: pol.Type,
+		Name: pol.Name,
+		Target: TargetXML{
+			Path: pol.Path,
+		},
+	}
+	pol.XML = polXml.Encode()
 	return pol, pol.Create()
 }
 
@@ -66,15 +75,7 @@ func (pol *Pool) Create() error {
 	if _, err := hyper.Conn.LookupStoragePoolByName(pol.Name); err == nil {
 		return nil
 	}
-	polXml := PoolXML{
-		Type: pol.Type,
-		Name: pol.Name,
-		Target: TargetXML{
-			Path: pol.Path,
-		},
-	}
-	xml := polXml.Encode()
-	pool, err := hyper.Conn.StoragePoolDefineXML(xml, 0)
+	pool, err := hyper.Conn.StoragePoolDefineXML(pol.XML, 0)
 	if err != nil {
 		return err
 	}

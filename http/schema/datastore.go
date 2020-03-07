@@ -5,15 +5,23 @@ import (
 	"unicode"
 )
 
+type NFS struct {
+	Host   string `json:"host"`
+	Path   string `json:"path"`
+	Format string `json:"format"`
+}
+
 type DataStore struct {
 	UUID       string `json:"uuid"`
 	Name       string `json:"name"`
 	Type       string `json:"type"`
+	Format     string `json:"format"`
 	State      string `json:"state"`
 	Capacity   uint64 `json:"capacity"`   // bytes
 	Allocation uint64 `json:"allocation"` // bytes
 	Available  uint64 `json:"available"`  // Bytes
 	Source     string `json:"source"`
+	NFS        *NFS   `json:"nfs"`
 }
 
 func IsDigit(s string) bool {
@@ -42,6 +50,9 @@ func NewDataStore(pol libvirts.Pool) DataStore {
 	case "netfs":
 		if xmlObj.Source.Format.Type == "nfs" {
 			obj.Source = "nfs://" + xmlObj.Source.Host.Name + xmlObj.Source.Dir.Path
+		}
+		if xmlObj.Source.Format.Type == "auto" {
+			obj.Source = "auto://" + xmlObj.Source.Host.Name + xmlObj.Source.Dir.Path
 		}
 	default:
 		obj.Source = obj.Type + "://" + obj.Name

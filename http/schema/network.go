@@ -28,7 +28,9 @@ func NewNetwork(net libvirtn.Network) Network {
 	}
 
 	xml := libvirtn.NewNetworkXMLFromNet(&net)
-	obj.Mode = xml.Forward.Mode
+	if xml.Forward != nil {
+		obj.Mode = xml.Forward.Mode
+	}
 	if xml.IPv4 != nil {
 		obj.Address = xml.IPv4.Address
 		obj.Netmask = xml.IPv4.Netmask

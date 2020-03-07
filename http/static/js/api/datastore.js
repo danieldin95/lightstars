@@ -32,6 +32,9 @@ export class DataStoreApi extends Api {
     create(data) {
         let your = this;
 
+        if (data.format == 'nfs') {
+            data.nfs = {host: data.host, path: data.path, format: 'nfs'};
+        }
         $.post(your.url(), JSON.stringify(data), function (data, status) {
             $(your.tasks).append(AlertSuccess(`create datastore ${data.message}`));
         }).fail(function (e) {

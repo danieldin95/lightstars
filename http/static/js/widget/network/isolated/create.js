@@ -2,7 +2,7 @@ import {FormModal} from "../../form/modal.js";
 import {Option} from "../../option.js";
 
 
-export class RoutedCreate extends FormModal {
+export class IsolatedCreate extends FormModal {
     //
     constructor (props) {
         super(props);
@@ -28,8 +28,8 @@ export class RoutedCreate extends FormModal {
         let name = {
             fresh: function() {
                 this.selector.find('option').remove();
-                for (let i = 0; i <= 16; i++) {
-                    let alias = "virbrx"+i;
+                for (let i = 0; i < 10; i++) {
+                    let alias = "isobr"+i;
                     this.selector.append(new Option(alias, alias));
                 }
             },
@@ -45,10 +45,10 @@ export class RoutedCreate extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="">Create routed network</h5>
+                    <h5 class="modal-title" id="">Create isolated network</h5>
                 </div>
                 <form name="network-new">
-                    <input type="text" class="d-none" name="mode" value="route"/>
+                    <input type="text" class="d-none" name="mode" value=""/>
                     <div id="" class="modal-body">
                         <div class="form-group row">
                             <label for="name" class="col-sm-4 col-form-label-sm ">Bridge's name</label>
@@ -56,8 +56,8 @@ export class RoutedCreate extends FormModal {
                                 <div class="input-group">
                                     <select class="select-md" name="name">
                                         <option value="virbr0" selected>virbrx0</option>
-                                        <option value="virbr1">virbrx1</option>
-                                        <option value="virbr2">virbrx2</option>
+                                        <option value="virbr1">isobr1</option>
+                                        <option value="virbr2">isobr2</option>
                                     </select>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@ export class RoutedCreate extends FormModal {
                             <div class="col-sm-6">
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm input-number-lg"
-                                           name="address" value="172.17.1.1"/>
+                                           name="address" value="192.168.30.1"/>
                                         <select class="select-unit-right" name="prefix">
                                             <option value="24" selected>/24</option>
                                         </select>
@@ -90,7 +90,7 @@ export class RoutedCreate extends FormModal {
                             <div class="col-sm-6">
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm" 
-                                        name="range" value="172.17.1.100,172.17.1.200"/>                                         
+                                        name="range" value="192.168.30.100,192.168.30.200"/>                                         
                                 </div>
                             </div>
                         </div>

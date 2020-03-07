@@ -30,16 +30,18 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 		Bridge: libvirtn.BridgeXML{
 			Name: conf.Name,
 		},
-		Forward: libvirtn.ForwardXML{
+	}
+	if conf.Mode != "" {
+		xmlObj.Forward = &libvirtn.ForwardXML{
 			Mode: conf.Mode,
-		},
+		}
 	}
 	if conf.Mode == "nat" {
 		xmlObj.Bridge.Stp = "on"
 		xmlObj.Bridge.Delay = "0"
 	}
 
-	if conf.Mode == "route" || conf.Mode == "nat" {
+	if conf.Address != "" {
 		xmlObj.IPv4 = &libvirtn.IPv4XML{
 			Address: conf.Address,
 		}
@@ -49,15 +51,16 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 		if conf.Netmask != "" {
 			xmlObj.IPv4.Netmask = conf.Netmask
 		}
-		if conf.DHCP != "no" {
-			xmlObj.IPv4.DHCP = &libvirtn.DHCPXML{
-				Range: libvirtn.DHCPRangeXML{
-					Start: conf.RangeStart,
-					End:   conf.RangeEnd,
-				},
-			}
+	}
+	if conf.DHCP != "no" {
+		xmlObj.IPv4.DHCP = &libvirtn.DHCPXML{
+			Range: libvirtn.DHCPRangeXML{
+				Start: conf.RangeStart,
+				End:   conf.RangeEnd,
+			},
 		}
 	}
+
 	return xmlObj
 }
 

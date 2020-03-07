@@ -32,7 +32,7 @@ export class NetworkApi extends Api {
     create(data) {
         let your = this;
 
-        if (data.range != "") {
+        if (data.range && data.range != "") {
             let range = data.range.split(',', 2);
             if (range.length == 2) {
                 data.rangeStart = range[0];

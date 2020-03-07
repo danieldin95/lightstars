@@ -220,16 +220,6 @@
 <!-- Create interface modal -->
 <div id="interfaceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
-<!-- Context menu -->
-<div class="dropdown-menu contextmenu">
-    <a id="refresh" class="dropdown-item" href="#" onclick="javascript:window.location.reload();">Refresh</a>
-    <div class="dropdown-divider"></div>
-    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.back();">Go back</a>
-    <a id="back" class="dropdown-item" href="#" onclick="javascript:window.history.forward();">Go forward</a>
-    <div class="dropdown-divider"></div>
-    <a id="home" class="dropdown-item" href="#" onclick="javascript:window.open('..', '_self')">Go home</a>
-</div>
-
 <!-- JQuery Javascript -->
 {{/*<script src="/static/asset/jquery-3.3.1.js"></script>*/}}
 <script src="/static/asset/jquery-1.12.4.js"></script>
@@ -281,17 +271,6 @@
         // register console draggable.
         $(function (e) {
             $('#consoleModal').draggable();
-        });
-
-        // register context menu.
-        $(document).on("contextmenu", function (e) {
-            $('.contextmenu').css("left", e.clientX);
-            $('.contextmenu').css("top", e.clientY);
-            $('.contextmenu').show();
-            return false;
-        });
-        $(document).on("click", function (e) {
-            $('.contextmenu').hide();
         });
     });
 </script>

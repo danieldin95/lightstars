@@ -38,7 +38,7 @@ export class NetworkTable {
                     {{v.address}}/{{v.netmask | netmask2prefix }}{{v.prefix ? v.prefix : ''}}
                     {{/if}}
                 </td>
-                <td>{{v.mode}}</td>
+                <td>{{v.mode != '' ? v.mode : 'isolated'}}</td>
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}

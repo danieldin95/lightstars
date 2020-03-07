@@ -6,12 +6,12 @@ import (
 )
 
 type NetworkXML struct {
-	XMLName xml.Name   `xml:"network" json:"-"`
-	Name    string     `xml:"name" json:"name"`
-	UUID    string     `xml:"uuid" json:"uuid"`
-	Forward ForwardXML `xml:"forward" json:"forward"`
-	IPv4    *IPv4XML   `xml:"ip,omitempty" json:"ipv4"`
-	Bridge  BridgeXML  `xml:"bridge" json:"bridge"`
+	XMLName xml.Name    `xml:"network" json:"-"`
+	Name    string      `xml:"name" json:"name"`
+	UUID    string      `xml:"uuid" json:"uuid"`
+	Forward *ForwardXML `xml:"forward,omitempty" json:"forward"`
+	IPv4    *IPv4XML    `xml:"ip,omitempty" json:"ipv4"`
+	Bridge  BridgeXML   `xml:"bridge" json:"bridge"`
 }
 
 func NewNetworkXMLFromNet(net *Network) *NetworkXML {

@@ -116,10 +116,26 @@
             <div class="card-body">
                 <!-- DataStore buttons -->
                 <div class="card-header-cnt">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#datastoreCreateModal">
-                        New a datastore
-                    </button>
+                    <div id="create-btns" class="btn-group btn-group-sm" role="group">
+                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                                data-toggle="modal" data-target="#dirCreateModal">
+                            New a datastore
+                        </button>
+                        <button id="creates" type="button"
+                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
+                            <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#nfsCreateModal">
+                                New by NFS
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#iscsiCreateModal">
+                                New by iSCSI
+                            </a>
+                        </div>
+                    </div>
                     <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#fileUploadModal">
                         Upload
@@ -168,7 +184,7 @@
                 <div class="card-header-cnt">
                     <div id="create-btns" class="btn-group btn-group-sm" role="group">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#networkCreateModal">
+                                data-toggle="modal" data-target="#natCreateModal">
                             Create network
                         </button>
                         <button id="creates" type="button"
@@ -177,18 +193,19 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                            <a id="create" class="dropdown-item" data-toggle="modal" data-target="#networkCreateModal">
+                            <a id="create-nat" class="dropdown-item" data-toggle="modal" data-target="#natCreateModal">
                                 NAT based
                             </a>
-                            <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#routedCreateModal">
-                                Routed network
+                            <a id="create-routed" class="dropdown-item" data-toggle="modal" data-target="#routedCreateModal">
+                                Routed mode
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#isolatedCreateModal">
+                                Isolated mode
                             </a>
                             <div class="dropdown-divider"></div>
                             <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#bridgeCreateModal">
                                 Host bridge
-                            </a>
-                            <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#isolatedCreateModal">
-                                Isolated network
                             </a>
                         </div>
                     </div>
@@ -226,14 +243,17 @@
 <div id="instanceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
 <!-- Create datastore modal -->
-<div id="datastoreCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="dirCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!-- Upload file modal -->
 <div id="fileUploadModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="nfsCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="iscsiCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
 <!-- Create network modal -->
-<div id="networkCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<div id="bridgeCreateModal"  class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<div id="routedCreateModal"  class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="natCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="bridgeCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="routedCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="isolatedCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
 <!-- JQuery Javascript -->
 {{/*<script src="/static/asset/jquery-3.3.1.js"></script>*/}}
@@ -250,17 +270,20 @@
 
 <script type="module">
     import {Utils} from "/static/js/com/utils.js";
+    import {Filters} from "/static/js/filter.js";
+    import {Collapse} from "/static/js/widget/collapse.js";
+    import {Overview} from "/static/js/widget/index/overview.js";
     import {Instances} from '/static/js/instances.js';
     import {Network} from "/static/js/network.js";
     import {DataStore} from "/static/js/datastore.js";
     import {InstanceCreate} from '/static/js/widget/instance/create.js';
-    import {NetworkCreate} from "/static/js/widget/network/create.js";
-    import {BridgeCreate} from "/static/js/widget/network/create/bridge.js";
-    import {RoutedCreate} from "/static/js/widget/network/create/routed.js";
-    import {DataStoreCreate} from "/static/js/widget/datastore/create.js";
-    import {Filters} from "/static/js/filter.js";
-    import {Collapse} from "/static/js/widget/collapse.js";
-    import {Overview} from "/static/js/widget/index/overview.js";
+    import {NATCreate} from "/static/js/widget/network/create.js";
+    import {BridgeCreate} from "/static/js/widget/network/bridge/create.js";
+    import {RoutedCreate} from "/static/js/widget/network/routed/create.js";
+    import {IsolatedCreate} from "/static/js/widget/network/isolated/create.js";
+    import {DirCreate} from "/static/js/widget/datastore/create.js";
+    import {NFSCreate} from "/static/js/widget/datastore/nfs/create.js";
+    import {iSCSICreate} from "/static/js/widget/datastore/iscsi/create.js";
 
 
     $(document).ready(function() {
@@ -295,7 +318,7 @@
 
         // load network.
         let net = new Network({id: '#networks'});
-        new NetworkCreate({id: '#networkCreateModal'}).onsubmit(net, function (e) {
+        new NATCreate({id: '#natCreateModal'}).onsubmit(net, function (e) {
             e.data.create(Utils.toJSON(e.form));
         });
         new BridgeCreate({id: '#bridgeCreateModal'}).onsubmit(net, function (e) {
@@ -304,13 +327,22 @@
         new RoutedCreate({id: '#routedCreateModal'}).onsubmit(net, function (e) {
             e.data.create(Utils.toJSON(e.form));
         });
+        new IsolatedCreate({id: '#isolatedCreateModal'}).onsubmit(net, function (e) {
+            e.data.create(Utils.toJSON(e.form));
+        });
 
         // load datastore.
         let store = new DataStore({
             id: '#datastores',
             upload: '#fileUploadModal',
         });
-        new DataStoreCreate({id: '#datastoreCreateModal'}).onsubmit(store, function (e) {
+        new DirCreate({id: '#dirCreateModal'}).onsubmit(store, function (e) {
+            e.data.create(Utils.toJSON(e.form));
+        });
+        new NFSCreate({id: '#nfsCreateModal'}).onsubmit(store, function (e) {
+            e.data.create(Utils.toJSON(e.form));
+        });
+        new iSCSICreate({id: '#iscsiCreateModal'}).onsubmit(store, function (e) {
             e.data.create(Utils.toJSON(e.form));
         });
     });
