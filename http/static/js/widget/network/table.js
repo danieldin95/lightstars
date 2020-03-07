@@ -35,7 +35,7 @@ export class NetworkTable {
                 <td>{{if v.address == ""}}
                     --
                     {{else}}
-                    {{v.address}}/{{v.netmask}}
+                    {{v.address}}/{{v.netmask | netmask2prefix }}{{v.prefix ? v.prefix : ''}}
                     {{/if}}
                 </td>
                 <td>{{v.mode}}</td>

@@ -61,6 +61,7 @@
                         <a id="console-window" class="dropdown-item" href="#" data="{{$url}}">
                             Open console in new window
                         </a>
+                        <div class="dropdown-divider"></div>
                         <a id="console-spice" class="dropdown-item" href="#" data="{{$spice}}">
                             Open console by spice
                         </a>
@@ -69,7 +70,7 @@
                 <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">Refresh</button>
                 <div id="power-btns" class="btn-group btn-group-sm" role="group">
                     <button id="start" type="button" class="btn btn-outline-dark">
-                        Power
+                        Power on
                     </button>
                     <button id="power" type="button"
                             class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split {{$class}}"
@@ -79,6 +80,7 @@
                     <div id="power-more" class="dropdown-menu" aria-labelledby="power">
                         <a id="start" class="dropdown-item" href="#">Power on</a>
                         <a id="shutdown" class="dropdown-item" href="#">Power off</a>
+                        <div class="dropdown-divider"></div>
                         <a id="reset" class="dropdown-item" href="#">Reset</a>
                         <div class="dropdown-divider"></div>
                         <a id="destroy" class="dropdown-item" href="#">Destroy</a>
@@ -94,6 +96,7 @@
                         <a id="resume" class="dropdown-item {{$class}}" href="#">Resume</a>
                         <div class="dropdown-divider"></div>
                         <a id="remove" class="dropdown-item" href="#">Remove</a>
+                        <div class="dropdown-divider"></div>
                         <a id="dumpxml" class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">Dump XML</a>
                     </div>
                 </div>

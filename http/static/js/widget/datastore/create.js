@@ -12,9 +12,7 @@ export class DataStoreCreate extends FormModal {
     }
 
     render() {
-        this.view = $(this.template());
-        this.container().html(this.view);
-
+        super.render();
         let name = {
             fresh: function() {
                 this.selector.find('option').remove();

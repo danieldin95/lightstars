@@ -32,6 +32,13 @@ export class NetworkApi extends Api {
     create(data) {
         let your = this;
 
+        if (data.range != "") {
+            let range = data.range.split(',', 2);
+            if (range.length == 2) {
+                data.rangeStart = range[0];
+                data.rangeEnd = range[1];
+            }
+        }
         $.post(your.url(), JSON.stringify(data), function (data, status) {
             $(your.tasks).append(AlertSuccess(`create network ${data.message}`));
         }).fail(function (e) {

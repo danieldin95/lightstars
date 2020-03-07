@@ -23,6 +23,7 @@ func IsUnicast(address string) bool {
 	}
 	return true
 }
+
 func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 	xmlObj := libvirtn.NetworkXML{
 		Name: conf.Name,
@@ -38,20 +39,21 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 		xmlObj.Bridge.Delay = "0"
 	}
 
-	if IsUnicast(conf.Address) && conf.Mode == "nat" {
-		addr, mask := libstar.ParseIP4Netmask(conf.Address, conf.Prefix)
-		if addr != nil && mask != nil {
-			xmlObj.IPv4 = &libvirtn.IPv4XML{
-				Address: conf.Address,
-				Netmask: mask.String(),
-			}
+	if conf.Mode == "route" || conf.Mode == "nat" {
+		xmlObj.IPv4 = &libvirtn.IPv4XML{
+			Address: conf.Address,
+		}
+		if conf.Prefix != "" {
+			xmlObj.IPv4.Prefix = conf.Prefix
+		}
+		if conf.Netmask != "" {
+			xmlObj.IPv4.Netmask = conf.Netmask
 		}
 		if conf.DHCP != "no" {
-			start, end := libstar.IP4Network2Range(addr, mask)
 			xmlObj.IPv4.DHCP = &libvirtn.DHCPXML{
 				Range: libvirtn.DHCPRangeXML{
-					Start: start.String(),
-					End:   end.String(),
+					Start: conf.RangeStart,
+					End:   conf.RangeEnd,
 				},
 			}
 		}

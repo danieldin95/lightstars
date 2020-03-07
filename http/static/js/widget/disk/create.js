@@ -12,12 +12,11 @@ export class DiskCreate extends FormModal {
     }
 
     render() {
-        this.view = $(this.template());
+        super.render();
         this.view.find("select[name='seq'] option").remove();
         for (let i = 1; i < 16; i++) {
             this.view.find("select[name='seq']").append(new Option(i, i));
         }
-        this.container().html(this.view);
     }
 
     template() {

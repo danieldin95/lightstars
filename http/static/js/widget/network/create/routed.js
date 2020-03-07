@@ -1,8 +1,8 @@
-import {FormModal} from "../form/modal.js";
-import {Option} from "../option.js";
+import {FormModal} from "../../form/modal.js";
+import {Option} from "../../option.js";
 
 
-export class NetworkCreate extends FormModal {
+export class RoutedCreate extends FormModal {
     //
     constructor (props) {
         super(props);
@@ -29,7 +29,7 @@ export class NetworkCreate extends FormModal {
             fresh: function() {
                 this.selector.find('option').remove();
                 for (let i = 0; i <= 16; i++) {
-                    let alias = "virbr"+i;
+                    let alias = "virbrx"+i;
                     this.selector.append(new Option(alias, alias));
                 }
             },
@@ -45,29 +45,29 @@ export class NetworkCreate extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="">Create NAT based network</h5>
+                    <h5 class="modal-title" id="">Create routed network</h5>
                 </div>
                 <form name="network-new">
-                    <input type="text" class="d-none" name="mode" value="nat"/>
+                    <input type="text" class="d-none" name="mode" value="route"/>
                     <div id="" class="modal-body">
                         <div class="form-group row">
                             <label for="name" class="col-sm-4 col-form-label-sm ">Bridge's name</label>
                             <div class="col-sm-6">
                                 <div class="input-group">
                                     <select class="select-md" name="name">
-                                        <option value="virbr0" selected>virbr0</option>
-                                        <option value="virbr1">virbr1</option>
-                                        <option value="virbr2">virbr2</option>
+                                        <option value="virbr0" selected>virbrx0</option>
+                                        <option value="virbr1">virbrx1</option>
+                                        <option value="virbr2">virbrx2</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="address" class="col-sm-4 col-form-label-sm">Address and prefix</label>
+                            <label for="address" class="col-sm-4 col-form-label-sm">IP Address</label>
                             <div class="col-sm-6">
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm input-number-lg"
-                                           name="address" value="172.16.1.1"/>
+                                           name="address" value="172.17.1.1"/>
                                         <select class="select-unit-right" name="prefix">
                                             <option value="24" selected>/24</option>
                                         </select>
@@ -90,7 +90,7 @@ export class NetworkCreate extends FormModal {
                             <div class="col-sm-6">
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm" 
-                                        name="range" value="172.16.1.100,172.16.1.200"/>                                         
+                                        name="range" value="172.17.1.100,172.17.1.200"/>                                         
                                 </div>
                             </div>
                         </div>

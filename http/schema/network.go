@@ -5,14 +5,16 @@ import (
 )
 
 type Network struct {
-	UUID    string `json:"uuid"`
-	Name    string `json:"name"`
-	State   string `json:"state"`
-	Address string `json:"address"`
-	Netmask string `json:"netmask"`
-	Prefix  string `json:"prefix,omitempty"`
-	DHCP    string `json:"dhcp,omitempty"`
-	Mode    string `json:"mode"` // nat, router.
+	UUID       string `json:"uuid"`
+	Name       string `json:"name"`
+	State      string `json:"state"`
+	Address    string `json:"address"`
+	Netmask    string `json:"netmask,omitempty"`
+	Prefix     string `json:"prefix,omitempty"`
+	RangeStart string `json:"rangeStart,omitempty"`
+	RangeEnd   string `json:"rangeEnd,omitempty"`
+	DHCP       string `json:"dhcp,omitempty"`
+	Mode       string `json:"mode"` // nat, router.
 }
 
 func NewNetwork(net libvirtn.Network) Network {
@@ -30,6 +32,7 @@ func NewNetwork(net libvirtn.Network) Network {
 	if xml.IPv4 != nil {
 		obj.Address = xml.IPv4.Address
 		obj.Netmask = xml.IPv4.Netmask
+		obj.Prefix = xml.IPv4.Prefix
 	}
 	if xml.Bridge.Name != "" {
 		obj.Name = xml.Bridge.Name

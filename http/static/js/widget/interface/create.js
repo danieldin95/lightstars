@@ -13,9 +13,7 @@ export class InterfaceCreate extends FormModal {
     }
 
     render() {
-        this.view = $(this.template());
-        this.container().html(this.view);
-
+        super.render();
         let iface = {
             fresh: function (){
                 let selector = this.selector;
