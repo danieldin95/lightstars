@@ -119,6 +119,17 @@ export class InstanceApi extends Api {
         });
     }
 
+    edit(data) {
+        let your = this;
+
+        data.action = 'set';
+        $.put(your.url(this.uuids[0]), JSON.stringify(data), function (data, status) {
+            $(your.tasks).append(AlertSuccess(`shutdown instance '${your.uuids[0]}' success`));
+        }).fail(function (e) {
+            $(your.tasks).append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
+        });
+    }
+
     console() {
         let password = this.props.passwd;
         this.uuids.forEach(function (uuid, index, err) {

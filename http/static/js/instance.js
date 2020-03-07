@@ -91,4 +91,8 @@ export class Instance {
             window.open(url, '_blank');
         });
     }
+
+    edit(data) {
+        new InstanceApi({uuids: this.uuid}).edit(data);
+    }
 }

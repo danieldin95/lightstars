@@ -110,6 +110,8 @@ func PrettyKBytes(k uint64) string {
 func ToBytes(v, u string) uint64 {
 	value, _ := strconv.Atoi(v)
 	switch u {
+	case "Bytes":
+		return uint64(value)
 	case "KiB":
 		return uint64(value) * 1024
 	case "MiB":
@@ -118,6 +120,24 @@ func ToBytes(v, u string) uint64 {
 		return uint64(value) * 1024 * 1024 * 1024
 	case "TiB":
 		return uint64(value) * 1024 * 1024 * 1024 * 1024
+	default:
+		return 0
+	}
+}
+
+func ToKiB(v, u string) uint64 {
+	value, _ := strconv.Atoi(v)
+	switch u {
+	case "Bytes":
+		return uint64(value / 1024)
+	case "KiB":
+		return uint64(value)
+	case "MiB":
+		return uint64(value) * 1024
+	case "GiB":
+		return uint64(value) * 1024 * 1024
+	case "TiB":
+		return uint64(value) * 1024 * 1024 * 1024
 	default:
 		return 0
 	}

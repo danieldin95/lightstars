@@ -97,6 +97,12 @@
                         <div class="dropdown-divider"></div>
                         <a id="remove" class="dropdown-item" href="#">Remove</a>
                         <div class="dropdown-divider"></div>
+                        {{if eq .State "running"}}
+                        <a id="setting" class="dropdown-item disabled" href="#">Setting</a>
+                        {{else}}
+                        <a id="setting" class="dropdown-item" href="#" data-toggle="modal" data-target="#instanceSetModal">Setting</a>
+                        {{end}}
+                        <div class="dropdown-divider"></div>
                         <a id="dumpxml" class="dropdown-item" href="/api/instance/{{.UUID}}?format=xml">Dump XML</a>
                     </div>
                 </div>
@@ -215,6 +221,8 @@
     </div>
 </div>
 
+<!-- Set instance modal -->
+<div id="instanceSetModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!-- Create disk modal -->
 <div id="diskCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!-- Create interface modal -->
@@ -232,11 +240,12 @@
 
 <script type="module">
     import {Utils} from "/static/js/com/utils.js";
+    import {Filters} from "/static/js/filter.js";
+    import {Collapse} from "/static/js/widget/collapse.js";
     import {Instance} from '/static/js/instance.js';
     import {DiskCreate} from '/static/js/widget/disk/create.js';
     import {InterfaceCreate} from '/static/js/widget/interface/create.js';
-    import {Filters} from "/static/js/filter.js";
-    import {Collapse} from "/static/js/widget/collapse.js";
+    import {InstanceSet} from "/static/js/widget/instance/set.js";
 
     $(document).ready(function() {
         new Filters();
@@ -257,6 +266,10 @@
             disks: {id: "#disk"},
             interfaces: {id: "#interface"},
         });
+        new InstanceSet({id: '#instanceSetModal'})
+            .onsubmit(instance, function (e) {
+                e.data.edit(Utils.toJSON(e.form));
+            });
 
         // load disks and interfaces.
         new DiskCreate({id: '#diskCreateModal'})

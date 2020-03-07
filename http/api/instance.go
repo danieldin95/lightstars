@@ -394,21 +394,10 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	case "shutdown":
-		xmlData, err := dom.GetXMLDesc(false)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
 		if err := dom.ShutdownFlags(libvirtc.DOMAIN_SHUTDOWN_ACPI); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		domNew, err := hyper.DomainDefineXML(xmlData)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		domNew.Free()
 	case "suspend":
 		if err := dom.Suspend(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -433,6 +422,33 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 		if err := dom.Undefine(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		}
+	case "set":
+		if conf.Cpu != "" {
+			cpu, err := strconv.Atoi(conf.Cpu)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DOMAIN_CPU_MAXIMUM); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DOMAIN_CPU_CONFIG); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+		if conf.MemSize != "" {
+			size := libstar.ToKiB(conf.MemSize, conf.MemUnit)
+			if err := dom.SetMemoryFlags(size, libvirtc.DOMAIN_MEM_MAXIMUM); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if err := dom.SetMemoryFlags(size, libvirtc.DOMAIN_MEM_CONFIG); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
 	}
 	ResponseMsg(w, 0, "success")

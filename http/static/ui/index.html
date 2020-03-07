@@ -312,39 +312,47 @@
         let ins = new Instances({
             id: '#instances',
         });
-        new InstanceCreate({id: '#instanceCreateModal'}).onsubmit(ins, function (e) {
-            e.data.create(Utils.toJSON(e.form));
-        });
+        new InstanceCreate({id: '#instanceCreateModal'})
+            .onsubmit(ins, function (e) {
+                e.data.create(Utils.toJSON(e.form));
+            });
 
         // load network.
         let net = new Network({id: '#networks'});
-        new NATCreate({id: '#natCreateModal'}).onsubmit(net, function (e) {
-            e.data.create(Utils.toJSON(e.form));
-        });
-        new BridgeCreate({id: '#bridgeCreateModal'}).onsubmit(net, function (e) {
-            e.data.create(Utils.toJSON(e.form));
-        });
-        new RoutedCreate({id: '#routedCreateModal'}).onsubmit(net, function (e) {
-            e.data.create(Utils.toJSON(e.form));
-        });
-        new IsolatedCreate({id: '#isolatedCreateModal'}).onsubmit(net, function (e) {
-            e.data.create(Utils.toJSON(e.form));
-        });
+        new NATCreate({id: '#natCreateModal'})
+            .onsubmit(net, function (e) {
+                e.data.create(Utils.toJSON(e.form));
+            });
+        new BridgeCreate({id: '#bridgeCreateModal'})
+            .onsubmit(net, function (e) {
+                e.data.create(Utils.toJSON(e.form));
+            });
+        new RoutedCreate({id: '#routedCreateModal'})
+            .onsubmit(net, function (e) {
+                e.data.create(Utils.toJSON(e.form));
+            });
+        new IsolatedCreate({id: '#isolatedCreateModal'})
+            .onsubmit(net, function (e) {
+                e.data.create(Utils.toJSON(e.form));
+            });
 
         // load datastore.
         let store = new DataStore({
             id: '#datastores',
             upload: '#fileUploadModal',
         });
-        new DirCreate({id: '#dirCreateModal'}).onsubmit(store, function (e) {
-            e.data.create(Utils.toJSON(e.form));
-        });
-        new NFSCreate({id: '#nfsCreateModal'}).onsubmit(store, function (e) {
-            e.data.create(Utils.toJSON(e.form));
-        });
-        new iSCSICreate({id: '#iscsiCreateModal'}).onsubmit(store, function (e) {
-            e.data.create(Utils.toJSON(e.form));
-        });
+        new DirCreate({id: '#dirCreateModal'})
+            .onsubmit(store, function (e) {
+                e.data.create(Utils.toJSON(e.form));
+            });
+        new NFSCreate({id: '#nfsCreateModal'})
+            .onsubmit(store, function (e) {
+                e.data.create(Utils.toJSON(e.form));
+            });
+        new iSCSICreate({id: '#iscsiCreateModal'})
+            .onsubmit(store, function (e) {
+                e.data.create(Utils.toJSON(e.form));
+            });
     });
 </script>
 </body>
