@@ -39,7 +39,12 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 			if err != nil {
 				continue
 			}
-			if strings.HasSuffix(file, ".iso") || strings.HasSuffix(file, ".ISO") {
+			name := strings.ToUpper(file)
+			if strings.HasSuffix(name, ".ISO") ||
+				strings.HasSuffix(name, ".IMG") ||
+				strings.HasSuffix(name, ".QCOW2") ||
+				strings.HasSuffix(name, ".RAW") ||
+				strings.HasSuffix(name, ".VMDK") {
 				images = append(images, IsoFile{
 					Name: path.Base(file),
 					Path: storage.PATH.Fmt(file),

@@ -34,12 +34,12 @@ func NewCDROMXML(file string) libvirtc.DiskXML {
 }
 
 func NewISOXML(file string) libvirtc.DiskXML {
-	return libvirtc.DiskXML{
+	xml := libvirtc.DiskXML{
 		Type:   "file",
-		Device: "cdrom",
+		Device: "disk",
 		Driver: libvirtc.DiskDriverXML{
-			Name: "qemu",
 			Type: "raw",
+			Name: "qemu",
 		},
 		Source: libvirtc.DiskSourceXML{
 			File: file,
@@ -49,6 +49,17 @@ func NewISOXML(file string) libvirtc.DiskXML {
 			Dev: libvirtc.DISK.Slot2Dev("ide", 1),
 		},
 	}
+	name := strings.ToUpper(file)
+	if strings.HasSuffix(name, ".ISO") {
+		xml.Device = "cdrom"
+	} else if strings.HasSuffix(name, ".RAW") {
+		xml.Driver.Type = "raw"
+	} else if strings.HasSuffix(name, ".QCOW2") || strings.HasSuffix(name, ".IMG") {
+		xml.Driver.Type = "qcow2"
+	} else if strings.HasSuffix(name, ".VMDK") {
+		xml.Driver.Type = "vmdk"
+	}
+	return xml
 }
 
 func NewDiskXML(format, file, bus string) libvirtc.DiskXML {
