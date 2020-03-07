@@ -7,16 +7,20 @@ export class InstanceSet extends FormModal {
     constructor (props) {
         super(props);
 
+        this.cpu = props.cpu ? props.cpu : 1;
+        this.mem = props.mem ? props.mem / 1024 : 1;
         this.render();
         this.loading();
     }
 
     render() {
         super.render();
-        this.view.find("select[name='cpu'] option").remove();
+        let cpu = this.view.find("select[name='cpu']");
+        cpu.find("option").remove();
         for (let i = 1; i < 17; i++) {
-            this.view.find("select[name='cpu']").append(new Option(i, i));
+            cpu.append(new Option(i, i));
         }
+        cpu.val(this.cpu).change();
     }
 
     template() {
@@ -35,7 +39,7 @@ export class InstanceSet extends FormModal {
                             </label>
                             <div class="col-sm-10 col-md-6">
                                 <div class="input-group">
-                                    <select class="select-md" name="cpu">
+                                    <select class="select-md" name="cpu" value="${this.cpu}">
                                         <option value="1">1</option>
                                         <option value="2" selected>2</option>
                                         <option value="3">3</option>
@@ -49,7 +53,7 @@ export class InstanceSet extends FormModal {
                             <div class="col-sm-10 col-md-6">
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm input-number-lg"
-                                           name="memSize" value="2048"/>
+                                           name="memSize" value="${this.mem}"/>
                                     <select class="select-unit-right" name="memUnit">
                                         <option value="MiB" selected>MiB</option>
                                         <option value="GiB">GiB</option>
@@ -60,7 +64,7 @@ export class InstanceSet extends FormModal {
                     </div>
                     <div id="" class="modal-footer">
                         <div class="mr-0" rol="group">
-                            <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                            <button name="finish-btn" class="btn btn-outline-success btn-sm">Submit</button>
                             <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
                             <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
                         </div>

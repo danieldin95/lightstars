@@ -20,6 +20,8 @@ export class Instance {
         this.props = props;
         let name = $(this.id).attr("name");
         let uuid = $(this.id).attr("data");
+        this.cpu = $("#instance").attr("cpu");
+        this.mem = $("#instance").attr("mem");
         this.uuid = uuid;
         this.name = name;
         this.tasks = props.tasks || "tasks";

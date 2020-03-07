@@ -17,7 +17,7 @@ export class InstanceTable {
 
     refresh(data, func) {
         $(this.id).html(this.loading());
-        console.log("InstanceTable.refresh", data, func);
+
         new InstanceApi({tasks: this.tasks}).list(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             func({data, resp: e.resp});

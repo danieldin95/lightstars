@@ -16,7 +16,7 @@
     <div class="card-no-border no-bottom">
         <tasks></tasks>
     </div>
-    <div id="instance" class="card instance" data="{{.UUID}}" name="{{.Name}}">
+    <div id="instance" class="card instance" data="{{.UUID}}" name="{{.Name}}" cpu="{{.MaxCpu}}" mem="{{.Memory}}">
         <div class="card-header">
             <div class="card-just-left">
                 <a href="../.." class="none">Home</a>
@@ -266,7 +266,7 @@
             disks: {id: "#disk"},
             interfaces: {id: "#interface"},
         });
-        new InstanceSet({id: '#instanceSetModal'})
+        new InstanceSet({id: '#instanceSetModal', cpu: instance.cpu, mem: instance.mem })
             .onsubmit(instance, function (e) {
                 e.data.edit(Utils.toJSON(e.form));
             });
