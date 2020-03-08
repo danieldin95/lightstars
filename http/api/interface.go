@@ -135,16 +135,16 @@ func (in Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if xml.Devices.Interfaces != nil {
-		for _, intf := range xml.Devices.Interfaces {
-			if intf.Mac.Address != address {
+		for _, inf := range xml.Devices.Interfaces {
+			if inf.Mac.Address != address {
 				continue
 			}
-			// found deivice
+			// found device
 			flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
 			if active, _ := dom.IsActive(); !active {
 				flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
 			}
-			if err := dom.DetachDeviceFlags(intf.Encode(), flags); err != nil {
+			if err := dom.DetachDeviceFlags(inf.Encode(), flags); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}

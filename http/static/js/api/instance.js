@@ -121,13 +121,26 @@ export class InstanceApi extends Api {
 
     edit(data) {
         let your = this;
+        let uuid = this.uuids[0];
 
-        data.action = 'set';
-        $.put(your.url(this.uuids[0]), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`shutdown instance '${your.uuids[0]}' success`));
-        }).fail(function (e) {
-            $(your.tasks).append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
-        });
+        if (data.cpu && data.cpu != "") {
+            let cpu = {cpu: data.cpu};
+
+            $.put(your.url(uuid)+"/processor", JSON.stringify(cpu), function (data, status) {
+                $(your.tasks).append(AlertSuccess(`Set processor for '${uuid}' success`));
+            }).fail(function (e) {
+                $(your.tasks).append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
+            });
+        }
+        if (data.memSize && data.memSize != "") {
+            let mem = {size: data.memSize, unit: data.memUnit};
+
+            $.put(your.url(uuid)+"/memory", JSON.stringify(mem), function (data, status) {
+                $(your.tasks).append(AlertSuccess(`Set memory for '${uuid}' success`));
+            }).fail(function (e) {
+                $(your.tasks).append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
+            });
+        }
     }
 
     console() {

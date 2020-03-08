@@ -182,7 +182,7 @@ func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 			if disk.Target.Dev != dev {
 				continue
 			}
-			// found deivice
+			// found device
 			flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
 			if active, _ := dom.IsActive(); !active {
 				flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG

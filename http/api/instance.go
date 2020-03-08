@@ -15,7 +15,7 @@ import (
 type Instance struct {
 }
 
-func NewCDROMXML(file string) libvirtc.DiskXML {
+func NewCDROMXML(file, family string) libvirtc.DiskXML {
 	return libvirtc.DiskXML{
 		Type:   "block",
 		Device: "cdrom",
@@ -33,7 +33,7 @@ func NewCDROMXML(file string) libvirtc.DiskXML {
 	}
 }
 
-func NewISOXML(file string) libvirtc.DiskXML {
+func NewISOXML(file, family string) libvirtc.DiskXML {
 	xml := libvirtc.DiskXML{
 		Type:   "file",
 		Device: "disk",
@@ -43,10 +43,6 @@ func NewISOXML(file string) libvirtc.DiskXML {
 		},
 		Source: libvirtc.DiskSourceXML{
 			File: file,
-		},
-		Target: libvirtc.DiskTargetXML{
-			Bus: "ide",
-			Dev: libvirtc.DISK.Slot2Dev("ide", 1),
 		},
 	}
 	name := strings.ToUpper(file)
@@ -58,6 +54,17 @@ func NewISOXML(file string) libvirtc.DiskXML {
 		xml.Driver.Type = "qcow2"
 	} else if strings.HasSuffix(name, ".VMDK") {
 		xml.Driver.Type = "vmdk"
+	}
+	if family == "linux" {
+		xml.Target = libvirtc.DiskTargetXML{
+			Bus: "virtio",
+			Dev: libvirtc.DISK.Slot2Dev("virtio", 1),
+		}
+	} else {
+		xml.Target = libvirtc.DiskTargetXML{
+			Bus: "ide",
+			Dev: libvirtc.DISK.Slot2Dev("ide", 1),
+		}
 	}
 	return xml
 }
@@ -194,9 +201,9 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	}
 	// disks
 	if strings.HasPrefix(conf.Disk0File, "/dev") {
-		dom.Devices.Disks[0] = NewCDROMXML(conf.Disk0File)
+		dom.Devices.Disks[0] = NewCDROMXML(conf.Disk0File, conf.Family)
 	} else {
-		dom.Devices.Disks[0] = NewISOXML(storage.PATH.Unix(conf.Disk0File))
+		dom.Devices.Disks[0] = NewISOXML(storage.PATH.Unix(conf.Disk0File), conf.Family)
 	}
 	switch conf.Family {
 	case "linux":
@@ -422,33 +429,6 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 		if err := dom.Undefine(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
-		}
-	case "set":
-		if conf.Cpu != "" {
-			cpu, err := strconv.Atoi(conf.Cpu)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DOMAIN_CPU_MAXIMUM); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DOMAIN_CPU_CONFIG); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-		}
-		if conf.MemSize != "" {
-			size := libstar.ToKiB(conf.MemSize, conf.MemUnit)
-			if err := dom.SetMemoryFlags(size, libvirtc.DOMAIN_MEM_MAXIMUM); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			if err := dom.SetMemoryFlags(size, libvirtc.DOMAIN_MEM_CONFIG); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
 		}
 	}
 	ResponseMsg(w, 0, "success")

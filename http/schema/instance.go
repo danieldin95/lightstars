@@ -13,6 +13,17 @@ type Graphics struct {
 	Port     string `json:"port"`
 }
 
+type Processor struct {
+	Cpu  string `json:"cpu"`  // configure
+	Mode string `json:"mode"` // configure
+	Time uint64 `json:"time"` // MicroSeconds
+}
+
+type Memory struct {
+	Size string `json:"size"` // configure
+	Unit string `json:"unit"` // configure
+}
+
 type Instance struct {
 	Action           string `json:"action,omitempty"` // If is "", means not action.
 	UUID             string `json:"uuid"`
@@ -45,6 +56,7 @@ type Instance struct {
 	Password    string       `json:"password"`
 	Vnc         Graphics     `json:"vnc"`
 	Spice       Graphics     `json:"spice"`
+	Graphics    []Graphics   `json:"graphics"`
 
 	XMLObj *libvirtc.DomainXML `json:"-"`
 }
@@ -78,18 +90,19 @@ func NewInstance(dom libvirtc.Domain) Instance {
 			obj.Controllers = append(obj.Controllers, NewFromControllerXML(x))
 		}
 		for _, x := range xmlObj.Devices.Graphics {
+			g := Graphics{
+				Type:     x.Type,
+				Listen:   x.Listen,
+				Password: x.Password,
+				Port:     x.Port,
+			}
 			if x.Type == "vnc" {
 				obj.Password = x.Password
-				obj.Vnc.Type = x.Type
-				obj.Vnc.Listen = x.Listen
-				obj.Vnc.Password = x.Password
-				obj.Vnc.Port = x.Port
+				obj.Vnc = g
 			} else if x.Type == "spice" {
-				obj.Spice.Type = x.Type
-				obj.Spice.Listen = x.Listen
-				obj.Spice.Password = x.Password
-				obj.Spice.Port = x.Port
+				obj.Spice = g
 			}
+			obj.Graphics = append(obj.Graphics, g)
 		}
 	}
 	obj.XMLObj = xmlObj

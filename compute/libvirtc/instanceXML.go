@@ -245,6 +245,15 @@ func (graphics *GraphicsXML) Decode(xmlData string) error {
 	return nil
 }
 
+func (graphics *GraphicsXML) Encode() string {
+	data, err := xml.Marshal(graphics)
+	if err != nil {
+		libstar.Error("GraphicsXML.Encode %s", err)
+		return ""
+	}
+	return string(data)
+}
+
 type DiskXML struct {
 	XMLName xml.Name      `xml:"disk" json:"-"`
 	Type    string        `xml:"type,attr" json:"type"`
