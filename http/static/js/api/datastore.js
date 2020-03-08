@@ -1,5 +1,5 @@
 import {Api} from "./api.js"
-import {AlertDanger, AlertSuccess} from "../com/alert.js";
+import {Alert} from "../com/alert.js";
 
 
 export class DataStoreApi extends Api {
@@ -20,36 +20,32 @@ export class DataStoreApi extends Api {
     }
 
     list(data, func) {
-        let your = this;
-
-        $.get(your.url(), {format: 'schema'}, function (resp, status) {
+        $.get(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger((`GET ${this.url()}: ${e.responseText}`)));
         });
     }
 
     create(data) {
-        let your = this;
-
         if (data.format == 'nfs') {
-            data.nfs = {host: data.host, path: data.path, format: 'nfs'};
+            data.nfs = { host: data.host, path: data.path, format: 'nfs' };
         }
-        $.post(your.url(), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`create datastore ${data.message}`));
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        $.post(this.url(), JSON.stringify(data), (resp, status) => {
+            $(this.tasks).append(Alert.success(`create datastore ${resp.message}`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
         });
     }
 
     delete() {
-        let your = this;
+        this.uuids.forEach((uuid, index, err) => {
+            let url = this.url(uuid);
 
-        this.uuids.forEach(function (uuid, index, err) {
-            $.delete(your.url(uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove datastore '${uuid}' ${data.message}`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.delete(url, (resp, status) => {
+                $(this.tasks).append(Alert.success(`remove datastore '${uuid}' ${resp.message}`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger(`DELETE ${url}: ${e.responseText}`));
             });
         });
     }

@@ -1,3 +1,6 @@
+/**
+ * @return {string}
+ */
 export function ProgressBar() {
     return (`
     <div class="progress">

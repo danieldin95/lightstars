@@ -1,5 +1,5 @@
 import {Api} from "./api.js"
-import {AlertDanger, AlertSuccess} from "../com/alert.js";
+import {Alert} from "../com/alert.js";
 
 
 export class NetworkApi extends Api {
@@ -20,40 +20,34 @@ export class NetworkApi extends Api {
     }
 
     list(data, func) {
-        let your = this;
-
-        $.get(your.url(), {format: 'schema'}, function (resp, status) {
+        $.get(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger((`GET ${this.url()}: ${e.responseText}`)));
         });
     }
 
     create(data) {
-        let your = this;
-
-        if (data.range && data.range != "") {
+        if (data.range && data.range !== "") {
             let range = data.range.split(',', 2);
             if (range.length == 2) {
                 data.rangeStart = range[0];
                 data.rangeEnd = range[1];
             }
         }
-        $.post(your.url(), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`create network ${data.message}`));
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        $.post(this.url(), JSON.stringify(data), (resp, status) => {
+            $(this.tasks).append(Alert.success(`create ${resp.message} success`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger((`GET ${this.url()}: ${e.responseText}`)));
         });
     }
 
     delete() {
-        let your = this;
-
-        this.uuids.forEach(function (uuid, index, err) {
-            $.delete(your.url(uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove network '${uuid}' ${data.message}`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        this.uuids.forEach((uuid, index, err) => {
+            $.delete(this.url(uuid), (resp, status) => {
+                $(this.tasks).append(Alert.success(`remove '${uuid}' ${resp.message} success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger((`GET ${this.url(uuid)}: ${e.responseText}`)));
             });
         });
     }

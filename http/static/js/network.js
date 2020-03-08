@@ -11,12 +11,12 @@ export class Network {
         this.id = props.id;
         this.props = props;
         this.checkbox = new Checkbox(props);
-        this.networks = this.checkbox.uuids;
+        this.uuids = this.checkbox.uuids;
         this.table = new NetworkTable({id: `${this.id} #display-table`});
 
         // register buttons's click.
         $(`${this.id} #delete`).on("click", (e) => {
-            new NetworkApi({uuids: this.networks.store}).delete();
+            new NetworkApi({uuids: this.uuids.store}).delete();
         });
 
         // refresh table and register refresh click.

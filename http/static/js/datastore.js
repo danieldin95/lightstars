@@ -12,16 +12,15 @@ export class DataStore {
         this.id = props.id;
         this.props = props;
         this.checkbox = new Checkbox(props);
-        this.datastores = this.checkbox.uuids;
+        this.uuids = this.checkbox.uuids;
         this.table = new DataStoreTable({id: `${this.id} #display-table`});
         this.upload = new FileUpload({id: props.upload});
 
-        this.upload.onsubmit(this.datastores, function (e) {
-            console.log(e.data, e.form);
+        this.upload.onsubmit(this.uuids, function (e) {
             new UploadApi({uuids: e.data.store, id: '#process'}).upload(e.form);
         });
         // register buttons's  click.
-        $(`${this.id} #delete`).on("click", this.datastores, function (e) {
+        $(`${this.id} #delete`).on("click", this.uuids, function (e) {
             new DataStoreApi({uuids: e.data.store}).delete();
         });
 
@@ -69,14 +68,14 @@ export class Checkbox {
     change(record, from) {
         record.store = from.store;
 
-        if (from.store.length == 0) {
+        if (from.store.length === 0) {
             $(`${record.id} #edit`).addClass('disabled');
             $(`${record.id} #delete`).addClass('disabled');
         } else {
             $(`${record.id} #edit`).removeClass('disabled');
             $(`${record.id} #delete`).removeClass('disabled');
         }
-        if (from.store.length != 1) {
+        if (from.store.length !== 1) {
             $(`${record.id} #edit`).addClass('disabled');
             $(`${record.id} #upload`).addClass('disabled');
         } else {

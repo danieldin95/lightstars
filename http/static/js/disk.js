@@ -11,20 +11,20 @@ export class Disk {
     constructor(props) {
         this.id = props.id;
         this.name = props.name;
-        this.instance = props.uuid;
+        this.inst = props.uuid;
 
         this.checkbox = new Checkbox(props);
-        this.disks = this.checkbox.disks;
+        this.uuids = this.checkbox.uuids;
         this.table = new DiskTable({
             id: `${this.id} #display-table`,
-            instance: this.instance,
+            inst: this.inst,
         });
 
         // register button's click.
         $(`${this.id} #remove`).on("click", (e) => {
             new DiskApi({
-                instance: this.instance,
-                uuids: this.disks.store,
+                inst: this.inst,
+                uuids: this.uuids.store,
             }).delete();
         });
 
@@ -40,11 +40,11 @@ export class Disk {
     }
 
     create(data) {
-        new DiskApi({instance: this.instance}).create(data);
+        new DiskApi({inst: this.inst}).create(data);
     }
 
     edit(data) {
-        new DiskApi({instance: this.instance}).edit(data);
+        new DiskApi({inst: this.inst}).edit(data);
     }
 }
 
@@ -55,18 +55,18 @@ export class Checkbox {
     // }
     constructor(props) {
         this.id = props.id;
-        this.disks = {store: [], id: this.id};
+        this.uuids = {store: [], id: this.id};
 
         this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
             change: (e) => {
-                this.change(this.disks, e);
+                this.change(this.uuids, e);
             },
         });
 
         // disabled firstly.
-        this.change(this.disks, this.disks);
+        this.change(this.uuids, this.uuids);
     }
 
     refresh() {

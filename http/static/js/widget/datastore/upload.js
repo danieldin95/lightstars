@@ -11,7 +11,6 @@ export class FileUpload extends FormModal {
 
     submit() {
         if (this.events.submit.func) {
-            console.log("FileUpload.submit", $(this.forms).serializeArray());
             this.events.submit.func({
                 data: this.events.submit.data,
                 form: new FormData($(this.forms)[0]),

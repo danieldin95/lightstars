@@ -4,13 +4,13 @@ import {DiskApi} from "../../api/disk.js";
 export class DiskTable {
     // {
     //   id: '#xx',
-    //   instance: 'uuid',
+    //   inst: 'uuid',
     // }
     constructor(props) {
         this.id = props.id;
         this.props = props;
         this.tasks = props.tasks;
-        this.instance = props.instance;
+        this.inst = props.inst;
     }
 
     loading() {
@@ -25,7 +25,7 @@ export class DiskTable {
         $(this.id).html(this.loading());
         new DiskApi({
             tasks: this.tasks,
-            instance: this.instance,
+            inst: this.inst,
         }).list(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             func({data, resp: e.resp});

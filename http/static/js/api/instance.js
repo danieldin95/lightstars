@@ -1,5 +1,5 @@
 import {Api} from "./api.js";
-import {AlertDanger, AlertSuccess, AlertWarn} from "../com/alert.js";
+import {Alert} from "../com/alert.js";
 
 
 export class InstanceApi extends Api {
@@ -20,143 +20,142 @@ export class InstanceApi extends Api {
     }
 
     list(data, func) {
-        let your = this;
-
-        $.get(your.url(), {format: 'schema'}, function (resp, status) {
+        $.get(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`GET ${url}: ${e.responseText}`));
         });
     }
 
     start() {
-        let your = this;
-        let data = JSON.stringify({action: 'start'});
+        this.uuids.forEach((uuid) => {
+            let url = this.url(uuid);
+            let data = JSON.stringify({action: 'start'});
 
-        this.uuids.forEach(function (uuid, index, err) {
-            $.put(your.url(uuid), data, function (data, status) {
-                $(your.tasks).append(AlertSuccess(`start instance '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.put(url, data, (resp, status) => {
+                $(this.tasks).append(Alert.success(`start '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
             });
         });
     }
 
     shutdown() {
-        let your = this;
-        let data = JSON.stringify({action: 'shutdown'});
+        this.uuids.forEach((uuid) => {
+            let url = this.url(uuid);
+            let data = JSON.stringify({action: 'shutdown'});
 
-        this.uuids.forEach(function (uuid, index, err) {
-            $.put(your.url(uuid), data, function (data, status) {
-                $(your.tasks).append(AlertSuccess(`shutdown instance '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.put(url, data, (resp, status) => {
+                $(this.tasks).append(Alert.success(`shutdown '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.warn(`PUT ${url}: ${e.responseText}`));
             });
         });
     }
 
     reset() {
-        let your = this;
-        let data = JSON.stringify({action: 'reset'});
+        this.uuids.forEach((uuid, index, err) => {
+            let url = this.url(uuid);
+            let data = JSON.stringify({action: 'reset'});
 
-        this.uuids.forEach(function (uuid, index, err) {
-            $.put(your.url(uuid), data, function (data, status) {
-                $(your.tasks).append(AlertSuccess(`reset instance '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.put(url, data, (resp, status) => {
+                $(this.tasks).append(Alert.success(`reset '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
             });
         });
     }
 
     suspend() {
-        let your = this;
-        let data = JSON.stringify({action: 'suspend'});
+        this.uuids.forEach((uuid, index, err) => {
+            let url = this.url(uuid);
+            let data = JSON.stringify({action: 'suspend'});
 
-        this.uuids.forEach(function (uuid, index, err) {
-            $.put(your.url(uuid), data, function (data, status) {
-                $(your.tasks).append(AlertSuccess(`suspend instance '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.put(this.url(uuid), data, (resp, status) => {
+                $(this.tasks).append(Alert.success(`suspend '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
             });
         });
     }
 
     resume() {
-        let your = this;
-        let data = JSON.stringify({action: 'resume'});
+        this.uuids.forEach((uuid, index, err) => {
+            let url = this.url(uuid);
+            let data = JSON.stringify({action: 'resume'});
 
-        this.uuids.forEach(function (uuid, index, err) {
-            $.put(your.url(uuid), data, function (data, status) {
-                $(your.tasks).append(AlertSuccess(`resume instance '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.put(url, data, (resp, status) => {
+                $(this.tasks).append(Alert.success(`resume '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
             });
         });
     }
 
     destroy() {
-        let your = this;
-        let data = JSON.stringify({action: 'destroy'});
+        this.uuids.forEach((uuid, index, err) => {
+            let url = this.url(uuid);
+            let data = JSON.stringify({action: 'destroy'});
 
-        this.uuids.forEach(function (uuid, index, err) {
-            $.put(your.url(uuid), data, function (data, status) {
-                $(your.tasks).append(AlertSuccess(`destroy instance '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.put(url, data, (resp, status) => {
+                $(this.tasks).append(Alert.success(`destroy '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger((`PUT ${url}: ${e.responseText}`)));
             });
         });
     }
 
     remove() {
-        let your = this;
+        this.uuids.forEach((uuid, index, err) => {
+            let url = this.url(uuid);
 
-        this.uuids.forEach(function (uuid, index, err) {
-            $.delete(your.url(uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove instance '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.delete(url, (resp, status) => {
+                $(this.tasks).append(Alert.success(`remove '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger((`DELETE ${url}: ${e.responseText}`)));
             });
         });
     }
 
     edit(data) {
-        let your = this;
         let uuid = this.uuids[0];
+        let url = this.url(uuid);
 
-        if (data.cpu && data.cpu != "") {
+        if (data.cpu !== "") {
             let cpu = {cpu: data.cpu};
 
-            $.put(your.url(uuid)+"/processor", JSON.stringify(cpu), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`Set processor for '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.put(url+"/processor", JSON.stringify(cpu), (resp, status) => {
+                $(this.tasks).append(Alert.success(`set processor for '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.warn((`PUT ${url}: ${e.responseText}`)));
             });
         }
-        if (data.memSize && data.memSize != "") {
+        if (data.memSize !== "") {
             let mem = {size: data.memSize, unit: data.memUnit};
 
-            $.put(your.url(uuid)+"/memory", JSON.stringify(mem), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`Set memory for '${uuid}' success`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertWarn((`${this.type} ${this.url}: ${e.responseText}`)));
+            $.put(url+"/memory", JSON.stringify(mem), (resp, status) => {
+                $(this.tasks).append(Alert.success(`set memory for '${uuid}' success`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.warn((`PUT ${url}: ${e.responseText}`)));
             });
         }
     }
 
     console() {
-        let password = this.props.passwd;
-        this.uuids.forEach(function (uuid, index, err) {
-            window.open("/ui/console?id="+uuid+"&password="+password[uuid]);
+        this.uuids.forEach((uuid, index, err) => {
+            let passwd = '';
+            if (this.props.passwd) {
+                passwd = this.props.passwd[uuid];
+            }
+            window.open("/ui/console?id=" + uuid + "&password=" + passwd);
         });
     }
 
     create (data) {
-        let your = this;
-
-        $.post(your.url(), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`create instance '${data.name}' success`));
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        $.post(this.url(), JSON.stringify(data), (resp, status) => {
+            $(this.tasks).append(Alert.success(`create '${resp.name}' success`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
         });
     }
 }

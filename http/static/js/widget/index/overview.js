@@ -16,7 +16,6 @@ export class Overview {
     }
 
     refresh(func) {
-        //$(this.id).html(this.loading());
         new HyperApi({tasks: this.tasks}).get(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             if (func) {

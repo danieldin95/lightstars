@@ -12,20 +12,20 @@ export class Interface {
         this.id = props.id;
         this.props = props;
         this.name = props.name;
-        this.instance = props.uuid;
+        this.inst = props.uuid;
 
         this.checkbox = new Checkbox(props);
-        this.interfaces = this.checkbox.interfaces;
+        this.uuids = this.checkbox.uuids;
         this.table = new InterfaceTable({
             id: `${this.id} #display-table`,
-            instance: this.instance,
+            inst: this.inst,
         });
 
         // register buttons's click
         $(`${this.id} #remove`).on("click", (e) => {
             new InterfaceApi({
-                instance: this.instance,
-                uuids: this.interfaces.store
+                inst: this.inst,
+                uuids: this.uuids.store
             }).delete();
         });
 
@@ -41,11 +41,11 @@ export class Interface {
     }
 
     create(data) {
-        new InterfaceApi({instance: this.instance}).create(data);
+        new InterfaceApi({inst: this.inst}).create(data);
     }
 
     edit(data) {
-        new InterfaceApi({instance: this.instance}).edit(data);
+        new InterfaceApi({inst: this.inst}).edit(data);
     }
 }
 
@@ -57,17 +57,17 @@ export class Checkbox {
     constructor(props) {
         this.id = props.id;
         this.props = props;
-        this.interfaces = {store: [], id: this.id};
+        this.uuids = {store: [], id: this.id};
 
         this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
             change: (e) => {
-                this.change(this.interfaces, e);
+                this.change(this.uuids, e);
             }
         });
         // disabled firstly.
-        this.change(this.interfaces, this.interfaces);
+        this.change(this.uuids, this.uuids);
     }
 
     refresh() {
@@ -77,12 +77,12 @@ export class Checkbox {
     change(record, from) {
         record.store = from.store;
 
-        if (from.store.length == 0) {
+        if (from.store.length === 0) {
             $(`${record.id} #remove`).addClass('disabled');
         } else {
             $(`${record.id} #remove`).removeClass('disabled');
         }
-        if (from.store.length != 1) {
+        if (from.store.length !== 1) {
             $(`${record.id} #edit`).addClass('disabled');
         }  else {
             $(`${record.id} #edit`).removeClass('disabled');

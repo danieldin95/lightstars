@@ -1,5 +1,4 @@
-
-export let Utils = {
+export var Utils = {
     // num: int
     iton: function (data, n) {
         return (Array(n).join(0) + data).slice(-n);

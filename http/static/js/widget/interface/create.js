@@ -1,6 +1,6 @@
 import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
-import {AlertDanger} from "../../com/alert.js";
+import {Alert} from "../../com/alert.js";
 
 
 export class InterfaceCreate extends FormModal {
@@ -28,7 +28,7 @@ export class InterfaceCreate extends FormModal {
                         }
                     });
                 }).fail(function (e) {
-                    $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                    $("tasks").append(Alert.danger(`${this.type} ${this.url}: ${e.responseText}`));
                 });
             },
             selector: this.view.find("select[name='source']"),

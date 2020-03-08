@@ -1,5 +1,5 @@
 import {Option} from "../option.js";
-import {AlertDanger} from "../../com/alert.js";
+import {Alert} from "../../com/alert.js";
 import {FormModal} from "../form/modal.js";
 
 
@@ -41,7 +41,7 @@ export class InstanceCreate extends FormModal {
                     });
                     selector.append(Option('CDROM device:/sr0', '/dev/sr0'));
                 }).fail(function (e) {
-                    $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                    $("tasks").append(Alert.danger(`${this.type} ${this.url}: ${e.responseText}`));
                 });
             },
         };
@@ -60,7 +60,7 @@ export class InstanceCreate extends FormModal {
                         iso.fresh(data[0]['name']);
                     }
                 }).fail(function (e) {
-                    $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                    $("tasks").append(Alert.danger(`${this.type} ${this.url}: ${e.responseText}`));
                 });
             },
         };
@@ -79,7 +79,7 @@ export class InstanceCreate extends FormModal {
                         }
                     });
                 }).fail(function (e) {
-                    $("tasks").append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+                    $("tasks").append(Alert.danger(`${this.type} ${this.url}: ${e.responseText}`));
                 });
             },
             selector: this.view.find("select[name='interface0Source']"),

@@ -1,5 +1,5 @@
 import {Api} from "./api.js";
-import {AlertDanger, AlertSuccess} from "../com/alert.js";
+import {Alert} from "../com/alert.js";
 import {ProgressBar} from "../com/progressbar.js"
 
 export class UploadApi extends Api {
@@ -26,29 +26,26 @@ export class UploadApi extends Api {
     // event: {start: func, process: func}
     //
     upload(data) {
-        let your = this;
-
         let event = {
-            id: this.id,
-            progress: function (e) {
+            progress: (e) => {
                 if (e.lengthComputable) {
                     $(`${this.id} .progress-bar`).css('width', `${e.loaded / e.total * 100}%`);
                 }
             },
-            success: function (e) {
+            success: (e) => {
                 $(this.id).empty();
-                $(this.tasks).append(AlertSuccess(`upload iso ${data.message}`));
+                $(this.tasks).append(Alert.success(`upload iso ${data.message}`));
             },
-            start: function (e) {
+            start: (e) => {
                 $(this.id).html(ProgressBar());
             },
-            fail: function (e) {
+            fail: (e) => {
                 $(this.id).empty();
-                $(your.tasks).append(AlertDanger((`POST upload file: ${e.responseText}`)));
+                $(this.tasks).append(Alert.danger((`POST upload file: ${e.responseText}`)));
             }
         };
         $.ajax({
-            url: your.url(your.uuids[0]),
+            url: this.url(this.uuids[0]),
             type: 'POST',
             data: data,
             contentType: false,

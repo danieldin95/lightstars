@@ -11,20 +11,20 @@ export class Graphics {
     constructor(props) {
         this.id = props.id;
         this.name = props.name;
-        this.instance = props.uuid;
+        this.inst = props.uuid;
 
         this.checkbox = new Checkbox(props);
-        this.graphics = this.checkbox.graphics;
+        this.uuids = this.checkbox.uuids;
         this.table = new GraphicsTable({
             id: `${this.id} #display-table`,
-            instance: this.instance,
+            inst: this.inst,
         });
 
         // register button's click.
         $(`${this.id} #remove`).on("click", this, function (e) {
             new GraphicsApi({
-                instance: e.data.instance,
-                uuids: e.data.graphics.store,
+                inst: e.data.inst,
+                uuids: e.data.uuids.store,
                 name: e.data.name}).delete();
         });
 
@@ -40,11 +40,11 @@ export class Graphics {
     }
 
     create(data) {
-        new GraphicsApi({instance: this.instance, name: this.name}).create(data);
+        new GraphicsApi({inst: this.inst, name: this.name}).create(data);
     }
 
     edit(data) {
-        new GraphicsApi({instance: this.instance, name: this.name}).edit(data);
+        new GraphicsApi({inst: this.inst, name: this.name}).edit(data);
     }
 }
 
@@ -55,18 +55,18 @@ export class Checkbox {
     // }
     constructor(props) {
         this.id = props.id;
-        this.graphics = {store: [], id: this.id};
+        this.uuids = {store: [], id: this.id};
 
         this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
             change: (e) => {
-                this.change(this.graphics, e);
+                this.change(this.uuids, e);
             },
         });
 
         // disabled firstly.
-        this.change(this.graphics, this.graphics);
+        this.change(this.uuids, this.uuids);
     }
 
     refresh() {
@@ -76,7 +76,7 @@ export class Checkbox {
     change(record, from) {
         record.store = from.store;
 
-        if (from.store.length != 1) {
+        if (from.store.length !== 1) {
             $(`${record.id} #edit`).addClass('disabled');
         } else {
             $(`${record.id} #edit`).removeClass('disabled');

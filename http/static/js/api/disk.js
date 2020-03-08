@@ -1,10 +1,10 @@
 import {Api} from "./api.js"
-import {AlertDanger, AlertSuccess, AlertWarn} from "../com/alert.js";
+import {Alert} from "../com/alert.js";
 
 
 export class DiskApi extends Api {
     // {
-    //   instance: 'uuid',
+    //   inst: 'uuid',
     //   uuids: [uuid],
     //   tasks: 'tasks',
     //   name: ''
@@ -12,55 +12,49 @@ export class DiskApi extends Api {
     constructor(props) {
         super(props);
 
-        this.instance = props.instance;
+        this.inst = props.inst;
     }
 
-    url(instance, uuid) {
+    url(uuid) {
         if (uuid) {
-            return `/api/instance/${instance}/disk/${uuid}`
+            return `/api/instance/${this.inst}/disk/${uuid}`
         }
-        return `/api/instance/${instance}/disk`
+        return `/api/instance/${this.inst}/disk`
     }
 
     list(data, func) {
-        let your = this;
-
-        $.get(your.url(this.instance), {format: 'schema'}, function (resp, status) {
+        $.get(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
         });
     }
 
     create(data) {
-        let your = this;
-
-        $.post(your.url(this.instance), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`create disk ${data.message}`));
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        $.post(this.url(), JSON.stringify(data), (resp, status) => {
+            $(this.tasks).append(Alert.success(`create ${resp.message}`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
         });
     }
 
     delete() {
-        let your = this;
-
-        this.uuids.forEach(function (uuid, index, err) {
-            $.delete(your.url(your.instance, uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove disk '${uuid}' ${data.message}`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        this.uuids.forEach((uuid, index, err) => {
+            $.delete(this.url(uuid), (resp, success) => {
+                $(this.tasks).append(Alert.success(`remove ${uuid} ${resp.message}`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger(`DELETE ${this.url(uuid)}: ${e.responseText}`));
             });
         });
     }
 
     edit(data) {
-        let your = this;
+        let url = this.url(this.uuids[0]);
 
-        $.post(your.url(your.instance, your.uuids[0]), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`edit disk '${data.name}' ${data.message}`));
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        $.put(url, JSON.stringify(data), (resp, success) => {
+            $(this.tasks).append(Alert.success(`edit ${resp.name} ${resp.message}`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
         });
     }
 }

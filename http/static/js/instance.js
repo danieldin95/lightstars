@@ -76,7 +76,6 @@ export class Instance {
             new InstanceApi({uuids: uuid}).remove();
         });
 
-
         // console
         $(`${this.id} #console-self`).on('click', this, function (e) {
             let url = $(this).attr('data');

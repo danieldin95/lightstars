@@ -1,5 +1,5 @@
 import {Api} from "./api.js"
-import {AlertDanger, AlertSuccess} from "../com/alert.js";
+import {Alert} from "../com/alert.js";
 
 
 export class InterfaceApi extends Api {
@@ -11,55 +11,49 @@ export class InterfaceApi extends Api {
     constructor(props) {
         super(props);
 
-        this.instance = props.instance;
+        this.inst = props.inst;
     }
 
-    url(instance, uuid) {
+    url(uuid) {
         if (uuid) {
-            return `/api/instance/${instance}/interface/${uuid}`
+            return `/api/instance/${this.inst}/interface/${uuid}`
         }
-        return `/api/instance/${instance}/interface`
+        return `/api/instance/${this.inst}/interface`
     }
 
     list(data, func) {
-        let your = this;
-
-        $.get(your.url(this.instance), {format: 'schema'}, function (resp, status) {
+        $.get(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
         });
     }
 
     create(data) {
-        let your = this;
-
-        $.post(your.url(this.instance), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`create interface ${data.message}`));
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        $.post(this.url(), JSON.stringify(data), (resp, status) => {
+            $(this.tasks).append(Alert.success(`create ${resp.message}`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
         });
     }
 
     delete() {
-        let your = this;
-
-        this.uuids.forEach(function (uuid, index, err) {
-            $.delete(your.url(your.instance, uuid), function (data, status) {
-                $(your.tasks).append(AlertSuccess(`remove interface '${uuid}' ${data.message}`));
-            }).fail(function (e) {
-                $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        this.uuids.forEach((uuid, index, err) =>  {
+            $.delete(this.url(uuid), (resp, status) => {
+                $(this.tasks).append(Alert.success(`remove '${uuid}' ${resp.message}`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger(`DELETE ${this.url(uuid)}: ${e.responseText}`));
             });
         });
     }
 
     edit(data) {
-        let your = this;
+        let url = this.uuids[0];
 
-        $.post(your.url(your.instance, your.uuids[0]), JSON.stringify(data), function (data, status) {
-            $(your.tasks).append(AlertSuccess(`edit interface '${data.name}' ${data.message}`));
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        $.put(url, JSON.stringify(data), (resp, status) => {
+            $(this.tasks).append(Alert.success(`edit '${resp.name}' ${resp.message}`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
         });
     }
 }

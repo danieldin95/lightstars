@@ -1,5 +1,5 @@
 import {Api} from "./api.js"
-import {AlertDanger, AlertSuccess} from "../com/alert.js";
+import {Alert} from "../com/alert.js";
 
 
 export class HyperApi extends Api {
@@ -20,12 +20,10 @@ export class HyperApi extends Api {
     }
 
     get(data, func) {
-        let your = this;
-
-        $.get(your.url(), {format: 'schema'}, function (resp, status) {
+        $.get(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
-        }).fail(function (e) {
-            $(your.tasks).append(AlertDanger((`${this.type} ${this.url}: ${e.responseText}`)));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
         });
     }
 }

@@ -22,8 +22,6 @@ export class Api {
         }
         this.name = props.name;
         this.props = props;
-
-        console.log('Api.constructor', this.props);
     }
 
     url(data) {
