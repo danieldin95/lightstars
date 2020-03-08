@@ -1,6 +1,11 @@
 import {GraphicsApi} from "./api/graphics.js";
-import {CheckBoxTop} from "./com/utils.js";
 import {GraphicsTable} from "./widget/graphics/table.js";
+import {CheckBoxTab} from "./widget/checkbox/checkbox.js";
+
+
+class CheckBox extends CheckBoxTab {
+}
+
 
 export class Graphics {
     // {
@@ -13,7 +18,7 @@ export class Graphics {
         this.name = props.name;
         this.inst = props.uuid;
 
-        this.checkbox = new Checkbox(props);
+        this.checkbox = new CheckBox(props);
         this.uuids = this.checkbox.uuids;
         this.table = new GraphicsTable({
             id: `${this.id} #display-table`,
@@ -45,41 +50,5 @@ export class Graphics {
 
     edit(data) {
         new GraphicsApi({inst: this.inst, name: this.name}).edit(data);
-    }
-}
-
-
-export class Checkbox {
-    // {
-    //   id: '#instane #graphics'
-    // }
-    constructor(props) {
-        this.id = props.id;
-        this.uuids = {store: [], id: this.id};
-
-        this.top = new CheckBoxTop({
-            one: `${this.id} #on-one`,
-            all: `${this.id} #on-all`,
-            change: (e) => {
-                this.change(this.uuids, e);
-            },
-        });
-
-        // disabled firstly.
-        this.change(this.uuids, this.uuids);
-    }
-
-    refresh() {
-        this.top.refresh();
-    }
-
-    change(record, from) {
-        record.store = from.store;
-
-        if (from.store.length !== 1) {
-            $(`${record.id} #edit`).addClass('disabled');
-        } else {
-            $(`${record.id} #edit`).removeClass('disabled');
-        }
     }
 }

@@ -29,7 +29,7 @@ export var Utils = {
 };
 
 
-export class CheckBoxTop {
+export class CheckBoxAll {
     // {
     //  all: selector for top checkbox
     //  one: selector for bottom checkbox

@@ -1,6 +1,10 @@
 import {NetworkApi} from "./api/network.js";
-import {CheckBoxTop} from "./com/utils.js";
 import {NetworkTable} from "./widget/network/table.js";
+import {CheckBoxTab} from "./widget/checkbox/checkbox.js";
+
+
+class CheckBox extends CheckBoxTab {
+}
 
 
 export class Network {
@@ -10,7 +14,7 @@ export class Network {
     constructor(props) {
         this.id = props.id;
         this.props = props;
-        this.checkbox = new Checkbox(props);
+        this.checkbox = new CheckBox(props);
         this.uuids = this.checkbox.uuids;
         this.table = new NetworkTable({id: `${this.id} #display-table`});
 
@@ -32,49 +36,5 @@ export class Network {
 
     create(data) {
         new NetworkApi().create(data);
-    }
-}
-
-
-export class Checkbox {
-    // {
-    //   id: "#networks"
-    // }
-    constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.uuids = {store: [], id: this.id};
-
-        this.top = new CheckBoxTop({
-            one: `${this.id} #on-one`,
-            all: `${this.id} #on-all`,
-            change: (e) => {
-                this.change(this.uuids, e);
-            },
-        });
-
-        // disable firstly.
-        this.change(this.uuids, this.uuids);
-    }
-
-    refresh() {
-        this.top.refresh();
-    }
-
-    change(record, from) {
-        record.store = from.store;
-
-        if (from.store.length == 0) {
-            $(`${record.id} #edit`).addClass('disabled');
-            $(`${record.id} #delete`).addClass('disabled');
-        } else {
-            $(`${record.id} #edit`).removeClass('disabled');
-            $(`${record.id} #delete`).removeClass('disabled');
-        }
-        if (from.store.length != 1) {
-            $(`${record.id} #edit`).addClass('disabled');
-        } else {
-            $(`${record.id} #edit`).removeClass('disabled');
-        }
     }
 }

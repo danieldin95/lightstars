@@ -3,6 +3,7 @@ import {Disk} from "./disk.js";
 import {Interface} from "./interface.js"
 import {Graphics} from "./graphics.js";
 
+
 export class Instance {
     // {
     //   id: '#instance'
