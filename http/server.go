@@ -61,6 +61,8 @@ func (h *Server) LoadRouter() {
 	// ui router
 	UI{}.Router(router)
 	// api router
+	api.Upload{}.Router(router)
+	api.Hyper{}.Router(router)
 	api.ISO{}.Router(router)
 	api.Bridger{}.Router(router)
 	api.DataStore{}.Router(router)
@@ -70,8 +72,7 @@ func (h *Server) LoadRouter() {
 	api.Interface{}.Router(router)
 	api.Processor{}.Router(router)
 	api.Memory{}.Router(router)
-	api.Upload{}.Router(router)
-	api.Hyper{}.Router(router)
+	api.Graphics{}.Router(router)
 }
 
 func (h *Server) SetCert(keyFile, crtFile string) {

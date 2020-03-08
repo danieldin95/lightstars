@@ -125,7 +125,7 @@
 
     <!-- Virtual Disk -->
     <div id="devices">
-    <div id="disk" class="card disk">
+    <div id="disk" class="card device">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
                     type="button" data-toggle="collapse"
@@ -167,7 +167,7 @@
     </div>
 
     <!-- Interface -->
-    <div id="interface" class="card interface">
+    <div id="interface" class="card device">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
                     type="button" data-toggle="collapse"
@@ -205,6 +205,44 @@
                 </table>
             </div>
         </div>
+        </div>
+    </div>
+    <!-- Graphics -->
+    <div id="graphics" class="card device">
+        <div class="card-header">
+            <button class="btn btn-link btn-block text-left btn-sm"
+                    type="button" data-toggle="collapse"
+                    data-target="#collapseGra" aria-expanded="true" aria-controls="collapseGra">
+                Graphics
+            </button>
+        </div>
+        <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#devices">
+            <div class="card-body">
+                <div class="card-header-cnt">
+                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                            data-toggle="modal" data-target="#graphicCreateModal">
+                        Attach graphic
+                    </button>
+                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
+                </div>
+                <div class="">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th><input id="on-all" type="checkbox" aria-label="select all graphics"></th>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Password</th>
+                            <th>Listen</th>
+                        </tr>
+                        </thead>
+                        <tbody id="display-table">
+                        <!-- Loading -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     </div>
@@ -257,6 +295,7 @@
             pages: [
                 {id: '#collapseInt', name: 'interface'},
                 {id: '#collapseDis', name: 'disk'},
+                {id: '#collapseGra', name: 'graphics'},
             ],
             default: "interface",
         });
@@ -265,6 +304,7 @@
             id: "#instance",
             disks: {id: "#disk"},
             interfaces: {id: "#interface"},
+            graphics: {id: "#graphics"},
         });
         new InstanceSet({id: '#instanceSetModal', cpu: instance.cpu, mem: instance.mem })
             .onsubmit(instance, function (e) {

@@ -1,7 +1,7 @@
-import {InterfaceApi} from "../../api/interface.js";
+import {GraphicsApi} from "../../api/graphics.js";
 
 
-export class InterfaceTable {
+export class GraphicsTable {
     // {
     //   id: '#xx',
     //   instance: 'uuid',
@@ -14,13 +14,13 @@ export class InterfaceTable {
     }
 
     loading() {
-        return `<tr><td colspan="7" style="text-align: center">Loading...</td></tr>`
+        return `<tr><td colspan="5" style="text-align: center">Loading...</td></tr>`
     }
 
     refresh(data, func) {
         $(this.id).html(this.loading());
 
-        new InterfaceApi({
+        new GraphicsApi({
             tasks: this.tasks,
             instance: this.instance,
         }).list(this,function (e) {
@@ -33,17 +33,11 @@ export class InterfaceTable {
         return template.compile(`
         {{each items v i}}
             <tr>
-                <td><input id="on-one" type="checkbox" data="{{v.address}}"></td>
+                <td><input id="on-one" type="checkbox" data="{{v.type}}"></td>
                 <td>{{i+1}}</td>
-                <td>{{v.model}}</td>
-                <td>{{v.device}}</td>
-                <td>{{v.address}}</td>
-                <td><span>
-                {{if  v.addrType == "pci"}}
-                    pci:{{v.addrBus | aton 2}}:{{v.addrSlot | aton 2}}.{{v.addrFunc}}
-                {{/if}}</span>
-                </td>
-                <td>{{v.source}}</td>
+                <td>{{v.type}}</td>
+                <td>{{v.password}}</td>
+                <td>{{v.listen}}:{{v.port != '' ? v.port : -1}}</td>
             </tr>
         {{/each}}
         `)(data)

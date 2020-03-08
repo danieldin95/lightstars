@@ -89,35 +89,5 @@ func (gra Graphics) PUT(w http.ResponseWriter, r *http.Request) {
 }
 
 func (gra Graphics) DELETE(w http.ResponseWriter, r *http.Request) {
-	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer dom.Free()
-
-	dev, _ := GetArg(r, "dev")
-	xml := libvirtc.NewDomainXMLFromDom(dom, true)
-	if xml == nil {
-		http.Error(w, "Cannot get domain's descXML", http.StatusInternalServerError)
-		return
-	}
-	if xml.Devices.Graphics != nil {
-		for _, gra := range xml.Devices.Graphics {
-			if gra.Type != dev {
-				continue
-			}
-			// found device
-			flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
-			if active, _ := dom.IsActive(); !active {
-				flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
-			}
-			if err := dom.DetachDeviceFlags(gra.Encode(), flags); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-		}
-	}
 	ResponseMsg(w, 0, "success")
 }

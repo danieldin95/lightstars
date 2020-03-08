@@ -1,6 +1,7 @@
-import {InstanceApi} from './api/instance.js';
+import {InstanceApi} from "./api/instance.js";
 import {Disk} from "./disk.js";
 import {Interface} from "./interface.js"
+import {Graphics} from "./graphics.js";
 
 export class Instance {
     // {
@@ -28,6 +29,7 @@ export class Instance {
 
         this.disk = new Disk({id: props.disks.id, uuid, name});
         this.interface = new Interface({id: props.interfaces.id, uuid, name});
+        this.graphics = new Graphics({id: props.graphics.id, uuid, name});
 
         // register buttons's click.
         $(`${this.id} #console`).on("click", this, function (e) {

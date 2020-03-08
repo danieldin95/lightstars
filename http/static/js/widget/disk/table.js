@@ -19,7 +19,7 @@ export class DiskTable {
 
     refresh(data, func) {
         $(this.id).html(this.loading());
-        console.log("DiskTable.refresh", data, func);
+
         new DiskApi({
             tasks: this.tasks,
             instance: this.instance,
