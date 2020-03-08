@@ -1,7 +1,6 @@
 import {InstanceApi} from "./api/instance.js";
 import {CheckBoxTop} from "./com/utils.js";
 import {InstanceTable} from "./widget/instance/table.js";
-import {Utils} from "./com/utils.js";
 
 export class Instances {
     // {
@@ -45,15 +44,14 @@ export class Instances {
         });
 
         // refresh table and register refresh click.
-        let refresh = function (your) {
-            your.table.refresh(your.checkbox, function (e) {
-                e.data.refresh();
+        $(`${this.id} #refresh`).on("click", (e) => {
+            this.table.refresh((e) => {
+                this.checkbox.refresh();
             });
-        };
-        $(`${this.id} #refresh`).on("click", this, function (e) {
-            refresh(e.data);
         });
-        refresh(this);
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+        });
     }
 
     create(data) {
@@ -70,19 +68,16 @@ export class Checkbox {
         this.id = props.id;
         this.uuids = {store: [], id: this.id};
 
-        let change = this.change;
-        let record = this.uuids;
-
         this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
-            change: function(e) {
-                change(record, e);
+            change: (e) => {
+                this.change(this.uuids, e);
             }
         });
 
         // disabled firstly.
-        change(record, this.uuids);
+        this.change(this.uuids, this.uuids);
     }
 
     refresh() {

@@ -307,18 +307,18 @@
             graphics: {id: "#graphics"},
         });
         new InstanceSet({id: '#instanceSetModal', cpu: instance.cpu, mem: instance.mem })
-            .onsubmit(instance, function (e) {
-                e.data.edit(Utils.toJSON(e.form));
+            .onsubmit((e) => {
+                instance.edit(Utils.toJSON(e.form));
             });
 
-        // load disks and interfaces.
+        // loading disks and interfaces.
         new DiskCreate({id: '#diskCreateModal'})
-            .onsubmit(instance, function (e) {
-                e.data.disk.create(Utils.toJSON(e.form));
+            .onsubmit((e) => {
+                instance.disk.create(Utils.toJSON(e.form));
             });
         new InterfaceCreate({id: '#interfaceCreateModal'})
-            .onsubmit(instance, function (e) {
-                e.data.interface.create(Utils.toJSON(e.form));
+            .onsubmit((e) => {
+                instance.interface.create(Utils.toJSON(e.form));
             });
 
         // register console draggable.

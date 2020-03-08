@@ -22,31 +22,30 @@ export class Interface {
         });
 
         // register buttons's click
-        $(`${this.id} #remove`).on("click", this, function (e) {
+        $(`${this.id} #remove`).on("click", (e) => {
             new InterfaceApi({
-                instance: e.data.instance,
-                uuids: e.data.interfaces.store,
-                name: this.name}).delete();
+                instance: this.instance,
+                uuids: this.interfaces.store
+            }).delete();
         });
 
         // refresh table and register refresh click.
-        let refresh = function (your) {
-            your.table.refresh(your.checkbox, function (e) {
-                e.data.refresh();
+        $(`${this.id} #refresh`).on("click", (e) => {
+            this.table.refresh((e) => {
+                this.checkbox.refresh();
             });
-        };
-        $(`${this.id} #refresh`).on("click", this, function (e) {
-            refresh(e.data);
         });
-        refresh(this);
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+        });
     }
 
     create(data) {
-        new InterfaceApi({instance: this.instance, name: this.name}).create(data);
+        new InterfaceApi({instance: this.instance}).create(data);
     }
 
     edit(data) {
-        new InterfaceApi({instance: this.instance, name: this.name}).edit(data);
+        new InterfaceApi({instance: this.instance}).edit(data);
     }
 }
 
@@ -60,18 +59,15 @@ export class Checkbox {
         this.props = props;
         this.interfaces = {store: [], id: this.id};
 
-        let record = this.interfaces;
-        let change = this.change;
-
         this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
-            change: function (e) {
-                change(record, e);
+            change: (e) => {
+                this.change(this.interfaces, e);
             }
         });
         // disabled firstly.
-        change(record, this.interfaces);
+        this.change(this.interfaces, this.interfaces);
     }
 
     refresh() {

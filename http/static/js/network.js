@@ -15,20 +15,19 @@ export class Network {
         this.table = new NetworkTable({id: `${this.id} #display-table`});
 
         // register buttons's click.
-        $(`${this.id} #delete`).on("click", this.networks, function (e) {
-            new NetworkApi({uuids: e.data.store}).delete();
+        $(`${this.id} #delete`).on("click", (e) => {
+            new NetworkApi({uuids: this.networks.store}).delete();
         });
 
         // refresh table and register refresh click.
-        let refresh = function (your) {
-            your.table.refresh(your.checkbox, function (e) {
-                e.data.refresh();
-            });
-        };
-        $(`${this.id} #refresh`).on("click", this, function (e) {
-            refresh(e.data);
+        $(`${this.id} #refresh`).on("click", (e) => {
+            this.table.refresh((e) => {
+                this.checkbox.refresh();
+            })
         });
-        refresh(this);
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+        });
     }
 
     create(data) {
@@ -46,19 +45,16 @@ export class Checkbox {
         this.props = props;
         this.uuids = {store: [], id: this.id};
 
-        let change = this.change;
-        let record = this.uuids;
-
         this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
-            change: function (e) {
-                change(record, e);
+            change: (e) => {
+                this.change(this.uuids, e);
             },
         });
 
-        // disabled firstly.
-        change(record, this.uuids);
+        // disable firstly.
+        this.change(this.uuids, this.uuids);
     }
 
     refresh() {

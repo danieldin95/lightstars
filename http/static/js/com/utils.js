@@ -50,7 +50,6 @@ export class CheckBoxTop {
         let storage = [];
 
         // listen on all one.
-        console.log("CheckBoxTop.refresh", $(your.one));
         $(your.one).each(function (i, e) {
             $(e).prop('checked', false);
             $(e).on("change", function(e) {
@@ -60,6 +59,7 @@ export class CheckBoxTop {
                 } else {
                     storage = storage.filter((v) => v !== data);
                 }
+                console.log(storage);
                 your.func({store: storage});
             });
         });
@@ -74,12 +74,12 @@ export class CheckBoxTop {
                     storage.push($(e).attr('data'));
                     $(e).prop('checked', true);
                 });
-                //console.log(storage);
             } else {
                 $(your.one).each(function (i, e) {
                     $(e).prop('checked', false);
                 });
             }
+            console.log(storage);
             your.func({store: storage});
         });
     }

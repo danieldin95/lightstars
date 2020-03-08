@@ -21,31 +21,30 @@ export class Disk {
         });
 
         // register button's click.
-        $(`${this.id} #remove`).on("click", this, function (e) {
+        $(`${this.id} #remove`).on("click", (e) => {
             new DiskApi({
-                instance: e.data.instance,
-                uuids: e.data.disks.store,
-                name: e.data.name}).delete();
+                instance: this.instance,
+                uuids: this.disks.store,
+            }).delete();
         });
 
         // refresh table and register refresh click.
-        let refresh = function (your) {
-            your.table.refresh(your.checkbox, function (e) {
-                e.data.refresh();
+        $(`${this.id} #refresh`).on("click", (e) => {
+            this.table.refresh((e) => {
+                this.checkbox.refresh();
             });
-        };
-        $(`${this.id} #refresh`).on("click", this, function (e) {
-            refresh(e.data);
         });
-        refresh(this);
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+        });
     }
 
     create(data) {
-        new DiskApi({instance: this.instance, name: this.name}).create(data);
+        new DiskApi({instance: this.instance}).create(data);
     }
 
     edit(data) {
-        new DiskApi({instance: this.instance, name: this.name}).edit(data);
+        new DiskApi({instance: this.instance}).edit(data);
     }
 }
 
@@ -58,19 +57,16 @@ export class Checkbox {
         this.id = props.id;
         this.disks = {store: [], id: this.id};
 
-        let record = this.disks;
-        let change = this.change;
-
         this.top = new CheckBoxTop({
             one: `${this.id} #on-one`,
             all: `${this.id} #on-all`,
-            change: function (e) {
-                change(record, e);
+            change: (e) => {
+                this.change(this.disks, e);
             },
         });
 
         // disabled firstly.
-        change(record, this.disks);
+        this.change(this.disks, this.disks);
     }
 
     refresh() {

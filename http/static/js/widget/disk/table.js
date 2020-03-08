@@ -18,8 +18,11 @@ export class DiskTable {
     }
 
     refresh(data, func) {
+        if (typeof data == 'function') {
+            func = data;
+            data = {};
+        }
         $(this.id).html(this.loading());
-
         new DiskApi({
             tasks: this.tasks,
             instance: this.instance,

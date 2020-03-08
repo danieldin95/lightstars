@@ -15,7 +15,7 @@ export class InterfaceCreate extends FormModal {
     render() {
         super.render();
         let iface = {
-            fresh: function (){
+            fresh: function () {
                 let selector = this.selector;
 
                 $.getJSON("/api/bridge", function (data) {

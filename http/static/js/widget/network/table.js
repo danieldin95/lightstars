@@ -16,8 +16,11 @@ export class NetworkTable {
     }
 
     refresh(data, func) {
+        if (typeof data == 'function') {
+            func = data;
+            data = {};
+        }
         $(this.id).html(this.loading());
-        console.log("NetworkTable.refresh", data, func);
         new NetworkApi({tasks: this.tasks}).list(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             func({data, resp: e.resp});

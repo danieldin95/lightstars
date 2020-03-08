@@ -45,8 +45,13 @@ export class FormModal {
     }
 
     onsubmit(data, func) {
-        this.events.submit.data = data;
-        this.events.submit.func = func;
+        if (typeof data == "function") {
+            this.events.submit.data = {};
+            this.events.submit.func = data;
+        } else {
+            this.events.submit.data = data;
+            this.events.submit.func = func;
+        }
     }
 
     loading() {
