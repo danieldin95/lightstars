@@ -56,6 +56,7 @@ func (h *Server) LoadRouter() {
 
 	// static files
 	Static{}.Router(router)
+	Download{}.Router(router)
 	// proxy websocket
 	WebSocket{}.Router(router)
 	// ui router
