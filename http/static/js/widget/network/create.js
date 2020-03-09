@@ -89,8 +89,8 @@ export class NATCreate extends FormModal {
                             <label for="range" class="col-sm-4 col-form-label-sm">Address range</label>
                             <div class="col-sm-6">
                                 <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm" 
-                                        name="range" value="192.168.10.100,192.168.10.200"/>                                         
+                                    <textarea type="text" class="form-control form-control-sm" 
+                                        name="range" rows="3">192.168.10.100,192.168.10.200</textarea>                                         
                                 </div>
                             </div>
                         </div>

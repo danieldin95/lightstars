@@ -65,8 +65,8 @@ type BridgeXML struct {
 }
 
 type DHCPXML struct {
-	XMLName xml.Name     `xml:"dhcp" json:"-"`
-	Range   DHCPRangeXML `xml:"range" json:"range"`
+	XMLName xml.Name       `xml:"dhcp" json:"-"`
+	Range   []DHCPRangeXML `xml:"range" json:"range"`
 }
 
 type DHCPRangeXML struct {

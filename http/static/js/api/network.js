@@ -29,10 +29,14 @@ export class NetworkApi extends Api {
 
     create(data) {
         if (data.range && data.range !== "") {
-            let range = data.range.split(',', 2);
-            if (range.length == 2) {
-                data.rangeStart = range[0];
-                data.rangeEnd = range[1];
+            let lines = data.range.split(/\r?\n/);
+
+            data.range = [];
+            for (let i = 0; i < lines.length; i ++) {
+                if (lines[i].indexOf(',') > 0) {
+                    let [start, end] = lines[i].split(',', 2);
+                    data.range.push({start, end});
+                }
             }
         }
         $.post(this.url(), JSON.stringify(data), (resp, status) => {

@@ -54,10 +54,14 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 	}
 	if conf.DHCP != "no" {
 		xmlObj.IPv4.DHCP = &libvirtn.DHCPXML{
-			Range: libvirtn.DHCPRangeXML{
-				Start: conf.RangeStart,
-				End:   conf.RangeEnd,
-			},
+			Range: make([]libvirtn.DHCPRangeXML, 0, 32),
+		}
+		for _, addr := range conf.Range {
+			xmlObj.IPv4.DHCP.Range = append(xmlObj.IPv4.DHCP.Range,
+				libvirtn.DHCPRangeXML{
+					Start: addr.Start,
+					End:   addr.End,
+				})
 		}
 	}
 

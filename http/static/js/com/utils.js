@@ -1,10 +1,11 @@
-export var Utils = {
+export class Utils {
     // num: int
-    iton: function (data, n) {
+    static iton (data, n) {
         return (Array(n).join(0) + data).slice(-n);
-    },
+    }
+
     // num: string
-    aton: function(data, n) {
+    static aton(data, n) {
         let num = "" + data;
         if (num.length > n) {
             return num
@@ -14,8 +15,9 @@ export var Utils = {
             ret += "0"
         }
         return ret + num;
-    },
-    toJSON: function (data) {
+    }
+
+    static toJSON (data) {
         let ret = {};
         data.forEach(function (element, index) {
             let key = element['name'];
@@ -25,8 +27,8 @@ export var Utils = {
             }
         });
         return ret;
-    },
-};
+    }
+}
 
 
 export class CheckBoxAll {

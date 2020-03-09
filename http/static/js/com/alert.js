@@ -1,20 +1,26 @@
-export var Alert = {
-    info: function (message) {
+
+export class Alert {
+    static info (message) {
         return this.div('info', message)
-    },
-    danger: function (message) {
+    }
+
+    static danger (message) {
         return this.div('danger', message)
-    },
-    success: function (message) {
+    }
+
+    static success (message) {
         return this.div('success', message)
-    },
-    warn: function (message) {
+    }
+
+    static warn (message) {
         return this.div('warning', message)
-    },
-    primary: function (message) {
+    }
+
+    static primary (message) {
         return this.div('primary', message)
-    },
-    div: function (cls, message) {
+    }
+
+    static div (cls, message) {
         return (`
         <div class="alert alert-${cls} alert-dismissible fade show" role="alert">
             ${message}
@@ -22,5 +28,5 @@ export var Alert = {
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>`)
-    },
-};
+    }
+}
