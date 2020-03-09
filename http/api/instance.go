@@ -55,7 +55,7 @@ func NewISOXML(file, family string) libvirtc.DiskXML {
 	} else if strings.HasSuffix(name, ".VMDK") {
 		xml.Driver.Type = "vmdk"
 	}
-	if family == "linux" {
+	if family == "linux" && !strings.HasSuffix(name, ".ISO") {
 		xml.Target = libvirtc.DiskTargetXML{
 			Bus: "virtio",
 			Dev: libvirtc.DISK.Slot2Dev("virtio", 1),
