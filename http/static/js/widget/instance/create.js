@@ -261,7 +261,7 @@ export class InstanceCreate extends FormModal {
             </div>
             <div class="modal-footer text-right">
                 <button id="btn-prev" class="btn btn-outline-dark btn-sm">Previous</button>
-                <button id="btn-next" class="btn btn-outline-dark btn-sm">Next</button>
+                <button id="btn-next" class="btn btn-outline-info btn-sm">Next</button>
                 <button id="btn-cancel" class="btn btn-outline-dark btn-sm">Cancel</button>
                 <button id="btn-submit" class="btn btn-outline-success btn-sm">Submit</button>
             </div>

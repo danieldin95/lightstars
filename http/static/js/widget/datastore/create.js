@@ -32,7 +32,7 @@ export class DirCreate extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="">New DataStore</h5>
+                    <h5 class="modal-title" id="">New a datastore</h5>
                 </div>
                 <form name="datastore-new">
                 <input type="text" class="d-none" name="type" value="dir"/>

@@ -32,7 +32,7 @@ export class NFSCreate extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="">New DataStore by NFS</h5>
+                    <h5 class="modal-title" id="">New datastore by NFS</h5>
                 </div>
                 <form name="datastore-new">
                 <input type="text" class="d-none" name="type" value="netfs"/>

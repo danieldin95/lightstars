@@ -394,6 +394,7 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 		if domNew, err := hyper.DomainDefineXML(xmlData); err == nil {
 			if err := dom.Create(); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 			domNew.Free()
 		} else {
