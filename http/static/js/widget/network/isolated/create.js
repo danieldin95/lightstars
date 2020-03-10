@@ -43,67 +43,65 @@ export class IsolatedCreate extends FormModal {
     template() {
         return (`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="">Create isolated network</h5>
-                </div>
-                <form name="network-new">
-                    <input type="text" class="d-none" name="mode" value=""/>
-                    <div id="" class="modal-body">
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-4 col-form-label-sm ">Bridge's name</label>
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <select class="select-md" name="name">
-                                        <option value="virbr0" selected>virbrx0</option>
-                                        <option value="virbr1">isobr1</option>
-                                        <option value="virbr2">isobr2</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="address" class="col-sm-4 col-form-label-sm">IP Address</label>
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm input-number-lg"
-                                           name="address" value="192.168.30.1"/>
-                                        <select class="select-unit-right" name="prefix">
-                                            <option value="24" selected>/24</option>
-                                        </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="dhcp" class="col-sm-4 col-form-label-sm ">DHCP setting</label>
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <select class="select-md" name="dhcp">
-                                        <option value="yes" selected>enable</option>
-                                        <option value="no">disable</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="range" class="col-sm-4 col-form-label-sm">Address range</label>
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <textarea type="text" class="form-control form-control-sm" 
-                                        name="range" rows="3">192.168.30.100,192.168.30.200</textarea>                                   
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="" class="modal-footer">
-                        <div class="mr-0" rol="group">
-                            <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
-                            <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
-                            <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                        </div>
-                    </div>
-                </form>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Create isolated network</h5>
             </div>
+            <form name="network-new">
+                <input type="text" class="d-none" name="mode" value=""/>
+                <div id="" class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-4 col-form-label-sm ">Bridge's name</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <select class="select-md" name="name">
+                                    <option value="virbr0" selected>virbrx0</option>
+                                    <option value="virbr1">isobr1</option>
+                                    <option value="virbr2">isobr2</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="address" class="col-sm-4 col-form-label-sm">IP Address</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm input-number-lg"
+                                       name="address" value="192.168.30.1"/>
+                                    <select class="select-unit-right" name="prefix">
+                                        <option value="24" selected>/24</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="dhcp" class="col-sm-4 col-form-label-sm ">DHCP setting</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <select class="select-md" name="dhcp">
+                                    <option value="yes" selected>enable</option>
+                                    <option value="no">disable</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="range" class="col-sm-4 col-form-label-sm">Address range</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <textarea type="text" class="form-control form-control-sm" 
+                                    name="range" rows="3">192.168.30.100,192.168.30.200</textarea>                                   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="" class="modal-footer">
+                    <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
+                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
+                    <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                </div>
+            </form>
+        </div>
         </div>`);
     }
 }

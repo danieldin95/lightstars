@@ -68,11 +68,9 @@ export class DiskCreate extends FormModal {
                 </div>
                 
                 <div id="" class="modal-footer">
-                    <div class="mr-0" rol="group">
-                        <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
-                        <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
-                        <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                    </div>
+                    <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
+                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
+                    <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
                 </div>
                 </form>
             </div>

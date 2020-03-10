@@ -118,7 +118,7 @@ export class InstanceCreate extends FormModal {
     template(props) {
         return (`
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
+        <div class="modal-content ">
             <div class="modal-header">
                     Create a instance
             </div>
