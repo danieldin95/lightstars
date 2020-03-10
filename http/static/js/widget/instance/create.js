@@ -246,7 +246,7 @@ export class InstanceCreate extends FormModal {
                         </label>
                         <div class="col-sm-10 col-md-6">
                             <div class="input-group">
-                                <select class="" name="interface0Source">
+                                <select class="select-md" name="interface0Source">
                                     <option value="virbr0" selected>Linux Bridge #virbr0</option>
                                     <option value="virbr1">Linux Bridge #virbr1</option>
                                     <option value="virbr2">Linux Bridge #virbr2</option>
