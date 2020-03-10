@@ -33,7 +33,7 @@ export class DataStoreTable {
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
                 <td>{{i+1}}</td>
-                <td><a href="/ui/datastore/{{v.uuid}}">{{v.uuid}}</a></td>
+                <td><a href="/download/{{v.id}}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
                 <td>{{v.source}}</td>
                 <td>{{v.capacity | prettyByte}}</td>

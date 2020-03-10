@@ -13,6 +13,7 @@ type NFS struct {
 
 type DataStore struct {
 	UUID       string `json:"uuid"`
+	Id         string `json:"id"`
 	Name       string `json:"name"`
 	Type       string `json:"type"`
 	Format     string `json:"format"`
@@ -40,6 +41,7 @@ func NewDataStore(pol libvirts.Pool) DataStore {
 	xmlObj := &libvirts.PoolXML{}
 	xmlObj.Decode(xml)
 
+	obj.Id = xmlObj.Name
 	obj.Name = xmlObj.Name
 	obj.UUID = xmlObj.UUID
 	if len(obj.Name) == 2 && IsDigit(obj.Name) {

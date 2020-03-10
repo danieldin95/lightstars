@@ -39,11 +39,12 @@ export class Instance {
             }
             let url = $(this).attr('data');
             let target = $(this).attr('data-target');
-
+            let iframe = `<iframe width="800px" height="600px" src="${url}" frameborder="0"></iframe>`;
+            
             $(target).modal('show');
-            $(`${target} iframe`).attr("src", url);
+            $(`${target} .modal-body`).html(iframe);
             $(target).on('hidden.bs.modal', function (e) {
-                $(target).find("iframe").removeAttr("src");
+                $(target).find(".modal-body").empty();
             });
         });
         $(`${this.id} #refresh`).on("click", this, function (e) {
