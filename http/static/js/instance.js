@@ -40,7 +40,7 @@ export class Instance {
             let url = $(this).attr('data');
             let target = $(this).attr('data-target');
             let iframe = `<iframe width="800px" height="600px" src="${url}" frameborder="0"></iframe>`;
-            
+
             $(target).modal('show');
             $(`${target} .modal-body`).html(iframe);
             $(target).on('hidden.bs.modal', function (e) {

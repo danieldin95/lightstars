@@ -1,0 +1,21 @@
+.modal-body .card {
+    border: none;
+}
+
+.modal-body .card-header {
+    color: #cccccc;
+    border-radius: .25rem;
+}
+
+
+.modal-body .nav-pills .nav-link.active {
+    color: white;
+    background-color: inherit;
+    text-decoration: underline;
+    /*border: 1px solid #cccccc;*/
+}
+
+.modal-body .nav-link {
+    display: block;
+    padding: 0.25rem 1.25rem;
+}
