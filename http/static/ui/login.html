@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<div class="container" style="text-align: center;">
+<div class="container">
     <div class="card-no-border login mt-5">
         {{ if ne .Error "" }}
             <div class="alert alert-danger alert-dismissible fade show"  role="alert">{{.Error}}
@@ -20,7 +20,7 @@
             </div>
         {{ end }}
     </div>
-    <form action="/ui/login" method="post">
+    <form action="/login" method="post">
     <div class="card login">
         <div class="card-header">
             <strong>Welcome to LightStar</strong><br/>
@@ -44,9 +44,9 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer text-right">
-            <button id="reset" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
-            <button id="submit" class="btn btn-outline-success btn-sm">Login</button>
+        <div class="card-footer">
+            <button id="reset" class="btn btn-outline-dark btn-sm float-left" type="reset">Reset</button>
+            <button id="submit" class="btn btn-outline-success btn-sm float-right">Login</button>
         </div>
     </div>
     </form>

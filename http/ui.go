@@ -1,11 +1,9 @@
 package http
 
 import (
-	"encoding/base64"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http/api"
 	"github.com/danieldin95/lightstar/http/schema"
-	"github.com/danieldin95/lightstar/http/service"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/gorilla/mux"
 	"io/ioutil"
@@ -23,33 +21,6 @@ func (ui UI) Router(router *mux.Router) {
 	router.HandleFunc("/ui/console", ui.Console)
 	router.HandleFunc("/ui/spice", ui.Spice)
 	router.HandleFunc("/ui/instance/{id}", ui.Instance)
-	router.HandleFunc("/ui/login", ui.Login)
-}
-
-func (ui UI) Login(w http.ResponseWriter, r *http.Request) {
-	data := struct {
-		Error string
-	}{}
-	if r.Method == "POST" {
-		name := r.FormValue("name")
-		pass := r.FormValue("password")
-		u, _ := service.USERS.Get(name)
-		if u.Password != pass {
-			data.Error = "Invalid username or password."
-		} else {
-			basic := name + ":" + pass
-			http.SetCookie(w, &http.Cookie{
-				Name:  "token",
-				Value: base64.StdEncoding.EncodeToString([]byte(basic)),
-				Path:  "/",
-			})
-			http.Redirect(w, r, "/ui", http.StatusMovedPermanently)
-		}
-	}
-	file := api.GetFile("ui/login.html")
-	if err := api.ParseFiles(w, file, data); err != nil {
-		libstar.Error("UI.Instance %s", err)
-	}
 }
 
 func (ui UI) Instance(w http.ResponseWriter, r *http.Request) {

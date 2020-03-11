@@ -55,6 +55,7 @@ func (h *Server) LoadRouter() {
 	WebSocket{}.Router(router)
 	// ui router
 	UI{}.Router(router)
+	Login{}.Router(router)
 	// api router
 	api.Upload{}.Router(router)
 	api.Hyper{}.Router(router)
@@ -99,7 +100,7 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 		strings.HasPrefix(r.URL.Path, "/websockify") {
 		return true
 	}
-	if strings.HasPrefix(r.URL.Path, "/ui/login") {
+	if strings.HasPrefix(r.URL.Path, "/login") {
 		return true
 	}
 
@@ -144,8 +145,7 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 				http.Error(w, "Request not allowed", http.StatusForbidden)
 			}
 		} else {
-			w.Header().Set("WWW-Authenticate", "Basic")
-			http.Error(w, "Authorization Required", http.StatusUnauthorized)
+			http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 		}
 	})
 }
