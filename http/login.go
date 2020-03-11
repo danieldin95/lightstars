@@ -13,7 +13,7 @@ type Login struct {
 }
 
 func (l Login) Router(router *mux.Router) {
-	router.HandleFunc("/login", l.Login)
+	router.HandleFunc("/ui/login", l.Login)
 }
 
 func (l Login) Login(w http.ResponseWriter, r *http.Request) {

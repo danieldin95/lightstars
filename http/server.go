@@ -95,12 +95,13 @@ func (h *Server) Initialize() {
 
 func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	// not need to auth.
-	if strings.HasPrefix(r.URL.Path, "/static") ||
+	if r.URL.Path == "/" ||
+		strings.HasPrefix(r.URL.Path, "/static") ||
 		strings.HasPrefix(r.URL.Path, "/ui/console") ||
 		strings.HasPrefix(r.URL.Path, "/websockify") {
 		return true
 	}
-	if strings.HasPrefix(r.URL.Path, "/login") {
+	if strings.HasPrefix(r.URL.Path, "/ui/login") {
 		return true
 	}
 
@@ -144,8 +145,11 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 			} else {
 				http.Error(w, "Request not allowed", http.StatusForbidden)
 			}
+		} else if strings.HasPrefix(r.URL.Path, "/ui") {
+			http.Redirect(w, r, "/ui/login", http.StatusMovedPermanently)
 		} else {
-			http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+			w.Header().Set("WWW-Authenticate", "Basic")
+			http.Error(w, "Authorization Required", http.StatusUnauthorized)
 		}
 	})
 }
