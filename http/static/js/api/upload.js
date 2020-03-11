@@ -26,6 +26,7 @@ export class UploadApi extends Api {
     // event: {start: func, process: func}
     //
     upload(data) {
+        let url = this.url(this.uuids[0]);
         let event = {
             progress: (e) => {
                 if (e.lengthComputable) {
@@ -41,11 +42,11 @@ export class UploadApi extends Api {
             },
             fail: (e) => {
                 $(this.id).empty();
-                $(this.tasks).append(Alert.danger((`POST upload file: ${e.responseText}`)));
+                $(this.tasks).append(Alert.danger((`POST ${url}: ${e.responseText}`)));
             }
         };
         $.ajax({
-            url: this.url(this.uuids[0]),
+            url: url,
             type: 'POST',
             data: data,
             contentType: false,
