@@ -106,11 +106,7 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	name := ""
 	pass := ""
 	if t, err := r.Cookie("token"); err == nil {
-		values := strings.SplitN(t.Value, ":", 2)
-		if len(values) == 2 {
-			name = values[0]
-			pass = values[1]
-		}
+		name, pass, _ = api.ParseBasicAuth(t.Value)
 	} else {
 		name, pass, _ = r.BasicAuth()
 	}

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
@@ -151,9 +152,22 @@ func ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 func GetUser(req *http.Request) (schema.User, bool) {
 	name := ""
 	if t, err := req.Cookie("token"); err == nil {
-		name = strings.SplitN(t.Value, ":", 2)[0]
+		name, _, _ = ParseBasicAuth(t.Value)
 	} else {
 		name, _, _ = req.BasicAuth()
 	}
 	return service.USERS.Get(name)
+}
+
+func ParseBasicAuth(auth string) (username, password string, ok bool) {
+	c, err := base64.StdEncoding.DecodeString(auth)
+	if err != nil {
+		return
+	}
+	cs := string(c)
+	s := strings.IndexByte(cs, ':')
+	if s < 0 {
+		return
+	}
+	return cs[:s], cs[s+1:], true
 }

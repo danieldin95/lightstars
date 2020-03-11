@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/base64"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http/api"
 	"github.com/danieldin95/lightstar/http/schema"
@@ -36,9 +37,10 @@ func (ui UI) Login(w http.ResponseWriter, r *http.Request) {
 		if u.Password != pass {
 			data.Error = "Invalid username or password."
 		} else {
+			basic := name + ":" + pass
 			http.SetCookie(w, &http.Cookie{
 				Name:  "token",
-				Value: name + ":" + pass,
+				Value: base64.StdEncoding.EncodeToString([]byte(basic)),
 				Path:  "/",
 			})
 			http.Redirect(w, r, "/ui", http.StatusMovedPermanently)
