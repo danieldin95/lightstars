@@ -1,5 +1,5 @@
 Name: lightstar
-Version: 0.4.27
+Version: 0.5.90
 Release: 1%{?dist}
 Summary: LightStar's Project Software
 Group: Applications/Communications
@@ -22,7 +22,7 @@ cp %_source_dir/lightstar %{buildroot}/usr/bin/lightstar
 
 mkdir -p %{buildroot}/etc/sysconfig
 cat > %{buildroot}/etc/sysconfig/lightstar.cfg << EOF
-OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/ca -auth:file /etc/lightstar.auth"
+OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/ca -conf /etc/lightstar"
 EOF
 
 mkdir -p %{buildroot}/usr/lib/systemd/system
@@ -32,6 +32,7 @@ mkdir -p %{buildroot}/var/lightstar
 cp -R %_source_dir/resource/ca %{buildroot}/var/lightstar
 cp -R %_source_dir/http/static %{buildroot}/var/lightstar
 
+mkdir -p %{buildroot}/etc/lightstar
 mkdir -p %{buildroot}/lightstar/datastore/01
 
 %pre
@@ -42,8 +43,9 @@ firewall-cmd --reload || :
 
 %files
 %defattr(-,root,root)
-/etc/*
+/etc/lightstar
+/etc/sysconfig
 /usr/bin/*
 /usr/lib/systemd/system/*
 /var/lightstar
-/lightstar
+/lightstar/datastore
