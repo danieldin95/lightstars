@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login | LighStar</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/asset/bootstrap/4.0.0/css/bootstrap.css">
+    <!-- Lightstar theme -->
+    <link rel="stylesheet" href="/static/css/boot.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+</head>
+
+<body>
+<div class="container" style="text-align: center;">
+    <div class="card-no-border login mt-5">
+        {{ if ne .Error "" }}
+            <div class="alert alert-danger alert-dismissible fade show"  role="alert">{{.Error}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {{ end }}
+    </div>
+    <form action="/ui/login" method="post">
+    <div class="card login">
+        <div class="card-header">
+            <strong>Welcome to LightStar</strong><br/>
+            <small>A simple and small platform to manage your cloud</small>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label for="name" class="col-sm-4 col-form-label-sm">Username</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm" name="name" value="" autofocus/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password" class="col-sm-4 col-form-label-sm">Password</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm" name="password" value=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button id="reset" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
+            <button id="submit" class="btn btn-outline-success btn-sm">Login</button>
+        </div>
+    </div>
+    </form>
+</div>
+
+<!-- JQuery Javascript -->
+<script src="/static/asset/jquery-1.12.4.js"></script>
+<script src="/static/asset/popper.js/1.12.9/umd/popper.js"></script>
+<!-- Bootstrap Javascript -->
+<script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
+</body>
+</html>

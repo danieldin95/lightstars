@@ -1,3 +1,25 @@
+body {
+    font-family: Arial;
+    font-size: small;
+    background: #fdfcf8;
+}
+
+th,
+td {
+    font-weight: normal;
+    font-size: small;
+}
+
+a {
+    color: inherit;
+    font-size: small;
+}
+
+a:hover,
+a:focus {
+    color: inherit;
+}
+
 .container {
     min-width: 800px;
     padding: 0;

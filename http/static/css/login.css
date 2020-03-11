@@ -1,0 +1,13 @@
+
+.login {
+    margin-right: auto;
+    margin-left: auto;
+    min-width: 20rem;
+    max-width: 32rem;
+    max-height: 32rem;
+    border-radius: 0.25rem;
+}
+
+.login .card-header {
+    padding: 0.75rem 1.25rem;
+}

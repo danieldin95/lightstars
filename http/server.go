@@ -93,20 +93,30 @@ func (h *Server) Initialize() {
 }
 
 func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
-	name, pass, ok := r.BasicAuth()
-	libstar.Print("Server.IsAuth %s:%s", name, pass)
-
 	// not need to auth.
 	if strings.HasPrefix(r.URL.Path, "/static") ||
 		strings.HasPrefix(r.URL.Path, "/ui/console") ||
 		strings.HasPrefix(r.URL.Path, "/websockify") {
 		return true
 	}
+	if strings.HasPrefix(r.URL.Path, "/ui/login") {
+		return true
+	}
+
+	name := ""
+	pass := ""
+	if t, err := r.Cookie("token"); err == nil {
+		values := strings.SplitN(t.Value, ":", 2)
+		if len(values) == 2 {
+			name = values[0]
+			pass = values[1]
+		}
+	} else {
+		name, pass, _ = r.BasicAuth()
+	}
+	libstar.Print("Server.IsAuth %s:%s", name, pass)
 
 	// auth by password and name
-	if !ok {
-		return false
-	}
 	user, ok := service.USERS.Get(name)
 	if !ok || user.Password != pass {
 		return false

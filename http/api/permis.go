@@ -92,6 +92,12 @@ func HasPermission(req *http.Request) bool {
 func init() {
 	// guest permission.
 	ROUTER.Add(RouteMatch{
+		Path:   "/ui/login",
+		Type:   "prefix",
+		Method: "POST",
+		Action: "permit",
+	})
+	ROUTER.Add(RouteMatch{
 		Path:   "/",
 		Type:   "prefix",
 		Method: "GET",

@@ -13,6 +13,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path"
+	"strings"
 	"text/template"
 )
 
@@ -148,6 +149,11 @@ func ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 }
 
 func GetUser(req *http.Request) (schema.User, bool) {
-	name, _, _ := req.BasicAuth()
+	name := ""
+	if t, err := req.Cookie("token"); err == nil {
+		name = strings.SplitN(t.Value, ":", 2)[0]
+	} else {
+		name, _, _ = req.BasicAuth()
+	}
 	return service.USERS.Get(name)
 }
