@@ -31,21 +31,6 @@ func (u Users) Load(file string) {
 	if err := libstar.JSON.UnmarshalLoad(&u.users, file); err != nil {
 		libstar.Error("Users.Load: %s", err)
 	}
-	token := ""
-	for k, v := range u.users {
-		if k == "admin" {
-			token = v.Password
-		}
-	}
-	if token == "" {
-		token = libstar.GenToken(32)
-		u.users["admin"] = schema.User{
-			Type:     "admin",
-			Name:     "admin",
-			Password: token,
-		}
-		libstar.JSON.MarshalSave(&u.users, u.file, true)
-	}
 }
 
 func (u Users) Get(name string) (schema.User, bool) {
