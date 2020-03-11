@@ -6,9 +6,14 @@ import (
 	"strings"
 )
 
+type RouteItem struct {
+	Value string
+	Type  string // argument or path
+}
+
 type RouteMatch struct {
 	Path   string
-	Values []string
+	Values []RouteItem
 	Type   string // prefix or path
 	Method string
 	Action string // permit or deny
@@ -23,8 +28,20 @@ var ROUTER = &RouteMatcher{
 }
 
 func (r *RouteMatcher) Add(m RouteMatch) {
-	libstar.Info("RouteMatcher.Add %v", m)
-	m.Values = strings.Split(m.Path, "/")
+	if m.Values == nil {
+		m.Values = make([]RouteItem, 0, 32)
+	}
+	for _, v := range strings.Split(m.Path, "/") {
+		ri := RouteItem{
+			Value: v,
+			Type:  "path",
+		}
+		if strings.HasPrefix(v, "{") && strings.HasSuffix(v, "}") {
+			ri.Type = "argument"
+		}
+		m.Values = append(m.Values, ri)
+	}
+	libstar.Debug("RouteMatcher.Add %v", m)
 	r.Match = append(r.Match, m)
 }
 
@@ -33,7 +50,6 @@ func HasPermission(req *http.Request) bool {
 	if user.Type == "admin" {
 		return true
 	}
-
 	path := req.URL.Path
 	values := strings.Split(path, "/")
 	for _, k := range ROUTER.Match {
@@ -55,10 +71,7 @@ func HasPermission(req *http.Request) bool {
 			}
 			matched := true
 			for i, v := range k.Values {
-				if values[i] == v {
-					continue
-				}
-				if strings.HasPrefix(v, "{") && strings.HasSuffix(v, "}") {
+				if values[i] == v.Value || v.Type == "argument" {
 					continue
 				}
 				matched = false
