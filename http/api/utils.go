@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
+	"github.com/danieldin95/lightstar/http/schema"
+	"github.com/danieldin95/lightstar/http/service"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/danieldin95/lightstar/storage/libvirts"
@@ -11,6 +13,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path"
+	"strings"
 	"text/template"
 )
 
@@ -143,4 +146,29 @@ func ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 		return err
 	}
 	return nil
+}
+
+func GetUser(req *http.Request) (schema.User, bool) {
+	name, _, _ := req.BasicAuth()
+	return service.USERS.Get(name)
+}
+
+var GuestAllowed = map[string]string{
+	"/":              "GET",
+	"/api/instance/": "PUT",
+}
+
+func HasPermission(req *http.Request) bool {
+	user, _ := GetUser(req)
+	if user.Type == "admin" {
+		return true
+	}
+	for k, v := range GuestAllowed {
+		if strings.HasPrefix(req.URL.Path, k) {
+			if v == req.Method {
+				return true
+			}
+		}
+	}
+	return false
 }

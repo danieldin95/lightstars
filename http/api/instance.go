@@ -268,17 +268,28 @@ func (ins Instance) Router(router *mux.Router) {
 func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
 	if !ok {
-		// list all instances.
+		user, _ := GetUser(r)
 		list := schema.List{
 			Items:    make([]interface{}, 0, 32),
 			Metadata: schema.MetaData{},
 		}
-		if domains, err := libvirtc.ListDomains(); err == nil {
-			// TODO support pages by offset and size.
-			for _, d := range domains {
-				int := schema.NewInstance(d)
-				list.Items = append(list.Items, int)
-				d.Free()
+		// list all instances.
+		if user.Type == "admin" {
+			if domains, err := libvirtc.ListDomains(); err == nil {
+				// TODO support pages by offset and size.
+				for _, d := range domains {
+					int := schema.NewInstance(d)
+					list.Items = append(list.Items, int)
+					d.Free()
+				}
+			}
+		} else {
+			for _, inst := range user.Instances {
+				if dom, err := libvirtc.LookupDomainByUUIDName(inst); err == nil {
+					int := schema.NewInstance(*dom)
+					list.Items = append(list.Items, int)
+					dom.Free()
+				}
 			}
 		}
 		sort.SliceStable(list.Items, func(i, j int) bool {

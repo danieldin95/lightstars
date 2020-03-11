@@ -3,7 +3,7 @@ package http
 import (
 	"context"
 	"github.com/danieldin95/lightstar/http/api"
-	"github.com/danieldin95/lightstar/http/schema"
+	"github.com/danieldin95/lightstar/http/service"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
@@ -22,7 +22,6 @@ type Server struct {
 	router     *mux.Router
 	adminToken string
 	adminFile  string
-	users      map[string]schema.User
 }
 
 func NewServer(listen, staticDir, authFile string) (h *Server) {
@@ -30,9 +29,8 @@ func NewServer(listen, staticDir, authFile string) (h *Server) {
 		listen:    listen,
 		pubDir:    staticDir,
 		adminFile: authFile,
-		users:     make(map[string]schema.User, 32),
 	}
-	h.LoadToken()
+	service.USERS.Load(authFile)
 	api.SetStatic(h.pubDir)
 	return
 }
@@ -94,37 +92,6 @@ func (h *Server) Initialize() {
 	h.LoadRouter()
 }
 
-func (h *Server) SaveToken() error {
-	libstar.Info("Server.SaveToken: AdminToken: %s", h.adminToken)
-	if err := libstar.JSON.MarshalSave(&h.users, h.adminFile, true); err != nil {
-		libstar.Error("Server.LoadToken: %s", err)
-		return err
-	}
-	return nil
-}
-
-func (h *Server) LoadToken() error {
-	if err := libstar.JSON.UnmarshalLoad(&h.users, h.adminFile); err != nil {
-		libstar.Error("Server.LoadToken: %s", err)
-		return err
-	}
-	for k, v := range h.users {
-		if k == "admin" {
-			h.adminToken = v.Password
-		}
-	}
-	if h.adminToken == "" {
-		h.adminToken = libstar.GenToken(32)
-		h.users["admin"] = schema.User{
-			Type:     "admin",
-			Password: h.adminToken,
-		}
-		h.SaveToken()
-	}
-	libstar.Info("%v", h.users)
-	return nil
-}
-
 func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	name, pass, ok := r.BasicAuth()
 	libstar.Print("Server.IsAuth %s:%s", name, pass)
@@ -140,7 +107,7 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	if !ok {
 		return false
 	}
-	user, ok := h.users[name]
+	user, ok := service.USERS.Get(name)
 	if !ok || user.Password != pass {
 		return false
 	}
@@ -165,7 +132,11 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h.LogRequest(r)
 		if h.IsAuth(w, r) {
-			next.ServeHTTP(w, r)
+			if api.HasPermission(r) {
+				next.ServeHTTP(w, r)
+			} else {
+				http.Error(w, "Request not allowed", http.StatusForbidden)
+			}
 		} else {
 			w.Header().Set("WWW-Authenticate", "Basic")
 			http.Error(w, "Authorization Required", http.StatusUnauthorized)
