@@ -1,11 +1,16 @@
 .modal-body .card {
     border: none;
+    margin: .5rem 0;
+}
+
+.modal-body .form-group:last-child {
+    margin-bottom: 0;
 }
 
 .modal-body .card-header {
     color: #cccccc;
     border-radius: .25rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .modal-body .nav-pills .nav-link.active {

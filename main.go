@@ -24,36 +24,48 @@ func Wait() {
 	fmt.Println("Done")
 }
 
-func main() {
-	staticDir := "static"
-	crtDir := "ca"
-	authFile := ".auth"
-	listen := "0.0.0.0:10080"
-	hyper := "qemu:///system"
-	verbose := 2
-	logFile := "/var/log/lightstar.log"
+type Config struct {
+	StaticDir string `json:"dir.static"`
+	CrtDir    string `json:"dir.crt"`
+	ConfDir   string `json:"-"`
+	Hyper     string `json:"hyper"`
+	Verbose   int    `json:"log.level"`
+	LogFile   string `json:"log.file"`
+	Listen    string `json:"listen"`
+}
 
-	flag.StringVar(&listen, "listen", listen, "the address http listen.")
-	flag.IntVar(&verbose, "log:level", verbose, "logger level")
-	flag.StringVar(&hyper, "hyper", hyper, "hypervisor connecting to.")
-	flag.StringVar(&crtDir, "crt:dir", crtDir, "he directory X509 certificate file on.")
-	flag.StringVar(&staticDir, "static:dir", staticDir, "the directory to serve files from.")
-	flag.StringVar(&authFile, "auth:file", authFile, "the file saved administrator auth")
+var cfg = Config{
+	StaticDir: "static",
+	CrtDir:    "ca",
+	ConfDir:   "/etc/lightstar",
+	Listen:    "0.0.0.0:10080",
+	Hyper:     "qemu:///system",
+	LogFile:   "/var/log/lightstar.log",
+	Verbose:   2,
+}
+
+func main() {
+	flag.StringVar(&cfg.Listen, "listen", cfg.Listen, "the address http listen.")
+	flag.IntVar(&cfg.Verbose, "log:level", cfg.Verbose, "logger level")
+	flag.StringVar(&cfg.Hyper, "hyper", cfg.Hyper, "hypervisor connecting to.")
+	flag.StringVar(&cfg.CrtDir, "crt:dir", cfg.CrtDir, "the directory X509 certificate file on.")
+	flag.StringVar(&cfg.StaticDir, "static:dir", cfg.StaticDir, "the directory to serve files from.")
+	flag.StringVar(&cfg.ConfDir, "conf", cfg.ConfDir, "the directory configuration on")
 	flag.Parse()
 
-	libstar.Init(logFile, verbose)
+	libstar.Init(cfg.LogFile, cfg.Verbose)
 	// initialize storage
 	libvirts.DATASTOR.Init()
 
-	libvirtc.SetHyper(hyper)
-	libvirts.SetHyper(hyper)
-	libvirtn.SetHyper(hyper)
+	libvirtc.SetHyper(cfg.Hyper)
+	libvirts.SetHyper(cfg.Hyper)
+	libvirtn.SetHyper(cfg.Hyper)
 
-	h := http.NewServer(listen, staticDir, authFile)
-	if _, err := os.Stat(crtDir); !os.IsNotExist(err) {
-		h.SetCert(crtDir+"/private.key", crtDir+"/crt.pem")
+	authFile := cfg.ConfDir + "/auth.json"
+	h := http.NewServer(cfg.Listen, cfg.StaticDir, authFile)
+	if _, err := os.Stat(cfg.CrtDir); !os.IsNotExist(err) {
+		h.SetCert(cfg.CrtDir+"/private.key", cfg.CrtDir+"/crt.pem")
 	}
-
 	go h.Start()
 
 	Wait()

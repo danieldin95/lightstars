@@ -3,10 +3,10 @@ package http
 import (
 	"context"
 	"github.com/danieldin95/lightstar/http/api"
+	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -22,6 +22,7 @@ type Server struct {
 	router     *mux.Router
 	adminToken string
 	adminFile  string
+	users      map[string]schema.User
 }
 
 func NewServer(listen, staticDir, authFile string) (h *Server) {
@@ -29,14 +30,9 @@ func NewServer(listen, staticDir, authFile string) (h *Server) {
 		listen:    listen,
 		pubDir:    staticDir,
 		adminFile: authFile,
+		users:     make(map[string]schema.User, 32),
 	}
-	if h.adminToken == "" {
-		h.LoadToken()
-	}
-	if h.adminToken == "" {
-		h.adminToken = libstar.GenToken(64)
-	}
-	h.SaveToken()
+	h.LoadToken()
 	api.SetStatic(h.pubDir)
 	return
 }
@@ -100,44 +96,52 @@ func (h *Server) Initialize() {
 
 func (h *Server) SaveToken() error {
 	libstar.Info("Server.SaveToken: AdminToken: %s", h.adminToken)
-	f, err := os.OpenFile(h.adminFile, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0600)
-	defer f.Close()
-	if err != nil {
-		libstar.Error("Server.SaveToken: %s", err)
-		return err
-	}
-	if _, err := f.Write([]byte(h.adminToken)); err != nil {
-		libstar.Error("Server.SaveToken: %s", err)
+	if err := libstar.JSON.MarshalSave(&h.users, h.adminFile, true); err != nil {
+		libstar.Error("Server.LoadToken: %s", err)
 		return err
 	}
 	return nil
 }
 
 func (h *Server) LoadToken() error {
-	if _, err := os.Stat(h.adminFile); os.IsNotExist(err) {
-		libstar.Info("Server.LoadToken: file:%s does not exist", h.adminFile)
-		return nil
-	}
-	contents, err := ioutil.ReadFile(h.adminFile)
-	if err != nil {
-		libstar.Error("Server.LoadToken: file:%s %s", h.adminFile, err)
+	if err := libstar.JSON.UnmarshalLoad(&h.users, h.adminFile); err != nil {
+		libstar.Error("Server.LoadToken: %s", err)
 		return err
-
 	}
-	h.adminToken = string(contents)
+	for k, v := range h.users {
+		if k == "admin" {
+			h.adminToken = v.Password
+		}
+	}
+	if h.adminToken == "" {
+		h.adminToken = libstar.GenToken(32)
+		h.users["admin"] = schema.User{
+			Type:     "admin",
+			Password: h.adminToken,
+		}
+		h.SaveToken()
+	}
+	libstar.Info("%v", h.users)
 	return nil
 }
 
 func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
-	user, pass, ok := r.BasicAuth()
-	libstar.Print("Server.IsAuth %s:%s", user, pass)
+	name, pass, ok := r.BasicAuth()
+	libstar.Print("Server.IsAuth %s:%s", name, pass)
 
-	if strings.HasPrefix(r.URL.Path, "/static") {
-		return true
-	} else if r.URL.Path == "/ui/console" || r.URL.Path == "/websockify" {
+	// not need to auth.
+	if strings.HasPrefix(r.URL.Path, "/static") ||
+		strings.HasPrefix(r.URL.Path, "/ui/console") ||
+		strings.HasPrefix(r.URL.Path, "/websockify") {
 		return true
 	}
-	if !ok || pass != h.adminToken || user != "admin" {
+
+	// auth by password and name
+	if !ok {
+		return false
+	}
+	user, ok := h.users[name]
+	if !ok || user.Password != pass {
 		return false
 	}
 	return true
