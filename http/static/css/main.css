@@ -34,12 +34,6 @@ div::-webkit-scrollbar-track {
     background: rgba(0,0,0,0.1);
 }
 
-.contextmenu {
-    position: fixed;
-    top: 0;
-    left: 0;
-}
-
 /* Index */
 .card-header-cnt,
 .card-header-btn {
@@ -200,35 +194,37 @@ select {
 
 /* instances */
 
-.system,
-.datastores,
-.networks {
+.instances .card-body {
+    min-height: 430px;
+    max-height: 430px;
+}
+
+.instances .card-header {
+    margin-bottom: 0;
+}
+
+.card-main {
     border-color: darkgray;
 }
 
-.system .card-header,
-.datastores .card-header,
-.networks .card-header {
+.card-main .card-header {
     color: inherit;
     background-color: inherit;
     border-bottom: 1px solid #0b3255;;
 }
 
-.system .card-header:first-child,
-.datastores .card-header:first-child,
-.networks .card-header:first-child {
+.card-main  .card-header:first-child {
     border-radius: .25rem;
 }
 
-.system .card-body {
-    min-height: 210px;
-}
 
-.instances .card-body,
-.datastores .card-body,
-.networks .card-body {
+.card-main .card-body {
     min-height: 430px;
     max-height: 430px;
+}
+
+.system .card-body {
+    min-height: 160px;
 }
 
 .system .card-header div {

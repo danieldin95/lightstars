@@ -11,10 +11,15 @@
     <link rel="stylesheet" href="/static/css/modal.css">
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- Loading-->
+</nav>
+
 <div class="container">
     <div id="index">
     <!-- System -->
-    <div name="system" class="card system">
+    <div name="system" class="card card-main system">
         <div class="card-header">
             <div class="">
                 <a id="system-col" href="#" data-toggle="collapse"
@@ -100,7 +105,7 @@
     </div>
     <div id="process" class="card-no-border"></div>
     <!-- DataStore -->
-    <div id="datastores" class="card datastores">
+    <div id="datastores" class="card card-main">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
                     type="button" data-toggle="collapse"
@@ -166,7 +171,7 @@
     </div>
 
     <!-- Network -->
-    <div id="networks" class="card networks">
+    <div id="networks" class="card card-main">
         <div class="card-header">
             <button class="btn btn-link btn-block text-left btn-sm"
                     type="button" data-toggle="collapse"
@@ -274,9 +279,14 @@
     import {DirCreate} from "/static/js/widget/datastore/create.js";
     import {NFSCreate} from "/static/js/widget/datastore/nfs/create.js";
     import {iSCSICreate} from "/static/js/widget/datastore/iscsi/create.js";
+    import {Navigation} from "/static/js/widget/navigation.js";
 
 
     $(document).ready(function() {
+        new Navigation({
+            id: "nav",
+            home: "."
+        });
         new Filters();
         new Collapse({
             pages: [

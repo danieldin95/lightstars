@@ -21,6 +21,7 @@ func NewVersion() Version {
 
 type Hyper struct {
 	Name       string  `json:"name"`
+	Host       string  `json:"host"`
 	CpuNum     uint    `json:"cpuNum"`
 	CpuVendor  string  `json:"cpuVendor"`
 	CpuUtils   uint64  `json:"cpuUtils"`
@@ -34,6 +35,7 @@ func NewHyper() (hs Hyper) {
 	hyper, _ := libvirtc.GetHyper()
 
 	hs.Name = hyper.Name
+	hs.Host = hyper.Address
 	hs.CpuNum, hs.CpuVendor, hs.CpuUtils = hyper.GetCPU()
 	hs.MemTotal, hs.MemFree, hs.MemCached = hyper.GetMem()
 
@@ -42,6 +44,7 @@ func NewHyper() (hs Hyper) {
 
 type Index struct {
 	Version    Version     `json:"version"`
+	User       User        `json:"user"`
 	Hyper      Hyper       `json:"hyper"`
 	Instances  []Instance  `json:"instances"`
 	DataStores []DataStore `json:"datastores"`

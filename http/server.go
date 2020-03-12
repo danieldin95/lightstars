@@ -96,22 +96,15 @@ func (h *Server) Initialize() {
 func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	// not need to auth.
 	if r.URL.Path == "/" ||
+		strings.HasPrefix(r.URL.Path, "/websockify") ||
 		strings.HasPrefix(r.URL.Path, "/static") ||
-		strings.HasPrefix(r.URL.Path, "/ui/console") ||
-		strings.HasPrefix(r.URL.Path, "/websockify") {
-		return true
-	}
-	if strings.HasPrefix(r.URL.Path, "/ui/login") {
+		strings.HasPrefix(r.URL.Path, "/favicon.ico") ||
+		strings.HasPrefix(r.URL.Path, "/ui/login") ||
+		strings.HasPrefix(r.URL.Path, "/ui/console") {
 		return true
 	}
 
-	name := ""
-	pass := ""
-	if t, err := r.Cookie("token"); err == nil {
-		name, pass, _ = api.ParseBasicAuth(t.Value)
-	} else {
-		name, pass, _ = r.BasicAuth()
-	}
+	name, pass, _ := api.GetAuth(r)
 	libstar.Print("Server.IsAuth %s:%s", name, pass)
 
 	// auth by password and name

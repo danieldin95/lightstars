@@ -149,13 +149,18 @@ func ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 	return nil
 }
 
-func GetUser(req *http.Request) (schema.User, bool) {
-	name := ""
+func GetAuth(req *http.Request) (name, pass string, ok bool) {
 	if t, err := req.Cookie("token"); err == nil {
-		name, _, _ = ParseBasicAuth(t.Value)
+		name, pass, ok = ParseBasicAuth(t.Value)
 	} else {
-		name, _, _ = req.BasicAuth()
+		name, pass, ok = req.BasicAuth()
 	}
+	return name, pass, ok
+}
+
+func GetUser(req *http.Request) (schema.User, bool) {
+	name, _, _ := GetAuth(req)
+	libstar.Debug("GetUser %s", name)
 	return service.USERS.Get(name)
 }
 

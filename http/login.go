@@ -24,17 +24,19 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		name := r.FormValue("name")
 		pass := r.FormValue("password")
-		u, _ := service.USERS.Get(name)
-		if u.Password != pass {
+		u, ok := service.USERS.Get(name)
+		if !ok || u.Password != pass {
 			data.Error = "Invalid username or password."
 		} else {
 			basic := name + ":" + pass
-			http.SetCookie(w, &http.Cookie{
+			cookie := http.Cookie{
 				Name:  "token",
 				Value: base64.StdEncoding.EncodeToString([]byte(basic)),
 				Path:  "/",
-			})
+			}
+			http.SetCookie(w, &cookie)
 			http.Redirect(w, r, "/ui", http.StatusMovedPermanently)
+			return
 		}
 	}
 	file := api.GetFile("ui/login.html")
@@ -42,4 +44,3 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 		libstar.Error("Login.Instance %s", err)
 	}
 }
-

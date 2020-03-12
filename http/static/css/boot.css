@@ -163,3 +163,17 @@ ol, ul, dl {
     padding-top: calc(0.25rem + 1px);
     padding-bottom: calc(0.25rem + 1px);
 }
+
+.navbar {
+    min-height: 58px;
+}
+
+.navbar .form-control {
+    font-size: smaller;
+    background-color: #fdfdfe;
+    border-radius: .5rem;
+}
+
+.smaller {
+    font-size: smaller;
+}

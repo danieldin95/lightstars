@@ -9,7 +9,7 @@ import (
 type Users struct {
 	lock  sync.RWMutex
 	file  string
-	users map[string]schema.User `json:"user"`
+	users map[string]*schema.User `json:"user"`
 }
 
 func (u Users) Save() error {
@@ -31,6 +31,14 @@ func (u Users) Load(file string) {
 	if err := libstar.JSON.UnmarshalLoad(&u.users, file); err != nil {
 		libstar.Error("Users.Load: %s", err)
 	}
+	for name, value := range u.users {
+		if value == nil {
+			continue
+		}
+		if value.Name == "" {
+			value.Name = name
+		}
+	}
 }
 
 func (u Users) Get(name string) (schema.User, bool) {
@@ -38,9 +46,12 @@ func (u Users) Get(name string) (schema.User, bool) {
 	defer u.lock.RUnlock()
 
 	user, ok := u.users[name]
-	return user, ok
+	if user == nil {
+		return schema.User{}, false
+	}
+	return *user, ok
 }
 
 var USERS = Users{
-	users: make(map[string]schema.User, 32),
+	users: make(map[string]*schema.User, 32),
 }

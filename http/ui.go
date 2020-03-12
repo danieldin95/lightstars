@@ -16,8 +16,8 @@ type UI struct {
 func (ui UI) Router(router *mux.Router) {
 	router.HandleFunc("/", ui.Index)
 	router.HandleFunc("/ui", ui.Home)
-	router.HandleFunc("/ui/", ui.Home)
-	router.HandleFunc("/ui/index", ui.Home)
+	router.HandleFunc("/ui/", ui.Index)
+	router.HandleFunc("/ui/index", ui.Index)
 	router.HandleFunc("/ui/console", ui.Console)
 	router.HandleFunc("/ui/spice", ui.Spice)
 	router.HandleFunc("/ui/instance/{id}", ui.Instance)
@@ -45,6 +45,8 @@ func (ui UI) Index(w http.ResponseWriter, r *http.Request) {
 
 func (ui UI) Home(w http.ResponseWriter, r *http.Request) {
 	index := schema.Index{}
+	index.User, _ = api.GetUser(r)
+	libstar.Debug("UI.Home %v", index.User)
 	index.Version = schema.NewVersion()
 	index.Hyper = schema.NewHyper()
 	file := api.GetFile("ui/index.html")
