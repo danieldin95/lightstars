@@ -1,28 +1,55 @@
 
+body {
+    background-color: #13508d;
+}
+
 .container {
-    margin: 10% auto auto;
+    margin: 8% auto auto;
 }
 
 .notice {
     min-width: 20rem;
-    max-width: 32rem;
+    max-width: 30rem;
     max-height: 32rem;
     margin: auto auto 1rem;
 }
 
 .login {
-    min-width: 20rem;
-    max-width: 32rem;
+    max-width: 30rem;
+    min-height: 20rem;
     max-height: 32rem;
     margin: auto;
     border-radius: 0.25rem;
 }
 
 .login .card-header {
-    text-align: center;
-    padding: 0.75rem 1.25rem;
+    text-align: left;
+    padding: 0.75rem .25rem;
+    background-color: #1d2124;
+    border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+}
+
+.login .card-header img {
+    width: 40px;
+    height: 40px;
+    float: left !important;
+}
+
+.login .card-header div {
+    /*margin-left: 40px;*/
+    /*margin-right: 40px;*/
+}
+
+.login .card-body {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .login label {
-    text-align: center;
+    text-align: left;
+}
+
+.login .card-footer .btn {
+    padding-left: 1rem;
+    padding-right: 1rem;
 }

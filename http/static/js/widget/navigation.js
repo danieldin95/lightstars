@@ -61,7 +61,7 @@ export class Navigation {
                     <a class="nav-link" href="${this.home}#network">Network</a>
                 </li>
             </ul>
-            <ul class="navbar-nav mr-2">
+            <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarMore" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
