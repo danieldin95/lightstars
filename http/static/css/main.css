@@ -185,7 +185,7 @@ select {
 }
 
 .btn-spot:hover,
-.btn-spot:focus{
+.btn-spot:focus {
     text-decoration: none;
     /*background-color: black;*/
     /*color: #b21f2d;*/
@@ -200,7 +200,7 @@ select {
 }
 
 .instances .card-header {
-    margin-bottom: 0;
+    /*margin-bottom: 0;*/
 }
 
 .card-main {
@@ -225,12 +225,6 @@ select {
 
 .system .card-body {
     min-height: 160px;
-}
-
-.system .card-header div {
-    margin-left: .25rem;
-    padding: .25rem 0;
-    font-size: inherit;
 }
 
 /* 404 */

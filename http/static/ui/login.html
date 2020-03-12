@@ -23,8 +23,11 @@
     <form action="/ui/login" method="post">
     <div class="card login">
         <div class="card-header">
-            <strong>Welcome to LightStar</strong><br/>
-            <small>A simple and small platform to manage your cloud</small>
+            <img class="float-left" src="/static/images/lightstar-6.png" width="40" height="40" alt="">
+            <div>
+                <strong>LightStar</strong><br/>
+                <small style="color: #ced4da">A simple and small platform to manage your cloud</small>
+            </div>
         </div>
         <div class="card-body">
             <div class="form-group row">
@@ -44,9 +47,9 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer">
-            <button id="reset" class="btn btn-outline-dark btn-sm float-left" type="reset">Reset</button>
-            <button id="submit" class="btn btn-outline-success btn-sm float-right">Login</button>
+        <div class="card-footer d-flex justify-content-end">
+            <button id="reset" class="btn btn-outline-dark btn-sm mr-2" type="reset">Reset</button>
+            <button id="submit" class="btn btn-outline-success btn-sm mr-0">Login</button>
         </div>
     </div>
     </form>

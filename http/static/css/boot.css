@@ -12,7 +12,7 @@ td {
 
 a {
     color: inherit;
-    font-size: small;
+    font-size: inherit;
 }
 
 a:hover,
@@ -36,7 +36,7 @@ a:focus {
 }
 
 .card-header {
-    padding: .25rem 1.25rem;
+    padding: .35rem 1.25rem;
     background-color: #13508d;
     color: white;
     /*border-color: #0b3255;*/
@@ -45,6 +45,12 @@ a:focus {
     border-bottom: 1px solid #0b3255;
     /*color: inherit;*/
     margin-bottom: -1px;
+}
+
+.card-header div {
+    margin-left: .25rem;
+    padding: .3rem 0;
+    font-size: inherit;
 }
 
 .card-body {
@@ -165,15 +171,25 @@ ol, ul, dl {
 }
 
 .navbar {
-    min-height: 58px;
+    min-height: 3rem;
+    padding: 0 2rem;
 }
 
 .navbar .form-control {
     font-size: smaller;
-    background-color: #fdfdfe;
+    background-color: #e9ecef;
     border-radius: .5rem;
 }
 
 .smaller {
     font-size: smaller;
+}
+
+.dropdown-item {
+    font-size: small;
+}
+
+.dropdown-menu {
+    right: 0;
+    left: auto;
 }

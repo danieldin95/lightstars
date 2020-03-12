@@ -10,14 +10,31 @@ export class Navigation {
         this.id = props.id;
         this.home = props.home;
         this.props = props;
+        this.active = this.get(window.location.href, "xx");
 
         this.refresh();
     }
 
     refresh() {
         new HyperApi().get(this, (e) => {
-            $(this.id).html(this.render(e.resp));
+            this.view = $(this.render(e.resp));
+            this.view.find('li').each((i, e) => {
+               let href = $(e).find('a').attr("href");
+               if (this.get(href) == this.active) {
+                   $(e).addClass("active");
+               }
+            });
+            $(this.id).html(this.view);
         });
+
+    }
+
+    get (href, name) {
+        let path = href.split("?", 2)[0];
+        let pages = path.split('#', 2);
+
+        name = name || ""
+        return (pages.length == 2 && pages[1] != "") ? pages[1] : name;
     }
 
     render(data) {
@@ -52,15 +69,12 @@ export class Navigation {
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarMore">
                         <a class="dropdown-item" href="#">Setting</a>
-                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Change password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/ui/login">Logout</a>
                     </div>
                 </li>
             </ul>
-            <form class="form-inline">
-                <input class="form-control form-control-sm" type="search" placeholder="Search" aria-label="Search">
-            </form>
         </div>`)(data)
     }
 }
