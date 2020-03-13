@@ -199,10 +199,6 @@ select {
     max-height: 430px;
 }
 
-.instances .card-header {
-    /*margin-bottom: 0;*/
-}
-
 .card-main {
     border-color: darkgray;
 }
@@ -212,11 +208,6 @@ select {
     background-color: inherit;
     border-bottom: 1px solid #0b3255;;
 }
-
-.card-main  .card-header:first-child {
-    border-radius: .25rem;
-}
-
 
 .card-main .card-body {
     min-height: 430px;
@@ -237,10 +228,6 @@ select {
     color: inherit;
     background-color: inherit;
     border-bottom: 1px solid #0b3255;;
-}
-
-.error .card-header:first-child {
-    border-radius: .25rem;
 }
 
 

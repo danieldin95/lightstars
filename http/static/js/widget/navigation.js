@@ -67,7 +67,7 @@ export class Navigation {
                        aria-expanded="false">
                         {{user.name}}@{{hyper.host}}
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarMore">
+                    <div class="dropdown-menu dropdown-left" aria-labelledby="navbarMore">
                         <a class="dropdown-item" href="#">Setting</a>
                         <a class="dropdown-item" href="#">Change password</a>
                         <div class="dropdown-divider"></div>

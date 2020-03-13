@@ -32,14 +32,9 @@
     border-color: darkgray;
 }
 
-.device .card-header:first-child {
-    border-radius: .25rem;
-}
-
 .device .card-header {
     background-color: inherit;
     border-bottom: 1px solid #0b3255;;
-    border-radius: .25rem;
 }
 
 .device .card-header .btn {

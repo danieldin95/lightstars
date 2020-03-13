@@ -1,7 +1,7 @@
 body {
     font-family: Arial;
     font-size: small;
-    background: #fdfcf8;
+    background: #e9ecef;
 }
 
 th,
@@ -28,23 +28,22 @@ a:focus {
 .card {
     margin: 1.25rem -1px 1.25rem 0;
     border-color: #0b3255;
-    border-radius: 0;
-}
-
-.card-header:first-child {
-    border-radius: 0;
 }
 
 .card-header {
     padding: .35rem 1.25rem;
     background-color: #13508d;
     color: white;
-    /*border-color: #0b3255;*/
-    /*background-color: inherit;*/
-    border-radius: 0;
     border-bottom: 1px solid #0b3255;
-    /*color: inherit;*/
     margin-bottom: -1px;
+}
+
+.card-header {
+    border-radius: calc(0.25rem - 1px);
+}
+
+.card-header:first-child {
+    border-radius: calc(0.25rem - 1px);
 }
 
 .card-header div {
@@ -140,27 +139,18 @@ ol, ul, dl {
     overflow: auto!important;
 }
 
-/* wizard */
-
-.sw-modal {
-    min-width: 760px;
+.smaller {
+    font-size: smaller;
 }
 
-.sw-main {
+.dropdown-left {
+    right: 0;
+    left: auto;
 }
 
-.sw-toolbar-bottom {
-    padding: 1rem;
-    border-top: 1px solid #e9ecef;
-}
-
-.sw-main ul.step-anchor {
-    margin: 0.5rem 1rem;
-}
-
-.sw-main .sw-container {
-    margin: 1.5rem;
-    min-height: 200px;
+.dropdown-right {
+    right: auto;
+    left: 0;
 }
 
 .custom-select-sm {
@@ -168,6 +158,10 @@ ol, ul, dl {
     font-weight: inherit;
     padding-top: calc(0.25rem + 1px);
     padding-bottom: calc(0.25rem + 1px);
+}
+
+.dropdown-item {
+    font-size: small;
 }
 
 .navbar {
@@ -179,17 +173,4 @@ ol, ul, dl {
     font-size: smaller;
     background-color: #e9ecef;
     border-radius: .5rem;
-}
-
-.smaller {
-    font-size: smaller;
-}
-
-.dropdown-item {
-    font-size: small;
-}
-
-.dropdown-menu {
-    right: 0;
-    left: auto;
 }
