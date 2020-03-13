@@ -1,6 +1,6 @@
-import {InterfaceApi} from "./api/interface.js";
-import {InterfaceTable} from "./widget/interface/table.js";
-import {CheckBoxTab} from "./widget/checkbox/checkbox.js";
+import {InterfaceApi} from "../api/interface.js";
+import {InterfaceTable} from "../widget/interface/table.js";
+import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
 
 
 class CheckBox extends CheckBoxTab {

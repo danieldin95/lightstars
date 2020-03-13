@@ -19,7 +19,7 @@ body {
     min-height: 20rem;
     max-height: 32rem;
     margin: auto;
-    border-radius: 0.45rem;
+    border-radius: 0.25rem;
     border: none;
 }
 
@@ -27,7 +27,7 @@ body {
     text-align: left;
     padding: 0.75rem .25rem;
     background-color: #1d2124;
-    border-radius: calc(0.45rem - 1px) calc(0.45rem - 1px) 0 0;
+    border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
 }
 
 .login .card-header img {

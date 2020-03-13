@@ -1,4 +1,5 @@
 import {HyperApi} from "../api/hyper.js";
+import {Index} from "../widget/container/index.js"
 
 
 export class Navigation {
@@ -11,22 +12,36 @@ export class Navigation {
         this.home = props.home;
         this.props = props;
         this.active = this.get(window.location.href, "xx");
+        this.navs = ["#system", "#instances", "#datastore", "#network"];
 
         this.refresh();
     }
 
     refresh() {
+
         new HyperApi().get(this, (e) => {
             this.view = $(this.render(e.resp));
             this.view.find('li').each((i, e) => {
-               let href = $(e).find('a').attr("href");
-               if (this.get(href) == this.active) {
+                let href = $(e).find('a').attr("data-target");
+                if (this.get(href) == this.active) {
                    $(e).addClass("active");
-               }
+                }
             });
+
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
+
+            for (let i = 0; i < this.navs.length; i++) {
+                this.view.find(this.navs[i]).on('click', function (e) {
+                    console.log('onclick', $(this).attr('data-target'));
+                    new Index({
+                        id: ".container",
+                        force: true,
+                        default: $(this).attr("data-target"),
+                    });
+                })
+            }
             $(this.id).html(this.view);
         });
 
@@ -40,23 +55,26 @@ export class Navigation {
             || el.mozRequestFullScreen
             || el.msRequestFullScreen
         ;
-        if (typeof rfs != "undefined" && rfs) {
+        if (rfs) {
             rfs.call(el);
-        } else if (typeof window.ActiveXObject != "undefined") {
+        } else if (window.ActiveXObject) {
             // for Internet Explorer
-            let wscript = new ActiveXObject("WScript.Shell");
-            if (wscript != null) {
-                wscript.SendKeys("{F11}");
+            let ws = new ActiveXObject("WScript.Shell");
+            if (ws != null) {
+                ws.SendKeys("{F11}");
             }
         }
     }
 
     get (href, name) {
+        if (!href) {
+            return name
+        }
         let path = href.split("?", 2)[0];
         let pages = path.split('#', 2);
 
-        name = name || ""
-        return (pages.length == 2 && pages[1] != "") ? pages[1] : name;
+        name = name || "";
+        return (pages.length === 2 && pages[1] !== "") ? pages[1] : name;
     }
 
     render(data) {
@@ -66,21 +84,21 @@ export class Navigation {
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarMore" aria-controls="navbarMore" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"/>
         </button>
         <div class="collapse navbar-collapse" id="navbarMore">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="${this.home}#system">Home</a>
+                    <span id="system" class="nav-link" data-target="system">Home</span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${this.home}#instances">Guest Instances</a>
+                    <a id="instances" class="nav-link" data-target="instances">Guest Instances</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${this.home}#datastore">DataStore</a>
+                    <a id="datastore" class="nav-link" data-target="datastore">DataStore</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${this.home}#network">Network</a>
+                    <a id="network" class="nav-link" data-target="network">Network</a>
                 </li>
             </ul>
             <ul class="navbar-nav">

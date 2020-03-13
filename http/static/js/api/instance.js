@@ -23,6 +23,16 @@ export class InstanceApi extends Api {
         $.get(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
         }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
+        });
+    }
+
+    get(data, func) {
+        let url = this.url(this.uuids[0]);
+
+        $.get(url, {format: 'schema'}, (resp, status) => {
+            func({data, resp});
+        }).fail((e) => {
             $(this.tasks).append(Alert.danger(`GET ${url}: ${e.responseText}`));
         });
     }

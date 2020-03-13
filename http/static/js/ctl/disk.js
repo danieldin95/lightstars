@@ -1,15 +1,15 @@
-import {GraphicsApi} from "./api/graphics.js";
-import {GraphicsTable} from "./widget/graphics/table.js";
-import {CheckBoxTab} from "./widget/checkbox/checkbox.js";
+import {DiskApi} from "../api/disk.js";
+import {DiskTable} from "../widget/disk/table.js";
+import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
 
 
 class CheckBox extends CheckBoxTab {
 }
 
 
-export class Graphics {
+export class Disk {
     // {
-    //   id: '#instance #graphics',
+    //   id: '#instance #disk',
     //   uuid: uuid of instance,
     //   name: name of instance,
     // }
@@ -20,17 +20,17 @@ export class Graphics {
 
         this.checkbox = new CheckBox(props);
         this.uuids = this.checkbox.uuids;
-        this.table = new GraphicsTable({
+        this.table = new DiskTable({
             id: `${this.id} #display-table`,
             inst: this.inst,
         });
 
         // register button's click.
-        $(`${this.id} #remove`).on("click", this, function (e) {
-            new GraphicsApi({
-                inst: e.data.inst,
-                uuids: e.data.uuids.store,
-                name: e.data.name}).delete();
+        $(`${this.id} #remove`).on("click", (e) => {
+            new DiskApi({
+                inst: this.inst,
+                uuids: this.uuids.store,
+            }).delete();
         });
 
         // refresh table and register refresh click.
@@ -45,10 +45,10 @@ export class Graphics {
     }
 
     create(data) {
-        new GraphicsApi({inst: this.inst, name: this.name}).create(data);
+        new DiskApi({inst: this.inst}).create(data);
     }
 
     edit(data) {
-        new GraphicsApi({inst: this.inst, name: this.name}).edit(data);
+        new DiskApi({inst: this.inst}).edit(data);
     }
 }

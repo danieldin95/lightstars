@@ -1,6 +1,6 @@
-import {InstanceApi} from "./api/instance.js";
-import {InstanceTable} from "./widget/instance/table.js";
-import {CheckBoxTab} from "./widget/checkbox/checkbox.js";
+import {InstanceApi} from "../api/instance.js";
+import {InstanceTable} from "../widget/instance/table.js";
+import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
 
 
 class Checkbox extends CheckBoxTab {
@@ -25,6 +25,7 @@ class Checkbox extends CheckBoxTab {
 export class Instances {
     // {
     //   id: '#instances'
+    //   onthis: function (e) {},
     // }
     constructor(props) {
         this.id = props.id;
@@ -65,12 +66,22 @@ export class Instances {
 
         // refresh table and register refresh click.
         $(`${this.id} #refresh`).on("click", (e) => {
-            this.table.refresh((e) => {
-                this.checkbox.refresh();
-            });
+            this.refresh();
         });
+        this.refresh();
+    }
+
+    refresh() {
         this.table.refresh((e) => {
             this.checkbox.refresh();
+
+            // register click on this table row.
+            let func = this.props.onthis;
+            if (func) {
+                $(`${this.id} #on-this`).on('click', function(e) {
+                    func({uuid: $(this).attr('data')});
+                });
+            }
         });
     }
 

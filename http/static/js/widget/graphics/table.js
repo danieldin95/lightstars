@@ -43,6 +43,6 @@ export class GraphicsTable {
                 <td>{{v.listen}}:{{v.port != '' ? v.port : -1}}</td>
             </tr>
         {{/each}}
-        `)(data)
+        `)(data);
     }
 }

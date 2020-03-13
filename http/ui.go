@@ -2,7 +2,6 @@ package http
 
 import (
 	"encoding/base64"
-	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http/api"
 	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/http/service"
@@ -22,23 +21,6 @@ func (ui UI) Router(router *mux.Router) {
 	router.HandleFunc("/ui/index", ui.Index)
 	router.HandleFunc("/ui/console", ui.Console)
 	router.HandleFunc("/ui/spice", ui.Spice)
-	router.HandleFunc("/ui/instance/{id}", ui.Instance)
-}
-
-func (ui UI) Instance(w http.ResponseWriter, r *http.Request) {
-	uuid, _ := api.GetArg(r, "id")
-
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
-		return
-	}
-	defer dom.Free()
-	instance := schema.NewInstance(*dom)
-	file := api.GetFile("ui/instance.html")
-	if err := api.ParseFiles(w, file, instance); err != nil {
-		libstar.Error("UI.Instance %s", err)
-	}
 }
 
 func (ui UI) Index(w http.ResponseWriter, r *http.Request) {

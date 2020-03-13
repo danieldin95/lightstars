@@ -35,7 +35,7 @@ export class InstanceTable {
                     <input id="on-one" type="checkbox" aria-label="" data="{{v.uuid}}" passwd="{{v.password}}">
                 </td>
                 <td>{{i+1}}</td>
-                <td><a class="text-decoration-none" href="/ui/instance/{{v.uuid}}">{{v.uuid}}</a></td>
+                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#">{{v.uuid}}</a></td>
                 <td>{{v.cpuTime}}ms</td>
                 <td>{{v.name}}</td>
                 <td>{{v.maxCpu}}</td>

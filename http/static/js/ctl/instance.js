@@ -1,4 +1,4 @@
-import {InstanceApi} from "./api/instance.js";
+import {InstanceApi} from "../api/instance.js";
 import {Disk} from "./disk.js";
 import {Interface} from "./interface.js"
 import {Graphics} from "./graphics.js";
@@ -46,9 +46,6 @@ export class Instance {
             $(target).on('hidden.bs.modal', function (e) {
                 $(target).find(".modal-body").empty();
             });
-        });
-        $(`${this.id} #refresh`).on("click", this, function (e) {
-            window.location.reload();
         });
         $(`${this.id} #start, ${this.id} #more-start`).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).start();

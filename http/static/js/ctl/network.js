@@ -1,6 +1,6 @@
-import {NetworkApi} from "./api/network.js";
-import {NetworkTable} from "./widget/network/table.js";
-import {CheckBoxTab} from "./widget/checkbox/checkbox.js";
+import {NetworkApi} from "../api/network.js";
+import {NetworkTable} from "../widget/network/table.js";
+import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
 
 
 class CheckBox extends CheckBoxTab {

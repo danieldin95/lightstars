@@ -1,4 +1,4 @@
-import {Utils} from "./com/utils.js";
+import {Utils} from "../com/utils.js";
 
 export class Filters {
     constructor() {
