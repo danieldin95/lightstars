@@ -4,6 +4,7 @@ import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http/api"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
 	"io"
@@ -12,11 +13,20 @@ import (
 	"sync"
 )
 
+type Download struct {
+}
+
+func (down Download) Router(router *mux.Router) {
+	dir := http.Dir(storage.PATH.Root())
+	files := http.StripPrefix("/ext/files/", http.FileServer(dir))
+	router.PathPrefix("/ext/files/").Handler(files)
+}
+
 type WebSocket struct {
 }
 
 func (w WebSocket) Router(router *mux.Router) {
-	router.Handle("/websockify", websocket.Handler(w.Sockify))
+	router.Handle("/ext/websocket", websocket.Handler(w.Socket))
 }
 
 func (w WebSocket) GetTarget(r *http.Request) string {
@@ -49,36 +59,36 @@ func (w WebSocket) GetTarget(r *http.Request) string {
 	return ""
 }
 
-func (w WebSocket) Sockify(ws *websocket.Conn) {
+func (w WebSocket) Socket(ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
 
 	target := w.GetTarget(ws.Request())
 	if target == "" {
-		libstar.Error("UI.Sockify target not found.")
+		libstar.Error("UI.Socket target not found.")
 		return
 	}
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("UI.Sockify dial %s", err)
+		libstar.Error("UI.Socket dial %s", err)
 		return
 	}
 	defer conn.Close()
-	libstar.Info("UI.Sockify request by %s", ws.RemoteAddr())
-	libstar.Info("UI.Sockify connect to %s", conn.RemoteAddr())
+	libstar.Info("UI.Socket request by %s", ws.RemoteAddr())
+	libstar.Info("UI.Socket connect to %s", conn.RemoteAddr())
 
 	wait := sync.WaitGroup{}
 	wait.Add(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Error("UI.Sockify copy from ws %s", err)
+			libstar.Error("UI.Socket copy from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Error("UI.Sockify copy from target %s", err)
+			libstar.Error("UI.Socket copy from target %s", err)
 		}
 	}()
 	wait.Wait()

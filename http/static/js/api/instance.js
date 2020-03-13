@@ -122,21 +122,23 @@ export class InstanceApi extends Api {
         let url = this.url(uuid);
 
         if (data.cpu !== "") {
+            let api = url+"/processor";
             let cpu = {cpu: data.cpu};
 
-            $.put(url+"/processor", JSON.stringify(cpu), (resp, status) => {
+            $.put(api, JSON.stringify(cpu), (resp, status) => {
                 $(this.tasks).append(Alert.success(`set processor for '${uuid}' success`));
             }).fail((e) => {
-                $(this.tasks).append(Alert.warn((`PUT ${url}: ${e.responseText}`)));
+                $(this.tasks).append(Alert.warn((`PUT ${api}: ${e.responseText}`)));
             });
         }
         if (data.memSize !== "") {
+            let api = url+"/memory";
             let mem = {size: data.memSize, unit: data.memUnit};
 
-            $.put(url+"/memory", JSON.stringify(mem), (resp, status) => {
+            $.put(api, JSON.stringify(mem), (resp, status) => {
                 $(this.tasks).append(Alert.success(`set memory for '${uuid}' success`));
             }).fail((e) => {
-                $(this.tasks).append(Alert.warn((`PUT ${url}: ${e.responseText}`)));
+                $(this.tasks).append(Alert.warn((`PUT ${api}: ${e.responseText}`)));
             });
         }
     }

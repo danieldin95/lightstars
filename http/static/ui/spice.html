@@ -84,7 +84,7 @@
                 if (password === undefined) {
                     password = spice_query_var('password', '');
                 }
-                var path = spice_query_var('path', 'websockify');
+                var path = spice_query_var('path', 'ext/websocket');
                 if ((!host) || (!port)) {
                     console.log("must specify host and port in URL");
                     return;

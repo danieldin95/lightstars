@@ -90,7 +90,7 @@ export class Navigation {
                         {{user.name}}@{{hyper.host}}
                     </a>
                     <div class="dropdown-menu dropdown-left" aria-labelledby="navbarMore">
-                        <a id="fullscreen" class="dropdown-item">Fullscreen</a>
+                        <a id="fullscreen" class="dropdown-item">Full screen</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Setting</a>
                         <a class="dropdown-item" href="#">Change password</a>
