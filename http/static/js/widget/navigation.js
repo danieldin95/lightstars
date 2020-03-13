@@ -24,9 +24,31 @@ export class Navigation {
                    $(e).addClass("active");
                }
             });
+            this.view.find("#fullscreen").on('click', (e) => {
+                this.fullscreen();
+            });
             $(this.id).html(this.view);
         });
 
+    }
+
+    fullscreen() {
+        let el = document.documentElement
+            , rfs =
+            el.requestFullScreen
+            || el.webkitRequestFullScreen
+            || el.mozRequestFullScreen
+            || el.msRequestFullScreen
+        ;
+        if (typeof rfs != "undefined" && rfs) {
+            rfs.call(el);
+        } else if (typeof window.ActiveXObject != "undefined") {
+            // for Internet Explorer
+            let wscript = new ActiveXObject("WScript.Shell");
+            if (wscript != null) {
+                wscript.SendKeys("{F11}");
+            }
+        }
     }
 
     get (href, name) {
@@ -68,6 +90,8 @@ export class Navigation {
                         {{user.name}}@{{hyper.host}}
                     </a>
                     <div class="dropdown-menu dropdown-left" aria-labelledby="navbarMore">
+                        <a id="fullscreen" class="dropdown-item">Fullscreen</a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Setting</a>
                         <a class="dropdown-item" href="#">Change password</a>
                         <div class="dropdown-divider"></div>

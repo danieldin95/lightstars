@@ -20,6 +20,14 @@ a:focus {
     color: inherit;
 }
 
+.fullScreen {
+    font-family: Arial;
+    font-size: small;
+    background: #e9ecef;
+    width: 100%;
+    height: 100%;
+}
+
 .container {
     min-width: 800px;
     padding: 0;

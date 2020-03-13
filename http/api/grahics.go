@@ -37,7 +37,7 @@ func (gra Graphics) GET(w http.ResponseWriter, r *http.Request) {
 			list.Items = append(list.Items, gra)
 		}
 		sort.SliceStable(list.Items, func(i, j int) bool {
-			return list.Items[i].(schema.Graphics).Type < list.Items[j].(schema.Graphics).Type
+			return list.Items[i].(schema.Graphics).Type > list.Items[j].(schema.Graphics).Type
 		})
 		list.Metadata.Size = len(list.Items)
 		list.Metadata.Total = len(list.Items)
