@@ -72,10 +72,10 @@
     $(document).ready(function() {
         new Navigation({
             id: "nav",
-            home: "."
+            home: ".",
+            name: $('hyper').attr('name'),
         });
         new Filters();
-
         new Index({
             id: ".container",
             default: "instances",

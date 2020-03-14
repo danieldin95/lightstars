@@ -1,6 +1,6 @@
 import {HyperApi} from "../api/hyper.js";
+import {Location} from "../com/location.js";
 import {Index} from "../widget/container/index.js"
-
 
 export class Navigation {
     // {
@@ -11,32 +11,48 @@ export class Navigation {
         this.id = props.id;
         this.home = props.home;
         this.props = props;
-        this.active = this.get(window.location.href, "xx");
+        this.active = Location.get("xx");
         this.navs = ["#system", "#instances", "#datastore", "#network"];
 
         this.refresh();
     }
 
-    refresh() {
 
-        new HyperApi().get(this, (e) => {
-            this.view = $(this.render(e.resp));
+
+    refresh() {
+        let active = (cur) => {
             this.view.find('li').each((i, e) => {
                 let href = $(e).find('a').attr("data-target");
-                if (this.get(href) == this.active) {
-                   $(e).addClass("active");
+                if (cur && cur === href) {
+                    $(e).addClass("active");
+                } else {
+                    $(e).removeClass("active");
                 }
             });
+        };
+
+        Location.listen.push({
+            data: this,
+            func: (e) => {
+              active(e.name);
+            },
+        });
+        new HyperApi().get(this, (e) => {
+            this.view = $(this.render(e.resp));
+            active(this.active);
 
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
 
+            let name = this.props.name;
             for (let i = 0; i < this.navs.length; i++) {
                 this.view.find(this.navs[i]).on('click', function (e) {
-                    console.log('onclick', $(this).attr('data-target'));
+                    active();
+                    $(this).parent('li').addClass("active");
                     new Index({
                         id: ".container",
+                        name: name,
                         force: true,
                         default: $(this).attr("data-target"),
                     });
@@ -66,17 +82,6 @@ export class Navigation {
         }
     }
 
-    get (href, name) {
-        if (!href) {
-            return name
-        }
-        let path = href.split("?", 2)[0];
-        let pages = path.split('#', 2);
-
-        name = name || "";
-        return (pages.length === 2 && pages[1] !== "") ? pages[1] : name;
-    }
-
     render(data) {
         return template.compile(`
         <a class="navbar-brand" href="${this.home}">
@@ -89,7 +94,7 @@ export class Navigation {
         <div class="collapse navbar-collapse" id="navbarMore">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <span id="system" class="nav-link" data-target="system">Home</span>
+                    <a id="system" class="nav-link" data-target="system">Home</a>
                 </li>
                 <li class="nav-item">
                     <a id="instances" class="nav-link" data-target="instances">Guest Instances</a>
