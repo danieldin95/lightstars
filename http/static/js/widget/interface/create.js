@@ -23,7 +23,7 @@ export class InterfaceCreate extends FormModal {
                     data.forEach(function (e, i) {
                         if (e['type'] == 'bridge') {
                             selector.append(Option(`Linux Bridge #${e['name']}`, e['name']));
-                        } else if (e['type'] == 'openvswith') {
+                        } else if (e['type'] == 'openvswitch') {
                             selector.append(Option(`Open vSwitch #${e['name']}`, e['name']));
                         }
                     });

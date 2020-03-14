@@ -28,7 +28,7 @@ export class FormWizard {
         // reset default page
         this.active = this.default;
         $(this.default).addClass('active');
-        $($(this.default).attr('data-target')).removeClass('d-none');
+        $(this.target(this.default)).removeClass('d-none');
 
         console.log(this.active, this.pages);
         // register prev and next.
@@ -41,18 +41,22 @@ export class FormWizard {
         $(this.next).on('click', (event) => {
             let pos = this.pages.indexOf(this.active)+1;
             if (pos < this.pages.length) {
-                this.move(pos)
+                this.move(pos);
             }
         });
+    }
+
+    target(page) {
+        return this.id + " " + $(page).attr('data-target');
     }
 
     move (pos) {
         let page = this.pages[pos];
         $(this.active).removeClass('active');
-        $($(this.active).attr('data-target')).addClass('d-none');
+        $(this.target(this.active)).addClass('d-none');
         this.active = page;
         $(page).addClass('active');
-        $($(page).attr('data-target')).removeClass('d-none');
+        $(this.target(page)).removeClass('d-none');
     }
 
     load (callback) {

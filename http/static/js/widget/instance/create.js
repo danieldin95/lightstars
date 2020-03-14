@@ -143,8 +143,8 @@ export class InstanceCreate extends FormModal {
                 <form id="form">
                 <div id="guest" class="card-body text-center d-none">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label-sm">Name</label>
-                        <div class="col-sm-6">
+                        <label for="name" class="col-sm-4 col-md-4 col-form-label-sm">Name</label>
+                        <div class="col-sm-10 col-md-6"">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm"
                                        name="name" value="guest.01"/>
@@ -152,8 +152,8 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="family" class="col-sm-4 col-form-label-sm">Guest OS</label>
-                        <div class="col-sm-6">
+                        <label for="family" class="col-sm-4 col-md-4 col-form-label-sm">Guest OS</label>
+                        <div class="col-sm-10 col-md-6">
                             <div class="input-group">
                                 <select class="select-lg" name="family">
                                     <option value="linux" selected>Linux</option>
@@ -166,10 +166,10 @@ export class InstanceCreate extends FormModal {
                 </div>
                 <div id="datastore" class="card-body text-center d-none">
                     <div class="form-group row">
-                        <label for="datastore" class="col-sm-4 col-form-label-sm">
-                            Datastore
+                        <label for="datastore" class="col-sm-4 col-md-4 col-form-label-sm">
+                            DataStore location
                         </label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-10 col-md-6"">
                             <div class="input-group">
                                 <select class="select-lg" name="datastore">
                                     <option value="datastore/01" selected>datastore01</option>
@@ -181,7 +181,7 @@ export class InstanceCreate extends FormModal {
                 </div>
                 <div id="custom" class="card-body text-center d-none">
                     <div class="form-group row">
-                        <label for="cpu" class="col-sm-2 col-md-4 col-form-label-sm">
+                        <label for="cpu" class="col-sm-4 col-md-4 col-form-label-sm">
                             Processors
                         </label>
                         <div class="col-sm-10 col-md-6">
@@ -214,7 +214,7 @@ export class InstanceCreate extends FormModal {
                     </div>
                     <div class="form-group row">
                         <label for="diskSize" class="col-sm-4 col-md-4 col-form-label-sm">
-                            Hardware disk01
+                            Hardware disk-01
                         </label>
                         <div class="col-sm-10 col-md-6">
                             <div class="input-group">
@@ -230,7 +230,7 @@ export class InstanceCreate extends FormModal {
                     </div>
                     <div class="form-group row">
                         <label for="disk0File" class="col-sm-4 col-md-4 col-form-label-sm">
-                            Datastore ISO file
+                            DataStore ISO file
                         </label>
                         <div class="col-sm-10 col-md-6">
                             <div class="input-group">
@@ -242,7 +242,7 @@ export class InstanceCreate extends FormModal {
                     </div>
                     <div class="form-group row">
                         <label for="interface0Source" class="col-sm-4 col-md-4 col-form-label-sm">
-                            Network interface01
+                            Network interface-01
                         </label>
                         <div class="col-sm-10 col-md-6">
                             <div class="input-group">

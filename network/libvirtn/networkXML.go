@@ -6,12 +6,13 @@ import (
 )
 
 type NetworkXML struct {
-	XMLName xml.Name    `xml:"network" json:"-"`
-	Name    string      `xml:"name" json:"name"`
-	UUID    string      `xml:"uuid" json:"uuid"`
-	Forward *ForwardXML `xml:"forward,omitempty" json:"forward"`
-	IPv4    *IPv4XML    `xml:"ip,omitempty" json:"ipv4"`
-	Bridge  BridgeXML   `xml:"bridge" json:"bridge"`
+	XMLName     xml.Name        `xml:"network" json:"-"`
+	Name        string          `xml:"name" json:"name"`
+	UUID        string          `xml:"uuid" json:"uuid"`
+	Forward     *ForwardXML     `xml:"forward,omitempty" json:"forward"`
+	IPv4        *IPv4XML        `xml:"ip,omitempty" json:"ipv4"`
+	Bridge      BridgeXML       `xml:"bridge" json:"bridge"`
+	VirtualPort *VirtualPortXML `xml:"virtualport" json:"virtualport"`
 }
 
 func NewNetworkXMLFromNet(net *Network) *NetworkXML {
@@ -73,4 +74,9 @@ type DHCPRangeXML struct {
 	XMLName xml.Name `xml:"range" json:"-"`
 	Start   string   `xml:"start,attr,omitempty" json:"start,omitempty"`
 	End     string   `xml:"end,attr,omitempty" json:"end,omitempty"`
+}
+
+type VirtualPortXML struct {
+	XMLName xml.Name `xml:"virtualport" json:"-"`
+	Type    string   `xml:"type,attr,omitempty" json:"type,omitempty"` //openvswitch
 }

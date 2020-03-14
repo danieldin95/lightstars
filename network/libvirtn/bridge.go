@@ -27,8 +27,13 @@ func (br *BridgeMgr) List() []Bridge {
 				net.Free()
 				continue
 			}
-			if name, err := net.GetBridgeName(); err == nil {
-				brs = append(brs, Bridge{Name: name, Type: "bridge"})
+			br := NewNetworkXMLFromNet(NewNetworkFromVir(&net))
+			if br != nil {
+				if br.VirtualPort != nil {
+					brs = append(brs, Bridge{Name: br.Name, Type: br.VirtualPort.Type})
+				} else {
+					brs = append(brs, Bridge{Name: br.Name, Type: "bridge"})
+				}
 			}
 			net.Free()
 		}

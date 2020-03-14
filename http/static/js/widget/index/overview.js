@@ -31,7 +31,7 @@ export class Overview {
                 <dd>{{version.version}}</dd>
                 <dt>Built on:</dt>
                 <dd>{{version.date}}</dd>
-                <dt>Hypervisor:</dt>
+                <dt>HyperVisor:</dt>
                 <dd>{{hyper.name}}</dd>
                 <dt>Processor:</dt>
                 <dd>{{hyper.cpuNum}} | {{hyper.cpuUtils | figureCpuFree hyper.cpuNum}} | {{hyper.cpuVendor}}</dd>

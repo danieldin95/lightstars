@@ -16,11 +16,12 @@ export class Collapse {
         let force = props.force !== undefined ? props.force : false;
         let update = props.update !== undefined ? props.update : true;
         let page = this.default;
+        console.log('Collapse.update', update);
         if (update) {
-            let page = Location.get(this.default);
             if (force) {
                 Location.set(this.default);
             }
+            page = Location.get(this.default);
         }
         for (let i = 0;  i < this.pages.length; i++) {
             let v = this.pages[i];
