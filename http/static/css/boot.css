@@ -28,6 +28,10 @@ a:focus {
     height: 100%;
 }
 
+.navbar {
+    min-width: 801px;
+}
+
 .container {
     min-width: 800px;
     padding: 0;

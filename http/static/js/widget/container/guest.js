@@ -1,5 +1,6 @@
 import {Base} from "./base.js"
 import {Utils} from "../../com/utils.js";
+import {Location} from "../../com/location.js";
 import {Instance} from '../../ctl/instance.js';
 import {InstanceApi} from "../../api/instance.js";
 import {Collapse} from "../collapse.js";
@@ -48,6 +49,7 @@ export class Guest extends Base {
                 {id: '#collapseGra', name: 'graphics'},
             ],
             default: this.default,
+            update: false,
         });
 
         let instance = new Instance({

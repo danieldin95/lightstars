@@ -5,18 +5,23 @@ export class Collapse {
     //   default: page,
     //   pages: [ {id: '#', name: ""} ],
     //   force: false,
+    //   update: false, // update href.
     // }
     constructor(props) {
         // collapse
         this.collapse = props;
         this.pages = props.pages;
-        this.force = props.force ? props.force : false;
         this.default = props.default;
 
-        if (this.force) {
-            Location.set(this.default);
+        let force = props.force !== undefined ? props.force : false;
+        let update = props.update !== undefined ? props.update : true;
+        let page = this.default;
+        if (update) {
+            let page = Location.get(this.default);
+            if (force) {
+                Location.set(this.default);
+            }
         }
-        let page = Location.get(this.default);
         for (let i = 0;  i < this.pages.length; i++) {
             let v = this.pages[i];
             if (page == v.name) {
@@ -24,7 +29,9 @@ export class Collapse {
                 $(v.id).collapse();
             }
             $(v.id).on('show.bs.collapse', this, function (e) {
-                Location.set(v.name);
+                if (update) {
+                    Location.set(v.name);
+                }
                 $(this).fadeIn('slow');
             });
             $(v.id).on('hide.bs.collapse', this, function (e) {

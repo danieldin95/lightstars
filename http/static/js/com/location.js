@@ -4,31 +4,38 @@ export class Location {
     //   data: '',
     //   func: function (e) {}
     // }
-    static listen = [];
+    static listen(on) {
+        if (!this.on) {
+            this.on = [];
+        }
+        this.on.push(on);
+    }
+
+    static href(value) {
+        if (value) {
+            window.location.href = value;
+        }
+        return window.location.href;
+    }
 
     static set(name) {
-        console.log('Collapse.set', name);
-        let queries = window.location.href.split("?", 2);
-        let path = queries[0];
-        let query = queries.length == 2 ? queries[1] : "";
+        let path = this.href();
         let uri = path.split('#', 2)[0];
 
+        console.log('Collapse.set', path, name);
+
         name = name || "";
-        if (query == "") {
-            window.location.href = uri+'#'+name;
-        } else {
-            window.location.href = uri+'#'+name+"?"+query;
-        }
-        for (let i = 0; i < this.listen.length; i++) {
-            let l = this.listen[i];
-            if (l && l.func) {
-                l.func({data: l.data, name});
+        this.href(uri + '#' + name);
+        for (let i = 0; i < this.on.length; i++) {
+            let on = this.on[i];
+            if (on && on.func) {
+                on.func({data: on.data, name});
             }
         }
     }
 
     static get (name) {
-        let path = window.location.href.split("?", 2)[0];
+        let path = this.href();
         let pages = path.split('#', 2);
 
         name = name || "";

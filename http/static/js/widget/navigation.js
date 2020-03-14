@@ -18,7 +18,6 @@ export class Navigation {
     }
 
 
-
     refresh() {
         let active = (cur) => {
             this.view.find('li').each((i, e) => {
@@ -31,7 +30,7 @@ export class Navigation {
             });
         };
 
-        Location.listen.push({
+        Location.listen({
             data: this,
             func: (e) => {
               active(e.name);

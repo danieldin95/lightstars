@@ -31,7 +31,6 @@ export class Index extends Base {
 
     loading() {
         this.title('Home - LightStar');
-
         new Collapse({
             pages: [
                 {id: '#collapseSys', name: 'system'},
