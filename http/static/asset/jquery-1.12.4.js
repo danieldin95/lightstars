@@ -9897,6 +9897,28 @@ jQuery.each( [ "get", "post", "put", "delete", "patch"], function( i, method ) {
 	};
 } );
 
+jQuery.each( [ "GET", "POST", "PUT", "DELETE"], function( i, method ) {
+		jQuery[ method ] = function( url, data, callback, type ) {
+
+			// shift arguments if data argument was omitted
+			if ( jQuery.isFunction( data ) ) {
+				type = type || callback;
+				callback = data;
+				data = undefined;
+			}
+
+			// The url can be an options object (which then must have .url)
+			return jQuery.ajax( jQuery.extend( {
+				url: url,
+				type: method,
+				dataType: "json",
+				data: data,
+				contentType: "application/json; charset=utf-8",
+				success: callback
+			}, jQuery.isPlainObject( url ) && url ) );
+		};
+	} );
+
 
 jQuery._evalUrl = function( url ) {
 	return jQuery.ajax( {

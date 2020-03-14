@@ -20,7 +20,7 @@ export class HyperApi extends Api {
     }
 
     get(data, func) {
-        $.get(this.url(), {format: 'schema'}, (resp, status) => {
+        $.GET(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));

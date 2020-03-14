@@ -20,7 +20,7 @@ export class NetworkApi extends Api {
     }
 
     list(data, func) {
-        $.get(this.url(), {format: 'schema'}, (resp, status) => {
+        $.GET(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
         }).fail((e) => {
             $(this.tasks).append(Alert.danger((`GET ${this.url()}: ${e.responseText}`)));
@@ -39,7 +39,7 @@ export class NetworkApi extends Api {
                 }
             }
         }
-        $.post(this.url(), JSON.stringify(data), (resp, status) => {
+        $.POST(this.url(), JSON.stringify(data), (resp, status) => {
             $(this.tasks).append(Alert.success(`create ${resp.message} success`));
         }).fail((e) => {
             $(this.tasks).append(Alert.danger((`POST ${this.url()}: ${e.responseText}`)));
@@ -48,7 +48,7 @@ export class NetworkApi extends Api {
 
     delete() {
         this.uuids.forEach((uuid, index, err) => {
-            $.delete(this.url(uuid), (resp, status) => {
+            $.DELETE(this.url(uuid), (resp, status) => {
                 $(this.tasks).append(Alert.success(`remove '${uuid}' ${resp.message} success`));
             }).fail((e) => {
                 $(this.tasks).append(Alert.danger((`DELETE ${this.url(uuid)}: ${e.responseText}`)));
