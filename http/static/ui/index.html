@@ -76,14 +76,11 @@
 
 <script type="module">
     import {Filters} from "/static/js/ctl/filter.js";
-    import {Location} from "/static/js/com/location.js";
     import {Navigation} from "/static/js/widget/navigation.js";
-    import {Index} from "/static/js/widget/container/index.js";
-    import {Guest} from "/static/js/widget/container/guest.js";
+    import {Routes} from "/static/js/routes.js"
 
     $(document).ready(function() {
         let hyper = $('hyper');
-        let page = Location.get();
         let container = "#container";
 
         new Navigation({
@@ -93,50 +90,10 @@
             name: hyper.attr('name'),
         });
         new Filters();
-
-        let routes = [
-            {
-                prefix: "instance/",
-                function: (p) => {
-                    let uuid = p.split('/', 2)[1];
-                    new Guest({
-                        id: container,
-                        uuid: uuid,
-                    });
-                },
-            },
-            {
-                prefix: "datastore/",
-                function: (p) => {
-                    //TODO
-                },
-            },
-            {
-                prefix: "network/",
-                function: (p) => {
-                    //TODO
-                },
-            },
-            {
-                prefix: "",
-                function: (p) => {
-                    new Index({
-                        id: container,
-                        default: "instances",
-                        name: hyper.attr('name'),
-                    });
-                },
-            },
-        ];
-
-        for (let i = 0; i < routes.length; i++) {
-            let rte = routes[i];
-            if (!page.startsWith(rte.prefix)) {
-                continue
-            }
-            rte.function(page);
-            break;
-        }
+        new Routes({
+            hyper: hyper,
+            container: container,
+        });
     });
 </script>
 </body>
