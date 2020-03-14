@@ -4,7 +4,7 @@ import {ProgressBar} from "../com/progressbar.js"
 
 export class UploadApi extends Api {
     // {
-    //  id: '#'
+    //   id: '#'
     //   uuid: [datastore],
     //   tasks: 'tasks',
     //   name: ''
@@ -35,7 +35,7 @@ export class UploadApi extends Api {
             },
             success: (e) => {
                 $(this.id).empty();
-                $(this.tasks).append(Alert.success(`upload iso ${data.message}`));
+                $(this.tasks).append(Alert.success(`upload iso ${e.message}`));
             },
             start: (e) => {
                 $(this.id).html(ProgressBar());
@@ -51,7 +51,7 @@ export class UploadApi extends Api {
             data: data,
             contentType: false,
             processData: false,
-            success: function (file) { event.success(file); },
+            success: function (resp) { event.success(resp); },
             xhr: function () {
                 event.start();
 

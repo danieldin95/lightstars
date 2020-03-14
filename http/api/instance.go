@@ -342,7 +342,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 	// need release created images if fails.
 	xmlData := xmlObj.Encode()
 	if xmlData == "" {
-		DelVolumeAndPool(conf.Name)
+		//DelVolumeAndPool(conf.Name)
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
 		return
 	}
@@ -351,7 +351,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 
 	dom, err := hyper.DomainDefineXML(xmlData)
 	if err != nil {
-		DelVolumeAndPool(conf.Name)
+		//DelVolumeAndPool(conf.Name)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

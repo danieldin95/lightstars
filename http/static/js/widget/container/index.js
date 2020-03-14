@@ -121,12 +121,7 @@ export class Index extends Base {
             </div>
             </div>
         </div>
-    
-        <!-- Tasks -->
-        <div class="card-no-border">
-            <tasks></tasks>
-        </div>
-    
+        
         <!-- Instances -->
         <div id="instances" class="card instances">
             <div class="card-header">
@@ -191,7 +186,6 @@ export class Index extends Base {
             </div>
             </div>
         </div>
-        <div id="process" class="card-no-border"></div>
         <!-- DataStore -->
         <div id="datastores" class="card card-main">
             <div class="card-header">

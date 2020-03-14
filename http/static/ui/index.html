@@ -19,7 +19,18 @@
 <hyper name="{{.Hyper.Name}}">
     <!--Loading-->
 </hyper>
-<div class="container">
+
+<div id="notice" class="container">
+    <!-- Tasks -->
+    <div id="tasks" class="card-no-border">
+        <tasks></tasks>
+    </div>
+    <div id="process" class="card-no-border">
+        <!-- Loading -->
+    </div>
+</div>
+
+<div id="container" class="container">
     <!-- Loading -->
 </div>
 
@@ -73,10 +84,12 @@
     $(document).ready(function() {
         let hyper = $('hyper');
         let page = Location.get();
+        let container = "#container";
 
         new Navigation({
             id: "nav",
             home: ".",
+            container: container,
             name: hyper.attr('name'),
         });
         new Filters();
@@ -87,7 +100,7 @@
                 function: (p) => {
                     let uuid = p.split('/', 2)[1];
                     new Guest({
-                        id: ".container",
+                        id: container,
                         uuid: uuid,
                     });
                 },
@@ -108,7 +121,7 @@
                 prefix: "",
                 function: (p) => {
                     new Index({
-                        id: ".container",
+                        id: container,
                         default: "instances",
                         name: hyper.attr('name'),
                     });
@@ -118,9 +131,11 @@
 
         for (let i = 0; i < routes.length; i++) {
             let rte = routes[i];
-            if (page.startsWith(rte.prefix)) {
-                rte.function(page);
+            if (!page.startsWith(rte.prefix)) {
+                continue
             }
+            rte.function(page);
+            break;
         }
     });
 </script>

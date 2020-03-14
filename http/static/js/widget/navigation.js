@@ -45,12 +45,13 @@ export class Navigation {
             });
 
             let name = this.props.name;
+            let container = this.props.container;
             for (let i = 0; i < this.navs.length; i++) {
                 this.view.find(this.navs[i]).on('click', function (e) {
                     active();
                     $(this).parent('li').addClass("active");
                     new Index({
-                        id: ".container",
+                        id: container,
                         name: name,
                         force: true,
                         default: $(this).attr("data-target"),

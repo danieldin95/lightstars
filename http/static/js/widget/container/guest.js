@@ -91,9 +91,6 @@ export class Guest extends Base {
 
         return template.compile(`
         <instance>
-        <div class="card-no-border no-bottom">
-            <tasks></tasks>
-        </div>
         <div id="instance" class="card instance" data="{{uuid}}" name="{{name}}" cpu="{{cpu}}" mem="{{memory}}">
             <div class="card-header">
                 <div class="card-just-left">
