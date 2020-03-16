@@ -18,7 +18,7 @@ func (br *BridgeMgr) List() []Bridge {
 
 	hyper, err := GetHyper()
 	if err != nil {
-		libstar.Warn("IsoMgr.ListFiles %s", err)
+		libstar.Warn("BridgeMgr.List %s", err)
 		return brs
 	}
 	if nets, err := hyper.Conn.ListAllNetworks(0); err == nil {
@@ -39,6 +39,27 @@ func (br *BridgeMgr) List() []Bridge {
 		}
 	}
 	return brs
+}
+
+func (br *BridgeMgr) Get(name string) (Bridge, error) {
+	b := Bridge{}
+	hyper, err := GetHyper()
+	if err != nil {
+		libstar.Warn("BridgeMgr.Get %s", err)
+		return b, err
+	}
+	if net, err := hyper.Conn.LookupNetworkByName(name); err == nil {
+		br := NewNetworkXMLFromNet(NewNetworkFromVir(net))
+		if br != nil {
+			if br.VirtualPort != nil {
+				b = Bridge{Name: br.Name, Type: br.VirtualPort.Type}
+			} else {
+				b = Bridge{Name: br.Name, Type: "bridge"}
+			}
+		}
+		net.Free()
+	}
+	return b, nil
 }
 
 var BRIDGE = BridgeMgr{

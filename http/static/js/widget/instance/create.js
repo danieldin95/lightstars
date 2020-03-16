@@ -42,7 +42,6 @@ export class InstanceCreate extends FormModal {
             selector: this.view.find("select[name='datastore']"),
             refresh: function () {
                 let selector = this.selector;
-
                 $.getJSON("/api/datastore", function (data) {
                     selector.find("option").remove();
                     data.forEach(function (ele, index) {
@@ -60,13 +59,12 @@ export class InstanceCreate extends FormModal {
         let iface = {
             fresh: function (){
                 let selector = this.selector;
-
                 $.getJSON("/api/bridge", function (data) {
                     selector.find("option").remove();
                     data.forEach(function (e, i) {
                         if (e['type'] == 'bridge') {
                             selector.append(Option(`Linux Bridge #${e['name']}`, e['name']));
-                        } else if (e['type'] == 'openvswith') {
+                        } else if (e['type'] == 'openvswitch') {
                             selector.append(Option(`Open vSwitch #${e['name']}`, e['name']));
                         }
                     });

@@ -4,6 +4,7 @@ import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -215,26 +216,13 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	}
 
 	// interfaces
-	dom.Devices.Interfaces[0] = libvirtc.InterfaceXML{
-		Type: "bridge",
-		Source: libvirtc.InterfaceSourceXML{
-			Bridge: conf.Interface0Source,
-		},
-		Target: libvirtc.InterfaceTargetXML{
-			Dev: libvirtc.INTERFACE.Slot2Dev(1),
-		},
-	}
+	source := conf.Interface0Source
+	br, _ := libvirtn.BRIDGE.Get(source)
+	dom.Devices.Interfaces[0] = Interface2XML(source, "virtio", "0x01", br.Type)
 	switch conf.Family {
 	case "linux":
 		dom.Devices.Interfaces[0].Model = libvirtc.InterfaceModelXML{
 			Type: "virtio",
-		}
-		dom.Devices.Interfaces[0].Address = &libvirtc.AddressXML{
-			Type:     "pci",
-			Domain:   libvirtc.PCI_DOMAIN,
-			Bus:      libvirtc.PCI_INTERFACE_BUS,
-			Slot:     "0x01",
-			Function: libvirtc.PCI_FUNC,
 		}
 	case "windows":
 		dom.Devices.Interfaces[0].Model = libvirtc.InterfaceModelXML{

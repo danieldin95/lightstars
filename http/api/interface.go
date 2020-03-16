@@ -12,31 +12,6 @@ import (
 type Interface struct {
 }
 
-func Interface2XML(conf *schema.Interface) (*libvirtc.InterfaceXML, error) {
-	xml := libvirtc.InterfaceXML{
-		Type: "bridge",
-		Source: libvirtc.InterfaceSourceXML{
-			Bridge: conf.Source,
-		},
-		Model: libvirtc.InterfaceModelXML{
-			Type: conf.Model,
-		},
-		Address: &libvirtc.AddressXML{
-			Type:     "pci",
-			Domain:   libvirtc.PCI_DOMAIN,
-			Bus:      libvirtc.PCI_INTERFACE_BUS,
-			Slot:     conf.Seq,
-			Function: libvirtc.PCI_FUNC,
-		},
-	}
-	if conf.Type == "openvswitch" {
-		xml.VirtualPort = &libvirtc.InterfaceVirtualPortXML{
-			Type: conf.Type,
-		}
-	}
-	return &xml, nil
-}
-
 func (in Interface) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance/{id}/interface", in.GET).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/interface", in.POST).Methods("POST")
@@ -97,12 +72,9 @@ func (in Interface) POST(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 
-	xmlObj, err := Interface2XML(conf)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	xmlObj := Interface2XML(conf.Source, conf.Model, conf.Seq, conf.Type)
 	libstar.Debug("Interface.POST: %s", xmlObj.Encode())
+
 	flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
 	if active, _ := dom.IsActive(); !active {
 		flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG

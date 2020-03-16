@@ -17,9 +17,8 @@ export class InterfaceCreate extends FormModal {
         let iface = {
             fresh: function () {
                 let selector = this.selector;
-
                 $.getJSON("/api/bridge", function (data) {
-                    // selector.find("option").remove();
+                    selector.find("option").remove();
                     data.forEach(function (e, i) {
                         if (e['type'] == 'bridge') {
                             selector.append(Option(`Linux Bridge #${e['name']}`, e['name']));
