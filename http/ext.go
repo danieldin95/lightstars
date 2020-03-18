@@ -40,9 +40,9 @@ func (w WebSocket) GetRemote(id, name, typ string) string {
 	}
 	host := node.Hostname
 	client := libstar.HttpClient{
-		Url: node.Url + "/api/instance/"+id+"?format=schema",
+		Url: node.Url + "/api/instance/" + id + "?format=schema",
 		Auth: libstar.Auth{
-			Type: "basic",
+			Type:     "basic",
 			Password: node.Password,
 			Username: node.Username,
 		},
@@ -83,7 +83,7 @@ func (w WebSocket) GetLocal(id, typ string) string {
 	if _, port := instXml.GraphicsAddr(typ); port != "" {
 		return hyper.Address + ":" + port
 	}
-	return  ""
+	return ""
 }
 
 func (w WebSocket) GetTarget(r *http.Request) string {

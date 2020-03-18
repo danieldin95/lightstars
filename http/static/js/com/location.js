@@ -39,7 +39,7 @@ export class Location {
         name = name || "";
         let path = this.href();
         let page = name;
-        if (path.indexOf('#') > 0) {
+        if (path.indexOf('#') >= 0) {
             page = path.split('#', 2)[1];
         }
         return page.split('?')[0];
@@ -60,18 +60,18 @@ export class Location {
         }
         let path = this.href();
         page = "";
-        if (path.indexOf('#') > 0) {
+        if (path.indexOf('#') >= 0) {
             page = path.split('#', 2)[1];
         }
         let query = "";
-        if (page.indexOf('?') > 0) {
+        if (page.indexOf('?') >= 0) {
             query = page.split("?", 2)[1];
         }
         if (name && typeof value === 'undefined') {
             let values = query.split('&');
             for (let i = 0; i < values.length; i++) {
                 let ele = values[i];
-                if (ele.indexOf('=') <= 0) {
+                if (ele.indexOf('=') < 0) {
                     continue
                 }
                 let [k, v] = ele.split('=', 2);
