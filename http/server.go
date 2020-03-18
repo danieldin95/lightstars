@@ -70,6 +70,7 @@ func (h *Server) LoadRouter() {
 	api.Processor{}.Router(router)
 	api.Memory{}.Router(router)
 	api.Graphics{}.Router(router)
+	api.Zone{}.Router(router)
 }
 
 func (h *Server) SetCert(keyFile, crtFile string) {

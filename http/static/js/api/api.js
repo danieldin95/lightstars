@@ -19,19 +19,19 @@ export class Api {
         } else {
             this.uuids = props.uuids;
         }
+        this.host = Api.host || ""
     }
 
     url(suffix) {
         suffix = suffix || "";
-        if (Api.host) {
-            return `/host/${Api.host}/api${suffix}`
+        if (this.host !== "") {
+            return `/host/${this.host}/api${suffix}`
         }
         return `/api${suffix}`
     }
 
     static Host(name) {
         if (name) {
-            console.log("Api.Host", name);
             this.host = name
         }
         return this.host

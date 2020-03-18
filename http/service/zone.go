@@ -40,3 +40,18 @@ func (l *Zone) Add(h *schema.Host) {
 
 	l.Host[h.Name] = h
 }
+
+func (l *Zone) List() <-chan *schema.Host {
+	c := make(chan *schema.Host, 128)
+	go func() {
+		l.Lock.RLock()
+		defer l.Lock.RUnlock()
+
+		for _, h := range l.Host {
+			c <- h
+		}
+		c <- nil //Finish channel by nil.
+	}()
+
+	return c
+}

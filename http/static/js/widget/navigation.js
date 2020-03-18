@@ -1,7 +1,9 @@
 import {Api} from "../api/api.js"
 import {HyperApi} from "../api/hyper.js";
+import {ZoneApi} from "../api/zone.js";
 import {Location} from "../com/location.js";
 import {Index} from "../widget/container/index.js"
+
 
 export class Navigation {
     // {
@@ -20,6 +22,7 @@ export class Navigation {
 
     refresh() {
         let active = (cur) => {
+            this.active = cur;
             this.view.find('li').each((i, e) => {
                 let href = $(e).find('a').attr("data-target");
                 if (cur && cur === href) {
@@ -44,8 +47,7 @@ export class Navigation {
             this.view = view;
             for (let i = 0; i < this.navs.length; i++) {
                 this.view.find(this.navs[i]).on('click', function (e) {
-                    active();
-                    $(this).parent('li').addClass("active");
+                    active($(this).parent('li a').attr("id"));
                     new Index({
                         id: container,
                         name: name,
@@ -56,14 +58,47 @@ export class Navigation {
             }
 
             active(this.active);
-            this.view.find("#zone a").on('click', function (e) {
-                let host = $(this).attr("data");
-                Api.Host(host)
+            this.zone();
+
+            this.view.find("#fullscreen").on('click', (e) => {
+                this.fullscreen();
             });
 
             $(this.id).html(this.view);
         });
 
+    }
+
+    zone() {
+        let view = this.view;
+        let name = this.props.name;
+        let container = this.props.container;
+
+        new ZoneApi().list(this, (data) => {
+            for (let i = 0; i < data.resp.length; i++) {
+                let name = data.resp[i]['name'];
+                let elem = $(`
+                   <div class="dropdown-divider"></div>
+                   <a class="dropdown-item" data="${name}">${name}</a>
+                `);
+                view.find("#zone").append(elem);
+            }
+            view.find("#zone a").on('click',  this,function (e) {
+                let host = $(this).attr("data");
+                if (host === "") {
+                    view.find("zone-name").text('localhost');
+                } else {
+                    view.find("zone-name").text(host);
+                }
+                Api.Host(host);
+                new Index({
+                    id: container,
+                    name: name,
+                    force: true,
+                    default: e.data.active,
+                });
+            });
+        });
     }
 
     fullscreen() {
@@ -99,12 +134,10 @@ export class Navigation {
                 <li class="nav-item dropdown">
                     <a id="zoneMore" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
-                        Zone
+                        Zone#<zone-name>localhost</zone-name>
                     </a>
                     <div id="zone" class="dropdown-menu" aria-labelledby="zoneMore">
-                        <a class="dropdown-item" data="149">149</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" data="249">249</a>
+                        <a class="dropdown-item" data="">localhost</a>
                     </div>
                 </li>
                 <li class="nav-item">

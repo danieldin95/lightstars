@@ -13,7 +13,7 @@ type Host struct {
 
 func (h Host) Router(router *mux.Router) {
 	router.PathPrefix("/host/{name}/api/").HandlerFunc(h.Handle).Methods("GET")
-	router.PathPrefix("/host/{name}/api/instance").HandlerFunc(h.Handle).Methods("POST")
+	router.PathPrefix("/host/{name}/api/").HandlerFunc(h.Handle).Methods("POST")
 	router.PathPrefix("/host/{name}/api/").HandlerFunc(h.Handle).Methods("PUT")
 	router.PathPrefix("/host/{name}/api/").HandlerFunc(h.Handle).Methods("DELETE")
 }
