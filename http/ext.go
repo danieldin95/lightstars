@@ -3,6 +3,8 @@ package http
 import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http/api"
+	"github.com/danieldin95/lightstar/http/schema"
+	"github.com/danieldin95/lightstar/http/service"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
@@ -26,22 +28,47 @@ type WebSocket struct {
 }
 
 func (w WebSocket) Router(router *mux.Router) {
-	router.Handle("/ext/websocket", websocket.Handler(w.Socket))
+	router.Handle("/ext/websocket", websocket.Handler(w.Handle))
 }
 
-func (w WebSocket) GetTarget(r *http.Request) string {
-	id := api.GetQueryOne(r, "id")
-	if id == "" {
+func (w WebSocket) GetRemote(id, name, typ string) string {
+	libstar.Debug("WebSocket.GetRemote %s://%s@%s", typ, id, name)
+	node := service.SERVICE.Zone.Get(name)
+	if node == nil {
+		libstar.Error("WebSocket.GetRemote %s", name)
 		return ""
 	}
-	format := api.GetQueryOne(r, "type")
-	if format == "" {
-		format = "vnc"
+	host := node.Hostname
+	client := libstar.HttpClient{
+		Url: node.Url + "/api/instance/"+id+"?format=schema",
+		Auth: libstar.Auth{
+			Type: "basic",
+			Password: node.Password,
+			Username: node.Username,
+		},
 	}
-	libstar.Debug("UI.GetTarget %s://%s", format, id)
+	resp, err := client.Do()
+	if err != nil {
+		libstar.Error("WebSocket.GetRemote %s", err)
+		return ""
+	}
+	inst := schema.Instance{}
+	if err := api.GetJSON(resp.Body, &inst); err != nil {
+		libstar.Error("WebSocket.GetRemote %s", name)
+		return ""
+	}
+	port := inst.Vnc.Port
+	if typ == "spice" {
+		port = inst.Spice.Port
+	}
+	return host + ":" + port
+}
+
+func (w WebSocket) GetLocal(id, typ string) string {
+	libstar.Debug("WebSocket.GetLocal %s://%s", typ, id)
 	hyper, err := libvirtc.GetHyper()
 	if err != nil {
-		libstar.Error("UI.GetTarget %s", err)
+		libstar.Error("WebSocket.GetLocal %s", err)
 		return ""
 	}
 	dom, err := hyper.LookupDomainByUUIDString(id)
@@ -53,42 +80,58 @@ func (w WebSocket) GetTarget(r *http.Request) string {
 	if instXml == nil {
 		return ""
 	}
-	if _, port := instXml.GraphicsAddr(format); port != "" {
+	if _, port := instXml.GraphicsAddr(typ); port != "" {
 		return hyper.Address + ":" + port
 	}
-	return ""
+	return  ""
 }
 
-func (w WebSocket) Socket(ws *websocket.Conn) {
+func (w WebSocket) GetTarget(r *http.Request) string {
+	id := api.GetQueryOne(r, "id")
+	if id == "" {
+		return ""
+	}
+	format := api.GetQueryOne(r, "type")
+	if format == "" {
+		format = "vnc"
+	}
+	name := api.GetQueryOne(r, "node")
+	if name == "" {
+		return w.GetLocal(id, format)
+	}
+	return w.GetRemote(id, name, format)
+}
+
+func (w WebSocket) Handle(ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
 
 	target := w.GetTarget(ws.Request())
 	if target == "" {
-		libstar.Error("UI.Socket target not found.")
+		libstar.Error("WebSocket.Handle target not found.")
 		return
 	}
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("UI.Socket dial %s", err)
+		libstar.Error("WebSocket.Handle dial %s", err)
 		return
 	}
 	defer conn.Close()
-	libstar.Info("UI.Socket request by %s", ws.RemoteAddr())
-	libstar.Info("UI.Socket connect to %s", conn.RemoteAddr())
+	libstar.Info("WebSocket.Handle request by %s", ws.RemoteAddr())
+	libstar.Info("WebSocket.Handle connect to %s", conn.RemoteAddr())
 
 	wait := sync.WaitGroup{}
 	wait.Add(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Error("UI.Socket copy from ws %s", err)
+			libstar.Error("WebSocket.Handle copy from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Error("UI.Socket copy from target %s", err)
+			libstar.Error("WebSocket.Handle copy from target %s", err)
 		}
 	}()
 	wait.Wait()

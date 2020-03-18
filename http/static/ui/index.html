@@ -77,11 +77,16 @@
 <script type="module">
     import {Filters} from "/static/js/ctl/filter.js";
     import {Navigation} from "/static/js/widget/navigation.js";
-    import {Routes} from "/static/js/routes.js"
+    import {Routes} from "/static/js/routes.js";
+    import {Location} from "/static/js/com/location.js";
+    import {Api} from "/static/js/api/api.js";
 
     $(document).ready(function() {
         let hyper = $('hyper');
         let container = "#container";
+        let node = Location.query('node');
+
+        Api.Host(node);
 
         new Navigation({
             id: "nav",

@@ -69,10 +69,23 @@ export class Navigation {
 
     }
 
+    zoneName(host, view) {
+        view = view || this.view;
+
+        if (host === "") {
+            view.find("zone-name").text('default');
+        } else {
+            view.find("zone-name").text(host);
+        }
+    }
+
     zone() {
         let view = this.view;
         let name = this.props.name;
         let container = this.props.container;
+        let host = Location.query('node');
+
+        this.zoneName(host);
 
         new ZoneApi().list(this, (data) => {
             for (let i = 0; i < data.resp.length; i++) {
@@ -85,11 +98,9 @@ export class Navigation {
             }
             view.find("#zone a").on('click',  this,function (e) {
                 let host = $(this).attr("data");
-                if (host === "") {
-                    view.find("zone-name").text('localhost');
-                } else {
-                    view.find("zone-name").text(host);
-                }
+
+                e.data.zoneName(host, view);
+                Location.query('node', host);
                 Api.Host(host);
                 new Index({
                     id: container,
@@ -131,15 +142,6 @@ export class Navigation {
         </button>
         <div class="collapse navbar-collapse" id="navbarMore">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a id="zoneMore" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">
-                        Zone#<zone-name>localhost</zone-name>
-                    </a>
-                    <div id="zone" class="dropdown-menu" aria-labelledby="zoneMore">
-                        <a class="dropdown-item" data="">localhost</a>
-                    </div>
-                </li>
                 <li class="nav-item">
                     <a id="system" class="nav-link" data-target="system">Home</a>
                 </li>
@@ -153,6 +155,17 @@ export class Navigation {
                     <a id="network" class="nav-link" data-target="network">Network</a>
                 </li>
             </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a id="zoneMore" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <zone-name>default</zone-name>@zone
+                    </a>
+                    <div id="zone" class="dropdown-menu" aria-labelledby="zoneMore">
+                        <a class="dropdown-item" data="">default</a>
+                    </div>
+                </li>            
+            </ul>            
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a id="userMore" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" 

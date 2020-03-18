@@ -155,11 +155,16 @@ export class InstanceApi extends Api {
 
     console() {
         this.uuids.forEach((uuid, index, err) => {
-            let passwd = '';
+            let password = '';
+            let host = Api.host || "";
             if (this.props.passwd) {
-                passwd = this.props.passwd[uuid];
+                password = this.props.passwd[uuid];
             }
-            window.open("/ui/console?id=" + uuid + "&password=" + passwd);
+            let url = "/ui/console?id=" + uuid + "&password=" + password;
+            if (host !== "") {
+                url += "&node=" + host
+            }
+            window.open(url);
         });
     }
 

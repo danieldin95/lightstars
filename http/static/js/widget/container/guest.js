@@ -1,7 +1,7 @@
 import {Base} from "./base.js"
 import {Utils} from "../../com/utils.js";
-import {Location} from "../../com/location.js";
 import {Instance} from '../../ctl/instance.js';
+import {Api} from "../../api/api.js";
 import {InstanceApi} from "../../api/instance.js";
 import {Collapse} from "../collapse.js";
 import {DiskCreate} from '../disk/create.js';
@@ -85,8 +85,8 @@ export class Guest extends Base {
         let spice = '#';
         if (v.state == 'running') {
             cls = '';
-            url = "/ui/console?id=" + v.uuid + "&password=" + v.password;
-            spice = "/ui/spice?id=" + v.uuid + "&password=" + v.spice.password + "&type=spice";
+            url = "/ui/console?id=" + v.uuid + "&password=" + v.password + "&node=" + Api.host;
+            spice = "/ui/spice?id=" + v.uuid + "&password=" + v.spice.password + "&type=spice&node=" + Api.host;
         }
 
         return template.compile(`

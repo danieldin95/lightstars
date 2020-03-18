@@ -31,7 +31,7 @@ export class Api {
     }
 
     static Host(name) {
-        if (name) {
+        if (typeof name !== 'undefined') {
             this.host = name
         }
         return this.host

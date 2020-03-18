@@ -14,9 +14,9 @@ export class ZoneApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return super.url(`/zone/${uuid}`);
+            return `/api/zone/${uuid}`;
         }
-        return super.url('/zone');
+        return '/api/zone';
     }
 
     list(data, func) {

@@ -22,6 +22,7 @@ func (l *Zone) Load(file string) error {
 			continue
 		}
 		host.Name = name
+		host.Initialize()
 		libstar.Debug("Zone.Load %s", host)
 	}
 	return nil
