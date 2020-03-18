@@ -9,14 +9,14 @@ export class InstanceApi extends Api {
     //   name: ''
     // }
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     url(uuid) {
         if (uuid) {
-            return `/api/instance/${uuid}`
+            return super.url(`/instance/${uuid}`);
         }
-        return '/api/instance'
+        return super.url(`/instance`);
     }
 
     list(data, func) {

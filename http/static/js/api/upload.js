@@ -16,9 +16,9 @@ export class UploadApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return `/api/upload/${uuid}`
+            return super.url(`/upload/${uuid}`);
         }
-        return `/api/upload`
+        return super.url(`/upload`);
     }
 
     //

@@ -161,7 +161,7 @@ func GetAuth(req *http.Request) (name, pass string, ok bool) {
 func GetUser(req *http.Request) (schema.User, bool) {
 	name, _, _ := GetAuth(req)
 	libstar.Debug("GetUser %s", name)
-	return service.USERS.Get(name)
+	return service.SERVICE.Users.Get(name)
 }
 
 func ParseBasicAuth(auth string) (username, password string, ok bool) {

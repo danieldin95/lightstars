@@ -17,9 +17,9 @@ export class DiskApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return `/api/instance/${this.inst}/disk/${uuid}`
+            return super.url(`/instance/${this.inst}/disk/${uuid}`);
         }
-        return `/api/instance/${this.inst}/disk`
+        return super.url(`/instance/${this.inst}/disk`);
     }
 
     list(data, func) {

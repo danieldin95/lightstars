@@ -91,7 +91,7 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		name := r.FormValue("name")
 		pass := r.FormValue("password")
-		u, ok := service.USERS.Get(name)
+		u, ok := service.SERVICE.Users.Get(name)
 		if !ok || u.Password != pass {
 			data.Error = "Invalid username or password."
 		} else {

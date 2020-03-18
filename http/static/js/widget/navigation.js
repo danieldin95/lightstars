@@ -1,3 +1,4 @@
+import {Api} from "../api/api.js"
 import {HyperApi} from "../api/hyper.js";
 import {Location} from "../com/location.js";
 import {Index} from "../widget/container/index.js"
@@ -16,7 +17,6 @@ export class Navigation {
 
         this.refresh();
     }
-
 
     refresh() {
         let active = (cur) => {
@@ -37,15 +37,11 @@ export class Navigation {
             },
         });
         new HyperApi().get(this, (e) => {
-            this.view = $(this.render(e.resp));
-            active(this.active);
-
-            this.view.find("#fullscreen").on('click', (e) => {
-                this.fullscreen();
-            });
-
+            let view = $(this.render(e.resp));
             let name = this.props.name;
             let container = this.props.container;
+
+            this.view = view;
             for (let i = 0; i < this.navs.length; i++) {
                 this.view.find(this.navs[i]).on('click', function (e) {
                     active();
@@ -58,6 +54,13 @@ export class Navigation {
                     });
                 })
             }
+
+            active(this.active);
+            this.view.find("#zone a").on('click', function (e) {
+                let host = $(this).attr("data");
+                Api.Host(host)
+            });
+
             $(this.id).html(this.view);
         });
 
@@ -93,6 +96,17 @@ export class Navigation {
         </button>
         <div class="collapse navbar-collapse" id="navbarMore">
             <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a id="zoneMore" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        Zone
+                    </a>
+                    <div id="zone" class="dropdown-menu" aria-labelledby="zoneMore">
+                        <a class="dropdown-item" data="149">149</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" data="249">249</a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a id="system" class="nav-link" data-target="system">Home</a>
                 </li>
@@ -108,11 +122,11 @@ export class Navigation {
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarMore" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">
+                    <a id="userMore" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" 
+                        aria-haspopup="true" aria-expanded="false">
                         {{user.name}}@{{hyper.host}}
                     </a>
-                    <div class="dropdown-menu dropdown-left" aria-labelledby="navbarMore">
+                    <div class="dropdown-menu dropdown-left" aria-labelledby="userMore">
                         <a id="fullscreen" class="dropdown-item">Full screen</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Setting</a>

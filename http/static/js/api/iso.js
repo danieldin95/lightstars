@@ -2,7 +2,7 @@ import {Api} from "./api.js"
 import {Alert} from "../com/alert.js";
 
 
-export class HyperApi extends Api {
+export class IsoApi extends Api {
     // {
     //   uuids: [],
     //   tasks: 'tasks',
@@ -14,14 +14,17 @@ export class HyperApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return super.url(`/hyper/${uuid}`);
+            return super.url(`/iso/${uuid}`);
         }
-        return super.url('/hyper');
+        return super.url('/iso');
     }
 
-    get(data, func) {
-        $.GET(this.url(), {format: 'schema'}, (resp, status) => {
-            func({data, resp});
+    list(datastore, func) {
+        if (typeof data == "function") {
+            func = data;
+        }
+        $.GET(this.url(), {datastore}, (resp, status) => {
+            func({datastore, resp});
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
         });

@@ -1,0 +1,10 @@
+<pool type="iscsi">
+    <name>20</name>
+    <source>
+        <host name="192.168.4.249"/>
+        <device path="iqn.2010-05.com.example.server1:disk0"/>
+    </source>
+    <target>
+        <path>/dev/disk/by-path</path>
+    </target>
+</pool>

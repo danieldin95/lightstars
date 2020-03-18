@@ -16,9 +16,9 @@ export class GraphicsApi extends Api {
 
     url(inst, uuid) {
         if (uuid) {
-            return `/api/instance/${this.inst}/graphics/${uuid}`
+            return super.url(`/instance/${this.inst}/graphics/${uuid}`);
         }
-        return `/api/instance/${this.inst}/graphics`
+        return super.url(`/instance/${this.inst}/graphics`);
     }
 
     list(data, func) {

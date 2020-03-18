@@ -1,7 +1,9 @@
 import {Option} from "../option.js";
-import {Alert} from "../../com/alert.js";
 import {FormModal} from "../form/modal.js";
 import {FormWizard} from "../form/wizard.js";
+import {BridgeApi} from "../../api/bridge.js";
+import {IsoApi} from "../../api/iso.js"
+import {DataStoreApi} from "../../api/datastore.js";
 
 
 export class InstanceCreate extends FormModal {
@@ -26,14 +28,13 @@ export class InstanceCreate extends FormModal {
             fresh: function (datastore) {
                 let selector = this.selector;
 
-                $.getJSON("/api/iso", {datastore: datastore}, function (data) {
+                new IsoApi().list(datastore, (data) => {
                     selector.find("option").remove();
-                    data.forEach(function (ele, index) {
+                    for (let i = 0; i < data.resp.length; i++) {
+                        let ele = data.resp[i];
                         selector.append(Option(ele['path'], ele['path']));
-                    });
+                    }
                     selector.append(Option('CDROM device:/sr0', '/dev/sr0'));
-                }).fail(function (e) {
-                    $("tasks").append(Alert.danger(`${this.type} ${this.url}: ${e.responseText}`));
                 });
             },
         };
@@ -42,16 +43,16 @@ export class InstanceCreate extends FormModal {
             selector: this.view.find("select[name='datastore']"),
             refresh: function () {
                 let selector = this.selector;
-                $.getJSON("/api/datastore", function (data) {
+                new DataStoreApi().list(this,  (data) => {
+                    let resp = data.resp;
                     selector.find("option").remove();
-                    data.forEach(function (ele, index) {
+                    for (let i = 0; i < resp.items.length; i++) {
+                        let ele = resp.items[i];
                         selector.append(Option(ele['name'], ele['path']));
-                    });
-                    if (data.length > 0) {
-                        iso.fresh(data[0]['name']);
                     }
-                }).fail(function (e) {
-                    $("tasks").append(Alert.danger(`${this.type} ${this.url}: ${e.responseText}`));
+                    if (resp.items.length > 0) {
+                        iso.fresh(resp.items[0]['name']);
+                    }
                 });
             },
         };
@@ -59,17 +60,17 @@ export class InstanceCreate extends FormModal {
         let iface = {
             fresh: function (){
                 let selector = this.selector;
-                $.getJSON("/api/bridge", function (data) {
+
+                new BridgeApi().list(this, (data) => {
                     selector.find("option").remove();
-                    data.forEach(function (e, i) {
-                        if (e['type'] == 'bridge') {
-                            selector.append(Option(`Linux Bridge #${e['name']}`, e['name']));
+                    for (let i = 0; i < data.resp.length; i++) {
+                        let ele = data.resp[i];
+                        if (ele['type'] == 'bridge') {
+                            selector.append(Option(`Linux Bridge #${ele['name']}`, ele['name']));
                         } else if (e['type'] == 'openvswitch') {
-                            selector.append(Option(`Open vSwitch #${e['name']}`, e['name']));
+                            selector.append(Option(`Open vSwitch #${ele['name']}`, ele['name']));
                         }
-                    });
-                }).fail(function (e) {
-                    $("tasks").append(Alert.danger(`${this.type} ${this.url}: ${e.responseText}`));
+                    }
                 });
             },
             selector: this.view.find("select[name='interface0Source']"),

@@ -1,7 +1,6 @@
 import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
-import {Alert} from "../../com/alert.js";
-
+import {BridgeApi} from "../../api/bridge.js";
 
 export class InterfaceCreate extends FormModal {
     //
@@ -17,17 +16,17 @@ export class InterfaceCreate extends FormModal {
         let iface = {
             fresh: function () {
                 let selector = this.selector;
-                $.getJSON("/api/bridge", function (data) {
+
+                new BridgeApi().list((data) => {
                     selector.find("option").remove();
-                    data.forEach(function (e, i) {
+                    for (let i = 0; i < data.resp.length; i++) {
+                        let e = data.resp[i];
                         if (e['type'] == 'bridge') {
                             selector.append(Option(`Linux Bridge #${e['name']}`, e['name']));
                         } else if (e['type'] == 'openvswitch') {
                             selector.append(Option(`Open vSwitch #${e['name']}`, e['name']));
                         }
-                    });
-                }).fail(function (e) {
-                    $("tasks").append(Alert.danger(`${this.type} ${this.url}: ${e.responseText}`));
+                    }
                 });
             },
             selector: this.view.find("select[name='source']"),

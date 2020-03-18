@@ -16,9 +16,9 @@ export class InterfaceApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return `/api/instance/${this.inst}/interface/${uuid}`
+            return super.url(`/instance/${this.inst}/interface/${uuid}`);
         }
-        return `/api/instance/${this.inst}/interface`
+        return super.url(`/instance/${this.inst}/interface`);
     }
 
     list(data, func) {

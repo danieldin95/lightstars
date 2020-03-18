@@ -30,7 +30,6 @@ func NewServer(listen, staticDir, authFile string) (h *Server) {
 		pubDir:    staticDir,
 		adminFile: authFile,
 	}
-	service.USERS.Load(authFile)
 	api.SetStatic(h.pubDir)
 	return
 }
@@ -45,14 +44,16 @@ func (h *Server) Router() *mux.Router {
 
 func (h *Server) LoadRouter() {
 	router := h.Router()
-	h.router.NotFoundHandler = http.HandlerFunc(h.Handle404)
-	h.router.Use(h.Middleware)
+	router.NotFoundHandler = http.HandlerFunc(h.Handle404)
+	router.Use(h.Middleware)
 
 	// static files
 	Static{}.Router(router)
 	Download{}.Router(router)
 	// proxy websocket
 	WebSocket{}.Router(router)
+	// zone router
+	Host{}.Router(router)
 	// ui router
 	UI{}.Router(router)
 	Login{}.Router(router)
@@ -108,7 +109,7 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 	libstar.Print("Server.IsAuth %s:%s", name, pass)
 
 	// auth by password and name
-	user, ok := service.USERS.Get(name)
+	user, ok := service.SERVICE.Users.Get(name)
 	if !ok || user.Password != pass {
 		return false
 	}

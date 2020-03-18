@@ -7,31 +7,32 @@ import (
 )
 
 type Users struct {
-	lock  sync.RWMutex
-	file  string
-	users map[string]*schema.User `json:"user"`
+	Lock  sync.RWMutex
+	File  string
+	Users map[string]*schema.User `json:"user"`
 }
 
 func (u Users) Save() error {
-	u.lock.RLock()
-	defer u.lock.RUnlock()
+	u.Lock.RLock()
+	defer u.Lock.RUnlock()
 
-	if err := libstar.JSON.MarshalSave(&u.users, u.file, true); err != nil {
+	if err := libstar.JSON.MarshalSave(&u.Users, u.File, true); err != nil {
 		libstar.Error("Server.LoadToken: %s", err)
 		return err
 	}
 	return nil
 }
 
-func (u Users) Load(file string) {
-	u.lock.Lock()
-	defer u.lock.Unlock()
+func (u Users) Load(file string) error {
+	u.Lock.Lock()
+	defer u.Lock.Unlock()
 
-	u.file = file
-	if err := libstar.JSON.UnmarshalLoad(&u.users, file); err != nil {
+	u.File = file
+	if err := libstar.JSON.UnmarshalLoad(&u.Users, file); err != nil {
 		libstar.Error("Users.Load: %s", err)
+		return err
 	}
-	for name, value := range u.users {
+	for name, value := range u.Users {
 		if value == nil {
 			continue
 		}
@@ -39,19 +40,16 @@ func (u Users) Load(file string) {
 			value.Name = name
 		}
 	}
+	return nil
 }
 
 func (u Users) Get(name string) (schema.User, bool) {
-	u.lock.RLock()
-	defer u.lock.RUnlock()
+	u.Lock.RLock()
+	defer u.Lock.RUnlock()
 
-	user, ok := u.users[name]
+	user, ok := u.Users[name]
 	if user == nil {
 		return schema.User{}, false
 	}
 	return *user, ok
-}
-
-var USERS = Users{
-	users: make(map[string]*schema.User, 32),
 }

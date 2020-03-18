@@ -13,8 +13,8 @@ export class ImageApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return `/api/image/${uuid}`
+            return super.url(`/image/${uuid}`);
         }
-        return '/api/image'
+        return super.url('/image');
     }
 }

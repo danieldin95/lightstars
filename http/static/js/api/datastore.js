@@ -14,12 +14,15 @@ export class DataStoreApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return `/api/datastore/${uuid}`
+            return super.url(`/datastore/${uuid}`);
         }
-        return '/api/datastore'
+        return super.url('/datastore');
     }
 
     list(data, func) {
+        if (typeof data == "function") {
+            func = data;
+        }
         $.GET(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
         }).fail((e) => {

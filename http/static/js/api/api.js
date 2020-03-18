@@ -10,21 +10,30 @@ export class Api {
         if (!props) {
             props = {};
         }
-        if (props.tasks) {
-            this.tasks = props.tasks;
-        } else {
-            this.tasks = "tasks";
-        }
+
+        this.name = props.name;
+        this.props = props;
+        this.tasks = props.tasks || "tasks";
         if (typeof props.uuids == "string") {
             this.uuids = [props.uuids];
         } else {
             this.uuids = props.uuids;
         }
-        this.name = props.name;
-        this.props = props;
     }
 
-    url(data) {
-        return '/api/${data}'
+    url(suffix) {
+        suffix = suffix || "";
+        if (Api.host) {
+            return `/host/${Api.host}/api${suffix}`
+        }
+        return `/api${suffix}`
+    }
+
+    static Host(name) {
+        if (name) {
+            console.log("Api.Host", name);
+            this.host = name
+        }
+        return this.host
     }
 }

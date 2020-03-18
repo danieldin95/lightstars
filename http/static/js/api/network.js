@@ -14,9 +14,9 @@ export class NetworkApi extends Api {
 
     url(uuid) {
         if (uuid) {
-            return `/api/network/${uuid}`
+            return super.url(`/network/${uuid}`);
         }
-        return '/api/network'
+        return super.url('/network');
     }
 
     list(data, func) {

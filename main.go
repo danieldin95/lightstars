@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http"
+	"github.com/danieldin95/lightstar/http/service"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/danieldin95/lightstar/storage/libvirts"
@@ -56,6 +57,7 @@ func main() {
 	libstar.Init(cfg.LogFile, cfg.Verbose)
 	// initialize storage
 	libvirts.DATASTOR.Init()
+	service.SERVICE.Load(cfg.ConfDir)
 
 	libvirtc.SetHyper(cfg.Hyper)
 	libvirts.SetHyper(cfg.Hyper)
