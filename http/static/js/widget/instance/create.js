@@ -48,7 +48,7 @@ export class InstanceCreate extends FormModal {
                     selector.find("option").remove();
                     for (let i = 0; i < resp.items.length; i++) {
                         let ele = resp.items[i];
-                        selector.append(Option(ele['name'], ele['path']));
+                        selector.append(Option(ele['name'], ele['name']));
                     }
                     if (resp.items.length > 0) {
                         iso.fresh(resp.items[0]['name']);
@@ -67,7 +67,7 @@ export class InstanceCreate extends FormModal {
                         let ele = data.resp[i];
                         if (ele['type'] == 'bridge') {
                             selector.append(Option(`Linux Bridge #${ele['name']}`, ele['name']));
-                        } else if (e['type'] == 'openvswitch') {
+                        } else if (ele['type'] == 'openvswitch') {
                             selector.append(Option(`Open vSwitch #${ele['name']}`, ele['name']));
                         }
                     }

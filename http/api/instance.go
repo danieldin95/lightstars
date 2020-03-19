@@ -272,11 +272,25 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		} else {
-			for _, inst := range user.Instances {
-				if dom, err := libvirtc.LookupDomainByUUIDName(inst); err == nil {
-					int := schema.NewInstance(*dom)
-					list.Items = append(list.Items, int)
-					dom.Free()
+			if domains, err := libvirtc.ListDomains(); err == nil {
+				for _, d := range domains {
+					has := false
+					inst := schema.NewInstance(d)
+
+					if strings.HasPrefix(inst.Name, user.Name + ".") {
+						has = true
+					} else {
+						for _, name := range user.Instances {
+							if inst.Name == name {
+								has = true
+								break
+							}
+						}
+					}
+					if has {
+						list.Items = append(list.Items, inst)
+					}
+					d.Free()
 				}
 			}
 		}

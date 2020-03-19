@@ -20,8 +20,8 @@ export class IsoApi extends Api {
     }
 
     list(datastore, func) {
-        if (typeof data == "function") {
-            func = data;
+        if (typeof datastore == "function") {
+            func = datastore;
         }
         $.GET(this.url(), {datastore}, (resp, status) => {
             func({datastore, resp});
