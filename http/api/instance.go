@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/network/libvirtn"
+	"github.com/danieldin95/lightstar/schema"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -277,7 +277,7 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 					has := false
 					inst := schema.NewInstance(d)
 
-					if strings.HasPrefix(inst.Name, user.Name + ".") {
+					if strings.HasPrefix(inst.Name, user.Name+".") {
 						has = true
 					} else {
 						for _, name := range user.Instances {

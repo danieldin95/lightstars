@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/network/libvirtn"
+	"github.com/danieldin95/lightstar/schema"
 	"github.com/gorilla/mux"
 	"net"
 	"net/http"

@@ -3,8 +3,8 @@ package http
 import (
 	"context"
 	"github.com/danieldin95/lightstar/http/api"
-	"github.com/danieldin95/lightstar/http/service"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/service"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/gorilla/mux"
 	"net/http"

@@ -2,8 +2,8 @@ package http
 
 import (
 	"github.com/danieldin95/lightstar/http/api"
-	"github.com/danieldin95/lightstar/http/service"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/service"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -39,5 +39,6 @@ func (h Host) Handle(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	pri.Initialize()
+	// TODO filter response.
 	pri.Handler(w, r)
 }

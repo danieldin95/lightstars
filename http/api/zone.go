@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/http/schema"
-	"github.com/danieldin95/lightstar/http/service"
+	"github.com/danieldin95/lightstar/schema"
+	"github.com/danieldin95/lightstar/service"
 	"github.com/gorilla/mux"
 	"net/http"
 )

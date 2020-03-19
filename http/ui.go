@@ -3,9 +3,9 @@ package http
 import (
 	"encoding/base64"
 	"github.com/danieldin95/lightstar/http/api"
-	"github.com/danieldin95/lightstar/http/schema"
-	"github.com/danieldin95/lightstar/http/service"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/schema"
+	"github.com/danieldin95/lightstar/service"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"

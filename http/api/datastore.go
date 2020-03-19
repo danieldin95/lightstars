@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/http/schema"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/schema"
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"

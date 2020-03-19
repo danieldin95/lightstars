@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/http/schema"
+	"github.com/danieldin95/lightstar/schema"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
