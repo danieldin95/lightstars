@@ -1,5 +1,5 @@
+import {Api} from "../../api/api.js";
 import {DataStoreApi} from "../../api/datastore.js";
-
 
 export class DataStoreTable {
     // {
@@ -28,12 +28,14 @@ export class DataStoreTable {
     }
 
     render(data) {
+        let prefix = Api.prefix();
+
         return template.compile(`
         {{each items v i}}
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
                 <td>{{i+1}}</td>
-                <td><a href="/ext/files/{{v.id}}">{{v.uuid}}</a></td>
+                <td><a href="${prefix}/ext/files/{{v.id}}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
                 <td>{{v.source}}</td>
                 <td>{{v.capacity | prettyByte}}</td>

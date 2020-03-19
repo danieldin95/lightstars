@@ -30,6 +30,13 @@ export class Api {
         return `/api${suffix}`
     }
 
+    static prefix() {
+        if (this.host) {
+            return `/host/${this.host}`
+        }
+        return ""
+    }
+
     static Host(name) {
         if (typeof name !== 'undefined') {
             this.host = name

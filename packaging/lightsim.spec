@@ -1,4 +1,4 @@
-Name: lightstar
+Name: lightsim
 Version: 0.7.05
 Release: 1%{?dist}
 Summary: LightStar's Project Software
@@ -6,8 +6,7 @@ Group: Applications/Communications
 License: GPL 3.0
 URL: https://github.com/danieldin95/lightstar
 BuildRequires: go
-Requires: libvirt-daemon libvirt qemu-kvm qemu-img
-Conflicts: lightsim
+Conflicts: lightstar
 
 %define _source_dir ${RPM_SOURCE_DIR}/lightstar-%{version}
 
@@ -27,14 +26,13 @@ OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/ca -conf /etc
 EOF
 
 mkdir -p %{buildroot}/usr/lib/systemd/system
-cp %_source_dir/packaging/lightstar.service %{buildroot}/usr/lib/systemd/system
+cp %_source_dir/packaging/lightsim.service %{buildroot}/usr/lib/systemd/system
 
 mkdir -p %{buildroot}/var/lightstar
 cp -R %_source_dir/resource/ca %{buildroot}/var/lightstar
 cp -R %_source_dir/http/static %{buildroot}/var/lightstar
 
 mkdir -p %{buildroot}/etc/lightstar
-mkdir -p %{buildroot}/lightstar/datastore/01
 
 %pre
 firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {
@@ -49,4 +47,3 @@ firewall-cmd --reload || :
 /usr/bin/*
 /usr/lib/systemd/system/*
 /var/lightstar
-/lightstar/datastore

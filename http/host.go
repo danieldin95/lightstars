@@ -16,6 +16,7 @@ func (h Host) Router(router *mux.Router) {
 	router.PathPrefix("/host/{name}/api/").HandlerFunc(h.Handle).Methods("POST")
 	router.PathPrefix("/host/{name}/api/").HandlerFunc(h.Handle).Methods("PUT")
 	router.PathPrefix("/host/{name}/api/").HandlerFunc(h.Handle).Methods("DELETE")
+	router.PathPrefix("/host/{name}/ext/").HandlerFunc(h.Handle).Methods("GET")
 }
 
 func (h Host) Handle(w http.ResponseWriter, r *http.Request) {

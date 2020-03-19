@@ -16,7 +16,7 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
 </nav>
 
-<hyper name="{{.Hyper.Name}}">
+<hyper name="{{.Hyper.Name}}" default="{{.Default}}">
     <!--Loading-->
 </hyper>
 
@@ -84,8 +84,9 @@
     $(document).ready(function() {
         let hyper = $('hyper');
         let container = "#container";
-        let node = Location.query('node');
+        let node = hyper.attr('default');
 
+        Location.query('node', node);
         Api.Host(node);
 
         new Navigation({

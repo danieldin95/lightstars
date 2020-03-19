@@ -13,7 +13,9 @@ lightstar:
 
 rpm:
 	./packaging/auto.sh
+	rpmbuild -ba packaging/lightsim.spec
 	rpmbuild -ba packaging/lightstar.spec
+	cp -rvf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm .
 	cp -rvf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm .
 
 

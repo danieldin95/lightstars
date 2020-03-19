@@ -15,6 +15,7 @@ export class Navigation {
         this.home = props.home;
         this.props = props;
         this.active = Location.get("instances");
+        console.log("Navigation.constructor", this.active);
         this.navs = ["#system", "#instances", "#datastore", "#network"];
 
         this.refresh();
@@ -86,14 +87,22 @@ export class Navigation {
         let host = Location.query('node');
 
         this.zoneName(host);
-
         new ZoneApi().list(this, (data) => {
+            view.find("#zone").empty();
             for (let i = 0; i < data.resp.length; i++) {
-                let name = data.resp[i]['name'];
+                let host = data.resp[i];
+                let name = host['name'];
+                let value = host['name'];
+                if (host['url'] === '') {
+                    value = '';
+                }
                 let elem = $(`
                    <div class="dropdown-divider"></div>
-                   <a class="dropdown-item" data="${name}">${name}</a>
+                   <a class="dropdown-item" data="${value}">${name}</a>
                 `);
+                if (i === 0) {
+                    elem = $(`<a class="dropdown-item" data="${value}">${name}</a>`);
+                }
                 view.find("#zone").append(elem);
             }
             view.find("#zone a").on('click',  this,function (e) {

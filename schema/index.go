@@ -49,4 +49,5 @@ type Index struct {
 	Instances  []Instance  `json:"instances"`
 	DataStores []DataStore `json:"datastores"`
 	Networks   []Network   `json:"networks"`
+	Default    string      `json:"default"`
 }

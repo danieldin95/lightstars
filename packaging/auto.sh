@@ -7,6 +7,7 @@ version=$(cat VERSION)
 mkdir -p ~/rpmbuild/SOURCES
 
 # update version
+sed -i  -e "s/Version:.*/Version:\ ${version}/" ./packaging/lightsim.spec
 sed -i  -e "s/Version:.*/Version:\ ${version}/" ./packaging/lightstar.spec
 
 # link source

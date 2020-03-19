@@ -29,6 +29,10 @@ func (ui UI) Index(w http.ResponseWriter, r *http.Request) {
 
 func (ui UI) Home(w http.ResponseWriter, r *http.Request) {
 	index := schema.Index{}
+	deft := service.SERVICE.Zone.Get("default")
+	if deft != nil && deft.Url != "" {
+		index.Default = "default"
+	}
 	index.User, _ = api.GetUser(r)
 	libstar.Debug("UI.Home %v", index.User)
 	index.Version = schema.NewVersion()

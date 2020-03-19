@@ -38,11 +38,12 @@ export class Location {
     static get (name) {
         name = name || "";
         let path = this.href();
-        let page = name;
+        let rawPage = '';
         if (path.indexOf('#') >= 0) {
-            page = path.split('#', 2)[1];
+            rawPage = path.split('#', 2)[1];
         }
-        return page.split('?')[0];
+        let cur = rawPage.split('?')[0];
+        return cur ? cur : name;
     }
 
     static url() {
@@ -75,7 +76,7 @@ export class Location {
                     continue
                 }
                 let [k, v] = ele.split('=', 2);
-                if (k == name) {
+                if (k === name) {
                     return v;
                 }
             }

@@ -5,6 +5,7 @@ import (
 	"github.com/danieldin95/lightstar/service"
 	"github.com/gorilla/mux"
 	"net/http"
+	"sort"
 )
 
 type Zone struct {
@@ -22,6 +23,9 @@ func (z Zone) GET(w http.ResponseWriter, r *http.Request) {
 		}
 		hosts = append(hosts, *h)
 	}
+	sort.SliceStable(hosts, func(i, j int) bool {
+		return hosts[i].Name < hosts[j].Name
+	})
 	ResponseJson(w, hosts)
 }
 
