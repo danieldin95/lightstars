@@ -1,4 +1,4 @@
-package api
+package service
 
 import (
 	"github.com/danieldin95/lightstar/libstar"
@@ -6,33 +6,29 @@ import (
 	"strings"
 )
 
-type RouteItem struct {
+type RuleValue struct {
 	Value string
 	Type  string // argument or path
 }
 
-type RouteMatch struct {
-	Path   string
-	Values []RouteItem
-	Type   string // prefix or path
-	Method string
-	Action string // permit or deny
+type Rule struct {
+	Path   string      `json:"path"`
+	Values []RuleValue `json:"-"`
+	Type   string      `json:"type"`   // prefix, suffix or path
+	Method string      `json:"method"` // get, post, put, delete
+	Action string      `json:"action"` // permit or deny
 }
 
 type RouteMatcher struct {
-	Match []RouteMatch
+	Match []Rule
 }
 
-var ROUTER = &RouteMatcher{
-	Match: make([]RouteMatch, 0, 32),
-}
-
-func (r *RouteMatcher) Add(m RouteMatch) {
+func (r *RouteMatcher) Add(m Rule) {
 	if m.Values == nil {
-		m.Values = make([]RouteItem, 0, 32)
+		m.Values = make([]RuleValue, 0, 32)
 	}
 	for _, v := range strings.Split(m.Path, "/") {
-		ri := RouteItem{
+		ri := RuleValue{
 			Value: v,
 			Type:  "path",
 		}
@@ -45,15 +41,29 @@ func (r *RouteMatcher) Add(m RouteMatch) {
 	r.Match = append(r.Match, m)
 }
 
-func HasPermission(req *http.Request) bool {
-	user, _ := GetUser(req)
-	if user.Type == "admin" {
-		return true
+type Permission struct {
+	Guest RouteMatcher `json:"guest"`
+}
+
+func (p *Permission) Load(file string) error {
+	rules := struct {
+		Guest []Rule `json:"guest"`
+	}{}
+	if err := libstar.JSON.UnmarshalLoad(&rules, file); err != nil {
+		return err
 	}
+	// guest permission.
+	for _, v := range rules.Guest {
+		p.Guest.Add(v)
+	}
+	return nil
+}
+
+func (p *Permission) Has(req *http.Request) bool {
 	path := req.URL.Path
 	values := strings.Split(path, "/")
-	for _, k := range ROUTER.Match {
-		if req.Method != k.Method {
+	for _, k := range p.Guest.Match {
+		if req.Method != strings.ToUpper(k.Method) {
 			continue
 		}
 		switch k.Type {
@@ -87,25 +97,4 @@ func HasPermission(req *http.Request) bool {
 		}
 	}
 	return false
-}
-
-func init() {
-	// guest permission.
-	ROUTER.Add(RouteMatch{
-		Path:   "/",
-		Type:   "prefix",
-		Method: "GET",
-		Action: "permit",
-	})
-	ROUTER.Add(RouteMatch{
-		Path:   "/ui/login",
-		Type:   "prefix",
-		Method: "POST",
-		Action: "permit",
-	})
-	ROUTER.Add(RouteMatch{
-		Path:   "/api/instance/{id}",
-		Method: "PUT",
-		Action: "permit",
-	})
 }

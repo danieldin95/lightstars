@@ -17,7 +17,6 @@ func (u Users) Save() error {
 	defer u.Lock.RUnlock()
 
 	if err := libstar.JSON.MarshalSave(&u.Users, u.File, true); err != nil {
-		libstar.Error("Server.LoadToken: %s", err)
 		return err
 	}
 	return nil
@@ -29,7 +28,6 @@ func (u Users) Load(file string) error {
 
 	u.File = file
 	if err := libstar.JSON.UnmarshalLoad(&u.Users, file); err != nil {
-		libstar.Error("Users.Load: %s", err)
 		return err
 	}
 	for name, value := range u.Users {

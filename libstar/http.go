@@ -7,10 +7,10 @@ import (
 )
 
 type HttpClient struct {
-	Method string
-	Url string
-	Payload io.Reader
-	Auth Auth
+	Method    string
+	Url       string
+	Payload   io.Reader
+	Auth      Auth
 	TlsConfig *tls.Config
 }
 

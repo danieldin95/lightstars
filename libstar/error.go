@@ -16,7 +16,7 @@ func NewErr(message string, v ...interface{}) (e *Err) {
 }
 
 func (e *Err) String() string {
-	return fmt.Sprintf("code: %d, message: %s", e.Code, e.Message)
+	return fmt.Sprintf("%d: %s", e.Code, e.Message)
 }
 
 func (e *Err) Error() string {

@@ -33,12 +33,19 @@ cp -R %_source_dir/resource/ca %{buildroot}/var/lightstar
 cp -R %_source_dir/http/static %{buildroot}/var/lightstar
 
 mkdir -p %{buildroot}/etc/lightstar
+cp -R %_source_dir/resource/*.json.example %{buildroot}/etc/lightstar
 
 %pre
 firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {
   echo "You need allowed TCP port 10080 manually."
 }
 firewall-cmd --reload || :
+
+%post
+[ -e '/etc/lightstar/permission.json' ] || {
+  cp -rvf /etc/lightstar/permission.json.example /etc/lightstar/permission.json
+}
+
 
 %files
 %defattr(-,root,root)

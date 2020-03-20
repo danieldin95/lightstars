@@ -135,7 +135,8 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h.LogRequest(r)
 		if h.IsAuth(w, r) {
-			if api.HasPermission(r) {
+			user, _ := api.GetUser(r)
+			if user.Type == "admin" || service.SERVICE.Permission.Has(r) {
 				next.ServeHTTP(w, r)
 			} else {
 				http.Error(w, "Request not allowed", http.StatusForbidden)

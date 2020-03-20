@@ -6,8 +6,9 @@ import (
 )
 
 type Service struct {
-	Zone  Zone
-	Users Users
+	Zone       Zone
+	Users      Users
+	Permission Permission
 }
 
 var SERVICE = Service{
@@ -16,6 +17,11 @@ var SERVICE = Service{
 	},
 	Users: Users{
 		Users: make(map[string]*schema.User, 32),
+	},
+	Permission: Permission{
+		Guest: RouteMatcher{
+			Match: make([]Rule, 0, 32),
+		},
 	},
 }
 
@@ -28,4 +34,8 @@ func (s *Service) Load(path string) {
 		libstar.Error("Service.Load.Users %s", err)
 	}
 	libstar.Debug("Service.Load %s", s.Users)
+	if err := s.Permission.Load(path + "/permission.json"); err != nil {
+		libstar.Error("Service.Load.Permission %s", err)
+	}
+	libstar.Debug("Service.Load %s", s.Permission)
 }

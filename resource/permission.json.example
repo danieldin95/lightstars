@@ -1,0 +1,22 @@
+{
+  "guest": [
+    {
+      "path": "/",
+      "method": "get",
+      "type": "prefix",
+      "action": "permit"
+    },
+    {
+      "path": "/ui/login",
+      "method": "post",
+      "type": "prefix",
+      "action": "permit"
+    },
+    {
+      "path": "/api/instance/{id}",
+      "method": "put",
+      "type": "path",
+      "action": "permit"
+    }
+  ]
+}
