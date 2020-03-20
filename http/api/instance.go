@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/network/libvirtn"
@@ -16,7 +17,7 @@ import (
 type Instance struct {
 }
 
-func NewCDROMXML(file, family string) libvirtc.DiskXML {
+func NewCDROMXML(file, family string, seq uint8) libvirtc.DiskXML {
 	return libvirtc.DiskXML{
 		Type:   "block",
 		Device: "cdrom",
@@ -29,12 +30,12 @@ func NewCDROMXML(file, family string) libvirtc.DiskXML {
 		},
 		Target: libvirtc.DiskTargetXML{
 			Bus: "ide",
-			Dev: "hda",
+			Dev: libvirtc.DISK.Slot2Dev("ide", seq),
 		},
 	}
 }
 
-func NewISOXML(file, family string) libvirtc.DiskXML {
+func NewISOXML(file, family string, seq uint8) libvirtc.DiskXML {
 	xml := libvirtc.DiskXML{
 		Type:   "file",
 		Device: "disk",
@@ -59,18 +60,18 @@ func NewISOXML(file, family string) libvirtc.DiskXML {
 	if family == "linux" && !strings.HasSuffix(name, ".ISO") {
 		xml.Target = libvirtc.DiskTargetXML{
 			Bus: "virtio",
-			Dev: libvirtc.DISK.Slot2Dev("virtio", 1),
+			Dev: libvirtc.DISK.Slot2Dev("virtio", seq),
 		}
 	} else {
 		xml.Target = libvirtc.DiskTargetXML{
 			Bus: "ide",
-			Dev: libvirtc.DISK.Slot2Dev("ide", 1),
+			Dev: libvirtc.DISK.Slot2Dev("ide", seq),
 		}
 	}
 	return xml
 }
 
-func NewDiskXML(format, file, bus string) libvirtc.DiskXML {
+func NewDiskXML(format, file, bus string, seq uint8) libvirtc.DiskXML {
 	disk := libvirtc.DiskXML{
 		Type:   "file",
 		Device: "disk",
@@ -86,19 +87,19 @@ func NewDiskXML(format, file, bus string) libvirtc.DiskXML {
 	case "virtio":
 		disk.Target = libvirtc.DiskTargetXML{
 			Bus: bus,
-			Dev: libvirtc.DISK.Slot2Dev(bus, 2),
+			Dev: libvirtc.DISK.Slot2Dev(bus, seq),
 		}
 		disk.Address = &libvirtc.AddressXML{
 			Type:     "pci",
 			Domain:   libvirtc.PCI_DOMAIN,
 			Bus:      libvirtc.PCI_DISK_BUS,
-			Slot:     "0x02",
+			Slot:     fmt.Sprintf("0x%x", seq),
 			Function: libvirtc.PCI_FUNC,
 		}
 	case "ide", "scsi":
 		disk.Target = libvirtc.DiskTargetXML{
 			Bus: bus,
-			Dev: libvirtc.DISK.Slot2Dev(bus, 2),
+			Dev: libvirtc.DISK.Slot2Dev(bus, seq),
 		}
 	}
 	return disk
@@ -109,9 +110,9 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		Type: "kvm",
 		Name: conf.Name,
 		Devices: libvirtc.DevicesXML{
-			Disks:       make([]libvirtc.DiskXML, 2),
+			Disks:       make([]libvirtc.DiskXML, 0, 2),
 			Graphics:    make([]libvirtc.GraphicsXML, 2), // vnc and spice
-			Interfaces:  make([]libvirtc.InterfaceXML, 1),
+			Interfaces:  make([]libvirtc.InterfaceXML, 0, 1),
 			Controllers: make([]libvirtc.ControllerXML, 4),
 			Inputs:      make([]libvirtc.InputXML, 1), // <input type="tablet" bus="usb"/>
 		},
@@ -128,12 +129,6 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	}
 	if dom.OS.Type.Arch == "" {
 		dom.OS.Type.Arch = "x86_64" // i386
-	}
-	// create new disk firstly.
-	size := libstar.ToBytes(conf.Disk1Size, conf.Disk1Unit)
-	vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, Slot2Disk(0), size)
-	if err != nil {
-		return dom, err
 	}
 	// boot sequence.
 	if conf.Boots == "" {
@@ -161,15 +156,15 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	}
 	dom.VCPUXml = libvirtc.VCPUXML{
 		Placement: "static",
-		Value:     conf.Cpu,
+		Value:     fmt.Sprintf("%d", conf.MaxCpu),
 	}
 	dom.Memory = libvirtc.MemXML{
-		Value: conf.MemSize,
-		Type:  conf.MemUnit,
+		Value: fmt.Sprintf("%d", conf.MaxMem),
+		Type:  "KiB",
 	}
 	dom.CurMem = libvirtc.CurMemXML{
-		Value: conf.MemSize,
-		Type:  conf.MemUnit,
+		Value: fmt.Sprintf("%d", conf.MaxMem),
+		Type:  "KiB",
 	}
 	// vnc
 	dom.Devices.Graphics[0] = libvirtc.GraphicsXML{
@@ -201,37 +196,61 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		}
 	}
 	// disks
-	if strings.HasPrefix(conf.Disk0File, "/dev") {
-		dom.Devices.Disks[0] = NewCDROMXML(conf.Disk0File, conf.Family)
-	} else {
-		dom.Devices.Disks[0] = NewISOXML(storage.PATH.Unix(conf.Disk0File), conf.Family)
-	}
-	switch conf.Family {
-	case "linux":
-		dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path, "virtio")
-	case "windows": // not scsi.
-		dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path, "ide")
-	default:
-		dom.Devices.Disks[1] = NewDiskXML(vol.Target.Format.Type, vol.Target.Path, "ide")
+	for i, disk := range conf.Disks {
+		file := disk.Source
+		size := disk.Size
+		unit := disk.SizeUnit
+		seq := uint8(i + 1)
+
+		obj := libvirtc.DiskXML{}
+		if strings.HasPrefix(file, "/dev") {
+			obj = NewCDROMXML(file, conf.Family, seq)
+		} else if strings.HasSuffix(file, ".iso") || strings.HasSuffix(file, ".ISO") {
+			obj = NewISOXML(storage.PATH.Unix(file), conf.Family, seq)
+		} else {
+			format := "raw"
+			if file == "" {
+				size := libstar.ToBytes(size, unit)
+				vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, Slot2Disk(seq), size)
+				if err != nil {
+					return dom, err
+				}
+				file = vol.Target.Path
+				format = vol.Target.Format.Type
+			}
+			switch conf.Family {
+			case "linux":
+				obj = NewDiskXML(format, file, "virtio", seq)
+			case "windows": // not scsi.
+				obj = NewDiskXML(format, file, "ide", seq)
+			default:
+				obj = NewDiskXML(format, file, "ide", seq)
+			}
+		}
+		dom.Devices.Disks = append(dom.Devices.Disks, obj)
 	}
 
 	// interfaces
-	source := conf.Interface0Source
-	br, _ := libvirtn.BRIDGE.Get(source)
-	dom.Devices.Interfaces[0] = Interface2XML(source, "virtio", "0x01", br.Type)
-	switch conf.Family {
-	case "linux":
-		dom.Devices.Interfaces[0].Model = libvirtc.InterfaceModelXML{
-			Type: "virtio",
+	for i, inf := range conf.Interfaces {
+		seq := fmt.Sprintf("0x%x", i+1)
+		source := inf.Source
+		br, _ := libvirtn.BRIDGE.Get(source)
+		obj := Interface2XML(source, "virtio", seq, br.Type)
+		switch conf.Family {
+		case "linux":
+			obj.Model = libvirtc.InterfaceModelXML{
+				Type: "virtio",
+			}
+		case "windows":
+			obj.Model = libvirtc.InterfaceModelXML{
+				Type: "rtl8139", //e1000,rtl8139
+			}
+		default:
+			obj.Model = libvirtc.InterfaceModelXML{
+				Type: "rtl8139",
+			}
 		}
-	case "windows":
-		dom.Devices.Interfaces[0].Model = libvirtc.InterfaceModelXML{
-			Type: "rtl8139", //e1000,rtl8139
-		}
-	default:
-		dom.Devices.Interfaces[0].Model = libvirtc.InterfaceModelXML{
-			Type: "rtl8139",
-		}
+		dom.Devices.Interfaces = append(dom.Devices.Interfaces, obj)
 	}
 	// inputs
 	dom.Devices.Inputs[0] = libvirtc.InputXML{
@@ -253,6 +272,41 @@ func (ins Instance) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance/{id}", ins.DELETE).Methods("DELETE")
 }
 
+func (ins Instance) GetByUser(user *schema.User, list *schema.List) {
+	if user.Type == "admin" {
+		if domains, err := libvirtc.ListDomains(); err == nil {
+			// TODO support pages by offset and size.
+			for _, d := range domains {
+				int := schema.NewInstance(d)
+				list.Items = append(list.Items, int)
+				d.Free()
+			}
+		}
+		return
+	}
+	if domains, err := libvirtc.ListDomains(); err == nil {
+		for _, d := range domains {
+			has := false
+			inst := schema.NewInstance(d)
+
+			if strings.HasPrefix(inst.Name, user.Name+".") {
+				has = true
+			} else {
+				for _, name := range user.Instances {
+					if inst.Name == name {
+						has = true
+						break
+					}
+				}
+			}
+			if has {
+				list.Items = append(list.Items, inst)
+			}
+			d.Free()
+		}
+	}
+}
+
 func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
 	if !ok {
@@ -262,38 +316,7 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 			Metadata: schema.MetaData{},
 		}
 		// list all instances.
-		if user.Type == "admin" {
-			if domains, err := libvirtc.ListDomains(); err == nil {
-				// TODO support pages by offset and size.
-				for _, d := range domains {
-					int := schema.NewInstance(d)
-					list.Items = append(list.Items, int)
-					d.Free()
-				}
-			}
-		} else {
-			if domains, err := libvirtc.ListDomains(); err == nil {
-				for _, d := range domains {
-					has := false
-					inst := schema.NewInstance(d)
-
-					if strings.HasPrefix(inst.Name, user.Name+".") {
-						has = true
-					} else {
-						for _, name := range user.Instances {
-							if inst.Name == name {
-								has = true
-								break
-							}
-						}
-					}
-					if has {
-						list.Items = append(list.Items, inst)
-					}
-					d.Free()
-				}
-			}
-		}
+		ins.GetByUser(&user, &list)
 		sort.SliceStable(list.Items, func(i, j int) bool {
 			return list.Items[i].(schema.Instance).Name < list.Items[j].(schema.Instance).Name
 		})

@@ -1,4 +1,4 @@
-import {CheckBoxAll} from "../../com/utils.js";
+import {CheckBoxAll} from "../../com/checkbox.js";
 
 
 export class CheckBoxTab {

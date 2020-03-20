@@ -30,9 +30,9 @@ func (br *BridgeMgr) List() []Bridge {
 			br := NewNetworkXMLFromNet(NewNetworkFromVir(&net))
 			if br != nil {
 				if br.VirtualPort != nil {
-					brs = append(brs, Bridge{Name: br.Name, Type: br.VirtualPort.Type})
+					brs = append(brs, Bridge{Name: br.Bridge.Name, Type: br.VirtualPort.Type})
 				} else {
-					brs = append(brs, Bridge{Name: br.Name, Type: "bridge"})
+					brs = append(brs, Bridge{Name: br.Bridge.Name, Type: "bridge"})
 				}
 			}
 			net.Free()

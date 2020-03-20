@@ -25,31 +25,21 @@ type Memory struct {
 }
 
 type Instance struct {
-	Action           string `json:"action,omitempty"` // If is "", means not action.
-	UUID             string `json:"uuid"`
-	Name             string `json:"name"`
-	Family           string `json:"family"'` // configure
-	State            string `json:"state"`
-	Arch             string `json:"arch"` // configure: x86_64 or i386
-	Type             string `json:"type"`
-	Boots            string `json:"boots,omitempty"`     // configure: hd,cdrom,network.
-	DataStore        string `json:"datastore,omitempty"` // configure
-	Cpu              string `json:"cpu,omitempty"`       // configure
-	MemSize          string `json:"memSize,omitempty"`   // configure
-	MemUnit          string `json:"memUnit,omitempty"`   // configure
-	CpuMode          string `json:"cpuMode,omitempty"`   // configure
-	Disk0File        string `json:"disk0File,omitempty"` // configure
-	Disk1Size        string `json:"disk1Size,omitempty"` // configure
-	Disk1Unit        string `json:"disk1Unit,omitempty"` // configure
-	Disk1Bus         string `json:"disk1Bus,omitempty"`  // configure
-	Interface0Source string `json:"interface0Source,omitempty"`
-	Interface0Bus    string `json:"interface0Bus,omitempty"`
-	Start            string `json:"start,omitempty"` //configure
-
+	Action      string       `json:"action,omitempty"` // If is "", means not action.
+	UUID        string       `json:"uuid"`
+	Name        string       `json:"name"`
+	Family      string       `json:"family"'` // linux, windows or others
+	State       string       `json:"state"`
+	Arch        string       `json:"arch"` // x86_64 or i386
+	Type        string       `json:"type"`
+	Boots       string       `json:"boots,omitempty"`
+	DataStore   string       `json:"datastore,omitempty"`
+	Start       string       `json:"start,omitempty"` // whether booting with created
+	CpuMode     string       `json:"cpuMode"`
 	MaxCpu      uint         `json:"maxCpu"`
-	MaxMem      uint64       `json:"maxMem"`  // Kbytes
-	Memory      uint64       `json:"memory"`  // KBytes
-	CpuTime     uint64       `json:"cpuTime"` // MicroSeconds
+	MaxMem      uint64       `json:"maxMem"`  // KiB
+	Memory      uint64       `json:"memory"`  // KiB
+	CpuTime     uint64       `json:"cpuTime"` // micro seconds
 	Disks       []Disk       `json:"disks,omitempty"`
 	Interfaces  []Interface  `json:"interfaces,omitempty"`
 	Controllers []Controller `json:"controllers,omitempty"`

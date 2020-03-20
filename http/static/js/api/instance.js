@@ -1,5 +1,6 @@
 import {Api} from "./api.js";
 import {Alert} from "../com/alert.js";
+import {Utils} from "../com/utils.js";
 
 
 export class InstanceApi extends Api {
@@ -169,7 +170,33 @@ export class InstanceApi extends Api {
     }
 
     create (data) {
-        $.POST(this.url(), JSON.stringify(data), (resp, status) => {
+        let schema = {};
+        schema.name = data.name;
+        schema.family = data.family;
+        schema.datastore = data.datastore;
+        schema.boots = 'hd,cdrom,network';
+        schema.maxCpu = parseInt(data.cpu);
+        schema.cpuMode = data.cpuMode || '';
+        schema.maxMem = Utils.toKiB(data.memSize, data.memUnit);
+        schema.disks = [
+            {
+                source: data.disk0File,
+            },
+            {
+                size: data.disk1Size,
+                sizeUnit: data.disk1Unit || 'MiB',
+                source: data.disk1File || '',
+            },
+         ];
+        schema.interfaces = [
+            {
+                source: data.interface0Source,
+                Modal: data.interface0Model || 'virtio',
+            },
+        ];
+
+        console.log('InstanceApi.create', schema, data);
+        $.POST(this.url(), JSON.stringify(schema), (resp, status) => {
             $(this.tasks).append(Alert.success(`create '${resp.name}' success`));
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
