@@ -17,6 +17,7 @@ export class InstanceCreate extends FormModal {
         this.render();
         this.loading();
 
+        $(this.id).off('show.bs.modal');
         $(this.id).on('show.bs.modal', (e) => {
             this.fetch();
         });
