@@ -19,13 +19,19 @@ func main() {
 	flag.IntVar(&verbose, "log:level", verbose, "logger level")
 	flag.Parse()
 
+	name := auth
+	password := ""
+	if strings.Contains(auth, ":") {
+		name = strings.SplitN(auth, ":", 2)[0]
+		password = strings.SplitN(auth, ":", 2)[1]
+	}
 	pri := proxy.Proxy{
 		Target: strings.Split(tgt, ","),
 		Client: &proxy.WsClient{
 			Auth: libstar.Auth{
 				Type:     "basic",
-				Username: "admin",
-				Password: "123",
+				Username: name,
+				Password: password,
 			},
 			Url: url + "/ext/tcpsocket?target=",
 		},

@@ -8,8 +8,8 @@ LDFLAGS += -X $(PKG).Version=$$(cat VERSION)
 
 
 lightstar:
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightstar main.go
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightprix proxy.go
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightstar lightstar.go
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightprix lightprix.go
 
 
 rpm:
@@ -25,7 +25,7 @@ devel/requirements:
 
 
 windows:
-	go build -mod=vendor -o lightprix.windows.x86_64.exe proxy.go
+	go build -mod=vendor -o lightprix.windows.x86_64.exe lightprix.go
 
 
 test:
