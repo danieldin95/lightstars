@@ -136,3 +136,45 @@ func (w WebSocket) Handle(ws *websocket.Conn) {
 	}()
 	wait.Wait()
 }
+
+type TcpSocket struct {
+}
+
+func (t TcpSocket) Router(router *mux.Router) {
+	router.Handle("/ext/tcpsocket", websocket.Handler(t.Handle))
+}
+
+func (t TcpSocket) Handle(ws *websocket.Conn) {
+	defer ws.Close()
+	ws.PayloadType = websocket.BinaryFrame
+
+	r := ws.Request()
+	target := api.GetQueryOne(r, "target")
+	conn, err := net.Dial("tcp", target)
+	if err != nil {
+		libstar.Error("TcpSocket.Handle dial %s", err)
+		return
+	}
+	defer conn.Close()
+
+	user, _ := api.GetUser(r)
+	libstar.Info("TcpSocket.Handle with %s", user.Name)
+	libstar.Info("TcpSocket.Handle request by %s", ws.RemoteAddr())
+	libstar.Info("TcpSocket.Handle connect to %s", conn.RemoteAddr())
+
+	wait := sync.WaitGroup{}
+	wait.Add(2)
+	go func() {
+		defer wait.Done()
+		if _, err := io.Copy(conn, ws); err != nil {
+			libstar.Error("TcpSocket.Handle copy from ws %s", err)
+		}
+	}()
+	go func() {
+		defer wait.Done()
+		if _, err := io.Copy(ws, conn); err != nil {
+			libstar.Error("TcpSocket.Handle copy from target %s", err)
+		}
+	}()
+	wait.Wait()
+}

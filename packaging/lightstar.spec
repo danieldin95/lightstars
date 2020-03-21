@@ -1,5 +1,5 @@
 Name: lightstar
-Version: 0.7.05
+Version: 0.7.06
 Release: 1%{?dist}
 Summary: LightStar's Project Software
 Group: Applications/Communications
@@ -20,6 +20,7 @@ cd %_source_dir && make
 %install
 mkdir -p %{buildroot}/usr/bin
 cp %_source_dir/lightstar %{buildroot}/usr/bin/lightstar
+cp %_source_dir/lightprix %{buildroot}/usr/bin/lightprix
 
 mkdir -p %{buildroot}/etc/sysconfig
 cat > %{buildroot}/etc/sysconfig/lightstar.cfg << EOF

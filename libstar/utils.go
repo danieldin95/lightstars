@@ -2,6 +2,7 @@ package libstar
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -9,11 +10,14 @@ import (
 	"math/rand"
 	"net"
 	"os"
+	"os/signal"
 	"reflect"
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
+	"unicode"
 )
 
 func GenToken(n int) string {
@@ -339,4 +343,30 @@ func PrettyPCI(dom, bus, slot, fun uint16) string {
 
 func PrettyDrive(ctl, bus, tgt, unit uint16) string {
 	return fmt.Sprintf("%04x:%02x:%02x.%x", ctl, bus, tgt, unit)
+}
+
+func IsDigit(s string) bool {
+	for _, v := range s {
+		if unicode.IsDigit(v) {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func BasicAuth(username, password string) string {
+	auth := username + ":" + password
+	return "Basic " + base64.StdEncoding.EncodeToString([]byte(auth))
+}
+
+func Wait() {
+	x := make(chan os.Signal)
+	signal.Notify(x, os.Interrupt, syscall.SIGTERM)
+	signal.Notify(x, os.Interrupt, syscall.SIGKILL)
+	signal.Notify(x, os.Interrupt, syscall.SIGQUIT) //CTL+/
+	signal.Notify(x, os.Interrupt, syscall.SIGINT)  //CTL+C
+
+	<-x
+	fmt.Println("Done")
 }

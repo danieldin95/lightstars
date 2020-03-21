@@ -9,6 +9,7 @@ LDFLAGS += -X $(PKG).Version=$$(cat VERSION)
 
 lightstar:
 	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightstar main.go
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightprix proxy.go
 
 
 rpm:
@@ -21,6 +22,10 @@ rpm:
 
 devel/requirements:
 	yum install libvirt-devel
+
+
+windows:
+	go build -mod=vendor -o lightprix.windows.x86_64.exe proxy.go
 
 
 test:

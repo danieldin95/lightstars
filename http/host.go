@@ -23,10 +23,7 @@ func (h Host) Router(router *mux.Router) {
 
 func (h Host) Filter(w http.ResponseWriter, r *http.Response, data interface{}) bool {
 	req := r.Request
-	if req == nil || req.Method != "GET" {
-		return false
-	}
-	if data == nil { // TODO reflect type.
+	if data == nil || req == nil || req.Method != "GET" {
 		return false
 	}
 	user := data.(*schema.User)

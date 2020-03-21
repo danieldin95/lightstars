@@ -1,8 +1,8 @@
 package schema
 
 import (
+	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/storage/libvirts"
-	"unicode"
 )
 
 type NFS struct {
@@ -25,16 +25,6 @@ type DataStore struct {
 	NFS        *NFS   `json:"nfs"`
 }
 
-func IsDigit(s string) bool {
-	for _, v := range s {
-		if unicode.IsDigit(v) {
-			continue
-		}
-		return false
-	}
-	return true
-}
-
 func NewDataStore(pol libvirts.Pool) DataStore {
 	obj := DataStore{}
 	xml, _ := pol.GetXMLDesc(0)
@@ -44,7 +34,7 @@ func NewDataStore(pol libvirts.Pool) DataStore {
 	obj.Id = xmlObj.Name
 	obj.Name = xmlObj.Name
 	obj.UUID = xmlObj.UUID
-	if len(obj.Name) == 2 && IsDigit(obj.Name) {
+	if len(obj.Name) == 2 && libstar.IsDigit(obj.Name) {
 		obj.Name = "datastore@" + obj.Name
 	}
 	obj.Type = xmlObj.Type

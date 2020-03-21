@@ -14,6 +14,19 @@ func IsDomainPool(name string) bool {
 	return strings.HasPrefix(name, ".")
 }
 
+func IsStorePool(name string) bool {
+	if IsDomainPool(name) {
+		return false
+	}
+	if len(name) <= 0 || len(name) > 2 {
+		return false
+	}
+	if libstar.IsDigit(name) {
+		return true
+	}
+	return false
+}
+
 type Pool struct {
 	libvirt.StoragePool
 	Type string

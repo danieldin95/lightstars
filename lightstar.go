@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/http"
 	"github.com/danieldin95/lightstar/libstar"
@@ -10,20 +9,7 @@ import (
 	"github.com/danieldin95/lightstar/service"
 	"github.com/danieldin95/lightstar/storage/libvirts"
 	"os"
-	"os/signal"
-	"syscall"
 )
-
-func Wait() {
-	x := make(chan os.Signal)
-	signal.Notify(x, os.Interrupt, syscall.SIGTERM)
-	signal.Notify(x, os.Interrupt, syscall.SIGKILL)
-	signal.Notify(x, os.Interrupt, syscall.SIGQUIT) //CTL+/
-	signal.Notify(x, os.Interrupt, syscall.SIGINT)  //CTL+C
-
-	<-x
-	fmt.Println("Done")
-}
 
 type Config struct {
 	StaticDir string `json:"dir.static"`
@@ -70,5 +56,5 @@ func main() {
 	}
 	go h.Start()
 
-	Wait()
+	libstar.Wait()
 }

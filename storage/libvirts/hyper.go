@@ -75,7 +75,7 @@ func (h *HyperVisor) ListAllPools() ([]Pool, error) {
 	newPools := make([]Pool, 0, 32)
 	for _, p := range pools {
 		name, err := p.GetName()
-		if err != nil || IsDomainPool(name) {
+		if err != nil || !IsStorePool(name) {
 			p.Free()
 			continue
 		}
