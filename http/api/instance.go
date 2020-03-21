@@ -272,34 +272,29 @@ func (ins Instance) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance/{id}", ins.DELETE).Methods("DELETE")
 }
 
-func (ins Instance) GetByUser(user *schema.User, list *schema.List) {
+func (ins Instance) HasPermission(user *schema.User, instance string) bool {
+	has := false
 	if user.Type == "admin" {
-		if domains, err := libvirtc.ListDomains(); err == nil {
-			// TODO support pages by offset and size.
-			for _, d := range domains {
-				int := schema.NewInstance(d)
-				list.Items = append(list.Items, int)
-				d.Free()
+		return true
+	}
+	if strings.HasPrefix(instance, user.Name+".") {
+		has = true
+	} else {
+		for _, name := range user.Instances {
+			if instance == name {
+				has = true
+				break
 			}
 		}
-		return
 	}
+	return has
+}
+
+func (ins Instance) GetByUser(user *schema.User, list *schema.List) {
 	if domains, err := libvirtc.ListDomains(); err == nil {
 		for _, d := range domains {
-			has := false
 			inst := schema.NewInstance(d)
-
-			if strings.HasPrefix(inst.Name, user.Name+".") {
-				has = true
-			} else {
-				for _, name := range user.Instances {
-					if inst.Name == name {
-						has = true
-						break
-					}
-				}
-			}
-			if has {
+			if ins.HasPermission(user, inst.Name) {
 				list.Items = append(list.Items, inst)
 			}
 			d.Free()

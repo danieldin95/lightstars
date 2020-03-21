@@ -40,6 +40,8 @@ func (pri *Proxy) GetPath(req *http.Request) string {
 type ProxyUrl struct {
 	Proxy
 	Transport *http.Transport
+	Filter    func(http.ResponseWriter, *http.Response, interface{}) bool
+	Data      interface{}
 }
 
 func (pri *ProxyUrl) Initialize() {
@@ -50,26 +52,32 @@ func (pri *ProxyUrl) Initialize() {
 }
 
 func (pri *ProxyUrl) ServeHttp(w http.ResponseWriter, r *http.Request) {
-	rs, err := pri.Transport.RoundTrip(r)
+	resp, err := pri.Transport.RoundTrip(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadGateway)
 		return
 	}
-	defer rs.Body.Close()
-	for key, value := range rs.Header {
+	defer resp.Body.Close()
+	for key, value := range resp.Header {
 		for _, v := range value {
 			w.Header().Add(key, v)
 		}
 	}
-	status := rs.StatusCode
+	status := resp.StatusCode
 	w.WriteHeader(status)
-	io.Copy(w, rs.Body)
+	filtered := false
+	if pri.Filter != nil {
+		filtered = pri.Filter(w, resp, pri.Data)
+	}
+	if !filtered {
+		io.Copy(w, resp.Body)
+	}
 }
 
 func (pri *ProxyUrl) Handler(w http.ResponseWriter, req *http.Request) {
 	url := pri.Server
 	url += pri.GetPath(req)
-	Debug("ProxyUrl.Handler %s %s to %s", req.Method, req.URL, url)
+	Debug("ProxyUrl.Handler %s %s to %s", req.Method, req.URL.Path, url)
 	outReq, _ := http.NewRequest(req.Method, url, req.Body)
 	for key, value := range req.Header {
 		for _, v := range value {

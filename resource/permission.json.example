@@ -17,6 +17,12 @@
       "method": "put",
       "type": "path",
       "action": "permit"
+    },
+    {
+      "path": "/host/{host}/api/instance/{id}",
+      "method": "put",
+      "type": "path",
+      "action": "permit"
     }
   ]
 }
