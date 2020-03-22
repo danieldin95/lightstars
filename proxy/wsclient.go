@@ -5,6 +5,7 @@ import (
 	"github.com/danieldin95/lightstar/libstar"
 	"golang.org/x/net/websocket"
 	"net/http"
+	"net/url"
 )
 
 type WsClient struct {
@@ -15,6 +16,13 @@ type WsClient struct {
 }
 
 func (w *WsClient) Initialize() {
+	u, _ := url.Parse(w.Url)
+	if u.Scheme == "http" {
+		u.Scheme = "ws"
+	} else if u.Scheme == "https" {
+		u.Scheme = "wss"
+	}
+	w.Url = u.String()
 	w.TlsConfig = &tls.Config{InsecureSkipVerify: true}
 }
 

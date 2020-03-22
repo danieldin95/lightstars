@@ -43,6 +43,7 @@ func GetJSON(r io.ReadCloser, v interface{}) error {
 	if err != nil {
 		return err
 	}
+	libstar.Debug("GetJSON %s", body)
 	if err := json.Unmarshal([]byte(body), v); err != nil {
 		return err
 	}

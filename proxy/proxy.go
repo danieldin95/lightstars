@@ -7,6 +7,7 @@ import (
 	"io"
 	"math/rand"
 	"net"
+	"strings"
 	"sync"
 	"time"
 )
@@ -16,6 +17,8 @@ const (
 	SIZE  = 1000
 )
 
+var Start = START
+
 type Local struct {
 	Target   string
 	Listen   string
@@ -24,11 +27,12 @@ type Local struct {
 }
 
 func (l *Local) Initialize() *Local {
-	for i := START; i < SIZE+START; i++ {
+	for i := Start; i < SIZE+START; i++ {
 		// random or sequence
 		l.Listen = fmt.Sprintf("localhost:%d", i)
 		listen, err := net.Listen("tcp", l.Listen)
 		if err == nil {
+			Start = i
 			l.Listener = listen
 			break
 		}
@@ -107,6 +111,9 @@ func (p *Proxy) Initialize() *Proxy {
 		p.Listen = make(map[string]*Local, 32)
 	}
 	for _, tgt := range p.Target {
+		if tgt == "" || !strings.Contains(tgt, ":") {
+			continue
+		}
 		local := &Local{
 			Target: tgt,
 			Client: p.Client,

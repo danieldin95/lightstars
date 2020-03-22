@@ -26,7 +26,9 @@ func (cl *HttpClient) Do() (*http.Response, error) {
 		return nil, err
 	}
 	if cl.Auth.Type == "basic" {
-		req.SetBasicAuth(cl.Auth.Username, cl.Auth.Password)
+		if cl.Auth.Password == "" {
+			req.Header.Set("Authorization", BasicAuth(cl.Auth.Username, cl.Auth.Password))
+		}
 	}
 	client := http.Client{
 		Transport: &http.Transport{

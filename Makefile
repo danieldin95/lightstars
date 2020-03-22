@@ -12,7 +12,7 @@ lightstar:
 	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightprix lightprix.go
 
 
-rpm:
+linux/rpm:
 	./packaging/auto.sh
 	rpmbuild -ba packaging/lightsim.spec
 	rpmbuild -ba packaging/lightstar.spec
@@ -26,6 +26,17 @@ devel/requirements:
 
 windows:
 	go build -mod=vendor -o lightprix.windows.x86_64.exe lightprix.go
+
+
+WIN_DIR = "lightprix-windows-"$$(cat VERSION)
+
+
+windows/zip:
+	rm -rf $(WIN_DIR) && mkdir -p $(WIN_DIR)
+	cp -rvf resource/point.json $(WIN_DIR)
+	cp -rvf lightprix.windows.x86_64.exe $(WIN_DIR)
+	rm -rf $(WIN_DIR).zip
+	zip -r $(WIN_DIR).zip $(WIN_DIR)
 
 
 test:

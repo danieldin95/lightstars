@@ -356,7 +356,10 @@ func IsDigit(s string) bool {
 }
 
 func BasicAuth(username, password string) string {
-	auth := username + ":" + password
+	auth := username
+	if password != "" {
+		auth += ":" + password
+	}
 	return "Basic " + base64.StdEncoding.EncodeToString([]byte(auth))
 }
 
