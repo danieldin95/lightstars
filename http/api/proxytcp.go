@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/danieldin95/lightstar/schema"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -32,6 +33,11 @@ func (pro ProxyTcp) GET(w http.ResponseWriter, r *http.Request) {
 	sort.SliceStable(list.Items, func(i, j int) bool {
 		return list.Items[i].(schema.Instance).Name < list.Items[j].(schema.Instance).Name
 	})
+
+	leases, err := libvirtn.ListLeases("")
+	if err != nil {
+		libstar.Warn("ProxyTcp.GET %s", err)
+	}
 	for _, item := range list.Items {
 		inst := item.(schema.Instance)
 
@@ -43,6 +49,17 @@ func (pro ProxyTcp) GET(w http.ResponseWriter, r *http.Request) {
 				tgts = append(tgts, hyper.Address+":"+graphic.Port)
 			}
 		}
+		if leases != nil {
+			for _, inf := range inst.Interfaces {
+				libstar.Debug("ProxyTcp.GET %s", inf.Address)
+				if le, ok := leases[inf.Address]; ok {
+					tgts = append(tgts, le.IPAddr+":22")   // ssh
+					tgts = append(tgts, le.IPAddr+":3389") // rdp
+					break
+				}
+			}
+		}
+
 	}
 	ResponseJson(w, tgts)
 }
