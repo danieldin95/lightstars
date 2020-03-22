@@ -18,8 +18,8 @@ func GetPorts(host, auth string) (error, []schema.Target) {
 				Type:     "basic",
 				Username: auth,
 			},
+			Host: host,
 		},
-		Host: host,
 	}
 	return api.Get(&data), data
 }
@@ -82,7 +82,7 @@ func main() {
 				Type:     "basic",
 				Username: cfg.Auth,
 			},
-			Url: cfg.Url + "/ext/tcpsocket?target=",
+			Url: cfg.Url + "/ext/tcpsocket",
 		},
 	}
 	pri.Initialize()
@@ -92,8 +92,9 @@ func main() {
 			input := ""
 			fmt.Scanln(&input)
 			for _, tgt := range pri.Target {
-				if l, ok := pri.Listen[tgt.Target]; ok {
-					libstar.Info("main %-15s %-20s on %-15s", l.Tgt.Name, l.Tgt.Target, l.Listen)
+				if l, ok := pri.Listen[tgt.Host+":"+tgt.Target]; ok {
+					libstar.Info("main %s:%-15s %-20s on %-15s",
+						l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
 				}
 			}
 		}

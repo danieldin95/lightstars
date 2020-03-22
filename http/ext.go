@@ -144,7 +144,7 @@ func (t TcpSocket) Router(router *mux.Router) {
 	router.Handle("/ext/tcpsocket", websocket.Handler(t.Handle))
 }
 
-func (t TcpSocket) Handle(ws *websocket.Conn) {
+func (t TcpSocket) Local(ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
 
@@ -177,4 +177,42 @@ func (t TcpSocket) Handle(ws *websocket.Conn) {
 		}
 	}()
 	wait.Wait()
+}
+
+func (t TcpSocket) Remote(ws *websocket.Conn) {
+	r := ws.Request()
+	host := api.GetQueryOne(r, "host")
+	if host == "" {
+		return
+	}
+	node := service.SERVICE.Zone.Get(host)
+	if node == nil {
+		libstar.Error("host not found: %s", host)
+		return
+	}
+	query := r.URL.Query()
+	query.Set("host", "")
+	r.URL.RawQuery = query.Encode()
+	pri := libstar.ProxyWs{
+		Proxy: libstar.Proxy{
+			Server: node.Url,
+			Auth: libstar.Auth{
+				Type:     "basic",
+				Username: node.Username,
+				Password: node.Password,
+			},
+		},
+	}
+	pri.Initialize()
+	pri.Socket(ws)
+}
+
+func (t TcpSocket) Handle(ws *websocket.Conn) {
+	r := ws.Request()
+	host := api.GetQueryOne(r, "host")
+	if host == "" {
+		t.Local(ws)
+	} else {
+		t.Remote(ws)
+	}
 }

@@ -14,13 +14,11 @@ func (le DHCPLease) Router(router *mux.Router) {
 	router.HandleFunc("/api/dhcp/lease", le.GET).Methods("GET")
 }
 
-func (le DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
+func (le DHCPLease) Get(data map[string]schema.DHCPLease) error {
 	leases, err := libvirtn.ListLeases()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
-	data := make(map[string]schema.DHCPLease, 128)
 	for addr, le := range leases {
 		data[addr] = schema.DHCPLease{
 			Mac:      le.Mac,
@@ -29,6 +27,15 @@ func (le DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
 			Hostname: le.Hostname,
 			Type:     le.Type,
 		}
+	}
+	return nil
+}
+
+func (le DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
+	data := make(map[string]schema.DHCPLease, 128)
+	if err := le.Get(data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	ResponseJson(w, data)
 }

@@ -9,6 +9,7 @@ import (
 
 type Client struct {
 	Auth libstar.Auth
+	Host string
 }
 
 func (cl Client) NewRequest(url string) *libstar.HttpClient {

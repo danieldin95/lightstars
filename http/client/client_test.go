@@ -14,12 +14,12 @@ func TestDHCPLease_Get(t *testing.T) {
 				Type:     "basic",
 				Username: "admin:123",
 			},
+			Host: "https://localhost:10080",
 		},
-		Host: "https://localhost:10080",
 	}
-	les := map[string]schema.DHCPLease{}
+	les := schema.ListLeases{}
 	fmt.Println(api.Get(&les), les)
-	les = map[string]schema.DHCPLease{}
+	les = schema.ListLeases{}
 	api.Client.Auth.Username = "123"
 	fmt.Println(api.Get(&les), les)
 }
@@ -31,8 +31,8 @@ func TestProxyTcp_Get(t *testing.T) {
 				Type:     "basic",
 				Username: "admin:123",
 			},
+			Host: "https://localhost:10080",
 		},
-		Host: "https://localhost:10080",
 	}
 	var ps []schema.Target
 	fmt.Println(api.Get(&ps), ps)
@@ -45,9 +45,9 @@ func TestInstance_Get(t *testing.T) {
 				Type:     "basic",
 				Username: "admin:123",
 			},
+			Host: "https://localhost:10080",
 		},
-		Host: "https://localhost:10080",
 	}
-	var data schema.List
+	var data schema.ListInstance
 	fmt.Println(api.Get(&data), data)
 }

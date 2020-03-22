@@ -2,9 +2,10 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/compute/libvirtc"
+	"github.com/danieldin95/lightstar/http/client"
 	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/danieldin95/lightstar/schema"
+	"github.com/danieldin95/lightstar/service"
 	"github.com/gorilla/mux"
 	"net/http"
 	"sort"
@@ -38,23 +39,20 @@ func (pro ProxyTcp) Graphics(inst *schema.Instance) []schema.Target {
 	return dst
 }
 
-func (pro ProxyTcp) Inside(inst *schema.Instance) []schema.Target {
+func (pro ProxyTcp) GetTarget(host string, inst *schema.Instance, leases schema.ListLeases) []schema.Target {
 	dst := make([]schema.Target, 0, 32)
-	leases, err := libvirtn.ListLeases()
-	if err != nil {
-		libstar.Warn("ProxyTcp.Inside %s", err)
-		return dst
-	}
 	for _, inf := range inst.Interfaces {
 		libstar.Debug("ProxyTcp.GET %s", inf.Address)
 		if le, ok := leases[inf.Address]; ok {
 			dst = append(dst, schema.Target{
 				Name:   inst.Name,
 				Target: le.IPAddr + ":22",
+				Host:   host,
 			}) // ssh
 			dst = append(dst, schema.Target{
 				Name:   inst.Name,
 				Target: le.IPAddr + ":3389",
+				Host:   host,
 			}) // rdp
 			break
 		}
@@ -62,25 +60,59 @@ func (pro ProxyTcp) Inside(inst *schema.Instance) []schema.Target {
 	return dst
 }
 
-func (pro ProxyTcp) Remote(inst *schema.Instance) []schema.Target {
-	dst := make([]schema.Target, 0, 32)
-	leases, err := libvirtn.ListLeases()
+func (pro ProxyTcp) Local(user *schema.User) []schema.Target {
+	leases := make(map[string]schema.DHCPLease, 128)
+	err := DHCPLease{}.Get(leases)
 	if err != nil {
-		libstar.Warn("ProxyTcp.Inside %s", err)
-		return dst
+		return nil
 	}
-	for _, inf := range inst.Interfaces {
-		libstar.Debug("ProxyTcp.GET %s", inf.Address)
-		if le, ok := leases[inf.Address]; ok {
-			dst = append(dst, schema.Target{
-				Name:   inst.Name,
-				Target: le.IPAddr + ":22",
-			}) // ssh
-			dst = append(dst, schema.Target{
-				Name:   inst.Name,
-				Target: le.IPAddr + ":3389",
-			}) // rdp
+	list := schema.List{
+		Items: make([]interface{}, 0, 32),
+	}
+	Instance{}.GetByUser(user, &list)
+	dst := make([]schema.Target, 0, 32)
+	for _, item := range list.Items {
+		inst := item.(schema.Instance)
+		dst = append(dst, pro.GetTarget("", &inst, leases)...)
+	}
+	return dst
+}
+
+func (pro ProxyTcp) Remote(user *schema.User) []schema.Target {
+	dst := make([]schema.Target, 0, 32)
+	insApi := Instance{}
+	for zone := range service.SERVICE.Zone.List() {
+		if zone == nil {
 			break
+		}
+		if zone.Url == "" {
+			continue
+		}
+		cl := client.Client{
+			Auth: libstar.Auth{
+				Type:     "basic",
+				Username: zone.Username,
+				Password: zone.Password,
+			},
+			Host: zone.Url,
+		}
+		leases := schema.ListLeases{}
+		err := client.DHCPLease{Client: cl}.Get(&leases)
+		if err != nil {
+			libstar.Error("ProxyTcp.Remote.Lease %s", err)
+			continue
+		}
+		var list schema.ListInstance
+		err = client.Instance{Client: cl}.Get(&list)
+		if err != nil {
+			libstar.Error("ProxyTcp.Remote.Instance %s", err)
+			continue
+		}
+		for _, inst := range list.Items {
+			if !insApi.HasPermission(user, inst.Name) {
+				continue
+			}
+			dst = append(dst, pro.GetTarget(zone.Name, &inst, leases)...)
 		}
 	}
 	return dst
@@ -88,21 +120,12 @@ func (pro ProxyTcp) Remote(inst *schema.Instance) []schema.Target {
 
 func (pro ProxyTcp) GET(w http.ResponseWriter, r *http.Request) {
 	user, _ := GetUser(r)
-	list := schema.List{
-		Items: make([]interface{}, 0, 32),
-	}
-
-	Instance{}.GetByUser(&user, &list)
-	sort.SliceStable(list.Items, func(i, j int) bool {
-		return list.Items[i].(schema.Instance).Name < list.Items[j].(schema.Instance).Name
-	})
-
 	tgt := make([]schema.Target, 0, 32)
-	for _, item := range list.Items {
-		inst := item.(schema.Instance)
-		//tgt = append(tgt, pro.Graphics(&inst)...)
-		tgt = append(tgt, pro.Inside(&inst)...)
-	}
+	tgt = append(tgt, pro.Local(&user)...)
+	tgt = append(tgt, pro.Remote(&user)...)
+	sort.SliceStable(tgt, func(i, j int) bool {
+		return (tgt[i].Host + ":" + tgt[i].Name) < (tgt[j].Host + ":" + tgt[j].Name)
+	})
 	ResponseJson(w, tgt)
 }
 

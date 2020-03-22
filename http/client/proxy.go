@@ -7,7 +7,6 @@ import (
 
 type ProxyTcp struct {
 	Client
-	Host string
 }
 
 func (api ProxyTcp) Url() string {

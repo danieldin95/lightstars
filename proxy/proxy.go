@@ -42,7 +42,8 @@ func (l *Local) Initialize() *Local {
 		}
 	}
 	if l.Listener != nil {
-		libstar.Info("Local.Initialize %-15s %-20s on %-15s", l.Tgt.Name, l.Tgt.Target, l.Listen)
+		libstar.Info("Local.Initialize %s:%-15s %-20s on %-15s",
+			l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
 	}
 	return l
 }
@@ -57,7 +58,7 @@ func (l *Local) Start() {
 	for {
 		conn, err := l.Listener.Accept()
 		if err != nil {
-			libstar.Error("Local.Accept: %s", err)
+			libstar.Debug("Local.Accept: %s", err)
 			return
 		}
 		libstar.Info("Local.Accept %s", conn.RemoteAddr())
@@ -71,7 +72,7 @@ func (l *Local) OnClient(from net.Conn) {
 		Auth: l.Client.Auth,
 		Url:  l.Client.Url,
 	}
-	ws.Url += l.Tgt.Target
+	ws.Url += fmt.Sprintf("?target=%s&host=%s", l.Tgt.Target, l.Tgt.Host)
 	ws.Initialize()
 	to, err := ws.Dial()
 	if err != nil {
@@ -85,13 +86,13 @@ func (l *Local) OnClient(from net.Conn) {
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(from, to); err != nil {
-			libstar.Error("Local.Handle copy from ws %s", err)
+			libstar.Debug("Local.Handle copy from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(to, from); err != nil {
-			libstar.Error("Local.Handle copy from local %s", err)
+			libstar.Debug("Local.Handle copy from local %s", err)
 		}
 	}()
 	wait.Wait()
@@ -123,7 +124,7 @@ func (p *Proxy) Initialize() *Proxy {
 			Client: p.Client,
 		}
 		local.Initialize()
-		p.Listen[tgt.Target] = local
+		p.Listen[tgt.Host+":"+tgt.Target] = local
 	}
 
 	return p

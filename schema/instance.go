@@ -43,6 +43,11 @@ type Instance struct {
 	Graphics    []Graphics   `json:"graphics"`
 }
 
+type ListInstance struct {
+	Items    []Instance `json:"items"`
+	Metadata MetaData   `json:"metadata"`
+}
+
 type Disk struct {
 	Action     string `json:"action,omitempty"`
 	Seq        string `json:"seq,omitempty"`       // configure

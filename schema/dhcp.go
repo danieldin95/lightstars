@@ -7,3 +7,5 @@ type DHCPLease struct {
 	Prefix   uint   `json:"prefix"`
 	Hostname string `json:"hostname"`
 }
+
+type ListLeases map[string]DHCPLease

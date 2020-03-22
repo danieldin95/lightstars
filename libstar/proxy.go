@@ -105,7 +105,11 @@ func (pri *ProxyWs) Dial(url_, protocol, origin string) (ws *websocket.Conn, err
 		config.Protocol = []string{protocol}
 	}
 	config.TlsConfig = pri.TlsConfig
-
+	if pri.Auth.Type == "basic" {
+		config.Header = http.Header{
+			"Authorization": {BasicAuth(pri.Auth.Username, pri.Auth.Password)},
+		}
+	}
 	return websocket.DialConfig(config)
 }
 
