@@ -9,7 +9,7 @@ LDFLAGS += -X $(PKG).Version=$$(cat VERSION)
 
 lightstar:
 	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightstar lightstar.go
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightprix lightprix.go
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightpix lightpix.go
 
 
 linux/rpm:
@@ -25,16 +25,16 @@ devel/requirements:
 
 
 windows:
-	go build -mod=vendor -o lightprix.windows.x86_64.exe lightprix.go
+	go build -mod=vendor -o lightpix.windows.x86_64.exe lightpix.go
 
 
-WIN_DIR = "lightprix-windows-"$$(cat VERSION)
+WIN_DIR = "lightpix-windows-"$$(cat VERSION)
 
 
 windows/zip:
 	rm -rf $(WIN_DIR) && mkdir -p $(WIN_DIR)
-	cp -rvf resource/lightprix.json.example $(WIN_DIR)/lightprix.json
-	cp -rvf lightprix.windows.x86_64.exe $(WIN_DIR)
+	cp -rvf resource/lightpix.json.example $(WIN_DIR)/lightpix.json
+	cp -rvf lightpix.windows.x86_64.exe $(WIN_DIR)
 	rm -rf $(WIN_DIR).zip
 	zip -r $(WIN_DIR).zip $(WIN_DIR)
 

@@ -2,12 +2,23 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/proxy"
 	"strings"
 )
 
-func GetPorts(url, auth string) []proxy.Target {
+func ToApi(host, name string) string {
+	switch name {
+	case "proxy":
+		return host + "/api/proxy/tcp"
+	case "socket":
+		return host + "/ext/tcpsocket?target="
+	}
+	return ""
+}
+
+func GetPorts(url, auth string) []proxy.Target{
 	ports := make([]proxy.Target, 0, 32)
 
 	client := libstar.HttpClient{
@@ -15,7 +26,7 @@ func GetPorts(url, auth string) []proxy.Target {
 			Type:     "basic",
 			Username: auth,
 		},
-		Url: url + "/api/proxy/tcp",
+		Url: ToApi(url, "proxy"),
 	}
 	r, err := client.Do()
 	if err == nil {
@@ -27,7 +38,7 @@ func GetPorts(url, auth string) []proxy.Target {
 	return ports
 }
 
-type Config struct {
+type PixConfig struct {
 	Url     string   `json:"url"`
 	Auth    string   `json:"Auth"`
 	Target  []string `json:"target"`
@@ -37,17 +48,17 @@ type Config struct {
 	Targets []proxy.Target
 }
 
-func (cfg *Config) Parse() *Config {
+func (cfg *PixConfig) Parse() *PixConfig {
 	tgt := ""
-	file := "lightprix.json"
+	file := "lightpix.json"
 	cfg.Url = "https://localhost:10080"
 	cfg.Auth = "admin:123456"
 	cfg.Verbose = 2
-	cfg.LogFile = "lightprix.log"
+	cfg.LogFile = "lightpix.log"
 
 	flag.StringVar(&file, "conf", file, "the configuration file")
 	flag.StringVar(&cfg.Url, "url", cfg.Url, "the url path.")
-	flag.StringVar(&tgt, "tgt", tgt, "the target proxied to.")
+	flag.StringVar(&tgt, "tgt", tgt, "target list by comma.")
 	flag.StringVar(&cfg.Auth, "auth", cfg.Auth, "the auth login to.")
 	flag.IntVar(&cfg.Verbose, "log:level", cfg.Verbose, "logger level")
 	flag.Parse()
@@ -69,9 +80,10 @@ func (cfg *Config) Parse() *Config {
 }
 
 func main() {
-	cfg := &Config{}
+	cfg := &PixConfig{}
 	cfg.Parse()
 	libstar.Init(cfg.LogFile, cfg.Verbose)
+
 	ports := GetPorts(cfg.Url, cfg.Auth)
 	for _, port := range ports {
 		cfg.Targets = append(cfg.Targets, port)
@@ -83,10 +95,22 @@ func main() {
 				Type:     "basic",
 				Username: cfg.Auth,
 			},
-			Url: cfg.Url + "/ext/tcpsocket?target=",
+			Url: ToApi(cfg.Url, "socket"),
 		},
 	}
-	pri.Initialize().Start()
+	pri.Initialize()
+	pri.Start()
+	go func() {
+		for {
+			input := ""
+			fmt.Scanln(&input)
+			for _, tgt := range pri.Target {
+				if l, ok := pri.Listen[tgt.Target]; ok {
+					libstar.Info("main %-15s %-20s on %-15s", l.Tgt.Name, l.Tgt.Target, l.Listen)
+				}
+			}
+		}
+	}()
 	defer pri.Stop()
 	libstar.Wait()
 }

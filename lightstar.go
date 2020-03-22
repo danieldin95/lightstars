@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-type Config struct {
+type StarConfig struct {
 	StaticDir string `json:"dir.static"`
 	CrtDir    string `json:"dir.crt"`
 	ConfDir   string `json:"-"`
@@ -21,7 +21,7 @@ type Config struct {
 	Listen    string `json:"listen"`
 }
 
-var cfg = Config{
+var cfg = StarConfig{
 	StaticDir: "static",
 	CrtDir:    "ca",
 	ConfDir:   "/etc/lightstar",
