@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func GetPorts(url, auth string) []string {
-	ports := make([]string, 0, 32)
+func GetPorts(url, auth string) []proxy.Target {
+	ports := make([]proxy.Target, 0, 32)
 
 	client := libstar.HttpClient{
 		Auth: libstar.Auth{
@@ -33,6 +33,8 @@ type Config struct {
 	Target  []string `json:"target"`
 	Verbose int      `json:"log.verbose"`
 	LogFile string   `json:"log.file"`
+
+	Targets []proxy.Target
 }
 
 func (cfg *Config) Parse() *Config {
@@ -54,6 +56,15 @@ func (cfg *Config) Parse() *Config {
 	if err := libstar.JSON.UnmarshalLoad(&cfg, file); err != nil {
 		libstar.Warn("main %s", err)
 	}
+	if cfg.Targets == nil {
+		cfg.Targets = make([]proxy.Target, 0, 32)
+	}
+	for _, t := range cfg.Target {
+		cfg.Targets = append(cfg.Targets, proxy.Target{
+			Name:   "custom",
+			Target: t,
+		})
+	}
 	return cfg
 }
 
@@ -63,10 +74,10 @@ func main() {
 	libstar.Init(cfg.LogFile, cfg.Verbose)
 	ports := GetPorts(cfg.Url, cfg.Auth)
 	for _, port := range ports {
-		cfg.Target = append(cfg.Target, port)
+		cfg.Targets = append(cfg.Targets, port)
 	}
 	pri := proxy.Proxy{
-		Target: cfg.Target,
+		Target: cfg.Targets,
 		Client: &proxy.WsClient{
 			Auth: libstar.Auth{
 				Type:     "basic",

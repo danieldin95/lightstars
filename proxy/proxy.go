@@ -19,8 +19,13 @@ const (
 
 var Start = START
 
+type Target struct {
+	Name   string `json:"name"`
+	Target string `json:"target"`
+}
+
 type Local struct {
-	Target   string
+	Tgt      Target
 	Listen   string
 	Listener net.Listener
 	Client   *WsClient
@@ -38,7 +43,7 @@ func (l *Local) Initialize() *Local {
 		}
 	}
 	if l.Listener != nil {
-		libstar.Info("Local.Initialize %s on %s", l.Target, l.Listen)
+		libstar.Info("Local.Initialize %-15s %-20s on %-15s", l.Tgt.Name, l.Tgt.Target, l.Listen)
 	}
 	return l
 }
@@ -67,7 +72,7 @@ func (l *Local) OnClient(from net.Conn) {
 		Auth: l.Client.Auth,
 		Url:  l.Client.Url,
 	}
-	ws.Url += l.Target
+	ws.Url += l.Tgt.Target
 	ws.Initialize()
 	to, err := ws.Dial()
 	if err != nil {
@@ -100,7 +105,7 @@ func (l *Local) Stop() {
 }
 
 type Proxy struct {
-	Target []string
+	Target []Target
 	Listen map[string]*Local
 	Client *WsClient
 	Conn   *websocket.Conn
@@ -111,15 +116,15 @@ func (p *Proxy) Initialize() *Proxy {
 		p.Listen = make(map[string]*Local, 32)
 	}
 	for _, tgt := range p.Target {
-		if tgt == "" || !strings.Contains(tgt, ":") {
+		if tgt.Target == "" || !strings.Contains(tgt.Target, ":") {
 			continue
 		}
 		local := &Local{
-			Target: tgt,
+			Tgt:    tgt,
 			Client: p.Client,
 		}
 		local.Initialize()
-		p.Listen[tgt] = local
+		p.Listen[tgt.Target] = local
 	}
 
 	return p

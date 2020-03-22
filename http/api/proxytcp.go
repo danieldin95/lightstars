@@ -22,7 +22,12 @@ func (pro ProxyTcp) GET(w http.ResponseWriter, r *http.Request) {
 	list := schema.List{
 		Items: make([]interface{}, 0, 32),
 	}
-	tgts := make([]string, 0, 32)
+
+	type Tgt struct {
+		Name   string `json:"name"`
+		Target string `json:"target"`
+	}
+	tgts := make([]Tgt, 0, 32)
 
 	hyper, err := libvirtc.GetHyper()
 	if err != nil {
@@ -46,15 +51,25 @@ func (pro ProxyTcp) GET(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			if libstar.IsDigit(graphic.Port) {
-				tgts = append(tgts, hyper.Address+":"+graphic.Port)
+
+				tgts = append(tgts, Tgt{
+					Name:   inst.Name,
+					Target: hyper.Address + ":" + graphic.Port,
+				})
 			}
 		}
 		if leases != nil {
 			for _, inf := range inst.Interfaces {
 				libstar.Debug("ProxyTcp.GET %s", inf.Address)
 				if le, ok := leases[inf.Address]; ok {
-					tgts = append(tgts, le.IPAddr+":22")   // ssh
-					tgts = append(tgts, le.IPAddr+":3389") // rdp
+					tgts = append(tgts, Tgt{
+						Name:   inst.Name,
+						Target: le.IPAddr + ":22",
+					}) // ssh
+					tgts = append(tgts, Tgt{
+						Name:   inst.Name,
+						Target: le.IPAddr + ":3389",
+					}) // rdp
 					break
 				}
 			}
