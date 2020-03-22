@@ -33,7 +33,7 @@ func (h Host) Filter(w http.ResponseWriter, r *http.Response, data interface{}) 
 			Items    []schema.Instance
 			Metadata schema.MetaData
 		}{}
-		if err := api.GetJSON(r.Body, &rList); err != nil {
+		if err := libstar.GetJSON(r.Body, &rList); err != nil {
 			libstar.Warn("Host.Filter %s %s", req.Method, req.URL.Path)
 			return false
 		}

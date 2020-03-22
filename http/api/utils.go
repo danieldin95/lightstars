@@ -11,7 +11,6 @@ import (
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"path"
@@ -31,19 +30,6 @@ func GetData(r *http.Request, v interface{}) error {
 	if err != nil {
 		return err
 	}
-	if err := json.Unmarshal([]byte(body), v); err != nil {
-		return err
-	}
-	return nil
-}
-
-func GetJSON(r io.ReadCloser, v interface{}) error {
-	defer r.Close()
-	body, err := ioutil.ReadAll(r)
-	if err != nil {
-		return err
-	}
-	libstar.Debug("GetJSON %s", body)
 	if err := json.Unmarshal([]byte(body), v); err != nil {
 		return err
 	}

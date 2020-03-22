@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"math/rand"
 	"net"
@@ -372,4 +373,17 @@ func Wait() {
 
 	<-x
 	fmt.Println("Done")
+}
+
+func GetJSON(r io.ReadCloser, v interface{}) error {
+	defer r.Close()
+	body, err := ioutil.ReadAll(r)
+	if err != nil {
+		return err
+	}
+	Debug("GetJSON %s", body)
+	if err := json.Unmarshal([]byte(body), v); err != nil {
+		return err
+	}
+	return nil
 }

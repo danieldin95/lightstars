@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"github.com/danieldin95/lightstar/http/api"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/proxy"
 	"strings"
@@ -20,29 +19,29 @@ func GetPorts(url, auth string) []string {
 	}
 	r, err := client.Do()
 	if err == nil {
-		api.GetJSON(r.Body, &ports)
+		libstar.GetJSON(r.Body, &ports)
 	} else {
 		libstar.Error("main %s", err)
 	}
-	libstar.Info("main %s", ports)
+	libstar.Debug("main %s", ports)
 	return ports
 }
 
-func main() {
+type Config struct {
+	Url     string   `json:"url"`
+	Auth    string   `json:"Auth"`
+	Target  []string `json:"target"`
+	Verbose int      `json:"log.verbose"`
+	LogFile string   `json:"log.file"`
+}
+
+func (cfg *Config) Parse() *Config {
 	tgt := ""
 	file := "lightprix.json"
-	cfg := struct {
-		Url     string   `json:"url"`
-		Auth    string   `json:"Auth"`
-		Target  []string `json:"target"`
-		Verbose int      `json:"log.verbose"`
-		LogFile string   `json:"log.file"`
-	}{
-		Url:     "https://localhost:10080",
-		Auth:    "admin:123456",
-		Verbose: 2,
-		LogFile: "lightprix.log",
-	}
+	cfg.Url = "https://localhost:10080"
+	cfg.Auth = "admin:123456"
+	cfg.Verbose = 2
+	cfg.LogFile = "lightprix.log"
 
 	flag.StringVar(&file, "conf", file, "the configuration file")
 	flag.StringVar(&cfg.Url, "url", cfg.Url, "the url path.")
@@ -55,7 +54,12 @@ func main() {
 	if err := libstar.JSON.UnmarshalLoad(&cfg, file); err != nil {
 		libstar.Warn("main %s", err)
 	}
+	return cfg
+}
 
+func main() {
+	cfg := &Config{}
+	cfg.Parse()
 	libstar.Init(cfg.LogFile, cfg.Verbose)
 	ports := GetPorts(cfg.Url, cfg.Auth)
 	for _, port := range ports {

@@ -33,7 +33,7 @@ WIN_DIR = "lightprix-windows-"$$(cat VERSION)
 
 windows/zip:
 	rm -rf $(WIN_DIR) && mkdir -p $(WIN_DIR)
-	cp -rvf resource/point.json $(WIN_DIR)
+	cp -rvf resource/lightprix.json.example $(WIN_DIR)/lightprix.json
 	cp -rvf lightprix.windows.x86_64.exe $(WIN_DIR)
 	rm -rf $(WIN_DIR).zip
 	zip -r $(WIN_DIR).zip $(WIN_DIR)
