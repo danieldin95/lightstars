@@ -1,5 +1,7 @@
 language: go
-os: linux
+os:
+  - linux
+  - windows
 dist: xenial
 sudo: require
 
@@ -26,5 +28,10 @@ install:
   - popd
 
 script:
-  - make
-  - make test
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
+      go build -mod=vendor -o lightpix.windows.x86_64.exe lightpix.go
+    else
+      make
+      make test
+    fi
