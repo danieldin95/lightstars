@@ -5,16 +5,16 @@ import (
 	"github.com/danieldin95/lightstar/schema"
 )
 
-type ProxyTcp struct {
+type DHCPLease struct {
 	Client
 	Host string
 }
 
-func (api ProxyTcp) Url() string {
-	return api.Host + "/api/proxy/tcp"
+func (api DHCPLease) Url() string {
+	return api.Host + "/api/dhcp/lease"
 }
 
-func (api ProxyTcp) Get(data *[]schema.Target) error {
+func (api DHCPLease) Get(data *map[string]schema.DHCPLease) error {
 	client := api.NewRequest(api.Url())
 	if err := api.GetJSON(client, data); err != nil {
 		libstar.Error("DHCPLease.Get %s", err)

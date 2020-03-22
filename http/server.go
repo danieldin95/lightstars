@@ -179,6 +179,7 @@ func (h *Server) Shutdown() {
 }
 
 func (h *Server) Handle404(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
 	file := api.GetFile("ui/404.html")
 	if err := api.ParseFiles(w, file, nil); err != nil {
 		libstar.Error("Server.Handle404 %s", err)

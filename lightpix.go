@@ -10,7 +10,8 @@ import (
 	"strings"
 )
 
-func GetPorts(host, auth string) []schema.Target {
+func GetPorts(host, auth string) (error, []schema.Target) {
+	var data []schema.Target
 	api := client.ProxyTcp{
 		Client: client.Client{
 			Auth: libstar.Auth{
@@ -20,7 +21,7 @@ func GetPorts(host, auth string) []schema.Target {
 		},
 		Host: host,
 	}
-	return api.Get()
+	return api.Get(&data), data
 }
 
 type PixConfig struct {
@@ -69,9 +70,10 @@ func main() {
 	cfg.Parse()
 	libstar.Init(cfg.LogFile, cfg.Verbose)
 
-	ports := GetPorts(cfg.Url, cfg.Auth)
-	for _, port := range ports {
-		cfg.Targets = append(cfg.Targets, port)
+	if err, ports := GetPorts(cfg.Url, cfg.Auth); err == nil {
+		for _, port := range ports {
+			cfg.Targets = append(cfg.Targets, port)
+		}
 	}
 	pri := proxy.Proxy{
 		Target: cfg.Targets,
