@@ -63,7 +63,7 @@ func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
 			}
 			if pools, err := libvirts.ListPools(); err == nil {
 				for _, p := range pools {
-					store := schema.NewDataStore(p)
+					store := storage.NewDataStore(p)
 					list.Items = append(list.Items, store)
 					p.Free()
 				}
@@ -75,7 +75,7 @@ func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
 			}
 			ResponseJson(w, list)
 		} else {
-			ResponseJson(w, libvirts.DATASTOR.List())
+			ResponseJson(w, storage.DATASTOR.List())
 		}
 		return
 	}

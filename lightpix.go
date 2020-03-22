@@ -3,39 +3,24 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/danieldin95/lightstar/http/client"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/proxy"
+	"github.com/danieldin95/lightstar/schema"
 	"strings"
 )
 
-func ToApi(host, name string) string {
-	switch name {
-	case "proxy":
-		return host + "/api/proxy/tcp"
-	case "socket":
-		return host + "/ext/tcpsocket?target="
-	}
-	return ""
-}
-
-func GetPorts(url, auth string) []proxy.Target{
-	ports := make([]proxy.Target, 0, 32)
-
-	client := libstar.HttpClient{
-		Auth: libstar.Auth{
-			Type:     "basic",
-			Username: auth,
+func GetPorts(host, auth string) []schema.Target {
+	api := client.ProxyTcp{
+		Client: client.Client{
+			Auth: libstar.Auth{
+				Type:     "basic",
+				Username: auth,
+			},
 		},
-		Url: ToApi(url, "proxy"),
+		Host: host,
 	}
-	r, err := client.Do()
-	if err == nil {
-		libstar.GetJSON(r.Body, &ports)
-	} else {
-		libstar.Error("main %s", err)
-	}
-	libstar.Debug("main %s", ports)
-	return ports
+	return api.Get()
 }
 
 type PixConfig struct {
@@ -45,7 +30,7 @@ type PixConfig struct {
 	Verbose int      `json:"log.verbose"`
 	LogFile string   `json:"log.file"`
 
-	Targets []proxy.Target
+	Targets []schema.Target
 }
 
 func (cfg *PixConfig) Parse() *PixConfig {
@@ -68,10 +53,10 @@ func (cfg *PixConfig) Parse() *PixConfig {
 		libstar.Warn("main %s", err)
 	}
 	if cfg.Targets == nil {
-		cfg.Targets = make([]proxy.Target, 0, 32)
+		cfg.Targets = make([]schema.Target, 0, 32)
 	}
 	for _, t := range cfg.Target {
-		cfg.Targets = append(cfg.Targets, proxy.Target{
+		cfg.Targets = append(cfg.Targets, schema.Target{
 			Name:   "custom",
 			Target: t,
 		})
@@ -95,7 +80,7 @@ func main() {
 				Type:     "basic",
 				Username: cfg.Auth,
 			},
-			Url: ToApi(cfg.Url, "socket"),
+			Url: cfg.Url + "/ext/tcpsocket?target=",
 		},
 	}
 	pri.Initialize()

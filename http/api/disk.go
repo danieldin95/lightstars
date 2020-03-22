@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/danieldin95/lightstar/compute"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/schema"
@@ -26,7 +27,6 @@ func (disk Disk) Router(router *mux.Router) {
 func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dev, ok := GetArg(r, "dev")
-	format := GetQueryOne(r, "format")
 	if !ok {
 		dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 		if err != nil {
@@ -34,28 +34,20 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer dom.Free()
-		instance := schema.NewInstance(*dom)
-		if format == "schema" {
-			list := schema.List{
-				Items:    make([]interface{}, 0, 32),
-				Metadata: schema.MetaData{},
-			}
-			for _, disk := range instance.Disks {
-				list.Items = append(list.Items, disk)
-			}
-			sort.SliceStable(list.Items, func(i, j int) bool {
-				return list.Items[i].(schema.Disk).Device < list.Items[j].(schema.Disk).Device
-			})
-			list.Metadata.Size = len(list.Items)
-			list.Metadata.Total = len(list.Items)
-			ResponseJson(w, list)
-		} else {
-			if instance.XMLObj == nil {
-				http.Error(w, "Get DescXML failed.", http.StatusInternalServerError)
-				return
-			}
-			ResponseJson(w, instance.XMLObj.Devices.Disks)
+		instance := compute.NewInstance(*dom)
+		list := schema.List{
+			Items:    make([]interface{}, 0, 32),
+			Metadata: schema.MetaData{},
 		}
+		for _, disk := range instance.Disks {
+			list.Items = append(list.Items, disk)
+		}
+		sort.SliceStable(list.Items, func(i, j int) bool {
+			return list.Items[i].(schema.Disk).Device < list.Items[j].(schema.Disk).Device
+		})
+		list.Metadata.Size = len(list.Items)
+		list.Metadata.Total = len(list.Items)
+		ResponseJson(w, list)
 		return
 	}
 	ResponseMsg(w, 0, dev)

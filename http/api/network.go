@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/network"
 	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/danieldin95/lightstar/schema"
 	"github.com/gorilla/mux"
@@ -86,7 +87,7 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 			}
 			if nets, err := libvirtn.ListNetworks(); err == nil {
 				for _, net := range nets {
-					n := schema.NewNetwork(net)
+					n := network.NewNetwork(net)
 					list.Items = append(list.Items, n)
 					net.Free()
 				}

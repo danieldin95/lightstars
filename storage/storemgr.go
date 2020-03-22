@@ -1,8 +1,8 @@
-package libvirts
+package storage
 
 import (
 	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/storage"
+	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/libvirt/libvirt-go"
 	"path"
 	"strings"
@@ -20,7 +20,7 @@ type IsoMgr struct {
 func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 	images := make([]IsoFile, 0, 32)
 
-	hyper, err := GetHyper()
+	hyper, err := libvirts.GetHyper()
 	if err != nil {
 		libstar.Warn("IsoMgr.ListFiles %s", err)
 		return images
@@ -47,7 +47,7 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 				strings.HasSuffix(name, ".VMDK") {
 				images = append(images, IsoFile{
 					Name: path.Base(file),
-					Path: storage.PATH.Fmt(file),
+					Path: PATH.Fmt(file),
 				})
 			}
 			vol.Free()
@@ -60,7 +60,7 @@ var ISO = IsoMgr{
 	Files: make([]IsoFile, 0, 32),
 }
 
-type DataStore struct {
+type Store struct {
 	Name       string `json:"name"`
 	Path       string `json:"path"`
 	State      int    `json:"state"`
@@ -69,16 +69,16 @@ type DataStore struct {
 	Available  uint64 `json:"available"`
 }
 
-type DataStoreMgr struct {
-	Storage []DataStore `json:"storage"`
+type StoreMgr struct {
+	Store []Store `json:"storage"`
 }
 
-func (store *DataStoreMgr) Init() {
-	AddHyperListener(HyperListener{
+func (store *StoreMgr) Init() {
+	libvirts.AddHyperListener(libvirts.HyperListener{
 		Opened: func(Conn *libvirt.Connect) error {
-			_, err := CreatePool("01", storage.PATH.Unix("datastore@01"))
+			_, err := libvirts.CreatePool("01", PATH.Unix("datastore@01"))
 			if err != nil {
-				libstar.Error("DataStoreMgr.Init CreatePool %s", err)
+				libstar.Error("StoreMgr.Init CreatePool %s", err)
 			}
 			return nil
 		},
@@ -86,12 +86,12 @@ func (store *DataStoreMgr) Init() {
 	})
 }
 
-func (store *DataStoreMgr) List() []DataStore {
-	stores := make([]DataStore, 0, 32)
+func (store *StoreMgr) List() []Store {
+	stores := make([]Store, 0, 32)
 
-	hyper, err := GetHyper()
+	hyper, err := libvirts.GetHyper()
 	if err != nil {
-		libstar.Warn("IsoMgr.ListFiles %s", err)
+		libstar.Warn("StoreMgr.ListFiles %s", err)
 		return stores
 	}
 	if pools, err := hyper.Conn.ListAllStoragePools(0); err == nil {
@@ -100,15 +100,14 @@ func (store *DataStoreMgr) List() []DataStore {
 			if err != nil {
 				continue
 			}
-			if IsDomainPool(name) {
+			if libvirts.IsDomainPool(name) {
 				pool.Free()
 				continue
 			}
-
 			info, err := pool.GetInfo()
 			if err == nil {
-				path := storage.DataStore + name
-				stores = append(stores, DataStore{
+				path := DataStore + name
+				stores = append(stores, Store{
 					Name:       path,
 					Path:       path,
 					State:      int(info.State),
@@ -123,6 +122,6 @@ func (store *DataStoreMgr) List() []DataStore {
 	return stores
 }
 
-var DATASTOR = DataStoreMgr{
-	Storage: make([]DataStore, 0, 32),
+var DATASTOR = StoreMgr{
+	Store: make([]Store, 0, 32),
 }

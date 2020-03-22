@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/danieldin95/lightstar/compute"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/schema"
 	"github.com/gorilla/mux"
@@ -19,7 +20,6 @@ func (gra Graphics) Router(router *mux.Router) {
 
 func (gra Graphics) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	format := GetQueryOne(r, "format")
 
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
@@ -27,28 +27,20 @@ func (gra Graphics) GET(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer dom.Free()
-	instance := schema.NewInstance(*dom)
-	if format == "schema" {
-		list := schema.List{
-			Items:    make([]interface{}, 0, 32),
-			Metadata: schema.MetaData{},
-		}
-		for _, gra := range instance.Graphics {
-			list.Items = append(list.Items, gra)
-		}
-		sort.SliceStable(list.Items, func(i, j int) bool {
-			return list.Items[i].(schema.Graphics).Type > list.Items[j].(schema.Graphics).Type
-		})
-		list.Metadata.Size = len(list.Items)
-		list.Metadata.Total = len(list.Items)
-		ResponseJson(w, list)
-	} else {
-		if instance.XMLObj == nil {
-			http.Error(w, "Get DescXML failed.", http.StatusInternalServerError)
-			return
-		}
-		ResponseJson(w, instance.XMLObj.Devices.Graphics)
+	instance := compute.NewInstance(*dom)
+	list := schema.List{
+		Items:    make([]interface{}, 0, 32),
+		Metadata: schema.MetaData{},
 	}
+	for _, gra := range instance.Graphics {
+		list.Items = append(list.Items, gra)
+	}
+	sort.SliceStable(list.Items, func(i, j int) bool {
+		return list.Items[i].(schema.Graphics).Type > list.Items[j].(schema.Graphics).Type
+	})
+	list.Metadata.Size = len(list.Items)
+	list.Metadata.Total = len(list.Items)
+	ResponseJson(w, list)
 }
 
 func (gra Graphics) POST(w http.ResponseWriter, r *http.Request) {

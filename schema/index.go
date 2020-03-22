@@ -1,9 +1,6 @@
 package schema
 
-import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/libstar"
-)
+import "github.com/danieldin95/lightstar/libstar"
 
 type Version struct {
 	Version string `json:"version"`
@@ -29,17 +26,6 @@ type Hyper struct {
 	MemFree    uint64  `json:"memFree"`
 	MemCached  uint64  `json:"memCached"`
 	MemPercent float64 `json:"memPercent"`
-}
-
-func NewHyper() (hs Hyper) {
-	hyper, _ := libvirtc.GetHyper()
-
-	hs.Name = hyper.Name
-	hs.Host = hyper.Address
-	hs.CpuNum, hs.CpuVendor, hs.CpuUtils = hyper.GetCPU()
-	hs.MemTotal, hs.MemFree, hs.MemCached = hyper.GetMem()
-
-	return hs
 }
 
 type Index struct {

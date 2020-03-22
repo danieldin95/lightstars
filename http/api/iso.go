@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/storage"
-	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -20,7 +19,7 @@ func (iso ISO) GET(w http.ResponseWriter, r *http.Request) {
 		store = "datastore@01"
 	}
 	path := storage.PATH.Unix(store)
-	ResponseJson(w, libvirts.ISO.ListFiles(path))
+	ResponseJson(w, storage.ISO.ListFiles(path))
 }
 
 func (iso ISO) POST(w http.ResponseWriter, r *http.Request) {

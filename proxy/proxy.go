@@ -3,6 +3,7 @@ package proxy
 import (
 	"fmt"
 	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/schema"
 	"golang.org/x/net/websocket"
 	"io"
 	"math/rand"
@@ -22,13 +23,8 @@ var PORT = struct {
 	Curr:  9000,
 }
 
-type Target struct {
-	Name   string `json:"name"`
-	Target string `json:"target"`
-}
-
 type Local struct {
-	Tgt      Target
+	Tgt      schema.Target
 	Listen   string
 	Listener net.Listener
 	Client   *WsClient
@@ -108,7 +104,7 @@ func (l *Local) Stop() {
 }
 
 type Proxy struct {
-	Target []Target
+	Target []schema.Target
 	Listen map[string]*Local
 	Client *WsClient
 	Conn   *websocket.Conn

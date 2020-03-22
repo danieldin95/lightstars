@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"github.com/danieldin95/lightstar/compute"
 	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/network/libvirtn"
@@ -301,7 +302,7 @@ func (ins Instance) HasPermission(user *schema.User, instance string) bool {
 func (ins Instance) GetByUser(user *schema.User, list *schema.List) {
 	if domains, err := libvirtc.ListDomains(); err == nil {
 		for _, d := range domains {
-			inst := schema.NewInstance(d)
+			inst := compute.NewInstance(d)
 			if ins.HasPermission(user, inst.Name) {
 				list.Items = append(list.Items, inst)
 			}
@@ -344,7 +345,7 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 			ResponseXML(w, "<error>"+err.Error()+"</error>")
 		}
 	} else if format == "schema" {
-		ResponseJson(w, schema.NewInstance(*dom))
+		ResponseJson(w, compute.NewInstance(*dom))
 	} else {
 		ResponseJson(w, libvirtc.NewDomainXMLFromDom(dom, true))
 	}

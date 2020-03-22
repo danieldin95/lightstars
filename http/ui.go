@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/base64"
+	"github.com/danieldin95/lightstar/compute"
 	"github.com/danieldin95/lightstar/http/api"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/schema"
@@ -36,7 +37,7 @@ func (ui UI) Home(w http.ResponseWriter, r *http.Request) {
 	index.User, _ = api.GetUser(r)
 	libstar.Debug("UI.Home %v", index.User)
 	index.Version = schema.NewVersion()
-	index.Hyper = schema.NewHyper()
+	index.Hyper = compute.NewHyper()
 	file := api.GetFile("ui/index.html")
 	if err := api.ParseFiles(w, file, index); err != nil {
 		libstar.Error("UI.Home %s", err)

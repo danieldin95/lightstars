@@ -120,17 +120,12 @@ func (h *HyperVisor) LookupNetwork(name string) (*Network, error) {
 }
 
 func (h *HyperVisor) SyncLeases() error {
-	h.Lock.Lock()
-	defer h.Lock.Unlock()
-
-	if err := h.OpenNotSafe(); err != nil {
-		return err
-	}
 	nets, err := hyper.ListAllNetworks()
 	if err != nil {
 		return err
 	}
-
+	h.Lock.Lock()
+	defer h.Lock.Unlock()
 	h.Leases = make(map[string]DHCPLease, 128)
 	for _, net := range nets {
 		les, err := net.GetDHCPLeases()
@@ -155,7 +150,6 @@ func (h *HyperVisor) SyncLeases() error {
 func (h *HyperVisor) GetLeases() map[string]DHCPLease {
 	h.Lock.RLock()
 	defer h.Lock.RUnlock()
-
 	leases := make(map[string]DHCPLease, 128)
 	for name, value := range h.Leases {
 		leases[name] = value
