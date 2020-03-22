@@ -17,6 +17,20 @@ import (
 type Instance struct {
 }
 
+func GetTypeBySuffix(name string) string {
+	name = strings.ToUpper(name)
+	if strings.HasSuffix(name, ".ISO") {
+		return "cdrom"
+	} else if strings.HasSuffix(name, ".RAW") {
+		return "raw"
+	} else if strings.HasSuffix(name, ".QCOW2") || strings.HasSuffix(name, ".IMG") {
+		return "qcow2"
+	} else if strings.HasSuffix(name, ".VMDK") {
+		return "vmdk"
+	}
+	return "raw"
+}
+
 func NewCDROMXML(file, family string, seq uint8) libvirtc.DiskXML {
 	return libvirtc.DiskXML{
 		Type:   "block",
@@ -48,15 +62,7 @@ func NewISOXML(file, family string, seq uint8) libvirtc.DiskXML {
 		},
 	}
 	name := strings.ToUpper(file)
-	if strings.HasSuffix(name, ".ISO") {
-		xml.Device = "cdrom"
-	} else if strings.HasSuffix(name, ".RAW") {
-		xml.Driver.Type = "raw"
-	} else if strings.HasSuffix(name, ".QCOW2") || strings.HasSuffix(name, ".IMG") {
-		xml.Driver.Type = "qcow2"
-	} else if strings.HasSuffix(name, ".VMDK") {
-		xml.Driver.Type = "vmdk"
-	}
+	xml.Driver.Type = GetTypeBySuffix(name)
 	if family == "linux" && !strings.HasSuffix(name, ".ISO") {
 		xml.Target = libvirtc.DiskTargetXML{
 			Bus: "virtio",
@@ -208,7 +214,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		} else if strings.HasSuffix(file, ".iso") || strings.HasSuffix(file, ".ISO") {
 			obj = NewISOXML(storage.PATH.Unix(file), conf.Family, seq)
 		} else {
-			format := "raw"
+			format := GetTypeBySuffix(file)
 			if file == "" {
 				size := libstar.ToBytes(size, unit)
 				vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, Slot2Disk(seq), size)
@@ -217,6 +223,8 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 				}
 				file = vol.Target.Path
 				format = vol.Target.Format.Type
+			} else {
+				file = storage.PATH.Unix(file)
 			}
 			switch conf.Family {
 			case "linux":

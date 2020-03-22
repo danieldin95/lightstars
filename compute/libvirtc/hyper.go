@@ -21,12 +21,12 @@ type HyperVisor struct {
 	Conn     *libvirt.Connect
 	Listener []HyperListener
 
-	lock     sync.RWMutex
-	ticker   *time.Ticker
-	cpuSts   *libvirt.NodeCPUStats
-	done     chan bool
-	idleUtil uint64
-	domsUtil map[string]uint64
+	Lock     sync.RWMutex
+	Ticker   *time.Ticker
+	CpuSts   *libvirt.NodeCPUStats
+	Done     chan bool
+	IdleUtil uint64
+	DomUtil  map[string]uint64
 }
 
 func parseQemuTCP(name string) (address, path string) {
@@ -81,8 +81,8 @@ func (h *HyperVisor) OpenNotSafe() error {
 }
 
 func (h *HyperVisor) Open() error {
-	h.lock.Lock()
-	defer h.lock.Unlock()
+	h.Lock.Lock()
+	defer h.Lock.Unlock()
 	return h.OpenNotSafe()
 }
 
@@ -109,14 +109,14 @@ func (h *HyperVisor) SetName(name string) {
 }
 
 func (h *HyperVisor) FigureCPU() (err error) {
-	h.lock.Lock()
-	defer h.lock.Unlock()
+	h.Lock.Lock()
+	defer h.Lock.Unlock()
 
 	if err := h.OpenNotSafe(); err != nil {
 		return err
 	}
-	if h.cpuSts == nil {
-		h.cpuSts, err = h.Conn.GetCPUStats(-1, 0)
+	if h.CpuSts == nil {
+		h.CpuSts, err = h.Conn.GetCPUStats(-1, 0)
 		if err != nil {
 			libstar.Warn("HyperVisor.FigureCpu %s", err)
 			return err
@@ -127,11 +127,11 @@ func (h *HyperVisor) FigureCPU() (err error) {
 		libstar.Warn("HyperVisor.FigureCpu %s", err)
 		return err
 	}
-	older := h.cpuSts.User
-	older += h.cpuSts.Idle
-	older += h.cpuSts.Kernel
-	older += h.cpuSts.Intr
-	older += h.cpuSts.Iowait
+	older := h.CpuSts.User
+	older += h.CpuSts.Idle
+	older += h.CpuSts.Kernel
+	older += h.CpuSts.Intr
+	older += h.CpuSts.Iowait
 	newer := newerSts.User
 	newer += newerSts.Idle
 	newer += newerSts.Kernel
@@ -139,9 +139,9 @@ func (h *HyperVisor) FigureCPU() (err error) {
 	newer += newerSts.Iowait
 	dt := newer - older
 	if dt > 0 {
-		h.idleUtil = 1000 * (newerSts.Idle - h.cpuSts.Idle) / dt
+		h.IdleUtil = 1000 * (newerSts.Idle - h.CpuSts.Idle) / dt
 		// record last statics
-		h.cpuSts = newerSts
+		h.CpuSts = newerSts
 	}
 	return nil
 }
@@ -149,9 +149,9 @@ func (h *HyperVisor) FigureCPU() (err error) {
 func (h *HyperVisor) LoopForever() {
 	for {
 		select {
-		case <-h.done:
+		case <-h.Done:
 			return
-		case <-h.ticker.C:
+		case <-h.Ticker.C:
 			h.FigureCPU()
 		}
 	}
@@ -162,10 +162,10 @@ func (h *HyperVisor) GetCPU() (uint, string, uint64) {
 		return 0, "", 1000
 	}
 
-	h.lock.RLock()
-	defer h.lock.RUnlock()
+	h.Lock.RLock()
+	defer h.Lock.RUnlock()
 	if info, err := h.Conn.GetNodeInfo(); err == nil {
-		return info.Cpus, info.Model, h.idleUtil
+		return info.Cpus, info.Model, h.IdleUtil
 	}
 	return 0, "", 1000
 }
@@ -273,10 +273,10 @@ func (h *HyperVisor) Close() {
 
 var hyper = HyperVisor{
 	Listener: make([]HyperListener, 0, 32),
-	ticker:   time.NewTicker(2 * time.Second),
-	done:     make(chan bool),
-	idleUtil: 1000,
-	domsUtil: make(map[string]uint64, 32),
+	Ticker:   time.NewTicker(2 * time.Second),
+	Done:     make(chan bool),
+	IdleUtil: 1000,
+	DomUtil:  make(map[string]uint64, 32),
 }
 
 func GetHyper() (*HyperVisor, error) {

@@ -28,39 +28,10 @@ func ListNetworks() ([]Network, error) {
 	return hyper.ListAllNetworks()
 }
 
-func ListLeases(name string) (map[string]DHCPLease, error) {
+func ListLeases() (map[string]DHCPLease, error) {
 	hyper, err := GetHyper()
 	if err != nil {
 		return nil, err
 	}
-	nets := make([]Network, 0, 32)
-	if name == "" {
-		nets, err = hyper.ListAllNetworks()
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		if net, err := hyper.LookupNetwork(name); err == nil {
-			nets = append(nets, *net)
-		}
-	}
-	leases := make(map[string]DHCPLease, 128)
-	for _, net := range nets {
-		les, err := net.GetDHCPLeases()
-		net.Free()
-		if err != nil {
-			continue
-		}
-		for _, le := range les {
-			d := DHCPLease{
-				Type:     int(le.Type),
-				IPAddr:   le.IPaddr,
-				Prefix:   le.Prefix,
-				Hostname: le.Hostname,
-				Mac:      le.Mac,
-			}
-			leases[d.Mac] = d
-		}
-	}
-	return leases, nil
+	return hyper.GetLeases(), nil
 }

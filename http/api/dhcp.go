@@ -12,12 +12,10 @@ type DHCPLease struct {
 
 func (le DHCPLease) Router(router *mux.Router) {
 	router.HandleFunc("/api/dhcp/lease", le.GET).Methods("GET")
-	router.HandleFunc("/api/dhcp/lease/{name}", le.GET).Methods("GET")
 }
 
 func (le DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
-	name, _ := GetArg(r, "name")
-	leases, err := libvirtn.ListLeases(name)
+	leases, err := libvirtn.ListLeases()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

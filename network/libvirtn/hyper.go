@@ -3,6 +3,8 @@ package libvirtn
 import (
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
+	"sync"
+	"time"
 )
 
 var (
@@ -18,13 +20,17 @@ type HyperVisor struct {
 	Name     string
 	Conn     *libvirt.Connect
 	Listener []HyperListener
+	Lock     sync.RWMutex
+	Ticker   *time.Ticker
+	Done     chan bool
+	Leases   map[string]DHCPLease
 }
 
 func (h *HyperVisor) AddListener(listen HyperListener) {
 	h.Listener = append(h.Listener, listen)
 }
 
-func (h *HyperVisor) Open() error {
+func (h *HyperVisor) OpenNotSafe() error {
 	if hyper.Conn != nil {
 		if _, err := hyper.Conn.GetVersion(); err != nil {
 			libstar.Error("HyperVisor.Open %s", err)
@@ -48,6 +54,13 @@ func (h *HyperVisor) Open() error {
 		return libstar.NewErr("Not connect.")
 	}
 	return nil
+}
+
+func (h *HyperVisor) Open() error {
+	h.Lock.Lock()
+	defer h.Lock.Unlock()
+
+	return h.OpenNotSafe()
 }
 
 func (h *HyperVisor) Close() {
@@ -106,9 +119,66 @@ func (h *HyperVisor) LookupNetwork(name string) (*Network, error) {
 	return &Network{Network: *net}, nil
 }
 
+func (h *HyperVisor) SyncLeases() error {
+	h.Lock.Lock()
+	defer h.Lock.Unlock()
+
+	if err := h.OpenNotSafe(); err != nil {
+		return err
+	}
+	nets, err := hyper.ListAllNetworks()
+	if err != nil {
+		return err
+	}
+
+	h.Leases = make(map[string]DHCPLease, 128)
+	for _, net := range nets {
+		les, err := net.GetDHCPLeases()
+		net.Free()
+		if err != nil {
+			continue
+		}
+		for _, le := range les {
+			d := DHCPLease{
+				Type:     int(le.Type),
+				IPAddr:   le.IPaddr,
+				Prefix:   le.Prefix,
+				Hostname: le.Hostname,
+				Mac:      le.Mac,
+			}
+			h.Leases[d.Mac] = d
+		}
+	}
+	return nil
+}
+
+func (h *HyperVisor) GetLeases() map[string]DHCPLease {
+	h.Lock.RLock()
+	defer h.Lock.RUnlock()
+
+	leases := make(map[string]DHCPLease, 128)
+	for name, value := range h.Leases {
+		leases[name] = value
+	}
+	return leases
+}
+
+func (h *HyperVisor) LoopForever() {
+	for {
+		select {
+		case <-h.Done:
+			return
+		case <-h.Ticker.C:
+			h.SyncLeases()
+		}
+	}
+}
+
 var hyper = HyperVisor{
 	Name:     "qemu:///system",
 	Listener: make([]HyperListener, 0, 32),
+	Ticker:   time.NewTicker(2 * time.Second),
+	Done:     make(chan bool),
 }
 
 func GetHyper() (*HyperVisor, error) {
@@ -126,4 +196,8 @@ func SetHyper(name string) (*HyperVisor, error) {
 
 func AddHyperListener(listen HyperListener) {
 	hyper.AddListener(listen)
+}
+
+func init() {
+	go hyper.LoopForever()
 }

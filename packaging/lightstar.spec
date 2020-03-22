@@ -20,7 +20,7 @@ cd %_source_dir && make
 %install
 mkdir -p %{buildroot}/usr/bin
 cp %_source_dir/lightstar %{buildroot}/usr/bin/lightstar
-cp %_source_dir/lightprix %{buildroot}/usr/bin/lightpix
+cp %_source_dir/lightpix %{buildroot}/usr/bin/lightpix
 
 mkdir -p %{buildroot}/etc/sysconfig
 cat > %{buildroot}/etc/sysconfig/lightstar.cfg << EOF

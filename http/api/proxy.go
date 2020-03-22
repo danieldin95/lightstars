@@ -40,7 +40,31 @@ func (pro ProxyTcp) Graphics(inst *schema.Instance) []schema.Target {
 
 func (pro ProxyTcp) Inside(inst *schema.Instance) []schema.Target {
 	dst := make([]schema.Target, 0, 32)
-	leases, err := libvirtn.ListLeases("")
+	leases, err := libvirtn.ListLeases()
+	if err != nil {
+		libstar.Warn("ProxyTcp.Inside %s", err)
+		return dst
+	}
+	for _, inf := range inst.Interfaces {
+		libstar.Debug("ProxyTcp.GET %s", inf.Address)
+		if le, ok := leases[inf.Address]; ok {
+			dst = append(dst, schema.Target{
+				Name:   inst.Name,
+				Target: le.IPAddr + ":22",
+			}) // ssh
+			dst = append(dst, schema.Target{
+				Name:   inst.Name,
+				Target: le.IPAddr + ":3389",
+			}) // rdp
+			break
+		}
+	}
+	return dst
+}
+
+func (pro ProxyTcp) Remote(inst *schema.Instance) []schema.Target {
+	dst := make([]schema.Target, 0, 32)
+	leases, err := libvirtn.ListLeases()
 	if err != nil {
 		libstar.Warn("ProxyTcp.Inside %s", err)
 		return dst
@@ -76,7 +100,7 @@ func (pro ProxyTcp) GET(w http.ResponseWriter, r *http.Request) {
 	tgt := make([]schema.Target, 0, 32)
 	for _, item := range list.Items {
 		inst := item.(schema.Instance)
-		tgt = append(tgt, pro.Graphics(&inst)...)
+		//tgt = append(tgt, pro.Graphics(&inst)...)
 		tgt = append(tgt, pro.Inside(&inst)...)
 	}
 	ResponseJson(w, tgt)
