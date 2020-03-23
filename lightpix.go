@@ -30,6 +30,7 @@ type PixConfig struct {
 	Target  []string `json:"target"`
 	Verbose int      `json:"log.verbose"`
 	LogFile string   `json:"log.file"`
+	Listen  string   `json:"listen"`
 
 	Targets []schema.Target
 }
@@ -41,10 +42,11 @@ func (cfg *PixConfig) Parse() *PixConfig {
 	cfg.Auth = "admin:123456"
 	cfg.Verbose = 2
 	cfg.LogFile = "lightpix.log"
+	cfg.Listen = "1270.0.0.1"
 
-	flag.StringVar(&file, "conf", file, "the configuration file")
+	flag.StringVar(&cfg.Listen, "listen", cfg.Listen, "local address listen on")
 	flag.StringVar(&cfg.Url, "url", cfg.Url, "the url path.")
-	flag.StringVar(&tgt, "tgt", tgt, "target list by comma.")
+	flag.StringVar(&tgt, "tgt", tgt, "target list by comma, like: <ADDRESS>:<PORT>,..")
 	flag.StringVar(&cfg.Auth, "auth", cfg.Auth, "the auth login to.")
 	flag.IntVar(&cfg.Verbose, "log:level", cfg.Verbose, "logger level")
 	flag.Parse()
@@ -84,13 +86,14 @@ func main() {
 			},
 			Url: cfg.Url + "/ext/tcpsocket",
 		},
+		Address: cfg.Listen,
 	}
 	pri.Initialize()
 	pri.Start()
 	go func() {
 		for {
 			input := ""
-			fmt.Scanln(&input)
+			_, _ = fmt.Scanln(&input)
 			if err, ports := GetPorts(cfg.Url, cfg.Auth); err == nil {
 				pri.Update(ports)
 			}

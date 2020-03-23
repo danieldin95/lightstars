@@ -24,6 +24,7 @@ var PORT = struct {
 }
 
 type Local struct {
+	Address  string
 	Tgt      schema.Target
 	Listen   string
 	Listener net.Listener
@@ -33,7 +34,7 @@ type Local struct {
 func (l *Local) Initialize() *Local {
 	for i := PORT.Curr; i < PORT.Size+PORT.Start; i++ {
 		// random or sequence
-		l.Listen = fmt.Sprintf("localhost:%d", i)
+		l.Listen = fmt.Sprintf("%s:%d", l.Address, i)
 		listen, err := net.Listen("tcp", l.Listen)
 		if err == nil {
 			PORT.Curr = i
@@ -42,7 +43,8 @@ func (l *Local) Initialize() *Local {
 		}
 	}
 	if l.Listener != nil {
-		libstar.Info("Local.Initialize %s %-15s %-20s on %-15s", l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
+		libstar.Info("Local.Initialize %s %-15s %-20s on %-15s",
+			l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
 	}
 	return l
 }
@@ -105,11 +107,12 @@ func (l *Local) Stop() {
 }
 
 type Proxy struct {
-	Lock   sync.RWMutex
-	Target []schema.Target
-	Listen map[string]*Local
-	Client *WsClient
-	Conn   *websocket.Conn
+	Lock    sync.RWMutex
+	Address string
+	Target  []schema.Target
+	Listen  map[string]*Local
+	Client  *WsClient
+	Conn    *websocket.Conn
 }
 
 func (p *Proxy) Initialize() *Proxy {
@@ -124,8 +127,9 @@ func (p *Proxy) Initialize() *Proxy {
 			continue
 		}
 		local := &Local{
-			Tgt:    tgt,
-			Client: p.Client,
+			Address: p.Address,
+			Tgt:     tgt,
+			Client:  p.Client,
 		}
 		local.Initialize()
 		p.Listen[tgt.ID()] = local
@@ -206,7 +210,8 @@ func (p *Proxy) Show() {
 		if !ok {
 			continue
 		}
-		libstar.Info("Proxy.Show %s %-15s %-20s on %-15s", l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
+		libstar.Info("Proxy.Show %s %-15s %-20s on %-15s",
+			l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
 	}
 }
 
