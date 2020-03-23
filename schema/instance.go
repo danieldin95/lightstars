@@ -7,6 +7,11 @@ type Graphics struct {
 	Port     string `json:"port"`
 }
 
+type ListGraphics struct {
+	List
+	Items []Graphics `json:"items"`
+}
+
 type Processor struct {
 	Cpu  string `json:"cpu"`  // configure
 	Mode string `json:"mode"` // configure
@@ -44,8 +49,8 @@ type Instance struct {
 }
 
 type ListInstance struct {
-	Items    []Instance `json:"items"`
-	Metadata MetaData   `json:"metadata"`
+	List
+	Items []Instance `json:"items"`
 }
 
 type Disk struct {
@@ -70,6 +75,11 @@ type Disk struct {
 	AddrUnit   uint16 `json:"addrUnit"`
 }
 
+type ListDisk struct {
+	List
+	Items []Disk `json:"items"`
+}
+
 type Interface struct {
 	Action     string `json:"action,omitempty"` // If is "", means not action.
 	Seq        string `json:"seq,omitempty"`    //configure
@@ -85,6 +95,11 @@ type Interface struct {
 	AddrDomain uint16 `json:"addrDomain"`
 	AddrBus    uint16 `json:"addrBus"`
 	AddrFunc   uint16 `json:"addrFunc"`
+}
+
+type ListInterface struct {
+	List
+	Items []Interface `json:"items"`
 }
 
 type Controller struct {

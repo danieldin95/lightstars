@@ -4,6 +4,7 @@ type Range struct {
 	Start string `json:"start"`
 	End   string `json:"end"`
 }
+
 type Network struct {
 	UUID    string  `json:"uuid"`
 	Name    string  `json:"name"`
@@ -14,4 +15,9 @@ type Network struct {
 	Range   []Range `json:"range"`
 	DHCP    string  `json:"dhcp,omitempty"`
 	Mode    string  `json:"mode"` // nat, router.
+}
+
+type ListNetwork struct {
+	List
+	Items []Network `json:"items"`
 }

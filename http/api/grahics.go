@@ -28,15 +28,14 @@ func (gra Graphics) GET(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 	instance := compute.NewInstance(*dom)
-	list := schema.List{
-		Items:    make([]interface{}, 0, 32),
-		Metadata: schema.MetaData{},
+	list := schema.ListGraphics{
+		Items: make([]schema.Graphics, 0, 32),
 	}
 	for _, gra := range instance.Graphics {
 		list.Items = append(list.Items, gra)
 	}
 	sort.SliceStable(list.Items, func(i, j int) bool {
-		return list.Items[i].(schema.Graphics).Type > list.Items[j].(schema.Graphics).Type
+		return list.Items[i].Type > list.Items[j].Type
 	})
 	list.Metadata.Size = len(list.Items)
 	list.Metadata.Total = len(list.Items)

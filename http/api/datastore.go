@@ -57,9 +57,8 @@ func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		// list all instances.
 		if format == "schema" {
-			list := schema.List{
-				Items:    make([]interface{}, 0, 32),
-				Metadata: schema.MetaData{},
+			list := schema.ListDataStore{
+				Items: make([]schema.DataStore, 0, 32),
 			}
 			if pools, err := libvirts.ListPools(); err == nil {
 				for _, p := range pools {
@@ -68,7 +67,7 @@ func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
 					p.Free()
 				}
 				sort.SliceStable(list.Items, func(i, j int) bool {
-					return list.Items[i].(schema.DataStore).Name < list.Items[j].(schema.DataStore).Name
+					return list.Items[i].Name < list.Items[j].Name
 				})
 				list.Metadata.Size = len(list.Items)
 				list.Metadata.Total = len(list.Items)

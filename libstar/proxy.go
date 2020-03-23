@@ -137,13 +137,13 @@ func (pri *ProxyWs) Socket(ws *websocket.Conn) {
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			Error("ProxyWs.Socket copy from ws %s", err)
+			Warn("ProxyWs.Socket copy from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			Error("ProxyWs.Socket copy from target %s", err)
+			Warn("ProxyWs.Socket copy from target %s", err)
 		}
 	}()
 	wait.Wait()

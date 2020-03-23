@@ -125,13 +125,13 @@ func (w WebSocket) Handle(ws *websocket.Conn) {
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Error("WebSocket.Handle copy from ws %s", err)
+			libstar.Warn("WebSocket.Handle copy from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Error("WebSocket.Handle copy from target %s", err)
+			libstar.Warn("WebSocket.Handle copy from target %s", err)
 		}
 	}()
 	wait.Wait()
@@ -144,7 +144,7 @@ func (t TcpSocket) Router(router *mux.Router) {
 	router.Handle("/ext/tcpsocket", websocket.Handler(t.Handle))
 }
 
-func (t TcpSocket) Local(ws *websocket.Conn) {
+func (t TcpSocket) Local(host string, ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
 
@@ -152,42 +152,37 @@ func (t TcpSocket) Local(ws *websocket.Conn) {
 	target := api.GetQueryOne(r, "target")
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("TcpSocket.Handle dial %s", err)
+		libstar.Error("TcpSocket.Local dial %s", err)
 		return
 	}
 	defer conn.Close()
-
 	user, _ := api.GetUser(r)
-	libstar.Info("TcpSocket.Handle with %s", user.Name)
-	libstar.Info("TcpSocket.Handle request by %s", ws.RemoteAddr())
-	libstar.Info("TcpSocket.Handle connect to %s", conn.RemoteAddr())
+	libstar.Info("TcpSocket.Local with %s", user.Name)
+	libstar.Info("TcpSocket.Local request by %s", ws.RemoteAddr())
+	libstar.Info("TcpSocket.Local connect to %s", conn.RemoteAddr())
 
 	wait := sync.WaitGroup{}
 	wait.Add(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Error("TcpSocket.Handle copy from ws %s", err)
+			libstar.Warn("TcpSocket.Local copy from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Error("TcpSocket.Handle copy from target %s", err)
+			libstar.Warn("TcpSocket.Local copy from target %s", err)
 		}
 	}()
 	wait.Wait()
 }
 
-func (t TcpSocket) Remote(ws *websocket.Conn) {
+func (t TcpSocket) Remote(host string, ws *websocket.Conn) {
 	r := ws.Request()
-	host := api.GetQueryOne(r, "host")
-	if host == "" {
-		return
-	}
 	node := service.SERVICE.Zone.Get(host)
 	if node == nil {
-		libstar.Error("host not found: %s", host)
+		libstar.Error("TcpSocket.Remote host not found: %s", host)
 		return
 	}
 	query := r.URL.Query()
@@ -211,8 +206,8 @@ func (t TcpSocket) Handle(ws *websocket.Conn) {
 	r := ws.Request()
 	host := api.GetQueryOne(r, "host")
 	if host == "" {
-		t.Local(ws)
+		t.Local("", ws)
 	} else {
-		t.Remote(ws)
+		t.Remote(host, ws)
 	}
 }

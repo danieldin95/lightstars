@@ -81,9 +81,8 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		// list all instances.
 		if format == "schema" {
-			list := schema.List{
-				Items:    make([]interface{}, 0, 32),
-				Metadata: schema.MetaData{},
+			list := schema.ListNetwork{
+				Items: make([]schema.Network, 0, 32),
 			}
 			if nets, err := libvirtn.ListNetworks(); err == nil {
 				for _, net := range nets {
@@ -92,7 +91,7 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 					net.Free()
 				}
 				sort.SliceStable(list.Items, func(i, j int) bool {
-					return list.Items[i].(schema.Network).Name < list.Items[j].(schema.Network).Name
+					return list.Items[i].Name < list.Items[j].Name
 				})
 				list.Metadata.Size = len(list.Items)
 				list.Metadata.Total = len(list.Items)
@@ -121,17 +120,17 @@ func (net Network) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	netvir, err := hyper.NetworkDefineXML(xmlObj.Encode())
+	netVir, err := hyper.NetworkDefineXML(xmlObj.Encode())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer netvir.Free()
-	if err := netvir.Create(); err != nil {
+	defer netVir.Free()
+	if err := netVir.Create(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := netvir.SetAutostart(true); err != nil {
+	if err := netVir.SetAutostart(true); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

@@ -19,3 +19,8 @@ type DataStore struct {
 	Source     string `json:"source"`
 	NFS        *NFS   `json:"nfs"`
 }
+
+type ListDataStore struct {
+	List
+	Items []DataStore `json:"items"`
+}

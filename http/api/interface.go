@@ -31,15 +31,14 @@ func (in Interface) GET(w http.ResponseWriter, r *http.Request) {
 		}
 		defer dom.Free()
 		instance := compute.NewInstance(*dom)
-		list := schema.List{
-			Items:    make([]interface{}, 0, 32),
-			Metadata: schema.MetaData{},
+		list := schema.ListInterface{
+			Items: make([]schema.Interface, 0, 32),
 		}
 		for _, inf := range instance.Interfaces {
 			list.Items = append(list.Items, inf)
 		}
 		sort.SliceStable(list.Items, func(i, j int) bool {
-			return list.Items[i].(schema.Interface).Device < list.Items[j].(schema.Interface).Device
+			return list.Items[i].Device < list.Items[j].Device
 		})
 		list.Metadata.Size = len(list.Items)
 		list.Metadata.Total = len(list.Items)

@@ -35,15 +35,14 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 		}
 		defer dom.Free()
 		instance := compute.NewInstance(*dom)
-		list := schema.List{
-			Items:    make([]interface{}, 0, 32),
-			Metadata: schema.MetaData{},
+		list := schema.ListDisk{
+			Items: make([]schema.Disk, 0, 32),
 		}
 		for _, disk := range instance.Disks {
 			list.Items = append(list.Items, disk)
 		}
 		sort.SliceStable(list.Items, func(i, j int) bool {
-			return list.Items[i].(schema.Disk).Device < list.Items[j].(schema.Disk).Device
+			return list.Items[i].Device < list.Items[j].Device
 		})
 		list.Metadata.Size = len(list.Items)
 		list.Metadata.Total = len(list.Items)
@@ -96,16 +95,7 @@ func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 			Slot:     conf.Seq,
 			Function: libvirtc.PCI_FUNC,
 		}
-		//case "scsi", "ide": // IDE reverse 1-4
-		//	xml.Address = &libvirtc.AddressXML{
-		//		Type:       "drive",
-		//		Controller: "0",
-		//		Bus:        libvirtc.DRV_DISK_BUS,
-		//		Target:     "0",
-		//		Unit:       conf.Slot,
-		//	}
 	}
-
 	return &xml, nil
 }
 

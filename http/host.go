@@ -29,26 +29,24 @@ func (h Host) Filter(w http.ResponseWriter, r *http.Response, data interface{}) 
 	user := data.(*schema.User)
 	libstar.Info("Host.Filter %s %s %s", user.Name, req.Method, req.URL.Path)
 	if req.URL.Path == "/api/instance" {
-		rList := struct {
-			Items    []schema.Instance
-			Metadata schema.MetaData
-		}{}
-		if err := libstar.GetJSON(r.Body, &rList); err != nil {
+		all := schema.ListInstance{
+			Items: make([]schema.Instance, 0, 32),
+		}
+		if err := libstar.GetJSON(r.Body, &all); err != nil {
 			libstar.Warn("Host.Filter %s %s", req.Method, req.URL.Path)
 			return false
 		}
-		list := schema.List{
-			Items:    make([]interface{}, 0, 32),
-			Metadata: schema.MetaData{},
+		list := schema.ListInstance{
+			Items: make([]schema.Instance, 0, 32),
 		}
 		obj := api.Instance{}
-		for _, item := range rList.Items {
+		for _, item := range all.Items {
 			if obj.HasPermission(user, item.Name) {
 				list.Items = append(list.Items, item)
 			}
 		}
 		sort.SliceStable(list.Items, func(i, j int) bool {
-			return list.Items[i].(schema.Instance).Name < list.Items[j].(schema.Instance).Name
+			return list.Items[i].Name < list.Items[j].Name
 		})
 		list.Metadata.Size = len(list.Items)
 		list.Metadata.Total = len(list.Items)

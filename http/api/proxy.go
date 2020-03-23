@@ -66,14 +66,13 @@ func (pro ProxyTcp) Local(user *schema.User) []schema.Target {
 	if err != nil {
 		return nil
 	}
-	list := schema.List{
-		Items: make([]interface{}, 0, 32),
+	list := schema.ListInstance{
+		Items: make([]schema.Instance, 0, 32),
 	}
 	Instance{}.GetByUser(user, &list)
 	dst := make([]schema.Target, 0, 32)
 	for _, item := range list.Items {
-		inst := item.(schema.Instance)
-		dst = append(dst, pro.GetTarget("", &inst, leases)...)
+		dst = append(dst, pro.GetTarget("", &item, leases)...)
 	}
 	return dst
 }

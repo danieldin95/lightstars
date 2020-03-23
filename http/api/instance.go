@@ -299,7 +299,7 @@ func (ins Instance) HasPermission(user *schema.User, instance string) bool {
 	return has
 }
 
-func (ins Instance) GetByUser(user *schema.User, list *schema.List) {
+func (ins Instance) GetByUser(user *schema.User, list *schema.ListInstance) {
 	if domains, err := libvirtc.ListDomains(); err == nil {
 		for _, d := range domains {
 			inst := compute.NewInstance(d)
@@ -315,14 +315,13 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
 	if !ok {
 		user, _ := GetUser(r)
-		list := schema.List{
-			Items:    make([]interface{}, 0, 32),
-			Metadata: schema.MetaData{},
+		list := schema.ListInstance{
+			Items: make([]schema.Instance, 0, 32),
 		}
 		// list all instances.
 		ins.GetByUser(&user, &list)
 		sort.SliceStable(list.Items, func(i, j int) bool {
-			return list.Items[i].(schema.Instance).Name < list.Items[j].(schema.Instance).Name
+			return list.Items[i].Name < list.Items[j].Name
 		})
 		list.Metadata.Size = len(list.Items)
 		list.Metadata.Total = len(list.Items)
