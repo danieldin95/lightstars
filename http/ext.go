@@ -12,7 +12,6 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"sync"
 )
 
 type Download struct {
@@ -120,8 +119,7 @@ func (w WebSocket) Handle(ws *websocket.Conn) {
 	libstar.Info("WebSocket.Handle request by %s", ws.RemoteAddr())
 	libstar.Info("WebSocket.Handle connect to %s", conn.RemoteAddr())
 
-	wait := sync.WaitGroup{}
-	wait.Add(2)
+	wait := libstar.NewWaitOne(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
@@ -135,6 +133,7 @@ func (w WebSocket) Handle(ws *websocket.Conn) {
 		}
 	}()
 	wait.Wait()
+	libstar.Warn("WebSocket.Handle %s exit", ws.RemoteAddr())
 }
 
 type TcpSocket struct {
@@ -152,7 +151,7 @@ func (t TcpSocket) Local(host string, ws *websocket.Conn) {
 	target := api.GetQueryOne(r, "target")
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("TcpSocket.Local dial %s", err)
+		libstar.Error("TcpSocket.Local %s", err)
 		return
 	}
 	defer conn.Close()
@@ -161,8 +160,7 @@ func (t TcpSocket) Local(host string, ws *websocket.Conn) {
 	libstar.Info("TcpSocket.Local request by %s", ws.RemoteAddr())
 	libstar.Info("TcpSocket.Local connect to %s", conn.RemoteAddr())
 
-	wait := sync.WaitGroup{}
-	wait.Add(2)
+	wait := libstar.NewWaitOne(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
@@ -176,6 +174,7 @@ func (t TcpSocket) Local(host string, ws *websocket.Conn) {
 		}
 	}()
 	wait.Wait()
+	libstar.Warn("ProxyWs.Socket %s exit", ws.RemoteAddr())
 }
 
 func (t TcpSocket) Remote(host string, ws *websocket.Conn) {

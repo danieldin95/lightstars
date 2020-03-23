@@ -66,6 +66,7 @@ func (l *Local) Start() {
 }
 
 func (l *Local) OnClient(from net.Conn) {
+	defer from.Close()
 	// proxy by websocket.
 	ws := &WsClient{
 		Auth: l.Client.Auth,
@@ -78,23 +79,23 @@ func (l *Local) OnClient(from net.Conn) {
 		libstar.Error("Local.Socket dial %s", err)
 		return
 	}
-
+	defer to.Close()
 	// wait exit.
-	wait := sync.WaitGroup{}
-	wait.Add(2)
+	wait := libstar.NewWaitOne(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(from, to); err != nil {
-			libstar.Debug("Local.Handle copy from ws %s", err)
+			libstar.Warn("Local.Handle copy from ws %v", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(to, from); err != nil {
-			libstar.Debug("Local.Handle copy from local %s", err)
+			libstar.Warn("Local.Handle copy from local %v", err)
 		}
 	}()
 	wait.Wait()
+	libstar.Warn("Local.Handle %s exit", from.RemoteAddr())
 }
 
 func (l *Local) Stop() {

@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"sync"
 )
 
 type Auth struct {
@@ -125,26 +124,26 @@ func (pri *ProxyWs) Socket(ws *websocket.Conn) {
 	target := schema + "://" + pri.Url.Host + pri.GetPath(req)
 	conn, err := pri.Dial(target, "", req.URL.RequestURI())
 	if err != nil {
-		Error("ProxyWs.Socket dial %s", err)
+		Error("ProxyWs.Socket %s", err)
 		return
 	}
 	defer conn.Close()
-	Debug("ProxyWs.Socket request by %s", ws.RemoteAddr())
-	Debug("ProxyWs.Socket connect to %s", conn.RemoteAddr())
+	Info("ProxyWs.Socket request by %s", ws.RemoteAddr())
+	Info("ProxyWs.Socket connect to %s", conn.RemoteAddr())
 
-	wait := sync.WaitGroup{}
-	wait.Add(2)
+	wait := NewWaitOne(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			Warn("ProxyWs.Socket copy from ws %s", err)
+			Warn("ProxyWs.Socket copy from ws %v", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			Warn("ProxyWs.Socket copy from target %s", err)
+			Warn("ProxyWs.Socket copy from target %v", err)
 		}
 	}()
 	wait.Wait()
+	Warn("ProxyWs.Socket %s exit", ws.RemoteAddr())
 }
