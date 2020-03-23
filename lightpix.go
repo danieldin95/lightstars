@@ -91,12 +91,10 @@ func main() {
 		for {
 			input := ""
 			fmt.Scanln(&input)
-			for _, tgt := range pri.Target {
-				if l, ok := pri.Listen[tgt.Host+":"+tgt.Target]; ok {
-					libstar.Info("main %s:%-15s %-20s on %-15s",
-						l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
-				}
+			if err, ports := GetPorts(cfg.Url, cfg.Auth); err == nil {
+				pri.Update(ports)
 			}
+			pri.Show()
 		}
 	}()
 	defer pri.Stop()

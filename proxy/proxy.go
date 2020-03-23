@@ -42,8 +42,7 @@ func (l *Local) Initialize() *Local {
 		}
 	}
 	if l.Listener != nil {
-		libstar.Info("Local.Initialize %s:%-15s %-20s on %-15s",
-			l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
+		libstar.Info("Local.Initialize %s %-15s %-20s on %-15s", l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
 	}
 	return l
 }
@@ -105,6 +104,7 @@ func (l *Local) Stop() {
 }
 
 type Proxy struct {
+	Lock   sync.RWMutex
 	Target []schema.Target
 	Listen map[string]*Local
 	Client *WsClient
@@ -112,6 +112,9 @@ type Proxy struct {
 }
 
 func (p *Proxy) Initialize() *Proxy {
+	p.Lock.Lock()
+	defer p.Lock.Unlock()
+
 	if p.Listen == nil {
 		p.Listen = make(map[string]*Local, 32)
 	}
@@ -124,25 +127,85 @@ func (p *Proxy) Initialize() *Proxy {
 			Client: p.Client,
 		}
 		local.Initialize()
-		p.Listen[tgt.Host+":"+tgt.Target] = local
+		p.Listen[tgt.ID()] = local
 	}
-
 	return p
 }
 
+func (p *Proxy) Update(target []schema.Target) {
+	p.Lock.Lock()
+	defer p.Lock.Unlock()
+
+	for _, tgt := range target {
+		if tgt.Target == "" || !strings.Contains(tgt.Target, ":") {
+			continue
+		}
+		if _, ok := p.Listen[tgt.ID()]; ok {
+			continue
+		}
+		libstar.Debug("Proxy.Update %s", tgt.ID())
+		p.Target = append(p.Target, tgt)
+		local := &Local{
+			Tgt:    tgt,
+			Client: p.Client,
+		}
+		local.Initialize()
+		p.Listen[tgt.ID()] = local
+	}
+}
+
 func (p *Proxy) Start() {
+	p.Lock.Lock()
+	defer p.Lock.Unlock()
+
 	for _, local := range p.Listen {
 		go local.Start()
 	}
 }
 
 func (p *Proxy) Stop() {
+	p.Lock.Lock()
+	defer p.Lock.Unlock()
+
 	if p.Conn != nil {
 		p.Conn.Close()
 	}
 	for tgt, local := range p.Listen {
 		libstar.Info("Proxy.Stop %s", tgt)
 		local.Stop()
+	}
+}
+
+func (p *Proxy) List() <-chan *schema.Target {
+	c := make(chan *schema.Target, 128)
+	go func() {
+		p.Lock.RLock()
+		defer p.Lock.RUnlock()
+
+		for i := range p.Target {
+			c <- &p.Target[i]
+		}
+		c <- nil //Finish channel by nil.
+	}()
+	return c
+}
+
+func (p *Proxy) Get(id string) *Local {
+	libstar.Debug("Proxy.Get %s", id)
+	p.Lock.RLock()
+	defer p.Lock.RUnlock()
+	return p.Listen[id]
+}
+
+func (p *Proxy) Show() {
+	p.Lock.RLock()
+	defer p.Lock.RUnlock()
+	for _, tgt := range p.Target {
+		l, ok := p.Listen[tgt.ID()]
+		if !ok {
+			continue
+		}
+		libstar.Info("Proxy.Show %s %-15s %-20s on %-15s", l.Tgt.Host, l.Tgt.Name, l.Tgt.Target, l.Listen)
 	}
 }
 
