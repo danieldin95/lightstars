@@ -27,21 +27,26 @@ export class UploadApi extends Api {
     //
     upload(data) {
         let url = this.url(this.uuids[0]);
+        let now = new Date();
+
         let event = {
-            progress: (e) => {
+            id: this.id,
+            tasks: this.tasks,
+            bar: now.getTime(),
+            progress: function(e) {
                 if (e.lengthComputable) {
-                    $(`${this.id} .progress-bar`).css('width', `${e.loaded / e.total * 100}%`);
+                    $(this.id).find(`#${this.bar} .progress-bar`).css('width', `${e.loaded / e.total * 100}%`);
                 }
             },
-            success: (e) => {
-                $(this.id).empty();
+            success: function(e) {
+                $(this.id).find(`#${this.bar}`).remove();
                 $(this.tasks).append(Alert.success(`upload iso ${e.message}`));
             },
-            start: (e) => {
-                $(this.id).html(ProgressBar());
+            start: function(e) {
+                $(this.id).append(ProgressBar(this.bar));
             },
-            fail: (e) => {
-                $(this.id).empty();
+            fail: function(e) {
+                $(this.id).find(`#${this.bar}`).remove();
                 $(this.tasks).append(Alert.danger((`POST ${url}: ${e.responseText}`)));
             }
         };
