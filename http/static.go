@@ -26,16 +26,16 @@ func (s Static) Files(w http.ResponseWriter, r *http.Request) {
 	}
 	contents, err := ioutil.ReadFile(realpath)
 	if err != nil {
-		fmt.Fprintf(w, "404")
+		_, _ = fmt.Fprintf(w, "404")
 		return
 	}
-	fmt.Fprintf(w, "%s\n", contents)
+	_, _ = fmt.Fprintf(w, "%s\n", contents)
 }
 
 func (s Static) Favicon(w http.ResponseWriter, r *http.Request) {
 	realpath := api.GetFile("images/favicon.ico")
 	contents, err := ioutil.ReadFile(realpath)
 	if err == nil {
-		fmt.Fprintf(w, "%s\n", contents)
+		_, _ = fmt.Fprintf(w, "%s\n", contents)
 	}
 }

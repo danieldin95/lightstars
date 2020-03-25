@@ -375,7 +375,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	file := storage.PATH.RootXML() + conf.Name + ".xml"
-	libstar.XML.MarshalSave(xmlObj, file, true)
+	_ = libstar.XML.MarshalSave(xmlObj, file, true)
 
 	dom, err := hyper.DomainDefineXML(xmlData)
 	if err != nil {

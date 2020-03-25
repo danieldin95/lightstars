@@ -32,7 +32,7 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 		return images
 	}
 	defer pool.Free()
-	pool.Refresh(0)
+	_ = pool.Refresh(0)
 	if vols, err := pool.ListAllStorageVolumes(0); err == nil {
 		for _, vol := range vols {
 			file, err := vol.GetPath()
@@ -50,7 +50,7 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 					Path: PATH.Fmt(file),
 				})
 			}
-			vol.Free()
+			_ = vol.Free()
 		}
 	}
 	return images
@@ -101,7 +101,7 @@ func (store *StoreMgr) List() []Store {
 				continue
 			}
 			if libvirts.IsDomainPool(name) {
-				pool.Free()
+				_ = pool.Free()
 				continue
 			}
 			info, err := pool.GetInfo()
@@ -116,7 +116,7 @@ func (store *StoreMgr) List() []Store {
 					Available:  info.Available,
 				})
 			}
-			pool.Free()
+			_ = pool.Free()
 		}
 	}
 	return stores

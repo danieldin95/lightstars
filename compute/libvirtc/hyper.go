@@ -58,7 +58,7 @@ func (h *HyperVisor) OpenNotSafe() error {
 	if hyper.Conn != nil {
 		if _, err := hyper.Conn.GetVersion(); err != nil {
 			libstar.Error("HyperVisor.Open %s", err)
-			hyper.Conn.Close()
+			_, _ = hyper.Conn.Close()
 			hyper.Conn = nil
 		}
 	}
@@ -70,7 +70,7 @@ func (h *HyperVisor) OpenNotSafe() error {
 		hyper.Conn = conn
 		for _, listen := range h.Listener {
 			if listen.Opened != nil {
-				listen.Opened(h.Conn)
+				_ = listen.Opened(h.Conn)
 			}
 		}
 	}
@@ -152,7 +152,7 @@ func (h *HyperVisor) LoopForever() {
 		case <-h.Done:
 			return
 		case <-h.Ticker.C:
-			h.FigureCPU()
+			_ = h.FigureCPU()
 		}
 	}
 }
@@ -265,7 +265,7 @@ func (h *HyperVisor) Close() {
 	}
 	for _, listen := range h.Listener {
 		if listen.Closed != nil {
-			listen.Closed(h.Conn)
+			_ = listen.Closed(h.Conn)
 		}
 	}
 	h.Conn = nil

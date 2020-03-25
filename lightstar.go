@@ -46,9 +46,9 @@ func main() {
 	storage.DATASTOR.Init()
 	service.SERVICE.Load(cfg.ConfDir)
 
-	libvirtc.SetHyper(cfg.Hyper)
-	libvirts.SetHyper(cfg.Hyper)
-	libvirtn.SetHyper(cfg.Hyper)
+	_, _ = libvirtc.SetHyper(cfg.Hyper)
+	_, _ = libvirts.SetHyper(cfg.Hyper)
+	_, _ = libvirtn.SetHyper(cfg.Hyper)
 
 	authFile := cfg.ConfDir + "/auth.json"
 	h := http.NewServer(cfg.Listen, cfg.StaticDir, authFile)

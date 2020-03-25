@@ -31,7 +31,7 @@ func (up Upload) Upload(w http.ResponseWriter, r *http.Request) {
 	path := storage.PATH.Unix(name)
 
 	// no more than 50MiB of memory
-	r.ParseMultipartForm(50 << 20)
+	_ = r.ParseMultipartForm(50 << 20)
 	file, handler, err := r.FormFile("file")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -47,7 +47,7 @@ func (up Upload) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer tempFile.Close()
-	io.Copy(tempFile, file)
+	_, _ = io.Copy(tempFile, file)
 
 	libstar.Info("Upload.Upload saved to %s", path)
 	ResponseMsg(w, 0, "success")

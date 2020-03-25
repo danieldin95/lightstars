@@ -7,7 +7,7 @@ import (
 
 func ParseIP4Netmask(addr, prefix string) (net.IP, net.IP) {
 	_, inet, err := net.ParseCIDR(addr + "/" + prefix)
-	if len(inet.Mask) != 4 || err != nil {
+	if inet == nil || len(inet.Mask) != 4 || err != nil {
 		return nil, nil
 	}
 	m := inet.Mask

@@ -61,7 +61,7 @@ func (h Host) Handle(w http.ResponseWriter, r *http.Request) {
 	name, _ := api.GetArg(r, "name")
 	node := service.SERVICE.Zone.Get(name)
 	if node == nil {
-		http.Error(w, "not found host", http.StatusNotFound)
+		http.Error(w, "host not found", http.StatusNotFound)
 		return
 	}
 	libstar.Debug("Host.Handle %s", node)

@@ -116,20 +116,20 @@ func (w WebSocket) Handle(ws *websocket.Conn) {
 		return
 	}
 	defer conn.Close()
-	libstar.Info("WebSocket.Handle request by %s", ws.RemoteAddr())
-	libstar.Info("WebSocket.Handle connect to %s", conn.RemoteAddr())
+	libstar.Info("WebSocket.Handle by %s", ws.RemoteAddr())
+	libstar.Info("WebSocket.Handle to %s", conn.RemoteAddr())
 
 	wait := libstar.NewWaitOne(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Warn("WebSocket.Handle copy from ws %s", err)
+			libstar.Warn("WebSocket.Handle from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Warn("WebSocket.Handle copy from target %s", err)
+			libstar.Warn("WebSocket.Handle from target %s", err)
 		}
 	}()
 	wait.Wait()
@@ -157,20 +157,20 @@ func (t TcpSocket) Local(host string, ws *websocket.Conn) {
 	defer conn.Close()
 	user, _ := api.GetUser(r)
 	libstar.Info("TcpSocket.Local with %s", user.Name)
-	libstar.Info("TcpSocket.Local request by %s", ws.RemoteAddr())
-	libstar.Info("TcpSocket.Local connect to %s", conn.RemoteAddr())
+	libstar.Info("TcpSocket.Local by %s", ws.RemoteAddr())
+	libstar.Info("TcpSocket.Local to %s", conn.RemoteAddr())
 
 	wait := libstar.NewWaitOne(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Warn("TcpSocket.Local copy from ws %s", err)
+			libstar.Warn("TcpSocket.Local from ws %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Warn("TcpSocket.Local copy from target %s", err)
+			libstar.Warn("TcpSocket.Local from target %s", err)
 		}
 	}()
 	wait.Wait()

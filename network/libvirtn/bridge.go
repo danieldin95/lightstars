@@ -24,7 +24,7 @@ func (br *BridgeMgr) List() []Bridge {
 	if nets, err := hyper.Conn.ListAllNetworks(0); err == nil {
 		for _, net := range nets {
 			if is, _ := net.IsActive(); !is {
-				net.Free()
+				_ = net.Free()
 				continue
 			}
 			br := NewNetworkXMLFromNet(NewNetworkFromVir(&net))
@@ -35,7 +35,7 @@ func (br *BridgeMgr) List() []Bridge {
 					brs = append(brs, Bridge{Name: br.Bridge.Name, Type: "bridge"})
 				}
 			}
-			net.Free()
+			_ = net.Free()
 		}
 	}
 	return brs
@@ -57,7 +57,7 @@ func (br *BridgeMgr) Get(name string) (Bridge, error) {
 				b = Bridge{Name: br.Name, Type: "bridge"}
 			}
 		}
-		net.Free()
+		_ = net.Free()
 	}
 	return b, nil
 }

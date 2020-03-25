@@ -87,13 +87,13 @@ func (l *Local) OnClient(from net.Conn) {
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(from, to); err != nil {
-			libstar.Warn("Local.Handle copy from ws %v", err)
+			libstar.Warn("Local.Handle from ws %v", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(to, from); err != nil {
-			libstar.Warn("Local.Handle copy from local %v", err)
+			libstar.Warn("Local.Handle from local %v", err)
 		}
 	}()
 	wait.Wait()

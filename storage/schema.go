@@ -10,7 +10,7 @@ func NewDataStore(pol libvirts.Pool) schema.DataStore {
 	obj := schema.DataStore{}
 	xml, _ := pol.GetXMLDesc(0)
 	xmlObj := &libvirts.PoolXML{}
-	xmlObj.Decode(xml)
+	_ = xmlObj.Decode(xml)
 
 	obj.Id = xmlObj.Name
 	obj.Name = xmlObj.Name

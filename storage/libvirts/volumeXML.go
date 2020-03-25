@@ -10,7 +10,7 @@ type VolumeXML struct {
 	Name       string        `xml:"name" json:"name"`
 	Key        string        `xml:"key" json:"key"`
 	Source     string        `xml:"source" json:"source"`
-	Capacity   CapacityXML   `xml:"capacity", json:"capacity"`
+	Capacity   CapacityXML   `xml:"capacity" json:"capacity"`
 	Allocation AllocationXML `xml:"allocation" json:"allocation"`
 	Physical   PhysicalXML   `xml:"physical" json:"physical"`
 	Target     TargetXML     `xml:"target" json:"target"`

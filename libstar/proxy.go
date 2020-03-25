@@ -128,20 +128,20 @@ func (pri *ProxyWs) Socket(ws *websocket.Conn) {
 		return
 	}
 	defer conn.Close()
-	Info("ProxyWs.Socket request by %s", ws.RemoteAddr())
-	Info("ProxyWs.Socket connect to %s", conn.RemoteAddr())
+	Info("ProxyWs.Socket by %s", ws.RemoteAddr())
+	Info("ProxyWs.Socket to %s", conn.RemoteAddr())
 
 	wait := NewWaitOne(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(conn, ws); err != nil {
-			Warn("ProxyWs.Socket copy from ws %v", err)
+			Warn("ProxyWs.Socket from ws %v", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(ws, conn); err != nil {
-			Warn("ProxyWs.Socket copy from target %v", err)
+			Warn("ProxyWs.Socket from target %v", err)
 		}
 	}()
 	wait.Wait()

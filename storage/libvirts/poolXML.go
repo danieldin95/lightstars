@@ -11,7 +11,7 @@ type PoolXML struct {
 	Name       string        `xml:"name" json:"name"`
 	UUID       string        `xml:"uuid" json:"uuid"`
 	Source     SourceXML     `xml:"source" json:"source"`
-	Capacity   CapacityXML   `xml:"capacity", json:"capacity"`
+	Capacity   CapacityXML   `xml:"capacity" json:"capacity"`
 	Allocation AllocationXML `xml:"allocation" json:"allocation"`
 	Available  AvailableXML  `xml:"available" json:"available"`
 	Target     TargetXML     `xml:"target" json:"target"`

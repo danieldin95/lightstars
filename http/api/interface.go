@@ -97,20 +97,22 @@ func (in Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if xml.Devices.Interfaces != nil {
-		for _, inf := range xml.Devices.Interfaces {
-			if inf.Mac.Address != address {
-				continue
-			}
-			// found device
-			flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
-			if active, _ := dom.IsActive(); !active {
-				flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
-			}
-			if err := dom.DetachDeviceFlags(inf.Encode(), flags); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
+	if xml.Devices.Interfaces == nil {
+		ResponseMsg(w, 0, "success")
+		return
+	}
+	for _, inf := range xml.Devices.Interfaces {
+		if inf.Mac.Address != address {
+			continue
+		}
+		// found device
+		flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+		if active, _ := dom.IsActive(); !active {
+			flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+		}
+		if err := dom.DetachDeviceFlags(inf.Encode(), flags); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 	ResponseMsg(w, 0, "success")

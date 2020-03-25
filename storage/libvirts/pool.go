@@ -118,7 +118,7 @@ func (pol *Pool) Clean() error {
 				if err := vol.Delete(0); err != nil {
 					return err
 				}
-				vol.Free()
+				_ = vol.Free()
 			}
 		}
 		defer pool.Free()

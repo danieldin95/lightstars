@@ -88,7 +88,7 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 				for _, net := range nets {
 					n := network.NewNetwork(net)
 					list.Items = append(list.Items, n)
-					net.Free()
+					_ = net.Free()
 				}
 				sort.SliceStable(list.Items, func(i, j int) bool {
 					return list.Items[i].Name < list.Items[j].Name

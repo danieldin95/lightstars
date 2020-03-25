@@ -108,7 +108,7 @@ func (vol *Volume) Remove() error {
 	if err != nil {
 		return err
 	}
-	volume.Delete(0)
+	_ = volume.Delete(0)
 	defer volume.Free()
 
 	return nil

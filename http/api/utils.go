@@ -48,7 +48,7 @@ func ResponseJson(w http.ResponseWriter, v interface{}) {
 	str, err := json.Marshal(v)
 	if err == nil {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(str)
+		_, _ = w.Write(str)
 	} else {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -56,7 +56,7 @@ func ResponseJson(w http.ResponseWriter, v interface{}) {
 
 func ResponseXML(w http.ResponseWriter, v string) {
 	w.Header().Set("Content-Type", "application/xml")
-	w.Write([]byte(v))
+	_, _ = w.Write([]byte(v))
 }
 
 func ResponseMsg(w http.ResponseWriter, code int, message string) {
@@ -139,11 +139,11 @@ func ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 		"prettyDrive":  libstar.PrettyDrive,
 	}).ParseFiles(name)
 	if err != nil {
-		fmt.Fprintf(w, "template.ParseFiles %s", err)
+		_, _ = fmt.Fprintf(w, "template.ParseFiles %s", err)
 		return err
 	}
 	if err := tmpl.Execute(w, data); err != nil {
-		fmt.Fprintf(w, "template.ParseFiles %s", err)
+		_, _ = fmt.Fprintf(w, "template.ParseFiles %s", err)
 		return err
 	}
 	return nil
