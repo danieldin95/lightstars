@@ -84,11 +84,15 @@
     $(document).ready(function() {
         let hyper = $('hyper');
         let container = "#container";
-        let node = hyper.attr('default');
+        let host = Location.query('node');
 
-        Location.query('node', node);
-        Api.Host(node);
-
+        if (host === undefined) {
+            // if host is null, using default.
+            host = hyper.attr('default');
+            Location.query('node', host);
+        }
+        console.log(host);
+        Api.Host(host);
         new Navigation({
             id: "nav",
             home: ".",

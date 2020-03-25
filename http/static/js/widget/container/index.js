@@ -45,7 +45,10 @@ export class Index extends Base {
         let view = new Overview({
             id: '#overview',
         });
-        view.refresh();
+        view.refresh((e) => {
+            this.props.name = e.resp.hyper.name;
+            $('#system #system-col').text(this.props.name);
+        });
         // register click on overview.
         $('#system-ref').on('click', () => {
             view.refresh();
@@ -107,11 +110,11 @@ export class Index extends Base {
         return (`
         <index id="index">
         <!-- System -->
-        <div name="system" class="card card-main system">
+        <div id="system" class="card card-main system">
             <div class="card-header">
                 <div class="">
                     <a id="system-col" href="#" data-toggle="collapse"
-                       data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">${this.props.name}</a>
+                       data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys"></a>
                     <a class="btn-spot float-right" id="system-ref" href="#system"></a>
                 </div>
             </div>

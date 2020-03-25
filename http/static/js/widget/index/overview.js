@@ -15,7 +15,11 @@ export class Overview {
         return (``);
     }
 
-    refresh(func) {
+    refresh(data, func) {
+        if (typeof data == 'function') {
+            func = data
+            data = {}
+        }
         new HyperApi({tasks: this.tasks}).get(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             if (func) {

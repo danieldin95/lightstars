@@ -40,7 +40,7 @@ export class UploadApi extends Api {
             },
             success: function(e) {
                 $(this.id).find(`#${this.bar}`).remove();
-                $(this.tasks).append(Alert.success(`upload iso ${e.message}`));
+                $(this.tasks).append(Alert.success(`upload ${e.message}`));
             },
             start: function(e) {
                 $(this.id).append(ProgressBar(this.bar));

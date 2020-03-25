@@ -18,6 +18,7 @@ export class Location {
         return window.location.href;
     }
 
+    // set page name after # and not change query.
     static set(name) {
         name = name || "";
         let path = this.href();
@@ -32,7 +33,7 @@ export class Location {
                 on.func({data: on.data, name});
             }
         }
-        console.log('Location.set', this.query('node'));
+        console.log('Location.set and node is', this.query('node'));
     }
 
     static get (name) {
@@ -51,12 +52,14 @@ export class Location {
         return path.split('#')[0];
     }
 
+    // get query by name if value is undefined.
+    // set query by name if value is defined and string.
     static query(name, value) {
         let url = this.url();
         let page = this.get();
 
         console.log("Location.query", name, value);
-        if (name && typeof value !== 'undefined') {
+        if (name && value !== undefined) {
             this.href(url + "#" + page + "?" + name + "=" + value);
         }
         let path = this.href();
@@ -68,7 +71,7 @@ export class Location {
         if (page.indexOf('?') >= 0) {
             query = page.split("?", 2)[1];
         }
-        if (name && typeof value === 'undefined') {
+        if (name && value === undefined) {
             let values = query.split('&');
             for (let i = 0; i < values.length; i++) {
                 let ele = values[i];
@@ -80,6 +83,7 @@ export class Location {
                     return v;
                 }
             }
+            return undefined
         }
         return query;
     }

@@ -50,5 +50,5 @@ func (up Upload) Upload(w http.ResponseWriter, r *http.Request) {
 	_, _ = io.Copy(tempFile, file)
 
 	libstar.Info("Upload.Upload saved to %s", path)
-	ResponseMsg(w, 0, "success")
+	ResponseMsg(w, 0, handler.Filename+" success")
 }
