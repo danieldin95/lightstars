@@ -53,32 +53,26 @@ func (store DataStore) Router(router *mux.Router) {
 
 func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
-	format := GetQueryOne(r, "format")
 	if !ok {
 		// list all instances.
-		if format == "schema" {
-			list := schema.ListDataStore{
-				Items: make([]schema.DataStore, 0, 32),
-			}
-			if pools, err := libvirts.ListPools(); err == nil {
-				for _, p := range pools {
-					store := storage.NewDataStore(p)
-					list.Items = append(list.Items, store)
-					p.Free()
-				}
-				sort.SliceStable(list.Items, func(i, j int) bool {
-					return list.Items[i].Name < list.Items[j].Name
-				})
-				list.Metadata.Size = len(list.Items)
-				list.Metadata.Total = len(list.Items)
-			}
-			ResponseJson(w, list)
-		} else {
-			ResponseJson(w, storage.DATASTOR.List())
+		list := schema.ListDataStore{
+			Items: make([]schema.DataStore, 0, 32),
 		}
+		if pools, err := libvirts.ListPools(); err == nil {
+			for _, p := range pools {
+				store := storage.NewDataStore(p)
+				list.Items = append(list.Items, store)
+				p.Free()
+			}
+			sort.SliceStable(list.Items, func(i, j int) bool {
+				return list.Items[i].Name < list.Items[j].Name
+			})
+			list.Metadata.Size = len(list.Items)
+			list.Metadata.Total = len(list.Items)
+		}
+		ResponseJson(w, list)
 		return
 	}
-
 	//TODO
 	ResponseJson(w, uuid)
 }

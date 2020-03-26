@@ -47,7 +47,7 @@ export class Index extends Base {
         });
         view.refresh((e) => {
             this.props.name = e.resp.hyper.name;
-            $('#system #system-col').text(this.props.name);
+            $('#system-col').text(this.props.name);
         });
         // register click on overview.
         $('#system-ref').on('click', () => {

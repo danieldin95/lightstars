@@ -1,8 +1,8 @@
-import {Api} from "../api/api.js"
+import {Api} from "../api/api.js";
 import {HyperApi} from "../api/hyper.js";
 import {ZoneApi} from "../api/zone.js";
 import {Location} from "../com/location.js";
-import {Index} from "../widget/container/index.js"
+import {Index} from "../widget/container/index.js";
 
 
 export class Navigation {

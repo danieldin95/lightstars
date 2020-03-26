@@ -77,30 +77,24 @@ func (net Network) Router(router *mux.Router) {
 
 func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
-	format := GetQueryOne(r, "format")
 	if !ok {
 		// list all instances.
-		if format == "schema" {
-			list := schema.ListNetwork{
-				Items: make([]schema.Network, 0, 32),
-			}
-			if nets, err := libvirtn.ListNetworks(); err == nil {
-				for _, net := range nets {
-					n := network.NewNetwork(net)
-					list.Items = append(list.Items, n)
-					_ = net.Free()
-				}
-				sort.SliceStable(list.Items, func(i, j int) bool {
-					return list.Items[i].Name < list.Items[j].Name
-				})
-				list.Metadata.Size = len(list.Items)
-				list.Metadata.Total = len(list.Items)
-			}
-			ResponseJson(w, list)
-		} else {
-			nets, _ := libvirtn.ListNetworks()
-			ResponseJson(w, nets)
+		list := schema.ListNetwork{
+			Items: make([]schema.Network, 0, 32),
 		}
+		if nets, err := libvirtn.ListNetworks(); err == nil {
+			for _, net := range nets {
+				n := network.NewNetwork(net)
+				list.Items = append(list.Items, n)
+				_ = net.Free()
+			}
+			sort.SliceStable(list.Items, func(i, j int) bool {
+				return list.Items[i].Name < list.Items[j].Name
+			})
+			list.Metadata.Size = len(list.Items)
+			list.Metadata.Total = len(list.Items)
+		}
+		ResponseJson(w, list)
 		return
 	}
 	// TODO
