@@ -12,12 +12,25 @@ lightstar:
 	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightpix lightpix.go
 
 
-linux/rpm:
+linux/rpm: linux/rpm/utils linux/rpm/star linux/rpm/sim
+
+
+linux/rpm/utils:
+	./packaging/auto.sh
+	rpmbuild -ba packaging/lightutils.spec
+	cp -rvf ~/rpmbuild/RPMS/x86_64/lightutils-*.rpm .
+
+
+linux/rpm/star:
+	./packaging/auto.sh
+	rpmbuild -ba packaging/lightstar.spec
+	cp -rvf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm .
+
+
+linux/rpm/sim:
 	./packaging/auto.sh
 	rpmbuild -ba packaging/lightsim.spec
-	rpmbuild -ba packaging/lightstar.spec
 	cp -rvf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm .
-	cp -rvf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm .
 
 
 devel/requirements:

@@ -13,7 +13,7 @@ export class InstanceTable {
     }
 
     loading() {
-        return `<tr><td colspan="9" style="text-align: center">Loading...</td></tr>`
+        return `<tr><td colspan="9" style="text-align:center">Loading...</td></tr>`
     }
 
     refresh(data, func) {

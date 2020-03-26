@@ -114,7 +114,7 @@ export class Index extends Base {
             <div class="card-header">
                 <div class="">
                     <a id="system-col" href="#" data-toggle="collapse"
-                       data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys"></a>
+                       data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">${this.props.name}</a>
                     <a class="btn-spot float-right" id="system-ref" href="#system"></a>
                 </div>
             </div>

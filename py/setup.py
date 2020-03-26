@@ -1,14 +1,14 @@
 from setuptools import setup
 
 setup(
-    name='lightstar',
+    name='lightutils',
     version='0.0.1',
     author='Daniel Ding',
     author_email='danieldin95@163.com',
-    packages=['lightstar'],
+    packages=['lightutils'],
     entry_points={
         'console_scripts': [
-            'lightstar-utils = lightstar.__main__:main',
+            'lightutils = lightutils.__main__:main',
         ]
     },
     install_requires=open('requirements.txt').readlines(),

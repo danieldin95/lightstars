@@ -64,7 +64,7 @@ export class FormModal {
         });
 
         $(this.forms).each(function (i, e) {
-            console.log("disable form's submit", e);
+            console.log("FormModal.loading disable", e);
             $(e).on('submit', function (e) {
                 return false;
             });
