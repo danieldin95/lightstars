@@ -68,6 +68,14 @@ export class Filters {
                 prefix -= n;
             }
             return mask.join('.');
-        }
+        };
+
+        template.defaults.imports.vncPassword = function (inst) {
+            return Utils.graphic(inst, 'vnc', 'password')
+        };
+
+        template.defaults.imports.spicePassword = function (inst) {
+            return Utils.graphic(inst, 'spice', 'password')
+        };
     }
 }

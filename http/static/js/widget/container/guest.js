@@ -81,12 +81,14 @@ export class Guest extends Base {
 
     template(v) {
         let cls = 'disabled';
-        let url = '#';
-        let spice = '#';
-        if (v.state == 'running') {
+        let vncUrl = '#';
+        let spiceUrl = '#';
+        if (v.state === 'running') {
             cls = '';
-            url = "/ui/console?id=" + v.uuid + "&password=" + v.password + "&node=" + Api.host;
-            spice = "/ui/spice?id=" + v.uuid + "&password=" + v.spice.password + "&type=spice&node=" + Api.host;
+            let vnc = Utils.graphic(v, 'vnc', 'password');
+            let spice = Utils.graphic(v, 'spice', 'password');
+            vncUrl = "/ui/console?id=" + v.uuid + "&password=" + vnc + "&node=" + Api.host;
+            spiceUrl = "/ui/spice?id=" + v.uuid + "&password=" + spice + "&type=spice&node=" + Api.host;
         }
 
         return template.compile(`
@@ -104,7 +106,7 @@ export class Guest extends Base {
                 <div class="card-header-cnt">
                     <div id="console-btns" class="btn-group btn-group-sm" role="group">
                         <button id="console" type="button" class="btn btn-outline-dark ${cls}"
-                                data-target="#consoleModal" data="${url}">
+                                data-target="#consoleModal" data="${vncUrl}">
                             Console
                         </button>
                         <button id="consoles" type="button"
@@ -113,17 +115,17 @@ export class Guest extends Base {
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
-                            <a id="console-self" class="dropdown-item" href="#" data="${url}">
+                            <a id="console-self" class="dropdown-item" href="#" data="${vncUrl}">
                                 Console in self
                             </a>
-                            <a id="console-blank" class="dropdown-item" href="#" data="${url}">
+                            <a id="console-blank" class="dropdown-item" href="#" data="${vncUrl}">
                                 Console in new blank
                             </a>
-                            <a id="console-window" class="dropdown-item" href="#" data="${url}">
+                            <a id="console-window" class="dropdown-item" href="#" data="${vncUrl}">
                                 Console in new window
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a id="console-spice" class="dropdown-item" href="#" data="${spice}">
+                            <a id="console-spice" class="dropdown-item" href="#" data="${spiceUrl}">
                                 Open spice console
                             </a>
                         </div>

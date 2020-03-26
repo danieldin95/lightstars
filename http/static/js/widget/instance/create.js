@@ -31,8 +31,7 @@ export class InstanceCreate extends FormModal {
 
                 new IsoApi().list(datastore, (data) => {
                     selector.find("option").remove();
-                    for (let i = 0; i < data.resp.length; i++) {
-                        let ele = data.resp[i];
+                    for (let ele of data.resp) {
                         selector.append(Option(ele['path'], ele['path']));
                     }
                     selector.append(Option('CDROM device:/sr0', '/dev/sr0'));
@@ -47,8 +46,7 @@ export class InstanceCreate extends FormModal {
                 new DataStoreApi().list(this,  (data) => {
                     let resp = data.resp;
                     selector.find("option").remove();
-                    for (let i = 0; i < resp.items.length; i++) {
-                        let ele = resp.items[i];
+                    for (let ele of resp.items) {
                         selector.append(Option(ele['name'], ele['name']));
                     }
                     if (resp.items.length > 0) {
@@ -64,11 +62,10 @@ export class InstanceCreate extends FormModal {
 
                 new BridgeApi().list(this, (data) => {
                     selector.find("option").remove();
-                    for (let i = 0; i < data.resp.length; i++) {
-                        let ele = data.resp[i];
-                        if (ele['type'] == 'bridge') {
+                    for (let ele of data.resp) {
+                        if (ele['type'] === 'bridge') {
                             selector.append(Option(`Linux Bridge #${ele['name']}`, ele['name']));
-                        } else if (ele['type'] == 'openvswitch') {
+                        } else if (ele['type'] === 'openvswitch') {
                             selector.append(Option(`Open vSwitch #${ele['name']}`, ele['name']));
                         }
                     }

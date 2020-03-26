@@ -31,7 +31,7 @@ export class DataStoreApi extends Api {
     }
 
     create(data) {
-        if (data.format == 'nfs') {
+        if (data.format === 'nfs') {
             data.nfs = { host: data.host, path: data.path, format: 'nfs' };
         }
         $.POST(this.url(), JSON.stringify(data), (resp, status) => {

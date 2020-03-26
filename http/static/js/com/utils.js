@@ -33,4 +33,13 @@ export class Utils {
         if (unit === 'MiB') return size * 1024;
         if (unit === 'GiB') return size * 1024 * 1024;
     }
+
+    static graphic(instance, type, name) {
+        for (let g of instance.graphics) {
+            if (g.type === type) {
+                return g[name];
+            }
+        }
+        return ''
+    }
 }

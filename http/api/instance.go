@@ -343,10 +343,8 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 		} else {
 			ResponseXML(w, "<error>"+err.Error()+"</error>")
 		}
-	} else if format == "schema" {
-		ResponseJson(w, compute.NewInstance(*dom))
 	} else {
-		ResponseJson(w, libvirtc.NewDomainXMLFromDom(dom, true))
+		ResponseJson(w, compute.NewInstance(*dom))
 	}
 }
 

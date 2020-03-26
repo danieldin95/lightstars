@@ -8,7 +8,7 @@ export class CheckBoxAll {
         this.one = props.one;
         this.all = props.all;
         this.func = props.change;
-        this.props = this.props;
+        this.props = props;
 
         this.refresh();
     }

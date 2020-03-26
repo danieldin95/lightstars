@@ -46,8 +46,8 @@ export class Navigation {
             let container = this.props.container;
 
             this.view = view;
-            for (let i = 0; i < this.navs.length; i++) {
-                this.view.find(this.navs[i]).on('click', function (e) {
+            for (let nav of this.navs) {
+                this.view.find(nav).on('click', function (e) {
                     active($(this).parent('li a').attr("id"));
                     new Index({
                         id: container,
@@ -89,11 +89,10 @@ export class Navigation {
         this.zoneName(host);
         new ZoneApi().list(this, (data) => {
             view.find("#zone").empty();
-            for (let i = 0; i < data.resp.length; i++) {
-                let host = data.resp[i];
-                let name = host['name'];
-                let value = host['name'];
-                if (host['url'] === '') {
+            data.resp.forEach((v, i) => {
+                let name = v['name'];
+                let value = v['name'];
+                if (v['url'] === '') {
                     value = '';
                 }
                 let elem = $(`
@@ -104,7 +103,7 @@ export class Navigation {
                     elem = $(`<a class="dropdown-item" data="${value}">${name}</a>`);
                 }
                 view.find("#zone").append(elem);
-            }
+            });
             view.find("#zone a").on('click',  this,function (e) {
                 let host = $(this).attr("data");
 
@@ -152,16 +151,16 @@ export class Navigation {
         <div class="collapse navbar-collapse" id="navbarMore">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a id="system" class="nav-link" data-target="system">Home</a>
+                    <a id="system" class="nav-link" data-target="/system">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a id="instances" class="nav-link" data-target="instances">Guest Instances</a>
+                    <a id="instances" class="nav-link" data-target="/instances">Guest Instances</a>
                 </li>
                 <li class="nav-item">
-                    <a id="datastore" class="nav-link" data-target="datastore">DataStore</a>
+                    <a id="datastore" class="nav-link" data-target="/datastore">DataStore</a>
                 </li>
                 <li class="nav-item">
-                    <a id="network" class="nav-link" data-target="network">Network</a>
+                    <a id="network" class="nav-link" data-target="/network">Network</a>
                 </li>
             </ul>
             <ul class="navbar-nav">

@@ -23,9 +23,8 @@ export class Collapse {
             }
             page = Location.get(this.default);
         }
-        for (let i = 0;  i < this.pages.length; i++) {
-            let v = this.pages[i];
-            if (page == v.name) {
+        for (let v of this.pages) {
+            if (page === v.name) {
                 $(v.id).fadeIn('slow');
                 $(v.id).collapse();
             }

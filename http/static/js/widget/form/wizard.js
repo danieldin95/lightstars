@@ -19,12 +19,11 @@ export class FormWizard {
         });
 
         // register click
-        for (let i in this.pages) {
-            let page = this.pages[i];
-            $(page).on('click', (event) => {
+        this.pages.forEach((v, i) => {
+            $(v).on('click', (event) => {
                 this.move(i);
             });
-        }
+        });
         // reset default page
         this.active = this.default;
         $(this.default).addClass('active');

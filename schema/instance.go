@@ -27,7 +27,7 @@ type Instance struct {
 	Action      string       `json:"action,omitempty"` // If is "", means not action.
 	UUID        string       `json:"uuid"`
 	Name        string       `json:"name"`
-	Family      string       `json:"family"'` // linux, windows or others
+	Family      string       `json:"family"` // linux, windows or others
 	State       string       `json:"state"`
 	Arch        string       `json:"arch"` // x86_64 or i386
 	Type        string       `json:"type"`
@@ -42,9 +42,6 @@ type Instance struct {
 	Disks       []Disk       `json:"disks,omitempty"`
 	Interfaces  []Interface  `json:"interfaces,omitempty"`
 	Controllers []Controller `json:"controllers,omitempty"`
-	Password    string       `json:"password"`
-	Vnc         Graphics     `json:"vnc"`
-	Spice       Graphics     `json:"spice"`
 	Graphics    []Graphics   `json:"graphics"`
 }
 
@@ -70,7 +67,7 @@ type Disk struct {
 	AddrDomain uint16 `json:"addrDomain"`
 	AddrBus    uint16 `json:"addrBus"`
 	AddrFunc   uint16 `json:"addrFunc"`
-	AddrCtl    uint16 `json"addrCtl"`
+	AddrCtl    uint16 `json:"addrCtl"`
 	AddrTgt    uint16 `json:"addrTgt"`
 	AddrUnit   uint16 `json:"addrUnit"`
 }

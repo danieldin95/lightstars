@@ -19,7 +19,7 @@ export class FormModal {
     }
 
     template() {
-        return (`<not-implement></not-implement>`);
+        return (`<not-implement/>`);
     }
 
     render() {

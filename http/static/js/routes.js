@@ -11,9 +11,9 @@ export class Routes {
     constructor(props) {
         this.routes = [
             {
-                prefix: "instance/",
+                prefix: "/instance/",
                 function: (p) => {
-                    let uuid = p.split('/', 2)[1];
+                    let uuid = p.split('/', 3)[2];
                     new Guest({
                         id: props.container,
                         uuid: uuid,
@@ -21,13 +21,13 @@ export class Routes {
                 },
             },
             {
-                prefix: "datastore/",
+                prefix: "/datastore/",
                 function: (p) => {
                     //TODO
                 },
             },
             {
-                prefix: "network/",
+                prefix: "/network/",
                 function: (p) => {
                     //TODO
                 },
@@ -37,7 +37,7 @@ export class Routes {
                 function: (p) => {
                     new Index({
                         id: props.container,
-                        default: "instances",
+                        default: "/instances",
                         name: props.hyper.attr('name'),
                     });
                 },
@@ -48,8 +48,7 @@ export class Routes {
 
     render() {
         let cur = Location.get();
-        for (let i = 0; i < this.routes.length; i++) {
-            let rte = this.routes[i];
+        for (let rte of this.routes) {
             if (cur.startsWith(rte.prefix)) {
                 rte.function(cur);
                 break;

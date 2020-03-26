@@ -23,7 +23,7 @@ export class Index extends Base {
     // }
     constructor(props) {
         super(props);
-        this.default = props.default || 'instances';
+        this.default = props.default || '/instances';
         console.log('Index', props);
         this.render();
         this.loading();
@@ -33,10 +33,10 @@ export class Index extends Base {
         this.title('Home - LightStar');
         new Collapse({
             pages: [
-                {id: '#collapseSys', name: 'system'},
-                {id: '#collapseIns', name: 'instances'},
-                {id: '#collapseStore', name: 'datastore'},
-                {id: '#collapseNet', name: 'network'}
+                {id: '#collapseSys', name: '/system'},
+                {id: '#collapseIns', name: '/instances'},
+                {id: '#collapseStore', name: '/datastore'},
+                {id: '#collapseNet', name: '/network'}
             ],
             force: this.force,
             default: this.default,

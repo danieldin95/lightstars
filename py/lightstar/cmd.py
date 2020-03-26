@@ -67,7 +67,7 @@ parse.add_argument('-d', '--debug',
                    action='store_true', default=False)
 parse.add_argument('-o', '--output',
                    help='set output format such as json, yaml',
-                   default='json')
+                   default='yaml')
 
 
 def parse_args():

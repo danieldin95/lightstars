@@ -35,10 +35,10 @@ export class InstanceTable {
         {{each items v i}}
             <tr>
                 <td>
-                    <input id="on-one" type="checkbox" aria-label="" data="{{v.uuid}}" passwd="{{v.password}}">
+                    <input id="on-one" type="checkbox" aria-label="" data="{{v.uuid}}" passwd="{{v | vncPassword}}">
                 </td>
                 <td>{{i+1}}</td>
-                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#instance/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
+                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/instance/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
                 <td>{{v.cpuTime}}ms</td>
                 <td>{{v.name}}</td>
                 <td>{{v.maxCpu}}</td>

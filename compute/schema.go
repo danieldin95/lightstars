@@ -105,12 +105,6 @@ func NewInstance(dom libvirtc.Domain) schema.Instance {
 				Password: x.Password,
 				Port:     x.Port,
 			}
-			if x.Type == "vnc" {
-				obj.Password = x.Password
-				obj.Vnc = g
-			} else if x.Type == "spice" {
-				obj.Spice = g
-			}
 			obj.Graphics = append(obj.Graphics, g)
 		}
 	}

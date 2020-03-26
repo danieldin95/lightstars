@@ -27,8 +27,7 @@ export class Location {
 
         console.log('Location.set', path, name);
         this.href(uri + '#' + name + "?" + query);
-        for (let i = 0; i < this.on.length; i++) {
-            let on = this.on[i];
+        for (let on of this.on) {
             if (on && on.func) {
                 on.func({data: on.data, name});
             }
@@ -73,8 +72,7 @@ export class Location {
         }
         if (name && value === undefined) {
             let values = query.split('&');
-            for (let i = 0; i < values.length; i++) {
-                let ele = values[i];
+            for (let ele of values) {
                 if (ele.indexOf('=') < 0) {
                     continue
                 }

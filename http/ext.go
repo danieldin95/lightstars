@@ -56,9 +56,11 @@ func (w WebSocket) GetRemote(id, name, typ string) string {
 		libstar.Error("WebSocket.GetRemote %s", name)
 		return ""
 	}
-	port := inst.Vnc.Port
-	if typ == "spice" {
-		port = inst.Spice.Port
+	port := ""
+	for _, g := range inst.Graphics {
+		if typ == g.Type {
+			port = g.Port
+		}
 	}
 	return host + ":" + port
 }
@@ -112,7 +114,7 @@ func (w WebSocket) Handle(ws *websocket.Conn) {
 	}
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("WebSocket.Handle dial %s", err)
+		libstar.Error("WebSocket.Handle %s", err)
 		return
 	}
 	defer conn.Close()

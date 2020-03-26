@@ -19,11 +19,10 @@ export class InterfaceCreate extends FormModal {
 
                 new BridgeApi().list((data) => {
                     selector.find("option").remove();
-                    for (let i = 0; i < data.resp.length; i++) {
-                        let e = data.resp[i];
-                        if (e['type'] == 'bridge') {
+                    for (let e of data.resp) {
+                        if (e['type'] === 'bridge') {
                             selector.append(Option(`Linux Bridge #${e['name']}`, e['name']));
-                        } else if (e['type'] == 'openvswitch') {
+                        } else if (e['type'] === 'openvswitch') {
                             selector.append(Option(`Open vSwitch #${e['name']}`, e['name']));
                         }
                     }
