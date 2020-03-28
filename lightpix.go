@@ -42,7 +42,7 @@ func (cfg *PixConfig) Parse() *PixConfig {
 	cfg.Auth = "admin:123456"
 	cfg.Verbose = 2
 	cfg.LogFile = "lightpix.log"
-	cfg.Listen = "1270.0.0.1"
+	cfg.Listen = "127.0.0.1"
 
 	flag.StringVar(&cfg.Listen, "listen", cfg.Listen, "local address listen on")
 	flag.StringVar(&cfg.Url, "url", cfg.Url, "the url path.")

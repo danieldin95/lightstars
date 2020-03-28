@@ -12,14 +12,11 @@
     <link rel="stylesheet" href="/static/css/modal.css">
 </head>
 <body>
-
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
 </nav>
-
 <hyper name="{{.Hyper.Name}}" default="{{.Default}}">
     <!--Loading-->
 </hyper>
-
 <div id="notice" class="container">
     <!-- Tasks -->
     <div id="tasks" class="card-no-border">
@@ -29,11 +26,9 @@
         <!-- Loading -->
     </div>
 </div>
-
 <div id="container" class="container">
     <!-- Loading -->
 </div>
-
 <div class="modals">
     <!-- Create instance modal -->
     <div id="instanceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
@@ -63,48 +58,15 @@
     <!-- Create interface modal -->
     <div id="interfaceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 </div>
-
 <!-- JQuery Javascript -->
 <script src="/static/asset/jquery-1.12.4.js"></script>
 <script src="/static/asset/ui/1.12.1/jquery-ui.js"></script>
-
 <script src="/static/asset/popper.js/1.12.9/umd/popper.js"></script>
 <!-- Bootstrap Javascript -->
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
 <!-- ART Template Javascript -->
 <script src="/static/asset/template-web.js"></script>
-
-<script type="module">
-    import {Filters} from "/static/js/ctl/filter.js";
-    import {Navigation} from "/static/js/widget/navigation.js";
-    import {Routes} from "/static/js/routes.js";
-    import {Location} from "/static/js/com/location.js";
-    import {Api} from "/static/js/api/api.js";
-
-    $(document).ready(function() {
-        let hyper = $('hyper');
-        let container = "#container";
-        let host = Location.query('node');
-
-        if (host === undefined) {
-            // if host is null, using default.
-            host = hyper.attr('default');
-            Location.query('node', host);
-        }
-        console.log(host);
-        Api.Host(host);
-        new Navigation({
-            id: "nav",
-            home: ".",
-            container: container,
-            name: hyper.attr('name'),
-        });
-        new Filters();
-        new Routes({
-            hyper: hyper,
-            container: container,
-        });
-    });
-</script>
+<!-- main Javascript -->
+<script src="/static/js/main.js" type="module"></script>
 </body>
 </html>
