@@ -1,19 +1,18 @@
+import {WidgetBase} from "../base.js";
 import {InstanceApi} from "../../api/instance.js";
 import {Location} from "../../com/location.js";
 
 
-export class InstanceTable {
+export class InstanceTable extends WidgetBase {
     // {
     //   id: '#xx'.
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.tasks = props.tasks;
+        super(props);
     }
 
     loading() {
-        return `<tr><td colspan="9" style="text-align:center">Loading...</td></tr>`
+        return `<tr><td colspan="9" style="text-align:center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -31,7 +30,7 @@ export class InstanceTable {
     render(data) {
         let query = Location.query();
 
-        return template.compile(`
+        return this.compile(`
         {{each items v i}}
             <tr>
                 <td>
@@ -46,6 +45,6 @@ export class InstanceTable {
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}
-        `)(data)
+        `, data);
     }
 }

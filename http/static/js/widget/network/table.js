@@ -1,18 +1,17 @@
 import {NetworkApi} from "../../api/network.js";
+import {WidgetBase} from "../base.js";
 
 
-export class NetworkTable {
+export class NetworkTable extends WidgetBase {
     // {
     //   id: '#xx'.
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.tasks = props.tasks;
+        super(props);
     }
 
     loading() {
-        return `<tr><td colspan="7" style="text-align: center">Loading...</td></tr>`
+        return `<tr><td colspan="7" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -28,7 +27,7 @@ export class NetworkTable {
     }
 
     render(data) {
-        return template.compile(`
+        return this.compile(`
         {{each items v i}}
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
@@ -45,6 +44,6 @@ export class NetworkTable {
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}
-        `)(data)
+        `, data);
     }
 }

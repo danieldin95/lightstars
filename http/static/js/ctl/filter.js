@@ -1,12 +1,14 @@
 import {Utils} from "../com/utils.js";
 
+const art = template.defaults.imports;
+
 export class Filters {
     constructor() {
-        template.defaults.imports.aton = function (data, n) {
+        art.aton = function (data, n) {
             return Utils.iton(data, n);
         };
 
-        template.defaults.imports.prettyKiB = function (data) {
+        art.prettyKiB = function (data) {
             let dec = data;
             if (dec < 1024) {
                 return dec.toFixed(2)+"KiB";
@@ -23,7 +25,7 @@ export class Filters {
             return dec.toFixed(2) + "TiB"
         };
 
-        template.defaults.imports.prettyByte = function (data) {
+        art.prettyByte = function (data) {
             let dec = data;
             if (dec < 1024) {
                 return dec.toFixed(2)+"B";
@@ -44,22 +46,22 @@ export class Filters {
             return dec.toFixed(2) + "TiB"
         };
 
-        template.defaults.imports.figureCpuUsed = function (free, total) {
+        art.figureCpuUsed = function (free, total) {
             return ((1000 - free) / 1000 * total).toFixed(2)
         };
 
-        template.defaults.imports.figureCpuFree = function (free, total) {
+        art.figureCpuFree = function (free, total) {
             return (free / 1000 * total).toFixed(2)
         };
 
-        template.defaults.imports.netmask2prefix = function (netmask) {
+        art.netmask2prefix = function (netmask) {
             if (!netmask) return undefined;
             return netmask.split('.').map(Number)
                 .map(part => (part >>> 0).toString(2))
                 .join('').split('1').length - 1;
         };
 
-        template.defaults.imports.prefix2netmask = function (prefix) {
+        art.prefix2netmask = function (prefix) {
             if (!prefix) return undefined;
             let mask = [];
             for(let i = 0;i < 4; i++) {
@@ -70,11 +72,11 @@ export class Filters {
             return mask.join('.');
         };
 
-        template.defaults.imports.vncPassword = function (inst) {
+        art.vncPassword = function (inst) {
             return Utils.graphic(inst, 'vnc', 'password')
         };
 
-        template.defaults.imports.spicePassword = function (inst) {
+        art.spicePassword = function (inst) {
             return Utils.graphic(inst, 'spice', 'password')
         };
     }

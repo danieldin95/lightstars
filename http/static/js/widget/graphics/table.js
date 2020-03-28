@@ -1,20 +1,19 @@
+import {WidgetBase} from "../base.js";
 import {GraphicsApi} from "../../api/graphics.js";
 
 
-export class GraphicsTable {
+export class GraphicsTable extends WidgetBase {
     // {
     //   id: '#xx',
     //   inst: 'uuid',
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.tasks = props.tasks;
+        super(props);
         this.inst = props.inst;
     }
 
     loading() {
-        return `<tr><td colspan="5" style="text-align: center">Loading...</td></tr>`
+        return `<tr><td colspan="5" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -33,7 +32,7 @@ export class GraphicsTable {
     }
 
     render(data) {
-        return template.compile(`
+        return this.compile(`
         {{each items v i}}
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.type}}"></td>
@@ -43,6 +42,6 @@ export class GraphicsTable {
                 <td>{{v.listen}}:{{v.port != '' ? v.port : -1}}</td>
             </tr>
         {{/each}}
-        `)(data);
+        `, data);
     }
 }

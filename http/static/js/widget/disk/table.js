@@ -1,20 +1,19 @@
+import {WidgetBase} from "../base.js";
 import {DiskApi} from "../../api/disk.js";
 
 
-export class DiskTable {
+export class DiskTable extends  WidgetBase {
     // {
     //   id: '#xx',
     //   inst: 'uuid',
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.tasks = props.tasks;
+        super(props);
         this.inst = props.inst;
     }
 
     loading() {
-        return `<tr><td colspan="7" style="text-align: center">Loading...</td></tr>`
+        return `<tr><td colspan="7" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -33,7 +32,7 @@ export class DiskTable {
     }
 
     render(data) {
-        return template.compile(`
+        return this.compile(`
         {{each items v i}}
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.device}}"></td>
@@ -51,6 +50,6 @@ export class DiskTable {
                 <td>{{v.format}}</td>
             </tr>
         {{/each}}
-        `)(data)
+        `, data);
     }
 }

@@ -1,14 +1,13 @@
+import {WidgetBase} from "../base.js";
 import {HyperApi} from "../../api/hyper.js";
 
 
-export class Overview {
+export class Overview extends WidgetBase {
     // {
     //   id: '#xx'.
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.tasks = props.tasks;
+        super(props);
     }
 
     loading() {
@@ -29,7 +28,7 @@ export class Overview {
     }
 
     render(data) {
-        return template.compile(`
+        return this.compile(`
             <dl class="dl-horizontal">
                 <dt>Version:</dt>
                 <dd>{{version.version}}</dd>
@@ -44,6 +43,6 @@ export class Overview {
                     {{hyper.memTotal | prettyByte}} | {{hyper.memFree | prettyByte}} | {{hyper.memCached | prettyByte}}
                 </dd>
             </dl>
-        `)(data)
+        `, data);
     }
 }

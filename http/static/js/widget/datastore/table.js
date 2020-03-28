@@ -1,18 +1,17 @@
+import {WidgetBase} from "../base.js";
 import {Api} from "../../api/api.js";
 import {DataStoreApi} from "../../api/datastore.js";
 
-export class DataStoreTable {
+export class DataStoreTable extends WidgetBase {
     // {
     //   id: '#xx'.
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.tasks = props.tasks;
+        super(props);
     }
 
     loading() {
-        return `<tr><td colspan="8" style="text-align: center">Loading...</td></tr>`
+        return `<tr><td colspan="8" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -30,7 +29,7 @@ export class DataStoreTable {
     render(data) {
         let prefix = Api.prefix();
 
-        return template.compile(`
+        return this.compile(`
         {{each items v i}}
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
@@ -43,6 +42,6 @@ export class DataStoreTable {
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}
-        `)(data)
+        `, data);
     }
 }
