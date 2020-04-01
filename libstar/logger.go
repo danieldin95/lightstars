@@ -82,7 +82,7 @@ func (l *Logger) SaveError(level string, format string, v ...interface{}) {
 	l.Lock.Lock()
 	defer l.Lock.Unlock()
 	if l.Errors.Len() >= 1024 {
-		if e := l.Errors.Front(); e != nil {
+		if e := l.Errors.Back(); e != nil {
 			l.Errors.Remove(e)
 		}
 	}
@@ -101,7 +101,7 @@ func (l *Logger) List() <-chan *Message {
 	go func() {
 		l.Lock.Lock()
 		defer l.Lock.Unlock()
-		for ele := l.Errors.Front(); ele != nil; ele = ele.Next() {
+		for ele := l.Errors.Back(); ele != nil; ele = ele.Prev() {
 			c <- ele.Value.(*Message)
 		}
 		c <- nil // Finish channel by nil.
