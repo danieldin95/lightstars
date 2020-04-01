@@ -23,8 +23,8 @@ type Logger struct {
 	Level    int
 	FileName string
 	FileLog  *log.Logger
-	Lock   sync.Mutex
-	Errors *list.List
+	Lock     sync.Mutex
+	Errors   *list.List
 }
 
 type Message struct {
@@ -35,48 +35,46 @@ type Message struct {
 
 func (l *Logger) Debug(format string, v ...interface{}) {
 	if DEUBG >= l.Level {
-		log.Printf(fmt.Sprintf("DEBUG %s", format), v...)
+		log.Printf("DEBUG "+format, v...)
 	}
 }
 
 func (l *Logger) Info(format string, v ...interface{}) {
 	if INFO >= l.Level {
-		log.Printf(fmt.Sprintf("INFO %s", format), v...)
+		log.Printf("INFO "+format, v...)
 	}
-	l.SaveError(fmt.Sprintf("INFO %s", format), v...)
+	l.SaveError("INFO", format, v...)
 }
 
 func (l *Logger) Warn(format string, v ...interface{}) {
 	if WARN >= l.Level {
-		log.Printf(fmt.Sprintf("WARN %s", format), v...)
+		log.Printf("WARN"+format, v...)
 	}
-
-	l.SaveError(fmt.Sprintf("WARN %s", format), v...)
+	l.SaveError("WARN", format, v...)
 }
 
 func (l *Logger) Error(format string, v ...interface{}) {
 	if ERROR >= l.Level {
-		log.Printf(fmt.Sprintf("ERROR %s", format), v...)
+		log.Printf("ERROR "+format, v...)
 	}
-	l.SaveError(fmt.Sprintf("ERROR %s", format), v...)
+	l.SaveError("ERROR", format, v...)
 }
 
 func (l *Logger) Fatal(format string, v ...interface{}) {
 	if FATAL >= l.Level {
-		log.Printf(fmt.Sprintf("FATAL %s", format), v...)
+		log.Printf("FATAL "+format, v...)
 	}
-
-	l.SaveError(fmt.Sprintf("FATAL %s", format), v...)
+	l.SaveError("FATAL", format, v...)
 }
 
 func (l *Logger) Print(format string, v ...interface{}) {
 	if PRINT >= l.Level {
-		log.Printf(fmt.Sprintf("PRINT %s", format), v...)
+		log.Printf("PRINT"+format, v...)
 	}
 }
 
-func (l *Logger) SaveError(format string, v ...interface{}) {
-	m := fmt.Sprintf(format, v...)
+func (l *Logger) SaveError(level string, format string, v ...interface{}) {
+	m := fmt.Sprintf(level+" "+format, v...)
 	if l.FileLog != nil {
 		l.FileLog.Println(m)
 	}
@@ -88,10 +86,11 @@ func (l *Logger) SaveError(format string, v ...interface{}) {
 			l.Errors.Remove(e)
 		}
 	}
-	yy, mm, dd:= time.Now().Date()
+	yy, mm, dd := time.Now().Date()
 	hh, mn, se := time.Now().Clock()
 	ele := &Message{
-		Date: fmt.Sprintf("%d/%d/%d %d:%d:%d", yy, mm, dd, hh, mn, se),
+		Level:   level,
+		Date:    fmt.Sprintf("%d/%d/%d %d:%d:%d", yy, mm, dd, hh, mn, se),
 		Message: m,
 	}
 	l.Errors.PushBack(ele)
@@ -102,7 +101,7 @@ func (l *Logger) List() <-chan *Message {
 	go func() {
 		l.Lock.Lock()
 		defer l.Lock.Unlock()
-		for	ele := l.Errors.Front(); ele != nil; ele = ele.Next() {
+		for ele := l.Errors.Front(); ele != nil; ele = ele.Next() {
 			c <- ele.Value.(*Message)
 		}
 		c <- nil // Finish channel by nil.
