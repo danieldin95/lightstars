@@ -90,7 +90,7 @@ func (l *Logger) SaveError(level string, format string, v ...interface{}) {
 	hh, mn, se := time.Now().Clock()
 	ele := &Message{
 		Level:   level,
-		Date:    fmt.Sprintf("%d/%d/%d %d:%d:%d", yy, mm, dd, hh, mn, se),
+		Date:    fmt.Sprintf("%d/%02d/%02d %02d:%02d:%02d", yy, mm, dd, hh, mn, se),
 		Message: m,
 	}
 	l.Errors.PushBack(ele)
