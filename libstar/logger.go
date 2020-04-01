@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime/debug"
 	"sync"
+	"time"
 )
 
 const (
@@ -22,9 +23,14 @@ type Logger struct {
 	Level    int
 	FileName string
 	FileLog  *log.Logger
+	Lock   sync.Mutex
+	Errors *list.List
+}
 
-	lock   sync.Mutex
-	errors *list.List
+type Message struct {
+	Level   string `json:"level"`
+	Date    string `json:"date"`
+	Message string `json:"message"`
 }
 
 func (l *Logger) Debug(format string, v ...interface{}) {
@@ -75,20 +81,39 @@ func (l *Logger) SaveError(format string, v ...interface{}) {
 		l.FileLog.Println(m)
 	}
 
-	l.lock.Lock()
-	defer l.lock.Unlock()
-	if l.errors.Len() >= 1024 {
-		if e := l.errors.Front(); e != nil {
-			l.errors.Remove(e)
+	l.Lock.Lock()
+	defer l.Lock.Unlock()
+	if l.Errors.Len() >= 1024 {
+		if e := l.Errors.Front(); e != nil {
+			l.Errors.Remove(e)
 		}
 	}
-	l.errors.PushBack(m)
+	yy, mm, dd:= time.Now().Date()
+	hh, mn, se := time.Now().Clock()
+	ele := &Message{
+		Date: fmt.Sprintf("%d/%d/%d %d:%d:%d", yy, mm, dd, hh, mn, se),
+		Message: m,
+	}
+	l.Errors.PushBack(ele)
+}
+
+func (l *Logger) List() <-chan *Message {
+	c := make(chan *Message, 128)
+	go func() {
+		l.Lock.Lock()
+		defer l.Lock.Unlock()
+		for	ele := l.Errors.Front(); ele != nil; ele = ele.Next() {
+			c <- ele.Value.(*Message)
+		}
+		c <- nil // Finish channel by nil.
+	}()
+	return c
 }
 
 var Log = Logger{
 	Level:    INFO,
 	FileName: ".log.error",
-	errors:   list.New(),
+	Errors:   list.New(),
 }
 
 func Print(format string, v ...interface{}) {
