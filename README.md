@@ -56,3 +56,9 @@ This software makes it easier for you to control compute resource.
 
     cat /etc/lightstar.auth
 
+
+# Welcome to attention
+
+WeChat: DanielDin
+
+Email: danieldin95@163.com
