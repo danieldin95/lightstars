@@ -1,39 +1,31 @@
 language: go
-os:
-  - linux
-  - windows
+os: linux
 dist: xenial
 sudo: require
 
 go:
-  - "1.12.9"
+  - 1.12.9
 
 env:
   - GO111MODULE="on" LIBVIRT=4.10.0  EXT=xz TEST_ARGS="-tags integration"
 
 install:
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      sudo apt-get -qqy build-dep libvirt
-      sudo apt-get -qqy install curl qemu-system-x86 sasl2-bin
-      sudo mkdir -p /usr/src && sudo chown $(id -u) /usr/src
-      curl -O -s https://libvirt.org/sources/libvirt-${LIBVIRT}.tar.${EXT}
-      tar -C /usr/src -xf libvirt-${LIBVIRT}.tar.${EXT}
-      pushd /usr/src/libvirt-${LIBVIRT}
-      ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc \
-                  --without-polkit \
-                  --without-esx --without-vbox --without-xen --without-libxl \
-                  --with-qemu --with-lxc
-      make
-      sudo make install
-      popd
-    fi
+    sudo apt-get -qqy build-dep libvirt
+    sudo apt-get -qqy install curl qemu-system-x86 sasl2-bin
+    sudo mkdir -p /usr/src && sudo chown $(id -u) /usr/src
+    curl -O -s https://libvirt.org/sources/libvirt-${LIBVIRT}.tar.${EXT}
+    tar -C /usr/src -xf libvirt-${LIBVIRT}.tar.${EXT}
+    pushd /usr/src/libvirt-${LIBVIRT}
+    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc \
+                --without-polkit \
+                --without-esx --without-vbox --without-xen --without-libxl \
+                --with-qemu --with-lxc
+    make
+    sudo make install
+    popd
 
 script:
   - |
-    if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-      go build -mod=vendor -o lightpix.windows.x86_64.exe lightpix.go
-    else
-      make
-      make test
-    fi
+    make
+    make test
