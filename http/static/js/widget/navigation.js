@@ -3,6 +3,10 @@ import {HyperApi} from "../api/hyper.js";
 import {ZoneApi} from "../api/zone.js";
 import {Location} from "../com/location.js";
 import {Index} from "../widget/container/index.js";
+import {ChangePassword} from "../widget/changePassword/create.js";
+import {Password} from "../ctl/password.js";
+import {Utils} from "../com/utils.js";
+
 
 
 export class Navigation {
@@ -64,9 +68,19 @@ export class Navigation {
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
+            
+            let password = new Password({id: 'password'})
+            new ChangePassword({id: '#changePasswordModal'})
+                .onsubmit((e) => {
+                    console.log(e.form)
+                    password.set(Utils.toJSON(e.form))
+                    // ins.create(Utils.toJSON(e.form));
+                });
 
             $(this.id).html(this.view);
         });
+
+
 
     }
 
@@ -184,7 +198,7 @@ export class Navigation {
                         <a id="fullscreen" class="dropdown-item">Full screen</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Setting</a>
-                        <a class="dropdown-item" href="#">Change password</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePasswordModal">Change password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/ui/login">Logout</a>
                     </div>
