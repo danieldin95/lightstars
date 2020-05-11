@@ -26,6 +26,7 @@ export class Utils {
                 ret[key] = value;
             }
         });
+        console.log(ret)
         return ret;
     }
 
