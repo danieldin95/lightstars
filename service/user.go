@@ -52,14 +52,14 @@ func (u *Users) Get(name string) (schema.User, bool) {
 	return *user, ok
 }
 
-func (u *Users) SetPassWord(name, oldPassword,newPassword string) (schema.User, bool)  {
+func (u *Users) SetPass(name, old, new string) (schema.User, bool) {
 	u.Lock.RLock()
 	defer u.Lock.RUnlock()
-        user, _ := u.Users[name]
-	if user == nil || !(user.Password == oldPassword) {
+	user, _ := u.Users[name]
+	if user == nil || !(user.Password == old) {
 		return schema.User{}, false
 	}
 
-	user.Password = newPassword
+	user.Password = new
 	return *user, true
 }

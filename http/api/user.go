@@ -7,7 +7,6 @@ import (
 )
 
 type User struct {
-
 }
 
 type Password struct {
@@ -20,19 +19,18 @@ func (u User) Router(router *mux.Router) {
 }
 
 func (u User) PUT(writer http.ResponseWriter, request *http.Request) {
-	data  := &Password{}
+	data := &Password{}
 	if err := GetData(request, data); err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-        name, _, _ := GetAuth(request)
-        
-	if _, status := service.SERVICE.Users.SetPassWord(name, data.OldPassword, data.NewPassword); status != true {
+	name, _, _ := GetAuth(request)
+	_, ok := service.SERVICE.Users.SetPass(name, data.OldPassword, data.NewPassword)
+	if !ok {
 		ResponseMsg(writer, 200, "password error")
-                return
-	} 
-	service.SERVICE.Users.Save()
-        ResponseMsg(writer, 0, "success")
+		return
+	}
+	_ = service.SERVICE.Users.Save()
+	ResponseMsg(writer, 0, "success")
 }
-

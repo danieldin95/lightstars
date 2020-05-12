@@ -8,9 +8,7 @@ export class ChangePassword extends FormModal {
 
         this.render();
         this.loading();
-
     }
-
 
     render() {
         console.log('??')
@@ -45,9 +43,8 @@ export class ChangePassword extends FormModal {
                 <div class="modal-header">
                         Change User Password
                 </div>
-                
+               
                 <div class="modal-body">
-
                         <form id="form">
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-4 col-md-4 col-form-label-sm">Old Password</label>
@@ -76,10 +73,7 @@ export class ChangePassword extends FormModal {
                                         </div>
                                     </div>
                                 </div>
-                                
-                        
                         </form>
-
                 </div>
                 
                 <div class="modal-footer text-right">

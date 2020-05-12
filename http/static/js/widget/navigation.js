@@ -68,20 +68,13 @@ export class Navigation {
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
-            
-            let password = new Password({id: 'password'})
-            new ChangePassword({id: '#changePasswordModal'})
-                .onsubmit((e) => {
-                    console.log(e.form)
-                    password.set(Utils.toJSON(e.form))
-                    // ins.create(Utils.toJSON(e.form));
-                });
 
+            let password = new Password({id: 'password'});
+            new ChangePassword({id: '#changePasswordModal'}).onsubmit((e) => {
+                password.set(Utils.toJSON(e.form));
+            });
             $(this.id).html(this.view);
         });
-
-
-
     }
 
     zoneName(host, view) {

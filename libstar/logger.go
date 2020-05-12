@@ -76,7 +76,7 @@ func (l *Logger) Print(format string, v ...interface{}) {
 func (l *Logger) SaveError(level string, format string, v ...interface{}) {
 	m := fmt.Sprintf(format, v...)
 	if l.FileLog != nil {
-		l.FileLog.Println(level+" "+m)
+		l.FileLog.Println(level + " " + m)
 	}
 
 	l.Lock.Lock()

@@ -1,5 +1,5 @@
 Name: lightsim
-Version: 0.8.05
+Version: 0.8.06
 Release: 1%{?dist}
 Summary: LightStar's Project Software
 Group: Applications/Communications

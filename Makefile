@@ -11,7 +11,9 @@ LDFLAGS += -X $(PKG).Date=$$(date +%FT%T%z)
 LDFLAGS += -X $(PKG).Version=$$(cat VERSION)
 
 ## all light software
-all: lightstar lightpix
+all: lightstar lightpix windows/lightpix
+
+all/pkg: all/rpm windows/zip
 
 all/rpm: linux/rpm/utils linux/rpm/star linux/rpm/sim
 
@@ -43,7 +45,7 @@ devel/requirements:
 	yum install libvirt-devel
 
 ## cross build for windows
-windows:
+windows/lightpix:
 	GOOS=windows GOARCH=amd64 go build -mod=vendor -o lightpix.windows.x86_64.exe lightpix.go
 
 ### packaging light pix for windows

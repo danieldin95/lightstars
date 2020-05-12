@@ -372,7 +372,7 @@ func Wait() {
 	signal.Notify(x, os.Interrupt, syscall.SIGINT)  //CTL+C
 
 	<-x
-	fmt.Println("Done")
+	fmt.Println("done")
 }
 
 func GetJSON(r io.ReadCloser, v interface{}) error {

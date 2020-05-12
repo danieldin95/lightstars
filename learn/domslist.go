@@ -20,7 +20,7 @@ func cpuUtils(conn *libvirt.Connect) {
 		fmt.Println(1000 * (newerSts.User - olderSts.User) / (newer - older))
 		fmt.Println(1000 * (newerSts.Kernel - olderSts.Kernel) / (newer - older))
 		fmt.Println(1000 * (newerSts.Idle - olderSts.Idle) / (newer - older))
-		fmt.Println(1000 * (newerSts.Idle - olderSts.Idle) / (2261 *1000*1000 * 16))
+		fmt.Println(1000 * (newerSts.Idle - olderSts.Idle) / (2261 * 1000 * 1000 * 16))
 		fmt.Printf("\n--%d----\n", newer-older)
 
 		older = newer
