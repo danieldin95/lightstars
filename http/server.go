@@ -74,6 +74,7 @@ func (h *Server) LoadRouter() {
 	api.Zone{}.Router(router)
 	api.ProxyTcp{}.Router(router)
 	api.DHCPLease{}.Router(router)
+        api.User{}.Router(router)
 }
 
 func (h *Server) SetCert(keyFile, crtFile string) {
