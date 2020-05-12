@@ -12,7 +12,7 @@ type Users struct {
 	Users map[string]*schema.User `json:"user"`
 }
 
-func (u Users) Save() error {
+func (u *Users) Save() error {
 	u.Lock.RLock()
 	defer u.Lock.RUnlock()
 
@@ -22,7 +22,7 @@ func (u Users) Save() error {
 	return nil
 }
 
-func (u Users) Load(file string) error {
+func (u *Users) Load(file string) error {
 	u.Lock.Lock()
 	defer u.Lock.Unlock()
 
@@ -41,7 +41,7 @@ func (u Users) Load(file string) error {
 	return nil
 }
 
-func (u Users) Get(name string) (schema.User, bool) {
+func (u *Users) Get(name string) (schema.User, bool) {
 	u.Lock.RLock()
 	defer u.Lock.RUnlock()
 
@@ -50,4 +50,16 @@ func (u Users) Get(name string) (schema.User, bool) {
 		return schema.User{}, false
 	}
 	return *user, ok
+}
+
+func (u *Users) SetPassWord(name, oldPassword,newPassword string) (schema.User, bool)  {
+	u.Lock.RLock()
+	defer u.Lock.RUnlock()
+        user, _ := u.Users[name]
+	if user == nil || !(user.Password == oldPassword) {
+		return schema.User{}, false
+	}
+
+	user.Password = newPassword
+	return *user, true
 }
