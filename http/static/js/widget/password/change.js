@@ -29,7 +29,7 @@ export class ChangePassword extends FormModal {
                             <div class="col-sm-10 col-md-6"">
                                 <div class="input-group">
                                     <input type="password" class="form-control form-control-sm"
-                                           name="oldPassword" value=""/>
+                                           name="old" value=""/>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@ export class ChangePassword extends FormModal {
                             <div class="col-sm-10 col-md-6"">
                                 <div class="input-group">
                                     <input type="password" class="form-control form-control-sm"
-                                           name="newPassword" value=""/>
+                                           name="new" value=""/>
                                 </div>
                             </div>
                         </div>
@@ -47,7 +47,7 @@ export class ChangePassword extends FormModal {
                             <div class="col-sm-10 col-md-6"">
                                 <div class="input-group">
                                     <input type="password" class="form-control form-control-sm"
-                                           name="repeatPassword" value=""/>
+                                           name="repeat" value=""/>
                                 </div>
                             </div>
                         </div>
