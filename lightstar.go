@@ -41,6 +41,7 @@ func main() {
 	flag.StringVar(&cfg.ConfDir, "conf", cfg.ConfDir, "the directory configuration on")
 	flag.Parse()
 
+	libstar.PreNotify()
 	libstar.Init(cfg.LogFile, cfg.Verbose)
 	// initialize storage
 	storage.DATASTOR.Init()
@@ -56,6 +57,7 @@ func main() {
 		h.SetCert(cfg.CrtDir+"/private.key", cfg.CrtDir+"/crt.pem")
 	}
 	go h.Start()
+	libstar.SdNotify()
 
 	libstar.Wait()
 }

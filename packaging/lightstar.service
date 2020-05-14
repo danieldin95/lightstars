@@ -3,10 +3,10 @@ Description=LightStar daemon
 After=libvirtd.target
 
 [Service]
-Type=oneshot
+Type=notify
 RemainAfterExit=yes
 EnvironmentFile=/etc/sysconfig/lightstar.cfg
-ExecStart=/bin/bash -c '/usr/bin/lightstar $OPTIONS &'
+ExecStart=/usr/bin/lightstar $OPTIONS
 ExecStop=/usr/bin/kill `/usr/sbin/pidof lightstar`
 
 [Install]
