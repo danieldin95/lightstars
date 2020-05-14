@@ -3,8 +3,8 @@ import {HyperApi} from "../api/hyper.js";
 import {ZoneApi} from "../api/zone.js";
 import {Location} from "../com/location.js";
 import {Index} from "../widget/container/index.js";
-import {ChangePassword} from "../widget/changePassword/create.js";
-import {Password} from "../ctl/password.js";
+import {ChangePassword} from "./password/change.js";
+import {PasswordApi} from "../api/password.js";
 import {Utils} from "../com/utils.js";
 
 
@@ -69,7 +69,7 @@ export class Navigation {
                 this.fullscreen();
             });
 
-            let password = new Password({id: 'password'});
+            let password = new PasswordApi();
             new ChangePassword({id: '#changePasswordModal'}).onsubmit((e) => {
                 password.set(Utils.toJSON(e.form));
             });
