@@ -70,8 +70,9 @@ export class Navigation {
             });
 
             let password = new PasswordApi();
-            new ChangePassword({id: '#changePasswordModal'}).onsubmit((e) => {
-                password.set(Utils.toJSON(e.form));
+            new ChangePassword({id: '#changePasswordModal'})
+                .onsubmit((e) => {
+                    password.set(Utils.toJSON(e.form));
             });
             $(this.id).html(this.view);
         });
