@@ -10,8 +10,8 @@ type User struct {
 }
 
 type Password struct {
-	OldPassword string `json:"oldPassword"`
-	NewPassword string `json:"newPassword"`
+	Old string `json:"old"`
+	New string `json:"new"`
 }
 
 func (u User) Router(router *mux.Router) {
@@ -26,7 +26,7 @@ func (u User) PUT(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	name, _, _ := GetAuth(request)
-	_, ok := service.SERVICE.Users.SetPass(name, data.OldPassword, data.NewPassword)
+	_, ok := service.SERVICE.Users.SetPass(name, data.Old, data.New)
 	if !ok {
 		ResponseMsg(writer, 200, "password error")
 		return
