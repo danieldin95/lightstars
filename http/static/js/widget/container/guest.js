@@ -82,13 +82,15 @@ export class Guest extends Base {
     template(v) {
         let cls = 'disabled';
         let vncUrl = '#';
-        let spiceUrl = '#';
+        let hostUrl = '';
+
+        if (Api.host !== '') {
+           hostUrl = "/host/" + Api.host;
+        }
         if (v.state === 'running') {
             cls = '';
             let vnc = Utils.graphic(v, 'vnc', 'password');
-            let spice = Utils.graphic(v, 'spice', 'password');
             vncUrl = "/ui/console?id=" + v.uuid + "&password=" + vnc + "&node=" + Api.host;
-            spiceUrl = "/ui/spice?id=" + v.uuid + "&password=" + spice + "&type=spice&node=" + Api.host;
         }
 
         return template.compile(`
@@ -124,10 +126,6 @@ export class Guest extends Base {
                             <a id="console-window" class="dropdown-item" href="#" data="${vncUrl}">
                                 Console in new window
                             </a>
-                            <div class="dropdown-divider"></div>
-                            <a id="console-spice" class="dropdown-item" href="#" data="${spiceUrl}">
-                                Open spice console
-                            </a>
                         </div>
                     </div>
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">Refresh</button>
@@ -162,7 +160,7 @@ export class Guest extends Base {
                             <div class="dropdown-divider"></div>
                             <a id="setting" class="dropdown-item" href="#" data-toggle="modal" data-target="#instanceSetModal">Setting</a>
                             <div class="dropdown-divider"></div>
-                            <a id="dumpxml" class="dropdown-item" href="/api/instance/{{uuid}}?format=xml">Dump XML</a>
+                            <a id="dumpxml" class="dropdown-item" href="${hostUrl}/api/instance/{{uuid}}?format=xml">Dump XML</a>
                         </div>
                     </div>
                 </div>
