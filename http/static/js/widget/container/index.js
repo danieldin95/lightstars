@@ -159,8 +159,6 @@ export class Index extends Base {
                         <a id="more-resume" class="dropdown-item" href="#">Resume</a>
                         <div class="dropdown-divider"></div>
                         <a id="more-destroy" class="dropdown-item" href="#">Destroy</a>
-                        <div class="dropdown-divider"></div>
-                        <a id="more-remove" class="dropdown-item" href="#">Remove</a>
                     </div>
                 </div>
     
