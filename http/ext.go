@@ -19,7 +19,7 @@ type Download struct {
 
 func (down Download) Router(router *mux.Router) {
 	dir := http.Dir(storage.PATH.Root())
-	files := http.StripPrefix("/ext/files/", http.FileServer(dir))
+	files := http.StripPrefix("/ext/files/", FileServer(dir))
 	router.PathPrefix("/ext/files/").Handler(files)
 }
 
