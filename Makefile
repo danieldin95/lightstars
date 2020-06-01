@@ -56,6 +56,9 @@ linux/zip: lightstar
 	@mkdir -p $(LIN_DIR)/usr/bin
 	@cp -rvf lightstar $(LIN_DIR)/usr/bin
 
+	@mkdir -p $(LIN_DIR)/etc/sysconfig
+	@echo OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/ca -conf /etc/lightstar" > $(LIN_DIR)/etc/sysconfig/lightstar.cfg
+
 	@mkdir -p $(LIN_DIR)/usr/lib/systemd/system
 	@cp ./packaging/lightstar.service $(LIN_DIR)/usr/lib/systemd/system
 
