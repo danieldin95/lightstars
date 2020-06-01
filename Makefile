@@ -41,15 +41,38 @@ linux/rpm/sim:
 	rpmbuild -ba packaging/lightsim.spec
 	cp -rvf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm .
 
+LIN_DIR=lightstar-$$(lsb_release -c -s)-$$(cat VERSION)
+
+linux/zip: lightstar
+	@rm -rf $(LIN_DIR) && mkdir -p $(LIN_DIR)
+	@mkdir -p $(LIN_DIR)/etc/lightstar
+	@cp -rvf resource/auth.json.example $(LIN_DIR)/etc/lightstar
+	@cp -rvf resource/zone.json.example $(LIN_DIR)/etc/lightstar
+	@cp -rvf resource/permission.json.example $(LIN_DIR)/etc/lightstar
+
+	@mkdir -p $(LIN_DIR)/var/lightstar
+	@cp -R ./resource/ca $(LIN_DIR)/var/lightstar
+	@cp -R ./http/static $(LIN_DIR)/var/lightstar
+	@mkdir -p $(LIN_DIR)/usr/bin
+	@cp -rvf lightstar $(LIN_DIR)/usr/bin
+
+	@mkdir -p $(LIN_DIR)/usr/lib/systemd/system
+	@cp ./packaging/lightstar.service $(LIN_DIR)/usr/lib/systemd/system
+
+	zip -r $(LIN_DIR).zip $(LIN_DIR)
+
 devel/requirements:
 	yum install libvirt-devel
+
+ubuntu/devel/requirements:
+	apt-get install libvirt-dev
 
 ## cross build for windows
 windows/lightpix:
 	GOOS=windows GOARCH=amd64 go build -mod=vendor -o lightpix.windows.x86_64.exe lightpix.go
 
 ### packaging light pix for windows
-WIN_DIR = "lightpix-windows-"$$(cat VERSION)
+WIN_DIR = lightpix-windows-$$(cat VERSION)
 
 windows/zip:
 	rm -rf $(WIN_DIR) && mkdir -p $(WIN_DIR)
