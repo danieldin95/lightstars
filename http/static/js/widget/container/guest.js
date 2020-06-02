@@ -3,6 +3,7 @@ import {Utils} from "../../com/utils.js";
 import {Instance} from '../../ctl/instance.js';
 import {Api} from "../../api/api.js";
 import {InstanceApi} from "../../api/instance.js";
+
 import {Collapse} from "../collapse.js";
 import {DiskCreate} from '../disk/create.js';
 import {InterfaceCreate} from '../interface/create.js';
@@ -82,7 +83,7 @@ export class Guest extends Base {
     template(v) {
         let cls = 'disabled';
         let vncUrl = '#';
-        let hostUrl = '';
+        let hostUrl = '#';
 
         if (Api.host !== '') {
            hostUrl = "/host/" + Api.host;

@@ -4,7 +4,7 @@ import {Routes} from "./routes.js";
 import {Location} from "./com/location.js";
 import {Api} from "./api/api.js";
 
-console.log('init')
+console.log('init');
 
 $(function() {
     let hyper = $('hyper');
