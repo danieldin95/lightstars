@@ -10,7 +10,7 @@
     yum install libvirt-daemon libvirt qemu-kvm qemu-img
 
 ### Install Dependence on Ubuntu
-    apt-get install libvirt-bin qemu-kvm qemu-img
+    apt-get install libvirt-bin qemu-kvm qemu
 
 ## Enable lightstar service
     systemctl enable lightstar
