@@ -1,6 +1,7 @@
 import {Base} from "./base.js"
 import {Guest} from "./guest.js"
 import {Utils} from "../../com/utils.js";
+import {Location} from "../../com/location.js";
 import {Instances} from '../../ctl/instances.js';
 import {Network} from "../../ctl/network.js";
 import {DataStore} from "../../ctl/datastore.js";
@@ -107,6 +108,7 @@ export class Index extends Base {
     }
 
     template(v) {
+        let query = Location.query();
         return (`
         <index id="index">
         <!-- System -->
@@ -115,7 +117,7 @@ export class Index extends Base {
                 <div class="">
                     <a id="system-col" href="javascript:void(0)" data-toggle="collapse"
                        data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">${this.props.name}</a>
-                    <a class="btn-spot float-right" id="system-ref" href="#system"></a>
+                    <a class="btn-spot float-right" id="system-ref" href="#/system?${query}"></a>
                 </div>
             </div>
             <div id="collapseSys" class="collapse" aria-labelledby="headingOne" data-parent="#index">
