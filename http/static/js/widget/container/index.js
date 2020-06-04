@@ -113,7 +113,7 @@ export class Index extends Base {
         <div id="system" class="card card-main system">
             <div class="card-header">
                 <div class="">
-                    <a id="system-col" href="#" data-toggle="collapse"
+                    <a id="system-col" href="javascript:void(0)" data-toggle="collapse"
                        data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">${this.props.name}</a>
                     <a class="btn-spot float-right" id="system-ref" href="#system"></a>
                 </div>
@@ -150,15 +150,15 @@ export class Index extends Base {
                         Actions
                     </button>
                     <div name="btn-more" class="dropdown-menu">
-                        <a id="more-start" class="dropdown-item" href="#">Power on</a>
-                        <a id="more-shutdown" class="dropdown-item" href="#">Power off</a>
+                        <a id="more-start" class="dropdown-item" href="javascript:void(0)">Power on</a>
+                        <a id="more-shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-reset" class="dropdown-item" href="#">Reset</a>
+                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-suspend" class="dropdown-item" href="#">Suspend</a>
-                        <a id="more-resume" class="dropdown-item" href="#">Resume</a>
+                        <a id="more-suspend" class="dropdown-item" href="javascript:void(0)">Suspend</a>
+                        <a id="more-resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-destroy" class="dropdown-item" href="#">Destroy</a>
+                        <a id="more-destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
                     </div>
                 </div>
     

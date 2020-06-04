@@ -118,13 +118,13 @@ export class Guest extends Base {
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
-                            <a id="console-self" class="dropdown-item" href="#" data="${vncUrl}">
+                            <a id="console-self" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
                                 Console in self
                             </a>
-                            <a id="console-blank" class="dropdown-item" href="#" data="${vncUrl}">
+                            <a id="console-blank" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
                                 Console in new blank
                             </a>
-                            <a id="console-window" class="dropdown-item" href="#" data="${vncUrl}">
+                            <a id="console-window" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
                                 Console in new window
                             </a>
                         </div>
@@ -140,12 +140,12 @@ export class Guest extends Base {
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div id="power-more" class="dropdown-menu" aria-labelledby="power">
-                            <a id="start" class="dropdown-item" href="#">Power on</a>
-                            <a id="shutdown" class="dropdown-item" href="#">Power off</a>
+                            <a id="start" class="dropdown-item" href="javascript:void(0)">Power on</a>
+                            <a id="shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
                             <div class="dropdown-divider"></div>
-                            <a id="reset" class="dropdown-item" href="#">Reset</a>
+                            <a id="reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
                             <div class="dropdown-divider"></div>
-                            <a id="destroy" class="dropdown-item" href="#">Destroy</a>
+                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
                         </div>
                     </div>
                     <div id="btns-more" class="btn-group btn-group-sm" role="group">
@@ -154,12 +154,12 @@ export class Guest extends Base {
                             Actions
                         </button>
                         <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                            <a id="suspend" class="dropdown-item ${cls}" href="#">Suspend</a>
-                            <a id="resume" class="dropdown-item" href="#">Resume</a>
+                            <a id="suspend" class="dropdown-item ${cls}" href="javascript:void(0)">Suspend</a>
+                            <a id="resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
                             <div class="dropdown-divider"></div>
-                            <a id="remove" class="dropdown-item" href="#">Remove</a>
+                            <a id="remove" class="dropdown-item" href="javascript:void(0)">Remove</a>
                             <div class="dropdown-divider"></div>
-                            <a id="setting" class="dropdown-item" href="#" data-toggle="modal" data-target="#instanceSetModal">Setting</a>
+                            <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#instanceSetModal">Setting</a>
                             <div class="dropdown-divider"></div>
                             <a id="dumpxml" class="dropdown-item" href="${hostUrl}/api/instance/{{uuid}}?format=xml">Dump XML</a>
                         </div>
