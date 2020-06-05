@@ -112,12 +112,14 @@ export class Navigation {
                 }
                 view.find("#zone").append(elem);
             });
-            view.find("#zone a").on('click',  this,function (e) {
+            view.find("#zone a").on('click', this, function (e) {
                 let host = $(this).attr("data");
 
-                e.data.zoneName(host, view);
+                //e.data.zoneName(host, view);
                 Location.query('node', host);
                 Api.Host(host);
+
+                e.data.refresh();
                 new Index({
                     id: container,
                     name: name,

@@ -19,5 +19,6 @@ func (h Hyper) GET(w http.ResponseWriter, r *http.Request) {
 	index.Version = schema.NewVersion()
 	index.Hyper = compute.NewHyper()
 	index.User, _ = GetUser(r)
+	index.User.Password = ""
 	ResponseJson(w, index)
 }
