@@ -59,7 +59,7 @@ export class Index extends Base {
         let ins = new Instances({
             id: '#instances',
             onthis: (e) => {
-                console.log("Index.loading", e);
+                console.log("Guest.loading", e);
                 new Guest({
                     id: this.id,
                     uuid: e.uuid,
