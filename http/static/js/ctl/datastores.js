@@ -1,6 +1,6 @@
-import {DataStoreApi} from "../api/datastore.js";
-import {DataStoreTable} from "../widget/datastore/table.js";
-import {FileUpload} from "../widget/datastore/upload.js";
+import {DataStoreApi} from "../api/datastores.js";
+import {DataStoreTable} from "../widget/datastores/table.js";
+import {FileUpload} from "../widget/datastores/upload.js";
 import {UploadApi} from "../api/upload.js";
 import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
 
@@ -17,7 +17,7 @@ export class CheckBox extends CheckBoxTab {
 }
 
 
-export class DataStore {
+export class Datastores {
     // {
     //   id: "#datastores"
     // }

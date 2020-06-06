@@ -3,7 +3,7 @@ import {FormModal} from "../form/modal.js";
 import {FormWizard} from "../form/wizard.js";
 import {BridgeApi} from "../../api/bridge.js";
 import {IsoApi} from "../../api/iso.js"
-import {DataStoreApi} from "../../api/datastore.js";
+import {DataStoreApi} from "../../api/datastores.js";
 
 
 export class InstanceCreate extends FormModal {

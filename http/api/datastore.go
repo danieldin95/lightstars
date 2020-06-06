@@ -85,7 +85,7 @@ func (store DataStore) POST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pol := DataStore2XML(data)
-	libstar.Debug("DataStore.POST %s", pol.XML)
+	libstar.Debug("Datastores.POST %s", pol.XML)
 	if err := pol.Create(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

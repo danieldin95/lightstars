@@ -3,7 +3,7 @@ import {Guest} from "./guest.js"
 import {Utils} from "../../com/utils.js";
 import {Instances} from '../../ctl/instances.js';
 import {Network} from "../../ctl/network.js";
-import {DataStore} from "../../ctl/datastore.js";
+import {Datastores} from "../../ctl/datastores.js";
 import {Collapse} from "../collapse.js";
 import {Overview} from "../index/overview.js";
 import {InstanceCreate} from '../instance/create.js';
@@ -11,9 +11,9 @@ import {NATCreate} from "../network/create.js";
 import {BridgeCreate} from "../network/bridge/create.js";
 import {RoutedCreate} from "../network/routed/create.js";
 import {IsolatedCreate} from "../network/isolated/create.js";
-import {DirCreate} from "../datastore/create.js";
-import {NFSCreate} from "../datastore/nfs/create.js";
-import {iSCSICreate} from "../datastore/iscsi/create.js";
+import {DirCreate} from "../datastores/create.js";
+import {NFSCreate} from "../datastores/nfs/create.js";
+import {iSCSICreate} from "../datastores/iscsi/create.js";
 
 export class Index extends Base {
     // {
@@ -88,7 +88,7 @@ export class Index extends Base {
                 net.create(Utils.toJSON(e.form));
             });
         // loading datastore.
-        let store = new DataStore({
+        let store = new Datastores({
             id: '#datastores',
             upload: '#fileUploadModal',
         });
