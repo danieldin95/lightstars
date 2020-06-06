@@ -33,12 +33,25 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return
 		}
+		name, err := dom.GetName()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusNotFound)
+		}
+		vols, _ := (&libvirts.Pool{Name: "." + name}).List()
+
 		defer dom.Free()
 		instance := compute.NewInstance(*dom)
 		list := schema.ListDisk{
 			Items: make([]schema.Disk, 0, 32),
 		}
 		for _, disk := range instance.Disks {
+			if vol, ok := vols[disk.Name]; ok {
+				disk.Volume = schema.VolumeInfo{
+					Type:       vol.Type,
+					Capacity:   vol.Capacity,
+					Allocation: vol.Allocation,
+				}
+			}
 			list.Items = append(list.Items, disk)
 		}
 		sort.SliceStable(list.Items, func(i, j int) bool {
@@ -48,6 +61,8 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 		list.Metadata.Total = len(list.Items)
 		ResponseJson(w, list)
 		return
+	} else {
+		//TODO
 	}
 	ResponseMsg(w, 0, dev)
 }

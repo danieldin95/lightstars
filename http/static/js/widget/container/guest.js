@@ -211,6 +211,7 @@ export class Guest extends Base {
                             <th>Bus</th>
                             <th>Device</th>
                             <th>Source</th>
+                            <th>Space</th>
                             <th>Address</th>
                             <th>Format</th>
                         </tr>

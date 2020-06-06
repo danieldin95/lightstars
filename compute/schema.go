@@ -39,8 +39,10 @@ func NewFromDiskXML(xml libvirtc.DiskXML) (disk schema.Disk) {
 	disk.Bus = xml.Target.Bus
 	if xml.Source.File != "" {
 		disk.Source = storage.PATH.Fmt(xml.Source.File)
+		disk.Name = xml.Source.File
 	} else if xml.Source.Device != "" {
 		disk.Source = storage.PATH.Fmt(xml.Source.Device)
+		disk.Name = xml.Source.Device
 	}
 	disk.Format = xml.Driver.Type
 	if xml.Address != nil {

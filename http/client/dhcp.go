@@ -13,7 +13,7 @@ func (api DHCPLease) Url() string {
 	return api.Host + "/api/dhcp/lease"
 }
 
-func (api DHCPLease) Get(data *schema.ListLeases) error {
+func (api DHCPLease) Get(data *schema.DHCPLeases) error {
 	client := api.NewRequest(api.Url())
 	if err := api.GetJSON(client, data); err != nil {
 		libstar.Error("DHCPLease.Get %s", err)

@@ -10,6 +10,7 @@ export class DiskTable extends  WidgetBase {
     constructor(props) {
         super(props);
         this.inst = props.inst;
+        this.name = props.name;
     }
 
     loading() {
@@ -40,6 +41,11 @@ export class DiskTable extends  WidgetBase {
                 <td>{{v.bus}}</td>
                 <td>{{v.device}}</td>
                 <td>{{v.source}}</td>
+                {{if v.volume.type === ""}}
+                <td>-</td>
+                {{else}}
+                <td>{{v.volume.capacity | prettyByte}} | {{v.volume.allocation | prettyByte}}</td>
+                {{/if}}
                 <td><span>
                     {{if v.addrType == "pci"}}
                         pci:{{v.addrBus | aton 2}}:{{v.addrSlot | aton 2}}.{{v.addrFunc}}
