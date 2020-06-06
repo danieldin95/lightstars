@@ -51,6 +51,7 @@ func (w WebSocket) GetRemote(id, name, typ string) string {
 		libstar.Error("WebSocket.GetRemote %s", err)
 		return ""
 	}
+	defer client.Close()
 	inst := schema.Instance{}
 	if err := libstar.GetJSON(resp.Body, &inst); err != nil {
 		libstar.Error("WebSocket.GetRemote %s", name)
