@@ -3,6 +3,6 @@ package schema
 type User struct {
 	Type      string   `json:"type"` // admin, guest or other
 	Name      string   `json:"name"`
-	Password  string   `json:"password"`
-	Instances []string `json:"instances"`
+	Password  string   `json:"password,omitempty"`
+	Instances []string `json:"instances,omitempty"`
 }

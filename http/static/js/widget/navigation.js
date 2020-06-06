@@ -112,12 +112,14 @@ export class Navigation {
                 }
                 view.find("#zone").append(elem);
             });
-            view.find("#zone a").on('click',  this,function (e) {
+            view.find("#zone a").on('click', this, function (e) {
                 let host = $(this).attr("data");
 
-                e.data.zoneName(host, view);
+                //e.data.zoneName(host, view);
                 Location.query('node', host);
                 Api.Host(host);
+
+                e.data.refresh();
                 new Index({
                     id: container,
                     name: name,
@@ -173,7 +175,7 @@ export class Navigation {
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a id="zoneMore" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                    <a id="zoneMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
                         <zone-name>default</zone-name>@zone
                     </a>
@@ -184,15 +186,15 @@ export class Navigation {
             </ul>            
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a id="userMore" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" 
+                    <a id="userMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" 
                         aria-haspopup="true" aria-expanded="false">
                         {{user.name}}@{{hyper.host}}
                     </a>
                     <div class="dropdown-menu dropdown-left" aria-labelledby="userMore">
                         <a id="fullscreen" class="dropdown-item">Full screen</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Setting</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePasswordModal">Change password</a>
+                        <a class="dropdown-item" href="javascript:void(0)">Setting</a>
+                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#changePasswordModal">Change password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/ui/login">Logout</a>
                     </div>

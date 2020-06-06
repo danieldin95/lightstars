@@ -1,6 +1,7 @@
 import {Base} from "./base.js"
 import {Guest} from "./guest.js"
 import {Utils} from "../../com/utils.js";
+import {Location} from "../../com/location.js";
 import {Instances} from '../../ctl/instances.js';
 import {Network} from "../../ctl/network.js";
 import {Datastores} from "../../ctl/datastores.js";
@@ -107,15 +108,16 @@ export class Index extends Base {
     }
 
     template(v) {
+        let query = Location.query();
         return (`
         <index id="index">
         <!-- System -->
         <div id="system" class="card card-main system">
             <div class="card-header">
                 <div class="">
-                    <a id="system-col" href="#" data-toggle="collapse"
+                    <a id="system-col" href="javascript:void(0)" data-toggle="collapse"
                        data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">${this.props.name}</a>
-                    <a class="btn-spot float-right" id="system-ref" href="#system"></a>
+                    <a class="btn-spot float-right" id="system-ref" href="#/system?${query}"></a>
                 </div>
             </div>
             <div id="collapseSys" class="collapse" aria-labelledby="headingOne" data-parent="#index">
@@ -150,15 +152,15 @@ export class Index extends Base {
                         Actions
                     </button>
                     <div name="btn-more" class="dropdown-menu">
-                        <a id="more-start" class="dropdown-item" href="#">Power on</a>
-                        <a id="more-shutdown" class="dropdown-item" href="#">Power off</a>
+                        <a id="more-start" class="dropdown-item" href="javascript:void(0)">Power on</a>
+                        <a id="more-shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-reset" class="dropdown-item" href="#">Reset</a>
+                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-suspend" class="dropdown-item" href="#">Suspend</a>
-                        <a id="more-resume" class="dropdown-item" href="#">Resume</a>
+                        <a id="more-suspend" class="dropdown-item" href="javascript:void(0)">Suspend</a>
+                        <a id="more-resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-destroy" class="dropdown-item" href="#">Destroy</a>
+                        <a id="more-destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
                     </div>
                 </div>
     

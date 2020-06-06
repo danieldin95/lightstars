@@ -28,9 +28,14 @@ func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 
 	pool, err := hyper.Conn.LookupStoragePoolByTargetPath(dir)
 	if err != nil {
-		libstar.Warn("IsoMgr.ListFiles %s", err)
-		return images
+		name := path.Base(dir)
+		libstar.Warn("IsoMgr.ListFiles %s, and try %s", err, name)
+		pool, err = hyper.Conn.LookupStoragePoolByName(name)
+		if err != nil {
+			return images
+		}
 	}
+
 	defer pool.Free()
 	_ = pool.Refresh(0)
 	if vols, err := pool.ListAllStorageVolumes(0); err == nil {
@@ -91,7 +96,7 @@ func (store *StoreMgr) List() []Store {
 
 	hyper, err := libvirts.GetHyper()
 	if err != nil {
-		libstar.Warn("StoreMgr.ListFiles %s", err)
+		libstar.Warn("StoreMgr.List %s", err)
 		return stores
 	}
 	if pools, err := hyper.Conn.ListAllStoragePools(0); err == nil {

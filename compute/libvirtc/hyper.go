@@ -14,10 +14,11 @@ type HyperListener struct {
 }
 
 type HyperVisor struct {
-	Name     string
+	Url      string
 	Schema   string
 	Address  string
 	Path     string
+	Host     string
 	Conn     *libvirt.Connect
 	Listener []HyperListener
 
@@ -63,11 +64,14 @@ func (h *HyperVisor) OpenNotSafe() error {
 		}
 	}
 	if hyper.Conn == nil {
-		conn, err := libvirt.NewConnect(hyper.Name)
+		conn, err := libvirt.NewConnect(hyper.Url)
 		if err != nil {
 			return err
 		}
 		hyper.Conn = conn
+		if name, err := conn.GetHostname(); err == nil {
+			hyper.Host = name
+		}
 		for _, listen := range h.Listener {
 			if listen.Opened != nil {
 				_ = listen.Opened(h.Conn)
@@ -90,15 +94,15 @@ func (h *HyperVisor) AddListener(listen HyperListener) {
 	h.Listener = append(h.Listener, listen)
 }
 
-func (h *HyperVisor) SetName(name string) {
-	hyper.Name = name
+func (h *HyperVisor) SetUrl(name string) {
+	hyper.Url = name
 
-	h.Schema = strings.SplitN(h.Name, ":", 2)[0]
+	h.Schema = strings.SplitN(h.Url, ":", 2)[0]
 	switch h.Schema {
 	case "qemu+ssh":
-		h.Address, h.Path = parseQemuSSH(h.Name)
+		h.Address, h.Path = parseQemuSSH(h.Url)
 	case "qemu+tcp", "qemu+tls":
-		h.Address, h.Path = parseQemuTCP(h.Name)
+		h.Address, h.Path = parseQemuTCP(h.Url)
 	default:
 		h.Address = "localhost"
 		h.Path = "system"
@@ -106,6 +110,7 @@ func (h *HyperVisor) SetName(name string) {
 	if strings.Contains(h.Address, ":") {
 		h.Address = strings.SplitN(h.Address, ":", 2)[0]
 	}
+	h.Host = h.Address
 }
 
 func (h *HyperVisor) FigureCPU() (err error) {
@@ -284,11 +289,11 @@ func GetHyper() (*HyperVisor, error) {
 }
 
 func SetHyper(name string) (*HyperVisor, error) {
-	if name == hyper.Name {
+	if name == hyper.Url {
 		return &hyper, nil
 	}
 	hyper.Close()
-	hyper.SetName(name)
+	hyper.SetUrl(name)
 	return &hyper, hyper.Open()
 }
 
@@ -321,6 +326,6 @@ func AddHyperListener(listen HyperListener) {
 }
 
 func init() {
-	hyper.SetName("qemu:///system")
+	hyper.SetUrl("qemu:///system")
 	go hyper.LoopForever()
 }
