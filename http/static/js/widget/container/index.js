@@ -19,7 +19,7 @@ import {iSCSICreate} from "../datastore/iscsi/create.js";
 export class Index extends Base {
     // {
     //    id: ".container",
-    //    default: "instances"
+    //    default: "/instances"
     //    force: false, // force to apply default.
     // }
     constructor(props) {

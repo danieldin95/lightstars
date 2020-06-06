@@ -18,7 +18,7 @@ export class Navigation {
         this.id = props.id;
         this.home = props.home;
         this.props = props;
-        this.active = Location.get("instances");
+        this.active = Location.get("/instances");
         console.log("Navigation.constructor", this.active);
         this.navs = ["#system", "#instances", "#datastore", "#network"];
 
