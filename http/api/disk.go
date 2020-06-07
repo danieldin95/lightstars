@@ -24,18 +24,32 @@ func (disk Disk) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.DELETE).Methods("DELETE")
 }
 
-func (disk Disk) Check(name string, disks []schema.Disk) {
+func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo {
+	name := instance.Name
+	disks := instance.Disks
+
+	vols := make(map[string]libvirts.VolumeInfo, 32)
 	sources := make(map[string]int, 4)
 	for _, disk := range disks {
+		if _, ok := vols[disk.Name]; ok {
+			continue
+		}
 		dir := path.Dir(disk.Name)
+		volsDir, err := (&libvirts.Pool{Path: dir}).ListByTarget()
+		if err == nil {
+			for file, vol := range volsDir {
+				vols[file] = vol
+			}
+			continue
+		}
 		if _, ok := sources[dir]; ok {
 			sources[dir] += 1
 		} else {
 			sources[dir] = 1
 		}
 	}
-
 	libstar.Debug("Disk.Check %v", sources)
+
 	curDir := ""
 	curUsed := 0
 	for dir, c := range sources {
@@ -49,12 +63,13 @@ func (disk Disk) Check(name string, disks []schema.Disk) {
 			}
 		}
 	}
-	libstar.Info("Disk.Check rebuild %s for %s", curDir, name)
 	if curDir != "" {
+		libstar.Info("Disk.Travel rebuild %s for %s", curDir, name)
 		if _, err := libvirts.CreatePool(libvirts.ToDomainPool(name), curDir); err != nil {
-			libstar.Warn("Disk.Check %s", err)
+			libstar.Warn("Disk.Travel %s", err)
 		}
 	}
+	return vols
 }
 
 func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
@@ -68,17 +83,8 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 		}
 		defer dom.Free()
 
-		name, err := dom.GetName()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusNotFound)
-		}
 		instance := compute.NewInstance(*dom)
-		pool := libvirts.Pool{Name: libvirts.ToDomainPool(name)}
-		vols, err := (&pool).List()
-		if err != nil {
-			disk.Check(name, instance.Disks)
-			vols, _ = (&pool).List()
-		}
+		vols := disk.Travel(instance)
 
 		list := schema.ListDisk{
 			Items: make([]schema.Disk, 0, 32),

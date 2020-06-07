@@ -148,19 +148,7 @@ func (pol *Pool) Remove() error {
 	return nil
 }
 
-func (pol *Pool) List() (map[string]VolumeInfo, error) {
-	hyper, err := GetHyper()
-	if err != nil {
-		return nil, err
-	}
-	pool, err := hyper.Conn.LookupStoragePoolByUUIDString(pol.Name)
-	if err != nil {
-		pool, err = hyper.Conn.LookupStoragePoolByName(pol.Name)
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer pool.Free()
+func (pol *Pool) list(pool *libvirt.StoragePool) (map[string]VolumeInfo, error) {
 	vols, err := pool.ListAllStorageVolumes(0)
 	if err != nil {
 		return nil, err
@@ -187,6 +175,35 @@ func (pol *Pool) List() (map[string]VolumeInfo, error) {
 		_ = vol.Free()
 	}
 	return infos, nil
+}
+
+func (pol *Pool) List() (map[string]VolumeInfo, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
+	}
+	pool, err := hyper.Conn.LookupStoragePoolByUUIDString(pol.Name)
+	if err != nil {
+		pool, err = hyper.Conn.LookupStoragePoolByName(pol.Name)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer pool.Free()
+	return pol.list(pool)
+}
+
+func (pol *Pool) ListByTarget() (map[string]VolumeInfo, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
+	}
+	pool, err := hyper.Conn.LookupStoragePoolByTargetPath(pol.Path)
+	if err != nil {
+		return nil, err
+	}
+	defer pool.Free()
+	return pol.list(pool)
 }
 
 func ListPools() ([]Pool, error) {
