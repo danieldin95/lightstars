@@ -8,42 +8,44 @@ export class Filters {
             return Utils.iton(data, n);
         };
 
-        art.prettyKiB = function (data) {
+        art.prettyKiB = function (data, fra) {
             let dec = data;
+            fra = fra === undefined ? 2 : fra;
             if (dec < 1024) {
-                return dec.toFixed(2)+"KiB";
+                return dec.toFixed(fra)+"KiB";
             }
             dec /= 1024.0;
             if (dec < 1024) {
-                return dec.toFixed(2)+"MiB";
+                return dec.toFixed(fra)+"MiB";
             }
             dec /= 1024.0;
             if (dec < 1024) {
-                return dec.toFixed(2)+"GiB";
+                return dec.toFixed(fra)+"GiB";
             }
             dec /=  1024.0;
-            return dec.toFixed(2) + "TiB"
+            return dec.toFixed(fra) + "TiB"
         };
 
-        art.prettyByte = function (data) {
+        art.prettyByte = function (data, fra) {
             let dec = data;
+            fra = fra === undefined ? 2 : fra;
             if (dec < 1024) {
-                return dec.toFixed(2)+"B";
+                return dec.toFixed(fra)+"B";
             }
             dec = dec / 1024.0;
             if (dec < 1024) {
-                return dec.toFixed(2)+"KiB";
+                return dec.toFixed(fra)+"KiB";
             }
             dec /= 1024.0;
             if (dec < 1024) {
-                return dec.toFixed(2)+"MiB";
+                return dec.toFixed(fra)+"MiB";
             }
             dec = dec / 1024.0;
             if (dec < 1024) {
-                return dec.toFixed(2)+"GiB";
+                return dec.toFixed(fra)+"GiB";
             }
             dec = dec / 1024;
-            return dec.toFixed(2) + "TiB"
+            return dec.toFixed(fra) + "TiB"
         };
 
         art.figureCpuUsed = function (free, total) {

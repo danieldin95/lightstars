@@ -44,7 +44,7 @@ export class DiskTable extends  WidgetBase {
                 {{if v.volume.type === ""}}
                 <td>-</td>
                 {{else}}
-                <td>{{v.volume.capacity | prettyByte}} | {{v.volume.allocation | prettyByte}}</td>
+                <td>{{v.volume.capacity | prettyByte 0}} | {{v.volume.allocation | prettyByte 0}}</td>
                 {{/if}}
                 <td><span>
                     {{if v.addrType == "pci"}}
