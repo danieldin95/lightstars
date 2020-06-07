@@ -1,10 +1,10 @@
 import {InstanceApi} from "../api/instance.js";
-import {Disk} from "./disk.js";
-import {Interface} from "./interface.js"
-import {Graphics} from "./graphics.js";
+import {DiskCtl} from "./disk.js";
+import {InterfaceCtl} from "./interface.js"
+import {GraphicsCtl} from "./graphics.js";
 
 
-export class Instance {
+export class GuestCtl {
     // {
     //   id: '#instance'
     //   header: {
@@ -28,9 +28,9 @@ export class Instance {
         this.name = name;
         this.tasks = props.tasks || "tasks";
 
-        this.disk = new Disk({id: props.disks.id, uuid, name});
-        this.interface = new Interface({id: props.interfaces.id, uuid, name});
-        this.graphics = new Graphics({id: props.graphics.id, uuid, name});
+        this.disk = new DiskCtl({id: props.disks.id, uuid, name});
+        this.interface = new InterfaceCtl({id: props.interfaces.id, uuid, name});
+        this.graphics = new GraphicsCtl({id: props.graphics.id, uuid, name});
 
         // register buttons's click.
         $(`${this.id} #console`).on("click", this, function (e) {

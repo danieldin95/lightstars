@@ -1,4 +1,4 @@
-import {Utils} from "../com/utils.js";
+import {Utils} from "./utils.js";
 
 const art = template.defaults.imports;
 

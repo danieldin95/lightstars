@@ -11,7 +11,7 @@ export class Routes {
     constructor(props) {
         this.routes = [
             {
-                prefix: "/instance/",
+                prefix: "/guest/",
                 function: (p) => {
                     let uuid = p.split('/', 3)[2];
                     new Guest({

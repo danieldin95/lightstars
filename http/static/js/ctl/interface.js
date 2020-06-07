@@ -7,7 +7,7 @@ class CheckBox extends CheckBoxTab {
 }
 
 
-export class Interface {
+export class InterfaceCtl {
     // {
     //   id: '#instance #interface',
     //   uuid: uuid of instance,

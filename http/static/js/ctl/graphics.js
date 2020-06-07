@@ -7,7 +7,7 @@ class CheckBox extends CheckBoxTab {
 }
 
 
-export class Graphics {
+export class GraphicsCtl {
     // {
     //   id: '#instance #graphics',
     //   uuid: uuid of instance,

@@ -7,7 +7,7 @@ class CheckBox extends CheckBoxTab {
 }
 
 
-export class Disk {
+export class DiskCtl {
     // {
     //   id: '#instance #disk',
     //   uuid: uuid of instance,

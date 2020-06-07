@@ -1,8 +1,8 @@
-import {Filters} from "./ctl/filter.js";
+import {Api} from "./api/api.js";
+import {Location} from "./com/location.js";
+import {Filters} from "./com/filter.js";
 import {Navigation} from "./widget/navigation.js";
 import {Routes} from "./routes.js";
-import {Location} from "./com/location.js";
-import {Api} from "./api/api.js";
 
 
 $(function() {

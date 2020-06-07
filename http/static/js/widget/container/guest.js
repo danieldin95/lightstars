@@ -1,6 +1,6 @@
 import {Base} from "./base.js"
 import {Utils} from "../../com/utils.js";
-import {Instance} from '../../ctl/instance.js';
+import {GuestCtl} from '../../ctl/guest.js';
 import {Api} from "../../api/api.js";
 import {InstanceApi} from "../../api/instance.js";
 
@@ -53,7 +53,7 @@ export class Guest extends Base {
             update: false,
         });
 
-        let instance = new Instance({
+        let instance = new GuestCtl({
             id: "#instance",
             disks: {id: "#disk"},
             interfaces: {id: "#interface"},
@@ -211,9 +211,9 @@ export class Guest extends Base {
                             <th>Bus</th>
                             <th>Device</th>
                             <th>Source</th>
-                            <th>Space</th>
+                            <th>Capacity</th>
+                            <th>Available</th>
                             <th>Address</th>
-                            <th>Format</th>
                         </tr>
                         </thead>
                         <tbody id="display-table">

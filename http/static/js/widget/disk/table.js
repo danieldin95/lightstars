@@ -41,11 +41,8 @@ export class DiskTable extends  WidgetBase {
                 <td>{{v.bus}}</td>
                 <td>{{v.device}}</td>
                 <td>{{v.source}}</td>
-                {{if v.volume.type === ""}}
-                <td>-</td>
-                {{else}}
-                <td>{{v.volume.capacity | prettyByte 0}} | {{v.volume.allocation | prettyByte 0}}</td>
-                {{/if}}
+                <td>{{if v.volume.type === ""}} - {{else}} {{v.volume.capacity | prettyByte}} {{/if}}</td>
+                <td>{{if v.volume.type === ""}} - {{else}} {{v.volume.allocation | prettyByte}} {{/if}}</td>
                 <td><span>
                     {{if v.addrType == "pci"}}
                         pci:{{v.addrBus | aton 2}}:{{v.addrSlot | aton 2}}.{{v.addrFunc}}
@@ -53,7 +50,6 @@ export class DiskTable extends  WidgetBase {
                         drv:{{v.addrBus | aton 2}}:{{v.addrTgt | aton 2}}.{{v.addrUnit}}
                     {{/if}}</span>
                 </td>
-                <td>{{v.format}}</td>
             </tr>
         {{/each}}
         `, data);
