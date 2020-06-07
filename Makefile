@@ -22,16 +22,17 @@ BD = build
 LD = lightstar-$(LSB)-$(VER)
 WD = lightpix-Windows-$(VER)
 
-# prepare
-env:
-	@mkdir -p $(BD)
-
 ## all light software
 all: lightstar lightpix windows/lightpix
 
 pkg: rpm windows/zip
 
 rpm: rpm/lightutils rpm/lightstar rpm/lightsim
+
+# prepare environment
+env:
+	@mkdir -p $(BD)
+	@./packaging/auto.sh
 
 ## light star
 lightstar:
@@ -43,17 +44,14 @@ lightpix:
 
 ### linux packaging
 rpm/lightutils: env
-	./packaging/auto.sh
 	rpmbuild -ba packaging/lightutils.spec
 	cp -rvf ~/rpmbuild/RPMS/x86_64/lightutils-*.rpm $(BD)
 
 rpm/lightstar:
-	./packaging/auto.sh
 	rpmbuild -ba packaging/lightstar.spec
 	cp -rvf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm $(BD)
 
 rpm/lightsim:
-	@./packaging/auto.sh
 	rpmbuild -ba packaging/lightsim.spec
 	cp -rvf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm $(BD)
 
@@ -82,7 +80,7 @@ linux/zip: env lightstar
 	@cp $(SD)/packaging/lightstar.service $(LD)/usr/lib/systemd/system
 
 	zip -r ./$(LD).zip $(LD) > /dev/null
-	popd
+	@popd
 
 centos/devel:
 	yum install libvirt-devel
@@ -103,7 +101,7 @@ windows/zip: env
 	@cp -rvf $(SD)/lightpix.windows.x86_64.exe $(WD)
 
 	zip -r $(WD).zip $(WD) > /dev/null
-	popd
+	@popd
 
 ## unit test
 test:
