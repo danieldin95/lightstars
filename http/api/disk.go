@@ -24,6 +24,39 @@ func (disk Disk) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.DELETE).Methods("DELETE")
 }
 
+func (disk Disk) Check(name string, disks []schema.Disk) {
+	sources := make(map[string]int, 4)
+	for _, disk := range disks {
+		dir := path.Dir(disk.Name)
+		if _, ok := sources[dir]; ok {
+			sources[dir] += 1
+		} else {
+			sources[dir] = 1
+		}
+	}
+
+	libstar.Debug("Disk.Check %v", sources)
+	curDir := ""
+	curUsed := 0
+	for dir, c := range sources {
+		if curUsed < c {
+			curUsed = c
+			curDir = dir
+		} else if curUsed == c {
+			// select has more deep directory.
+			if len(strings.Split(curDir, "/")) < len(strings.Split(dir, "/")) {
+				curDir = dir
+			}
+		}
+	}
+	libstar.Info("Disk.Check rebuild %s for %s", curDir, name)
+	if curDir != "" {
+		if _, err := libvirts.CreatePool(libvirts.ToDomainPool(name), curDir); err != nil {
+			libstar.Warn("Disk.Check %s", err)
+		}
+	}
+}
+
 func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dev, ok := GetArg(r, "dev")
@@ -33,14 +66,20 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return
 		}
+		defer dom.Free()
+
 		name, err := dom.GetName()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusNotFound)
 		}
-		vols, _ := (&libvirts.Pool{Name: "." + name}).List()
-
-		defer dom.Free()
 		instance := compute.NewInstance(*dom)
+		pool := libvirts.Pool{Name: libvirts.ToDomainPool(name)}
+		vols, err := (&pool).List()
+		if err != nil {
+			disk.Check(name, instance.Disks)
+			vols, _ = (&pool).List()
+		}
+
 		list := schema.ListDisk{
 			Items: make([]schema.Disk, 0, 32),
 		}
