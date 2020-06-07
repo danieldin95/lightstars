@@ -64,9 +64,14 @@ func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo
 		}
 	}
 	if curDir != "" {
-		libstar.Info("Disk.Travel rebuild %s for %s", curDir, name)
 		if _, err := libvirts.CreatePool(libvirts.ToDomainPool(name), curDir); err != nil {
 			libstar.Warn("Disk.Travel %s", err)
+		}
+	}
+	volsDir, err := (&libvirts.Pool{Name: libvirts.ToDomainPool(name)}).List()
+	if err == nil {
+		for file, vol := range volsDir {
+			vols[file] = vol
 		}
 	}
 	return vols
