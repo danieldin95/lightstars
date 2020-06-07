@@ -1,5 +1,5 @@
 Name: lightsim
-Version: 0.8.06
+Version: 0.8.10
 Release: 1%{?dist}
 Summary: LightStar's Project Software
 Group: Applications/Communications
@@ -18,8 +18,8 @@ cd %_source_dir && make
 
 %install
 mkdir -p %{buildroot}/usr/bin
-cp %_source_dir/lightstar %{buildroot}/usr/bin/lightstar
-cp %_source_dir/lightpix %{buildroot}/usr/bin/lightpix
+cp %_source_dir/build/lightstar %{buildroot}/usr/bin/lightstar
+cp %_source_dir/build/lightpix %{buildroot}/usr/bin/lightpix
 
 mkdir -p %{buildroot}/etc/sysconfig
 cat > %{buildroot}/etc/sysconfig/lightstar.cfg << EOF

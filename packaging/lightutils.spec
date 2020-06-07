@@ -1,5 +1,5 @@
 Name: lightutils
-Version: 0.8.06
+Version: 0.8.10
 Release: 1%{?dist}
 Summary: LightStar's Utility Software
 Group: Applications/Communications

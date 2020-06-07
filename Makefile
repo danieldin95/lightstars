@@ -18,7 +18,7 @@ LDFLAGS += -X $(MOD).Version=$(VER)
 
 ## directory
 SD = $(shell pwd)
-BD = build
+BD = $(SD)/build
 LD = lightstar-$(LSB)-$(VER)
 WD = lightpix-Windows-$(VER)
 
@@ -32,31 +32,33 @@ rpm: rpm/lightutils rpm/lightstar rpm/lightsim
 # prepare environment
 env:
 	@mkdir -p $(BD)
-	@./packaging/auto.sh
 
 ## light star
-lightstar:
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightstar lightstar.go
+lightstar: env
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightstar lightstar.go
 
 ## light pix to proxy tcp
-lightpix:
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o lightpix lightpix.go
+lightpix: env
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightpix lightpix.go
 
 ### linux packaging
-rpm/lightutils: env
+rpm/env:
+	@./packaging/spec.sh
+
+rpm/lightutils: rpm/env
 	rpmbuild -ba packaging/lightutils.spec
-	cp -rvf ~/rpmbuild/RPMS/x86_64/lightutils-*.rpm $(BD)
+	cp -rf ~/rpmbuild/RPMS/x86_64/lightutils-*.rpm $(BD)
 
-rpm/lightstar:
+rpm/lightstar: rpm/env
 	rpmbuild -ba packaging/lightstar.spec
-	cp -rvf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm $(BD)
+	cp -rf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm $(BD)
 
-rpm/lightsim:
+rpm/lightsim: rpm/env
 	rpmbuild -ba packaging/lightsim.spec
-	cp -rvf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm $(BD)
+	cp -rf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm $(BD)
 
 
-linux/zip: env lightstar
+linux/zip: env lightstar lightpix
 	@pushd $(BD)
 	@rm -rf $(LD) && mkdir -p $(LD)
 
@@ -74,7 +76,8 @@ linux/zip: env lightstar
 	@cp -R $(SD)/http/static $(LD)/var/lightstar
 
 	@mkdir -p $(LD)/usr/bin
-	@cp -rvf $(SD)/lightstar $(LD)/usr/bin
+	@cp -rvf $(BD)/lightstar $(LD)/usr/bin
+	@cp -rvf $(BD)/lightpix $(LD)/usr/bin
 
 	@mkdir -p $(LD)/usr/lib/systemd/system
 	@cp $(SD)/packaging/lightstar.service $(LD)/usr/lib/systemd/system
@@ -89,8 +92,8 @@ ubuntu/devel:
 	apt-get install libvirt-dev
 
 ## cross build for windows
-windows/lightpix:
-	GOOS=windows GOARCH=amd64 go build -mod=vendor -o lightpix.windows.x86_64.exe lightpix.go
+windows/lightpix: env
+	GOOS=windows GOARCH=amd64 go build -mod=vendor -o $(BD)/lightpix.windows.x86_64.exe lightpix.go
 
 ### packaging light pix for windows
 windows/zip: env
@@ -98,7 +101,7 @@ windows/zip: env
 	@rm -rf $(WD) && mkdir -p $(WD)
 
 	@cp -rvf $(SD)/resource/lightpix.json.example $(WD)/lightpix.json
-	@cp -rvf $(SD)/lightpix.windows.x86_64.exe $(WD)
+	@cp -rvf $(BD)/lightpix.windows.x86_64.exe $(WD)
 
 	zip -r $(WD).zip $(WD) > /dev/null
 	@popd

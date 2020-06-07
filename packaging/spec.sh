@@ -1,7 +1,6 @@
 #!/bin/bash
 
-set -e 
-set -v
+set -e
 
 version=$(cat VERSION)
 mkdir -p ~/rpmbuild/SOURCES
