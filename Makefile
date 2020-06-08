@@ -64,15 +64,15 @@ linux/zip: env lightstar lightpix
 
 	@cp $(SD)/packaging/README.md $(LD)
 	@mkdir -p $(LD)/etc/lightstar
-	@cp -rvf $(SD)/resource/auth.json.example $(LD)/etc/lightstar
-	@cp -rvf $(SD)/resource/zone.json.example $(LD)/etc/lightstar
-	@cp -rvf $(SD)/resource/permission.json.example $(LD)/etc/lightstar
+	@cp -rvf $(SD)/packaging/resource/auth.json.example $(LD)/etc/lightstar
+	@cp -rvf $(SD)/packaging/resource/zone.json.example $(LD)/etc/lightstar
+	@cp -rvf $(SD)/packaging/resource/permission.json.example $(LD)/etc/lightstar
 
 	@mkdir -p $(LD)/etc/sysconfig
 	@echo OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/ca -conf /etc/lightstar" > $(LD)/etc/sysconfig/lightstar.cfg
 
 	@mkdir -p $(LD)/var/lightstar
-	@cp -R $(SD)/resource/ca $(LD)/var/lightstar
+	@cp -R $(SD)/packaging/resource/ca $(LD)/var/lightstar
 	@cp -R $(SD)/http/static $(LD)/var/lightstar
 
 	@mkdir -p $(LD)/usr/bin
@@ -100,7 +100,7 @@ windows/zip: env
 	@pushd $(BD)
 	@rm -rf $(WD) && mkdir -p $(WD)
 
-	@cp -rvf $(SD)/resource/lightpix.json.example $(WD)/lightpix.json
+	@cp -rvf $(SD)/packaging/resource/lightpix.json.example $(WD)/lightpix.json
 	@cp -rvf $(BD)/lightpix.windows.x86_64.exe $(WD)
 
 	zip -r $(WD).zip $(WD) > /dev/null

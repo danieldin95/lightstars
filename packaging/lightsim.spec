@@ -30,11 +30,11 @@ mkdir -p %{buildroot}/usr/lib/systemd/system
 cp %_source_dir/packaging/lightsim.service %{buildroot}/usr/lib/systemd/system
 
 mkdir -p %{buildroot}/var/lightstar
-cp -R %_source_dir/resource/ca %{buildroot}/var/lightstar
+cp -R %_source_dir/packaging/resource/ca %{buildroot}/var/lightstar
 cp -R %_source_dir/http/static %{buildroot}/var/lightstar
 
 mkdir -p %{buildroot}/etc/lightstar
-cp -R %_source_dir/resource/*.json.example %{buildroot}/etc/lightstar
+cp -R %_source_dir/packaging/resource/*.json.example %{buildroot}/etc/lightstar
 
 %pre
 firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {

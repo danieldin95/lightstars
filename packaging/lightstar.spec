@@ -31,11 +31,12 @@ mkdir -p %{buildroot}/usr/lib/systemd/system
 cp %_source_dir/packaging/lightstar.service %{buildroot}/usr/lib/systemd/system
 
 mkdir -p %{buildroot}/var/lightstar
-cp -R %_source_dir/resource/ca %{buildroot}/var/lightstar
+cp -R %_source_dir/packaging/resource/ca %{buildroot}/var/lightstar
+cp -R %_source_dir/packaging/script %{buildroot}/var/lightstar
 cp -R %_source_dir/http/static %{buildroot}/var/lightstar
 
 mkdir -p %{buildroot}/etc/lightstar
-cp -R %_source_dir/resource/*.json.example %{buildroot}/etc/lightstar
+cp -R %_source_dir/packaging/resource/*.json.example %{buildroot}/etc/lightstar
 mkdir -p %{buildroot}/lightstar/datastore/01
 
 %pre

@@ -83,10 +83,10 @@ export class Guest extends Base {
     template(v) {
         let cls = 'disabled';
         let vncUrl = '#';
-        let hostUrl = '#';
+        let xmlUrl = '/api/instance/'+ v.uuid + '?format=xml';
 
         if (Api.host !== '') {
-           hostUrl = "/host/" + Api.host;
+           xmlUrl = "/host/" + Api.host + xmlUrl;
         }
         if (v.state === 'running') {
             cls = '';
@@ -161,7 +161,7 @@ export class Guest extends Base {
                             <div class="dropdown-divider"></div>
                             <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#instanceSetModal">Setting</a>
                             <div class="dropdown-divider"></div>
-                            <a id="dumpxml" class="dropdown-item" href="${hostUrl}/api/instance/{{uuid}}?format=xml">Dump XML</a>
+                            <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">Dump XML</a>
                         </div>
                     </div>
                 </div>
