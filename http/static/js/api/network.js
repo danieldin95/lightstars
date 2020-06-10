@@ -32,7 +32,7 @@ export class NetworkApi extends Api {
             let lines = data.range.split(/\r?\n/);
 
             data.range = [];
-            for (let line of i < lines) {
+            for (let line of lines) {
                 if (line.indexOf(',') > 0) {
                     let [start, end] = line.split(',', 2);
                     data.range.push({start, end});
