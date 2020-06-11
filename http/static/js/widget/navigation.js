@@ -104,7 +104,6 @@ export class Navigation {
                     value = '';
                 }
                 let elem = $(`
-                   <div class="dropdown-divider"></div>
                    <a class="dropdown-item" data="${value}">${name}</a>
                 `);
                 if (i === 0) {

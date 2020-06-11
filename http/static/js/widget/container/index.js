@@ -214,11 +214,10 @@ export class Index extends Base {
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
                                 <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#nfsCreateModal">
-                                    New NFS datastore
+                                    New nfs datastore
                                 </a>
-                                <div class="dropdown-divider"></div>
                                 <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#iscsiCreateModal">
-                                    New iSCSI datastore
+                                    New iscsi datastore
                                 </a>
                             </div>
                         </div>
@@ -280,15 +279,13 @@ export class Index extends Base {
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
                                 <a id="create-routed" class="dropdown-item" data-toggle="modal" data-target="#routedCreateModal">
-                                    Routed network
+                                    Create routed network
                                 </a>
-                                <div class="dropdown-divider"></div>
                                 <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#isolatedCreateModal">
-                                    Isolated network
+                                    Create isolated network
                                 </a>
-                                <div class="dropdown-divider"></div>
                                 <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#bridgeCreateModal">
-                                    Host bridge
+                                    Create host bridge
                                 </a>
                             </div>
                         </div>
