@@ -21,14 +21,14 @@ type HyperVisor struct {
 }
 
 func (h *HyperVisor) AddListener(listen HyperListener) {
-	libstar.Debug("HyperVisor.AddListener %s", listen)
+	libstar.Debug("HyperVisor.AddListener %v", listen)
 	h.Listener = append(h.Listener, listen)
 }
 
 func (h *HyperVisor) Open() error {
 	if hyper.Conn != nil {
 		if _, err := hyper.Conn.GetVersion(); err != nil {
-			libstar.Error("HyperVisor.Open %s", err)
+			libstar.Error("HyperVisor.open %s", err)
 			_, _ = hyper.Conn.Close()
 			hyper.Conn = nil
 		}

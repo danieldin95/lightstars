@@ -1,5 +1,6 @@
 import {Index} from "./widget/container/index.js";
 import {Guest} from "./widget/container/guest.js";
+import {Network} from "./widget/container/network.js";
 import {Location} from "./com/location.js";
 
 
@@ -29,7 +30,11 @@ export class Routes {
             {
                 prefix: "/network/",
                 function: (p) => {
-                    //TODO
+                    let uuid = p.split('/', 3)[2];
+                    new Network({
+                        id: props.container,
+                        uuid: uuid,
+                    });
                 },
             },
             {

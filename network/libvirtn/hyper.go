@@ -33,7 +33,7 @@ func (h *HyperVisor) AddListener(listen HyperListener) {
 func (h *HyperVisor) OpenNotSafe() error {
 	if hyper.Conn != nil {
 		if _, err := hyper.Conn.GetVersion(); err != nil {
-			libstar.Error("HyperVisor.Open %s", err)
+			libstar.Error("HyperVisor.open %s", err)
 			_, _ = hyper.Conn.Close()
 			hyper.Conn = nil
 		}

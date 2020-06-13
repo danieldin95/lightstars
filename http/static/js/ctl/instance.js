@@ -22,7 +22,7 @@ class Checkbox extends CheckBoxTab {
 }
 
 
-export class IndexCtl {
+export class InstanceCtl {
     // {
     //   id: '#instances'
     //   onthis: function (e) {},

@@ -14,7 +14,7 @@ import (
 type Network struct {
 }
 
-func IsUnicast(address string) bool {
+func IsUniCast(address string) bool {
 	addr := net.ParseIP(address)
 	if addr == nil {
 		return false
@@ -71,6 +71,7 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 
 func (net Network) Router(router *mux.Router) {
 	router.HandleFunc("/api/network", net.GET).Methods("GET")
+	router.HandleFunc("/api/network/{id}", net.GET).Methods("GET")
 	router.HandleFunc("/api/network", net.POST).Methods("POST")
 	router.HandleFunc("/api/network/{id}", net.DELETE).Methods("DELETE")
 }
@@ -82,11 +83,11 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 		list := schema.ListNetwork{
 			Items: make([]schema.Network, 0, 32),
 		}
-		if nets, err := libvirtn.ListNetworks(); err == nil {
-			for _, net := range nets {
-				n := network.NewNetwork(net)
-				list.Items = append(list.Items, n)
-				_ = net.Free()
+		if ns, err := libvirtn.ListNetworks(); err == nil {
+			for _, n := range ns {
+				sn := network.NewNetwork(n)
+				list.Items = append(list.Items, sn)
+				_ = n.Free()
 			}
 			sort.SliceStable(list.Items, func(i, j int) bool {
 				return list.Items[i].Name < list.Items[j].Name
@@ -95,10 +96,15 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 			list.Metadata.Total = len(list.Items)
 		}
 		ResponseJson(w, list)
-		return
+	} else {
+		if n, err := libvirtn.LookupNetwork(uuid); err == nil {
+			sn := network.NewNetwork(*n)
+			n.Free()
+			ResponseJson(w, sn)
+		} else {
+			http.Error(w, err.Error(), http.StatusNotFound)
+		}
 	}
-	// TODO
-	ResponseJson(w, uuid)
 }
 
 func (net Network) POST(w http.ResponseWriter, r *http.Request) {

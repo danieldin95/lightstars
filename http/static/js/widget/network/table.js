@@ -32,7 +32,7 @@ export class NetworkTable extends WidgetBase {
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
                 <td>{{i+1}}</td>
-                <td><a href="/ui/network/{{v.uuid}}">{{v.uuid}}</a></td>
+                <td><a href="#/network/{{v.uuid}}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
                 <td>{{if v.address == ""}}
                     --

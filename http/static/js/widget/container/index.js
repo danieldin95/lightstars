@@ -1,10 +1,11 @@
 import {Base} from "./base.js"
 import {Guest} from "./guest.js"
+import {Network} from "./network.js";
 import {Utils} from "../../com/utils.js";
 import {Location} from "../../com/location.js";
-import {IndexCtl} from '../../ctl/index.js';
-import {NetworkCtl} from "../../ctl/network.js";
-import {DataStoreCtl} from "../../ctl/datastore.js";
+import {InstanceCtl} from '../../ctl/instance.js';
+import {NetworksCtl} from "../../ctl/networks.js";
+import {DataStoresCtl} from "../../ctl/datastores.js";
 import {Collapse} from "../collapse.js";
 import {Overview} from "../index/overview.js";
 import {InstanceCreate} from '../instance/create.js';
@@ -56,7 +57,7 @@ export class Index extends Base {
             $('#collapseSys').collapse('show');
         });
 
-        let ins = new IndexCtl({
+        let ins = new InstanceCtl({
             id: '#instances',
             onthis: (e) => {
                 console.log("Guest.loading", e);
@@ -71,7 +72,16 @@ export class Index extends Base {
                 ins.create(Utils.toJSON(e.form));
             });
         // loading network.
-        let net = new NetworkCtl({id: '#networks'});
+        let net = new NetworksCtl({
+            id: '#networks',
+            onthis: (e) => {
+                console.log("network.loading", e);
+                new Network({
+                    id: this.id,
+                    uuid: e.uuid,
+                });
+            },
+        });
         new NATCreate({id: '#natCreateModal'})
             .onsubmit((e) => {
                 net.create(Utils.toJSON(e.form));
@@ -89,7 +99,7 @@ export class Index extends Base {
                 net.create(Utils.toJSON(e.form));
             });
         // loading datastore.
-        let store = new DataStoreCtl({
+        let store = new DataStoresCtl({
             id: '#datastores',
             upload: '#fileUploadModal',
         });

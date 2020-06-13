@@ -23,7 +23,7 @@ func (l *Zone) Load(file string) error {
 		}
 		host.Name = name
 		host.Initialize()
-		libstar.Debug("Zone.Load %s", host)
+		libstar.Debug("Zone.Load %v", host)
 	}
 	if l.Get("default") == nil {
 		l.Add(&schema.Host{Name: "default", Url: ""})

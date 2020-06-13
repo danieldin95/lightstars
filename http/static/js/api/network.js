@@ -27,6 +27,16 @@ export class NetworkApi extends Api {
         });
     }
 
+    get(data, func) {
+        let url = this.url(this.uuids[0]);
+
+        $.GET(url, {format: 'schema'}, (resp, status) => {
+            func({data, resp});
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`GET ${url}: ${e.responseText}`));
+        });
+    }
+
     create(data) {
         if (data.range && data.range !== "") {
             let lines = data.range.split(/\r?\n/);

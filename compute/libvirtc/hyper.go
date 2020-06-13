@@ -55,10 +55,10 @@ func parseQemuSSH(name string) (address, path string) {
 	return address, path
 }
 
-func (h *HyperVisor) OpenNotSafe() error {
+func (h *HyperVisor) open() error {
 	if hyper.Conn != nil {
 		if _, err := hyper.Conn.GetVersion(); err != nil {
-			libstar.Error("HyperVisor.Open %s", err)
+			libstar.Error("HyperVisor.open %s", err)
 			_, _ = hyper.Conn.Close()
 			hyper.Conn = nil
 		}
@@ -87,7 +87,7 @@ func (h *HyperVisor) OpenNotSafe() error {
 func (h *HyperVisor) Open() error {
 	h.Lock.Lock()
 	defer h.Lock.Unlock()
-	return h.OpenNotSafe()
+	return h.open()
 }
 
 func (h *HyperVisor) AddListener(listen HyperListener) {
@@ -117,7 +117,8 @@ func (h *HyperVisor) FigureCPU() (err error) {
 	h.Lock.Lock()
 	defer h.Lock.Unlock()
 
-	if err := h.OpenNotSafe(); err != nil {
+	libstar.Debug("HyperVisor.FigureCpu")
+	if err := h.open(); err != nil {
 		return err
 	}
 	if h.CpuSts == nil {
@@ -157,7 +158,9 @@ func (h *HyperVisor) LoopForever() {
 		case <-h.Done:
 			return
 		case <-h.Ticker.C:
-			_ = h.FigureCPU()
+			if err := h.FigureCPU(); err != nil {
+				libstar.Warn("HyperVisor.LoopForever %s", err)
+			}
 		}
 	}
 }

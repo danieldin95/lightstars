@@ -7,7 +7,7 @@ class CheckBox extends CheckBoxTab {
 }
 
 
-export class NetworkCtl {
+export class NetworksCtl {
     // {
     //   id: "#networks"
     // }

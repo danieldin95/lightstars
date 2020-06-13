@@ -17,7 +17,7 @@ export class CheckBox extends CheckBoxTab {
 }
 
 
-export class DataStoreCtl {
+export class DataStoresCtl {
     // {
     //   id: "#datastores"
     // }
