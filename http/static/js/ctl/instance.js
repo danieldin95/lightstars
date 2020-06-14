@@ -41,7 +41,10 @@ export class InstanceCtl extends Ctl {
             });
             new InstanceApi(props).console();
         });
-        $(this.child('#start'), this.child('#more-start')).on("click", this.uuids, function (e) {
+        $(this.child('#start')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).start();
+        });
+        $(this.child('#more-start')).on("click", this.uuids, function (e) {
             new InstanceApi({uuids: e.data.store}).start();
         });
         $(this.child('#more-shutdown')).on("click", this.uuids, function (e) {

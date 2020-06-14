@@ -21,19 +21,9 @@ export class NetworkCtl extends Ctl {
         let uuid = $(this.id).attr("data");
         this.uuid = uuid;
         this.name = name;
-        this.header = props.header;
         this.tasks = props.tasks || "Tasks";
 
         console.log("NetworkCtl", this.props, $(this.id));
-
         this.leases = new LeasesCtl({id: props.leases.id, uuid, name});
-    }
-
-    edit(data) {
-        new NetworkApi({uuids: this.uuid}).edit(data);
-    }
-
-    headerId(id) {
-        return [this.id, this.header.id, id].join(" ");
     }
 }
