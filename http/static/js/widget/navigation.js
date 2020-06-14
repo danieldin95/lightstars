@@ -11,11 +11,11 @@ import {Utils} from "../com/utils.js";
 
 export class Navigation {
     // {
-    //   id: '#xx'.
+    //   parent: '#xx'.
     //   home: '.'
     // }
     constructor(props) {
-        this.id = props.id;
+        this.parent = props.parent;
         this.home = props.home;
         this.props = props;
         this.active = Location.get("/instances");
@@ -54,7 +54,7 @@ export class Navigation {
                 this.view.find(nav).on('click', function (e) {
                     active($(this).parent('li a').attr("id"));
                     new Index({
-                        id: container,
+                        parent: container,
                         name: name,
                         force: true,
                         default: $(this).attr("data-target"),
@@ -70,11 +70,11 @@ export class Navigation {
             });
 
             let password = new PasswordApi();
-            new ChangePassword({id: '#changePasswordModal'})
+            new ChangePassword({id: '#ChangePasswordModal'})
                 .onsubmit((e) => {
                     password.set(Utils.toJSON(e.form));
             });
-            $(this.id).html(this.view);
+            $(this.parent).html(this.view);
         });
     }
 
@@ -120,7 +120,7 @@ export class Navigation {
 
                 e.data.refresh();
                 new Index({
-                    id: container,
+                    parent: container,
                     name: name,
                     force: true,
                     default: e.data.active,
@@ -193,7 +193,10 @@ export class Navigation {
                         <a id="fullscreen" class="dropdown-item">Full screen</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)">Setting</a>
-                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#changePasswordModal">Change password</a>
+                        <a class="dropdown-item" href="javascript:void(0)" 
+                            data-toggle="modal" data-target="#ChangePasswordModal">
+                            Change password
+                        </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/ui/login">Logout</a>
                     </div>

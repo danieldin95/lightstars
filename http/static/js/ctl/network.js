@@ -21,7 +21,7 @@ export class NetworkCtl {
         let uuid = $(this.id).attr("data");
         this.uuid = uuid;
         this.name = name;
-        this.tasks = props.tasks || "tasks";
+        this.tasks = props.tasks || "Tasks";
 
         console.log("NetworkCtl", this.props, $(this.id));
 

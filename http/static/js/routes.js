@@ -16,7 +16,7 @@ export class Routes {
                 function: (p) => {
                     let uuid = p.split('/', 3)[2];
                     new Guest({
-                        id: props.container,
+                        parent: props.container,
                         uuid: uuid,
                     });
                 },
@@ -32,7 +32,7 @@ export class Routes {
                 function: (p) => {
                     let uuid = p.split('/', 3)[2];
                     new Network({
-                        id: props.container,
+                        parent: props.container,
                         uuid: uuid,
                     });
                 },
@@ -41,7 +41,7 @@ export class Routes {
                 prefix: "",
                 function: (p) => {
                     new Index({
-                        id: props.container,
+                        parent: props.container,
                         default: "/instances",
                         name: props.hyper.attr('name'),
                     });

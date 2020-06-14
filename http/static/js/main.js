@@ -7,7 +7,7 @@ import {Routes} from "./routes.js";
 
 $(function() {
     let hyper = $('hyper');
-    let container = "#container";
+    let container = "#Container";
     let host = Location.query('node');
 
     if (host === undefined) {
@@ -18,7 +18,7 @@ $(function() {
     Api.Host(host);
 
     new Navigation({
-        id: "nav",
+        parent: "nav",
         home: ".",
         container: container,
         name: hyper.attr('name'),

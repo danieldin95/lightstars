@@ -6,7 +6,7 @@ export class UploadApi extends Api {
     // {
     //   id: '#'
     //   uuid: [datastore],
-    //   tasks: 'tasks',
+    //   tasks: 'Tasks',
     //   name: ''
     // }
     constructor(props) {

@@ -5,7 +5,7 @@ import {Alert} from "../com/alert.js";
 export class InterfaceApi extends Api {
     // {
     //   uuids: [],
-    //   tasks: 'tasks',
+    //   tasks: 'Tasks',
     //   name: ''
     // }
     constructor(props) {

@@ -4,7 +4,7 @@ import {Api} from "./api.js"
 export class ImageApi extends Api {
     // {
     //   uuids: [],
-    //   tasks: 'tasks',
+    //   tasks: 'Tasks',
     //   name: ''
     // }
     constructor(props) {

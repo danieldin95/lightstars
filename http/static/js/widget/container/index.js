@@ -19,12 +19,13 @@ import {iSCSICreate} from "../datastore/iscsi/create.js";
 
 export class Index extends Base {
     // {
-    //    id: ".container",
+    //    parent: "#Container",
     //    default: "/instances"
     //    force: false, // force to apply default.
     // }
     constructor(props) {
         super(props);
+        this.current = '#index';
         this.default = props.default || '/instances';
         console.log('Index', props);
         this.render();
@@ -32,86 +33,86 @@ export class Index extends Base {
     }
 
     loading() {
-        this.title('Home - LightStar');
+        this.title('Home');
         new Collapse({
             pages: [
-                {id: '#collapseSys', name: '/system'},
-                {id: '#collapseIns', name: '/instances'},
-                {id: '#collapseStore', name: '/datastore'},
-                {id: '#collapseNet', name: '/network'}
+                {id: this.id('#collapseSys'), name: '/system'},
+                {id: this.id('#collapseIns'), name: '/instances'},
+                {id: this.id('#collapseStore'), name: '/datastore'},
+                {id: this.id('#collapseNet'), name: '/network'}
             ],
             force: this.force,
             default: this.default,
         });
         // loading overview.
         let view = new Overview({
-            id: '#overview',
+            id: this.id('#overview'),
         });
         view.refresh((e) => {
             this.props.name = e.resp.hyper.name;
-            $('#system-col').text(this.props.name);
+            $(this.id('#system-col')).text(this.props.name);
         });
         // register click on overview.
-        $('#system-ref').on('click', () => {
+        $(this.id('#system-ref')).on('click', () => {
             view.refresh();
-            $('#collapseSys').collapse('show');
+            $(this.id('#collapseSys')).collapse('show');
         });
 
         let ins = new InstanceCtl({
-            id: '#instances',
+            id: this.id('#instances'),
             onthis: (e) => {
                 console.log("Guest.loading", e);
                 new Guest({
-                    id: this.id,
+                    parent: this.parent,
                     uuid: e.uuid,
                 });
             },
         });
-        new InstanceCreate({id: '#instanceCreateModal'})
+        new InstanceCreate({id: '#InstanceCreateModal'})
             .onsubmit((e) => {
                 ins.create(Utils.toJSON(e.form));
             });
         // loading network.
         let net = new NetworksCtl({
-            id: '#networks',
+            id: this.id('#networks'),
             onthis: (e) => {
                 console.log("network.loading", e);
                 new Network({
-                    id: this.id,
+                    parent: this.parent,
                     uuid: e.uuid,
                 });
             },
         });
-        new NATCreate({id: '#natCreateModal'})
+        new NATCreate({id: '#NatCreateModal'})
             .onsubmit((e) => {
                 net.create(Utils.toJSON(e.form));
             });
-        new BridgeCreate({id: '#bridgeCreateModal'})
+        new BridgeCreate({id: '#BridgeCreateModal'})
             .onsubmit((e) => {
                 net.create(Utils.toJSON(e.form));
             });
-        new RoutedCreate({id: '#routedCreateModal'})
+        new RoutedCreate({id: '#RoutedCreateModal'})
             .onsubmit((e) => {
                 net.create(Utils.toJSON(e.form));
             });
-        new IsolatedCreate({id: '#isolatedCreateModal'})
+        new IsolatedCreate({id: '#IsolatedCreateModal'})
             .onsubmit((e) => {
                 net.create(Utils.toJSON(e.form));
             });
         // loading data storage.
         let store = new DataStoresCtl({
-            id: '#datastores',
-            upload: '#fileUploadModal',
+            id: this.id('#datastores'),
+            upload: '#FileUploadModal',
         });
-        new DirCreate({id: '#dirCreateModal'})
+        new DirCreate({id: '#DirCreateModal'})
             .onsubmit((e) => {
                 store.create(Utils.toJSON(e.form));
             });
-        new NFSCreate({id: '#nfsCreateModal'})
+        new NFSCreate({id: '#NfsCreateModal'})
             .onsubmit((e) => {
                 store.create(Utils.toJSON(e.form));
             });
-        new iSCSICreate({id: '#iscsiCreateModal'})
+        new iSCSICreate({id: '#IscsiCreateModal'})
             .onsubmit((e) => {
                 store.create(Utils.toJSON(e.form));
             });
@@ -120,7 +121,7 @@ export class Index extends Base {
     template(v) {
         let query = Location.query();
         return (`
-        <index id="index">
+        <div id="index">
         <!-- System -->
         <div id="system" class="card card-main system">
             <div class="card-header">
@@ -151,7 +152,7 @@ export class Index extends Base {
                 <!-- Instances buttons -->
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#instanceCreateModal">
+                            data-toggle="modal" data-target="#InstanceCreateModal">
                         Create new instance
                     </button>
                     <button id="console" type="button" class="btn btn-outline-dark btn-sm">Console</button>
@@ -214,7 +215,7 @@ export class Index extends Base {
                     <div class="card-header-cnt">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#dirCreateModal">
+                                    data-toggle="modal" data-target="#DirCreateModal">
                                 New a datastore
                             </button>
                             <button id="creates" type="button"
@@ -223,16 +224,16 @@ export class Index extends Base {
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#nfsCreateModal">
+                                <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#NfsCreateModal">
                                     New nfs datastore
                                 </a>
-                                <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#iscsiCreateModal">
+                                <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#IscsiCreateModal">
                                     New iscsi datastore
                                 </a>
                             </div>
                         </div>
                         <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#fileUploadModal">
+                                data-toggle="modal" data-target="#FileUploadModal">
                             Upload
                         </button>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
@@ -279,7 +280,7 @@ export class Index extends Base {
                     <div class="card-header-cnt">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#natCreateModal">
+                                    data-toggle="modal" data-target="#NatCreateModal">
                                 Create network
                             </button>
                             <button id="creates" type="button"
@@ -288,13 +289,13 @@ export class Index extends Base {
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-routed" class="dropdown-item" data-toggle="modal" data-target="#routedCreateModal">
+                                <a id="create-routed" class="dropdown-item" data-toggle="modal" data-target="#RoutedCreateModal">
                                     Create routed network
                                 </a>
-                                <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#isolatedCreateModal">
+                                <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#IsolatedCreateModal">
                                     Create isolated network
                                 </a>
-                                <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#bridgeCreateModal">
+                                <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#BridgeCreateModal">
                                     Create host bridge
                                 </a>
                             </div>
@@ -326,6 +327,6 @@ export class Index extends Base {
                 </div>
             </div>
         </div>
-        </index>`)
+        </div>`)
     }
 }

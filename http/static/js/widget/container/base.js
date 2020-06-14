@@ -1,33 +1,39 @@
 
 export class Base {
     // {
-    //    id: ".container",
-    //    default: "instances"
+    //    parent: "#Container",
+    //    default: "instances" // set default panel
     //    force: false, // force to apply default.
     // }
     constructor(props) {
-        this.id  = props.id;
+        this.parent  = props.parent ? props.parent : '';
+        this.current = props.current ? props.current : '';
         this.force = props.force;
         this.props = props;
+        console.log([this.parent, this.current].join(" "));
         console.log('Base', props);
     }
 
     render() {
-        $(this.id).html(this.template());
+        $(this.parent).html(this.template());
     }
 
     loading() {
+        console.log("Base", "implement me")
     }
 
     template(v) {
-        return (``)
+        return `<div id="${this.current}">TODO ${this.current}</div>`;
     }
 
-    child(id) {
-        return this.id + " " + id;
+    id(id) {
+        if (id) {
+            return [this.parent, this.current, id].join(" ");
+        }
+        return [this.parent, this.current].join(" ")
     }
 
     title(name) {
-        $(document).attr("title", name);
+        $(document).attr("title", name + ' - LightStar');
     }
 }

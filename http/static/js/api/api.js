@@ -3,7 +3,7 @@
 export class Api {
     // {
     //   uuids: [],
-    //   tasks: 'tasks',
+    //   tasks: 'Tasks',
     //   name: ''
     // }
     constructor(props) {
@@ -13,7 +13,7 @@ export class Api {
 
         this.name = props.name;
         this.props = props;
-        this.tasks = props.tasks || "tasks";
+        this.tasks = props.tasks || "Tasks";
         if (typeof props.uuids == "string") {
             this.uuids = [props.uuids];
         } else {

@@ -8,7 +8,7 @@ import {DataStoreApi} from "../../api/datastore.js";
 
 export class InstanceCreate extends FormModal {
     // {
-    //   id: "#instanceCrateModal",
+    //   id: "#InstanceCrateModal",
     //   wizardId: "",
     // }
     constructor (props) {

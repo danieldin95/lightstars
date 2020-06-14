@@ -8,7 +8,7 @@ import {NetworkCtl} from "../../ctl/network.js";
 
 export class Network extends Base {
     // {
-    //    id: ".container",
+    //    parent: "#Container",
     //    uuid: "",
     //    default: "lease"
     //    force: false, // force to apply default.
@@ -17,6 +17,7 @@ export class Network extends Base {
         super(props);
         this.default = props.default || 'lease';
         this.uuid = props.uuid;
+        this.current = "#network";
         console.log('Instance', props);
 
         this.render();
@@ -24,47 +25,42 @@ export class Network extends Base {
 
     render() {
         new NetworkApi({uuids: this.uuid}).get(this, (e) => {
-            this.title(`${e.resp.name} - LightStar`);
+            this.title(e.resp.name);
+
             this.view = $(this.template(e.resp));
-            this.view.find('#network #refresh').on('click', (e) => {
+            this.view.find(this.id('#refresh')).on('click', (e) => {
                 this.render();
             });
-            $(this.id).html(this.view);
+            $(this.parent).html(this.view);
             this.loading();
         });
     }
 
     loading() {
         // collapse
-        $('#collapseOver').fadeIn('slow');
-        $('#collapseOver').collapse();
+        $(this.id('#collapseOver')).fadeIn('slow');
+        $(this.id('#collapseOver')).collapse();
         new Collapse({
             pages: [
-                {id: '#collapseLea', name: 'lease'},
+                {id: this.id('#collapseLea'), name: 'lease'},
             ],
             default: this.default,
             update: false,
         });
 
         let net = new NetworkCtl({
-            id: this.id + " #network",
-            leases: {id: "#leases"},
-            subnets: {id: "#subnets"},
+            id: this.id(),
+            leases: {id: this.id("#leases")},
+            subnets: {id: this.id("#subnets")},
         });
-        // new InstanceSet({id: '#instanceSetModal', cpu: instance.cpu, mem: instance.mem })
+        // new InstanceSet({id: '#InstanceSetModal', cpu: instance.cpu, mem: instance.mem })
         //     .onsubmit((e) => {
         //         instance.edit(Utils.toJSON(e.form));
-        //     });
-        // loading lease.
-        // new DiskCreate({id: '#diskCreateModal'})
-        //     .onsubmit((e) => {
-        //         instance.disk.create(Utils.toJSON(e.form));
         //     });
     }
 
     template(v) {
         return template.compile(`
-        <network>
         <div id="network" class="card instance" data="{{uuid}}" name="{{name}}">
             <div class="card-header">
                 <div class="card-just-left">
@@ -124,7 +120,7 @@ export class Network extends Base {
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#leaseCreateModal">
+                            data-toggle="modal" data-target="#LeaseCreateModal">
                         New a lease
                     </button>
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
@@ -150,7 +146,6 @@ export class Network extends Base {
             </div>
             </div>
         </div>
-        </div>
-        </network>`)(v);
+        </div>`)(v);
     }
 }

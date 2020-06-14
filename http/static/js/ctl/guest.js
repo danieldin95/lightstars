@@ -26,7 +26,7 @@ export class GuestCtl {
         this.mem = $("#instance").attr("mem");
         this.uuid = uuid;
         this.name = name;
-        this.tasks = props.tasks || "tasks";
+        this.tasks = props.tasks || "Tasks";
 
         this.disk = new DiskCtl({id: props.disks.id, uuid, name});
         this.interface = new InterfaceCtl({id: props.interfaces.id, uuid, name});
