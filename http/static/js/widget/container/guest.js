@@ -75,8 +75,8 @@ export class Guest extends Container {
             });
 
         // register console draggable.
-        $(() => {
-            $(this.id('#consoleModal')).draggable();
+        $(function (e) {
+            $('#ConsoleModal').draggable();
         });
     }
 
