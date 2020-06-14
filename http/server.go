@@ -62,6 +62,7 @@ func (h *Server) LoadRouter() {
 	api.Upload{}.Router(router)
 	api.Hyper{}.Router(router)
 	api.ISO{}.Router(router)
+	api.Volume{}.Router(router)
 	api.Bridger{}.Router(router)
 	api.DataStore{}.Router(router)
 	api.Network{}.Router(router)

@@ -130,3 +130,59 @@ func (store *StoreMgr) List() []Store {
 var DATASTOR = StoreMgr{
 	Store: make([]Store, 0, 32),
 }
+
+type File struct {
+	Name string `json:"name"`
+	Path string `json:"path"`
+	Type libvirt.StorageVolType `json:"type"`
+}
+
+type FileMgr struct {
+	Files []File `json:"files"`
+}
+
+func (f *FileMgr) List(dir string) []File {
+	files := make([]File, 0, 32)
+
+	hyper, err := libvirts.GetHyper()
+	if err != nil {
+		libstar.Warn("FileMgr.ListFiles %s", err)
+		return files
+	}
+
+	pool, err := hyper.Conn.LookupStoragePoolByTargetPath(dir)
+	if err != nil {
+		name := path.Base(dir)
+		libstar.Warn("FileMgr.ListFiles %s, and try %s", err, name)
+		pool, err = hyper.Conn.LookupStoragePoolByName(name)
+		if err != nil {
+			return files
+		}
+	}
+
+	defer pool.Free()
+	_ = pool.Refresh(0)
+	if vols, err := pool.ListAllStorageVolumes(0); err == nil {
+		for _, vol := range vols {
+			i, _ := vol.GetInfo()
+			libstar.Info("%s", &i.Type)
+			file, err := vol.GetPath()
+			if err != nil {
+				continue
+			}
+
+			files = append(files, File{
+				Name: path.Base(file),
+				Path: PATH.Fmt(file),
+				Type: i.Type,
+			})
+
+			_ = vol.Free()
+		}
+	}
+	return files
+}
+
+var FILE = FileMgr{
+	Files: make([]File, 0, 32),
+}

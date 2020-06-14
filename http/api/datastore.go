@@ -6,6 +6,9 @@ import (
 	"github.com/danieldin95/lightstar/storage"
 	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
+	"github.com/libvirt/libvirt-go"
+
+	//"github.com/libvirt/libvirt-go"
 	"net/http"
 	"sort"
 )
@@ -48,6 +51,7 @@ func DataStore2XML(conf schema.DataStore) libvirts.Pool {
 func (store DataStore) Router(router *mux.Router) {
 	router.HandleFunc("/api/datastore", store.GET).Methods("GET")
 	router.HandleFunc("/api/datastore", store.POST).Methods("POST")
+	router.HandleFunc("/api/datastore/{id}", store.GET).Methods("GET")
 	router.HandleFunc("/api/datastore/{id}", store.DELETE).Methods("DELETE")
 }
 
@@ -73,8 +77,25 @@ func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
 		ResponseJson(w, list)
 		return
 	}
-	//TODO
-	ResponseJson(w, uuid)
+
+	pool, err := libvirts.LookupPoolByUUID(uuid)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer pool.Free()
+	format := GetQueryOne(r, "format")
+	if format == "xml" {
+		xmlDesc, err := pool.GetXMLDesc(libvirt.STORAGE_XML_INACTIVE)
+		if err == nil {
+			ResponseXML(w, xmlDesc)
+		} else {
+			ResponseXML(w, "<error>"+err.Error()+"</error>")
+		}
+	} else {
+		ResponseJson(w, storage.NewDataStore(*pool))
+	}
 }
 
 func (store DataStore) POST(w http.ResponseWriter, r *http.Request) {
