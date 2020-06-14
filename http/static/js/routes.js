@@ -1,4 +1,4 @@
-import {Index} from "./widget/container/index.js";
+import {Home} from "./widget/container/home.js";
 import {Guest} from "./widget/container/guest.js";
 import {Network} from "./widget/container/network.js";
 import {Location} from "./com/location.js";
@@ -40,7 +40,7 @@ export class Routes {
             {
                 prefix: "",
                 function: (p) => {
-                    new Index({
+                    new Home({
                         parent: props.container,
                         default: "/instances",
                         name: props.hyper.attr('name'),

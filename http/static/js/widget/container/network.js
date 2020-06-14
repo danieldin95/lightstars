@@ -1,4 +1,4 @@
-import {Base} from "./base.js"
+import {Container} from "./container.js"
 import {Utils} from "../../com/utils.js";
 import {Api} from "../../api/api.js";
 import {NetworkApi} from "../../api/network.js";
@@ -6,7 +6,7 @@ import {Collapse} from "../collapse.js";
 import {NetworkCtl} from "../../ctl/network.js";
 
 
-export class Network extends Base {
+export class Network extends Container {
     // {
     //    parent: "#Container",
     //    uuid: "",
@@ -61,7 +61,8 @@ export class Network extends Base {
 
     template(v) {
         return template.compile(`
-        <div id="network" class="card instance" data="{{uuid}}" name="{{name}}">
+        <div id="network" data="{{uuid}}" name="{{name}}">
+        <div id="header" class="card">
             <div class="card-header">
                 <div class="card-just-left">
                     <a id="refresh" class="none">{{name}}</a>
@@ -106,7 +107,7 @@ export class Network extends Base {
             </div>
             </div>
         </div>
-        <div id="devices">
+        <div id="collapse">
         <!-- DHCP Lease -->
         <div id="leases" class="card device">
             <div class="card-header">
@@ -116,7 +117,7 @@ export class Network extends Base {
                     DHCP Lease
                 </button>
             </div>
-            <div id="collapseLea" class="collapse" aria-labelledby="headingOne" data-parent="#devices">
+            <div id="collapseLea" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"

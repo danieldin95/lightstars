@@ -1,4 +1,4 @@
-import {Base} from "./base.js"
+import {Container} from "./container.js"
 import {Guest} from "./guest.js"
 import {Network} from "./network.js";
 import {Utils} from "../../com/utils.js";
@@ -17,7 +17,7 @@ import {DirCreate} from "../datastore/create.js";
 import {NFSCreate} from "../datastore/nfs/create.js";
 import {iSCSICreate} from "../datastore/iscsi/create.js";
 
-export class Index extends Base {
+export class Home extends Container {
     // {
     //    parent: "#Container",
     //    default: "/instances"

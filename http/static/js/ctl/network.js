@@ -1,7 +1,8 @@
+import {Ctl} from "./ctl.js"
 import {NetworkApi} from "../api/network.js";
 import {LeasesCtl} from "./leases.js";
 
-export class NetworkCtl {
+export class NetworkCtl extends Ctl {
     // {
     //   id: '#network'
     //   header: {
@@ -15,8 +16,7 @@ export class NetworkCtl {
     //   },
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
+        super(props);
         let name = $(this.id).attr("name");
         let uuid = $(this.id).attr("data");
         this.uuid = uuid;

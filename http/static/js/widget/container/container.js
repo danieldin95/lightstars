@@ -1,5 +1,5 @@
 
-export class Base {
+export class Container {
     // {
     //    parent: "#Container",
     //    default: "instances" // set default panel

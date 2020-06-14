@@ -1,4 +1,4 @@
-import {Base} from "./base.js"
+import {Container} from "./container.js"
 import {Utils} from "../../com/utils.js";
 import {GuestCtl} from '../../ctl/guest.js';
 import {Api} from "../../api/api.js";
@@ -10,7 +10,7 @@ import {InterfaceCreate} from '../interface/create.js';
 import {InstanceSet} from "../instance/setting.js";
 
 
-export class Guest extends Base {
+export class Guest extends Container {
     // {
     //    parent: "#Container",
     //    uuid: "",
@@ -96,7 +96,8 @@ export class Guest extends Base {
         }
 
         return template.compile(`
-        <div id="instance" class="card instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" mem="{{maxMem}}">
+        <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">
+        <div id="header" class="card header">
             <div class="card-header">
                 <div class="card-just-left">
                     <a id="refresh" class="none">{{name}}</a>
@@ -181,8 +182,8 @@ export class Guest extends Base {
             </div>
         </div>
     
+        <div id="collapse">
         <!-- Virtual Disk -->
-        <div id="devices">
         <div id="disk" class="card device">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm"
@@ -191,7 +192,7 @@ export class Guest extends Base {
                     Virtual Disk
                 </button>
             </div>
-            <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#devices">
+            <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
@@ -233,7 +234,7 @@ export class Guest extends Base {
                     Network Interface
                 </button>
             </div>
-            <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#devices">
+            <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
@@ -274,7 +275,7 @@ export class Guest extends Base {
                     Graphics Device
                 </button>
             </div>
-            <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#devices">
+            <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
                 <div class="card-body">
                     <div class="card-header-cnt">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
@@ -302,6 +303,7 @@ export class Guest extends Base {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         </div>`)(v);
     }

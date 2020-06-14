@@ -1,4 +1,5 @@
-export class CheckBoxAll {
+
+export class CheckBox {
     // {
     //  all: selector for top checkbox
     //  one: selector for bottom checkbox

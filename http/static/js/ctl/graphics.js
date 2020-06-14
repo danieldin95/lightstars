@@ -1,32 +1,33 @@
+import {Ctl} from "./ctl.js";
 import {GraphicsApi} from "../api/graphics.js";
 import {GraphicsTable} from "../widget/graphics/table.js";
-import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
+import {CheckBox} from "../widget/checkbox/checkbox.js";
 
 
-class CheckBox extends CheckBoxTab {
+class CheckBoxCtl extends CheckBox {
 }
 
 
-export class GraphicsCtl {
+export class GraphicsCtl extends Ctl {
     // {
     //   id: '#instance #graphics',
     //   uuid: uuid of instance,
     //   name: name of instance,
     // }
     constructor(props) {
-        this.id = props.id;
+        super(props);
         this.name = props.name;
         this.inst = props.uuid;
 
         this.checkbox = new CheckBox(props);
         this.uuids = this.checkbox.uuids;
         this.table = new GraphicsTable({
-            id: `${this.id} #display-table`,
+            id: this.child('#display-table'),
             inst: this.inst,
         });
 
         // register button's click.
-        $(`${this.id} #remove`).on("click", this, function (e) {
+        $(this.child('#remove')).on("click", this, function (e) {
             new GraphicsApi({
                 inst: e.data.inst,
                 uuids: e.data.uuids.store,
@@ -34,7 +35,7 @@ export class GraphicsCtl {
         });
 
         // refresh table and register refresh click.
-        $(`${this.id} #refresh`).on("click", (e) => {
+        $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
                 this.checkbox.refresh();
             });

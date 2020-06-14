@@ -1,8 +1,8 @@
-import {WidgetBase} from "../base.js";
+import {Widget} from "../widget.js";
 import {DiskApi} from "../../api/disk.js";
 
 
-export class DiskTable extends  WidgetBase {
+export class DiskTable extends Widget {
     // {
     //   id: '#xx',
     //   inst: 'uuid',
@@ -11,6 +11,7 @@ export class DiskTable extends  WidgetBase {
         super(props);
         this.inst = props.inst;
         this.name = props.name;
+        console.log("DiskTable", $(this.id))
     }
 
     loading() {

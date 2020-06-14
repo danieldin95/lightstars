@@ -1,44 +1,44 @@
+import {Ctl} from "./ctl.js"
 import {DataStoreApi} from "../api/datastore.js";
 import {DataStoreTable} from "../widget/datastore/table.js";
 import {FileUpload} from "../widget/datastore/upload.js";
 import {UploadApi} from "../api/upload.js";
-import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
+import {CheckBox} from "../widget/checkbox/checkbox.js";
 
 
-export class CheckBox extends CheckBoxTab {
+class CheckBoxCtl extends CheckBox {
     change(from) {
         super.change(from);
         if (from.store.length !== 1) {
-            $(`${this.uuids.id} #upload`).addClass('disabled');
+            $(this.child('#upload')).addClass('disabled');
         } else {
-            $(`${this.uuids.id} #upload`).removeClass('disabled');
+            $(this.child('#upload')).removeClass('disabled');
         }
     }
 }
 
 
-export class DataStoresCtl {
+export class DataStoresCtl extends Ctl {
     // {
     //   id: "#datastores"
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.checkbox = new CheckBox(props);
+        super(props);
+        this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
-        this.table = new DataStoreTable({id: `${this.id} #display-table`});
+        this.table = new DataStoreTable({id: this.child('#display-table')});
         this.upload = new FileUpload({id: props.upload});
 
         this.upload.onsubmit(this.uuids, function (e) {
             new UploadApi({uuids: e.data.store, id: '#Process'}).upload(e.form);
         });
         // register buttons's  click.
-        $(`${this.id} #delete`).on("click", this.uuids, function (e) {
+        $(this.child('#delete')).on("click", this.uuids, function (e) {
             new DataStoreApi({uuids: e.data.store}).delete();
         });
 
         // refresh table and register refresh click.
-        $(`${this.id} #refresh`).on("click", (e) => {
+        $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
                 this.checkbox.refresh();
             });

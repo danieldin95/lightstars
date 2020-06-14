@@ -1,9 +1,9 @@
-import {WidgetBase} from "../base.js";
+import {Widget} from "../widget.js";
 import {InstanceApi} from "../../api/instance.js";
 import {Location} from "../../com/location.js";
 
 
-export class InstanceTable extends WidgetBase {
+export class InstanceTable extends Widget {
     // {
     //   id: '#xx'.
     // }

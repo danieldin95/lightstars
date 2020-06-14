@@ -1,11 +1,11 @@
-import {WidgetBase} from "../base.js";
+import {Widget} from "../widget.js";
 import {FileApi} from "../../api/file.js";
 import {CheckBoxTab} from "../checkbox/checkbox.js";
 
 class CheckBox extends CheckBoxTab {
 }
 
-export default class FileTable extends WidgetBase {
+export default class FileTable extends Widget {
 
     constructor(props) {
         super(props);

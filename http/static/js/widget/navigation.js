@@ -2,7 +2,7 @@ import {Api} from "../api/api.js";
 import {HyperApi} from "../api/hyper.js";
 import {ZoneApi} from "../api/zone.js";
 import {Location} from "../com/location.js";
-import {Index} from "../widget/container/index.js";
+import {Home} from "../widget/container/home.js";
 import {ChangePassword} from "./password/change.js";
 import {PasswordApi} from "../api/password.js";
 import {Utils} from "../com/utils.js";
@@ -53,7 +53,7 @@ export class Navigation {
             for (let nav of this.navs) {
                 this.view.find(nav).on('click', function (e) {
                     active($(this).parent('li a').attr("id"));
-                    new Index({
+                    new Home({
                         parent: container,
                         name: name,
                         force: true,
@@ -119,7 +119,7 @@ export class Navigation {
                 Api.Host(host);
 
                 e.data.refresh();
-                new Index({
+                new Home({
                     parent: container,
                     name: name,
                     force: true,

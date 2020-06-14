@@ -1,9 +1,9 @@
 import {NetworkApi} from "../../api/network.js";
-import {WidgetBase} from "../base.js";
+import {Widget} from "../widget.js";
 import {Location} from "../../com/location.js";
 
 
-export class NetworkTable extends WidgetBase {
+export class NetworkTable extends Widget {
     // {
     //   id: '#xx'.
     // }
