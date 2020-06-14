@@ -300,7 +300,7 @@ export class Index extends Base {
                             </div>
                         </div>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
-                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">Delete</button>
+                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">Remove</button>
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
                     </div>
     

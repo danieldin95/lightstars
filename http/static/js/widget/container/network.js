@@ -63,8 +63,6 @@ export class Network extends Base {
     }
 
     template(v) {
-        let cls = "enable";
-
         return template.compile(`
         <network>
         <div id="network" class="card instance" data="{{uuid}}" name="{{name}}">
@@ -101,7 +99,13 @@ export class Network extends Base {
                     <dt>UUID:</dt>
                     <dd>{{uuid}}</dd>
                     <dt>Mode:</dt>
-                    <dd>{{mode != '' ? mode : 'isolated'}}</dd>
+                    <dd>{{mode == '' ? 'isolated' : mode}}</dd>
+                    <dt>Address:</dt>
+                    <dd>{{if address == ''}} 
+                      - 
+                    {{else}} 
+                      {{address}}/{{if prefix}} {{prefix}} {{else}} {{netmask | netmask2prefix}} {{/if}}
+                    {{/if}}</dd>
                 </dl>
             </div>
             </div>

@@ -36,13 +36,12 @@ export class NetworkTable extends WidgetBase {
                 <td>{{i+1}}</td>
                 <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/network/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
-                <td>{{if v.address == ""}}
-                    --
-                    {{else}}
-                    {{v.address}}/{{v.netmask | netmask2prefix }}{{v.prefix ? v.prefix : ''}}
-                    {{/if}}
-                </td>
-                <td>{{v.mode != '' ? v.mode : 'isolated'}}</td>
+                <td>{{if v.address == ""}} 
+                  - 
+                {{else}} 
+                  {{v.address}}/{{if v.prefix }}  {{v.prefix}} {{else}} {{v.netmask | netmask2prefix}} {{/if}} 
+                {{/if}}</td>
+                <td>{{v.mode == '' ? 'isolated' : mode}}</td>
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}
