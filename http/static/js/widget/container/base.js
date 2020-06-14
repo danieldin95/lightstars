@@ -23,6 +23,10 @@ export class Base {
         return (``)
     }
 
+    child(id) {
+        return this.id + " " + id;
+    }
+
     title(name) {
         $(document).attr("title", name);
     }

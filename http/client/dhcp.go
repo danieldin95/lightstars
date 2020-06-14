@@ -10,7 +10,7 @@ type DHCPLease struct {
 }
 
 func (api DHCPLease) Url() string {
-	return api.Host + "/api/dhcp/lease"
+	return api.Host + "/api/network/all/lease"
 }
 
 func (api DHCPLease) Get(data *schema.DHCPLeases) error {

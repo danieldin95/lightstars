@@ -29,7 +29,6 @@ export class InstanceTable extends WidgetBase {
 
     render(data) {
         let query = Location.query();
-
         return this.compile(`
         {{each items v i}}
             <tr>

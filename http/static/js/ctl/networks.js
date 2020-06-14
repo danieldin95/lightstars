@@ -9,7 +9,8 @@ class CheckBox extends CheckBoxTab {
 
 export class NetworksCtl {
     // {
-    //   id: "#networks"
+    //   id: "#networks",
+    //   onthis: function (e) {},
     // }
     constructor(props) {
         this.id = props.id;
@@ -25,16 +26,26 @@ export class NetworksCtl {
 
         // refresh table and register refresh click.
         $(`${this.id} #refresh`).on("click", (e) => {
-            this.table.refresh((e) => {
-                this.checkbox.refresh();
-            })
+            this.refresh();
         });
-        this.table.refresh((e) => {
-            this.checkbox.refresh();
-        });
+
+        this.refresh();
     }
 
     create(data) {
         new NetworkApi().create(data);
+    }
+
+    refresh() {
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+            // register click on this table row.
+            let func = this.props.onthis;
+            if (func) {
+                $(`${this.id} #on-this`).on('click', function(e) {
+                    func({uuid: $(this).attr('data')});
+                });
+            }
+        });
     }
 }

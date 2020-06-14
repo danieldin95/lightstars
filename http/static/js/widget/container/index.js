@@ -98,7 +98,7 @@ export class Index extends Base {
             .onsubmit((e) => {
                 net.create(Utils.toJSON(e.form));
             });
-        // loading datastore.
+        // loading data storage.
         let store = new DataStoresCtl({
             id: '#datastores',
             upload: '#fileUploadModal',

@@ -9,3 +9,8 @@ type DHCPLease struct {
 }
 
 type DHCPLeases map[string]DHCPLease
+
+type ListDHCPLease struct {
+	List
+	Items []DHCPLease `json:"items"`
+}

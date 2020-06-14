@@ -14,7 +14,7 @@ export class DiskTable extends  WidgetBase {
     }
 
     loading() {
-        return `<tr><td colspan="7" style="text-align: center">Loading...</td></tr>`;
+        return `<tr><td colspan="8" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {

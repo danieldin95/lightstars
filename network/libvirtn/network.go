@@ -43,3 +43,11 @@ func ListLeases() (map[string]DHCPLease, error) {
 	}
 	return hyper.GetLeases(), nil
 }
+
+func LookupLeases(uuid string) ([]DHCPLease, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
+	}
+	return hyper.LookupLeases(uuid)
+}

@@ -11,7 +11,8 @@ type DHCPLease struct {
 }
 
 func (l DHCPLease) Router(router *mux.Router) {
-	router.HandleFunc("/api/dhcp/lease", l.GET).Methods("GET")
+	router.HandleFunc("/api/network/all/lease", l.GET).Methods("GET")
+	router.HandleFunc("/api/network/{id}/lease", l.GET).Methods("GET")
 }
 
 func (l DHCPLease) Get(data schema.DHCPLeases) error {
@@ -32,12 +33,34 @@ func (l DHCPLease) Get(data schema.DHCPLeases) error {
 }
 
 func (l DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
-	data := make(schema.DHCPLeases, 128)
-	if err := l.Get(data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	uuid, ok := GetArg(r, "id")
+	if !ok || uuid == "all" {
+		data := make(schema.DHCPLeases, 128)
+		if err := l.Get(data); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		ResponseJson(w, data)
+	} else {
+		leases, err := libvirtn.LookupLeases(uuid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
+		list := schema.ListDHCPLease{
+			Items: make([]schema.DHCPLease, 0, 32),
+		}
+		for _, l := range leases {
+			list.Items = append(list.Items, schema.DHCPLease{
+				Mac:      l.Mac,
+				IPAddr:   l.IPAddr,
+				Prefix:   l.Prefix,
+				Hostname: l.Hostname,
+				Type:     l.Type,
+			})
+		}
+		ResponseJson(w, list)
 	}
-	ResponseJson(w, data)
 }
 
 func (l DHCPLease) POST(w http.ResponseWriter, r *http.Request) {

@@ -3,6 +3,7 @@ import {Utils} from "../../com/utils.js";
 import {Api} from "../../api/api.js";
 import {NetworkApi} from "../../api/network.js";
 import {Collapse} from "../collapse.js";
+import {NetworkCtl} from "../../ctl/network.js";
 
 
 export class Network extends Base {
@@ -45,12 +46,11 @@ export class Network extends Base {
             update: false,
         });
 
-        // let instance = new GuestCtl({
-        //     id: "#instance",
-        //     disks: {id: "#disk"},
-        //     interfaces: {id: "#interface"},
-        //     graphics: {id: "#graphics"},
-        // });
+        let net = new NetworkCtl({
+            id: this.id + " #network",
+            leases: {id: "#leases"},
+            subnets: {id: "#subnets"},
+        });
         // new InstanceSet({id: '#instanceSetModal', cpu: instance.cpu, mem: instance.mem })
         //     .onsubmit((e) => {
         //         instance.edit(Utils.toJSON(e.form));
@@ -79,31 +79,19 @@ export class Network extends Base {
                 <!-- Header buttons -->
                 <div class="card-header-cnt">
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">Refresh</button>
-                    <div id="power-btns" class="btn-group btn-group-sm" role="group">
-                        <button id="start" type="button" class="btn btn-outline-dark">
-                            Power on
-                        </button>
-                        <button id="power" type="button"
-                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div id="power-more" class="dropdown-menu" aria-labelledby="power">
-                            <a id="start" class="dropdown-item" href="javascript:void(0)">Power on</a>
-                            <a id="shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
-                        </div>
-                    </div>
+                    <button id="autostart" type="button" class="btn btn-outline-dark btn-sm">Autostart</button>
                     <div id="btns-more" class="btn-group btn-group-sm" role="group">
                         <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
                                 data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
                             Actions
                         </button>
                         <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                            <a id="suspend" class="dropdown-item ${cls}" href="javascript:void(0)">Suspend</a>
+                            <a id="edit" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
+                            <div class="dropdown-divider"></div>
+                            <a id="remove" class="dropdown-item" href="javascript:void(0)">Remove</a>
+                            <div class="dropdown-divider"></div>
+                            <a id="dumpxml" class="dropdown-item" href="javascript:void(0)">Dump XML</a>
                         </div>
                     </div>
                 </div>
@@ -112,19 +100,15 @@ export class Network extends Base {
                     <dd><span class="{{state}}">{{state}}</span></dd>
                     <dt>UUID:</dt>
                     <dd>{{uuid}}</dd>
-                    <dt>Arch:</dt>
-                    <dd>{{arch}} | {{type}}</dd>
-                    <dt>Processor:</dt>
-                    <dd>{{maxCpu}} | {{cpuTime}}ms</dd>
-                    <dt>Memory:</dt>
-                    <dd>{{maxMem | prettyKiB}} | {{memory | prettyKiB}}</dd>
+                    <dt>Mode:</dt>
+                    <dd>{{mode != '' ? mode : 'isolated'}}</dd>
                 </dl>
             </div>
             </div>
         </div>
         <div id="devices">
         <!-- DHCP Lease -->
-        <div id="lease" class="card device">
+        <div id="leases" class="card device">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
@@ -136,8 +120,8 @@ export class Network extends Base {
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#diskCreateModal">
-                        Attach disk
+                            data-toggle="modal" data-target="#leaseCreateModal">
+                        New a lease
                     </button>
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
                     <button id="remove" type="button" class="btn btn-outline-dark btn-sm">Remove</button>
@@ -149,12 +133,9 @@ export class Network extends Base {
                         <tr>
                             <th><input id="on-all" type="checkbox"></th>
                             <th>ID</th>
-                            <th>Bus</th>
-                            <th>Device</th>
-                            <th>Source</th>
-                            <th>Capacity</th>
-                            <th>Available</th>
-                            <th>Address</th>
+                            <th>MAC address</th>
+                            <th>IP address</th>
+                            <th>Host name</th>
                         </tr>
                         </thead>
                         <tbody id="display-table">

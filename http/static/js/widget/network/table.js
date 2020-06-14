@@ -1,5 +1,6 @@
 import {NetworkApi} from "../../api/network.js";
 import {WidgetBase} from "../base.js";
+import {Location} from "../../com/location.js";
 
 
 export class NetworkTable extends WidgetBase {
@@ -27,12 +28,13 @@ export class NetworkTable extends WidgetBase {
     }
 
     render(data) {
+        let query = Location.query();
         return this.compile(`
         {{each items v i}}
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
                 <td>{{i+1}}</td>
-                <td><a href="#/network/{{v.uuid}}">{{v.uuid}}</a></td>
+                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/network/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
                 <td>{{if v.address == ""}}
                     --
