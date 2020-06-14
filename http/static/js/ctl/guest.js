@@ -26,6 +26,7 @@ export class GuestCtl extends Ctl {
         this.mem = $(this.id).attr("memory");
         this.uuid = uuid;
         this.name = name;
+        this.header = props.header;
         this.tasks = props.tasks || "Tasks";
 
         this.disk = new DiskCtl({id: props.disks.id, uuid, name});
@@ -33,7 +34,7 @@ export class GuestCtl extends Ctl {
         this.graphics = new GraphicsCtl({id: props.graphics.id, uuid, name});
 
         // register buttons's click.
-        $(this.child('#console')).on("click", this, function (e) {
+        $(this.headerId('#console')).on("click", this, function (e) {
             if ($(this).hasClass('disabled')) {
                 return
             }
@@ -46,44 +47,44 @@ export class GuestCtl extends Ctl {
                 $(target).find(".modal-body").empty();
             });
         });
-        $(this.child('#start'), this.child('#more-start')).on("click", this, function (e) {
+        $(this.headerId('#start'), this.headerId('#more-start')).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).start();
         });
-        $(this.child('#shutdown')).on("click", this, function (e) {
+        $(this.headerId('#shutdown')).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).shutdown();
         });
-        $(this.child('#reset')).on("click", this, function (e) {
+        $(this.headerId('#reset')).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).reset();
         });
-        $(this.child('#suspend')).on("click", this, function (e) {
+        $(this.headerId('#suspend')).on("click", this, function (e) {
             if ($(this).hasClass('disabled')) {
                 return
             }
             new InstanceApi({uuids: uuid}).suspend();
         });
-        $(this.child('#resume')).on("click", this, function (e) {
+        $(this.headerId('#resume')).on("click", this, function (e) {
             if ($(this).hasClass('disabled')) {
                 return
             }
             new InstanceApi({uuids: uuid}).resume();
         });
-        $(this.child('#destroy')).on("click", this, function (e) {
+        $(this.headerId('#destroy')).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).destroy();
         });
-        $(this.child('#remove')).on("click", this, function (e) {
+        $(this.headerId('#remove')).on("click", this, function (e) {
             new InstanceApi({uuids: uuid}).remove();
         });
 
         // console
-        $(this.child('#console-self')).on('click', this, function (e) {
+        $(this.headerId('#console-self')).on('click', this, function (e) {
             let url = $(this).attr('data');
             window.open(url, '_self');
         });
-        $(this.child('#console-blank')).on('click', this, function (e) {
+        $(this.headerId('#console-blank')).on('click', this, function (e) {
             let url = $(this).attr('data');
             window.open(url, '_blank');
         });
-        $(this.child('#console-window')).on('click', this, function (e) {
+        $(this.headerId('#console-window')).on('click', this, function (e) {
             let url = $(this).attr('data');
             window.open(url, e.data.name,'width=800,height=600');
         });
@@ -91,5 +92,9 @@ export class GuestCtl extends Ctl {
 
     edit(data) {
         new InstanceApi({uuids: this.uuid}).edit(data);
+    }
+
+    headerId(id) {
+        return [this.id, this.header.id, id].join(" ")
     }
 }

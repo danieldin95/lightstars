@@ -55,6 +55,7 @@ export class Guest extends Container {
 
         let instance = new GuestCtl({
             id: this.id(),
+            header: {id: this.id("#header")},
             disks: {id: this.id("#disk")},
             interfaces: {id: this.id("#interface")},
             graphics: {id: this.id("#graphics")},

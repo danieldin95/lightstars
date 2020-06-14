@@ -49,6 +49,7 @@ export class Network extends Container {
 
         let net = new NetworkCtl({
             id: this.id(),
+            header: {id: this.id("#header")},
             leases: {id: this.id("#leases")},
             subnets: {id: this.id("#subnets")},
         });
