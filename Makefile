@@ -27,7 +27,7 @@ all: lightstar lightpix windows/lightpix
 
 pkg: rpm windows/zip
 
-rpm: rpm/lightutils rpm/lightstar rpm/lightsim
+rpm: rpm/lightstar rpm/lightsim
 
 # prepare environment
 env:

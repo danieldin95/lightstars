@@ -1,6 +1,21 @@
-
+import {Alert} from "../com/alert.js";
 
 export class Api {
+    // static func.
+    static prefix() {
+        if (this.host) {
+            return `/host/${this.host}`
+        }
+        return ""
+    }
+
+    static Host(name) {
+        if (name !== undefined) {
+            this.host = name
+        }
+        return this.host
+    }
+
     // {
     //   uuids: [],
     //   tasks: 'Tasks',
@@ -14,10 +29,12 @@ export class Api {
         this.name = props.name;
         this.props = props;
         this.tasks = props.tasks || "Tasks";
-        if (typeof props.uuids == "string") {
+        if (typeof props.uuids === "string") {
             this.uuids = [props.uuids];
-        } else {
+        } else if (typeof props.uuids === "object") {
             this.uuids = props.uuids;
+        } else {
+            this.uuids = [];
         }
         this.host = Api.host || ""
     }
@@ -30,17 +47,58 @@ export class Api {
         return `/api${suffix}`
     }
 
-    static prefix() {
-        if (this.host) {
-            return `/host/${this.host}`
+    list(data, func) {
+        if (typeof data == "function") {
+            func = data;
+            data = {};
         }
-        return ""
+        $.GET(this.url(), {format: 'schema'}, (resp, status) => {
+            func({data, resp});
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
+        });
     }
 
-    static Host(name) {
-        if (name !== undefined) {
-            this.host = name
+    get(data, func) {
+        if (typeof data == "function") {
+            func = data;
+            data = {};
         }
-        return this.host
+        let url = this.url();
+        if (this.uuids.length > 0) {
+            url = this.url(this.uuids[0]);
+        }
+        $.GET(url, {format: 'schema'}, (resp, status) => {
+            func({data, resp});
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
+        });
+    }
+
+    create(data) {
+        $.POST(this.url(), JSON.stringify(data), (resp, status) => {
+            $(this.tasks).append(Alert.success(`create ${resp.message}`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
+        });
+    }
+
+    delete() {
+        this.uuids.forEach((uuid, index, err) => {
+            $.DELETE(this.url(uuid), (resp, success) => {
+                $(this.tasks).append(Alert.success(`remove ${uuid} ${resp.message}`));
+            }).fail((e) => {
+                $(this.tasks).append(Alert.danger(`DELETE ${this.url(uuid)}: ${e.responseText}`));
+            });
+        });
+    }
+
+    edit(data) {
+        let url = this.url(this.uuids[0]);
+        $.PUT(url, JSON.stringify(data), (resp, success) => {
+            $(this.tasks).append(Alert.success(`edit ${resp.name} ${resp.message}`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
+        });
     }
 }

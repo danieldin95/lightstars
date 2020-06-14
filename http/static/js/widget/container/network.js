@@ -26,9 +26,8 @@ export class Network extends Container {
     render() {
         new NetworkApi({uuids: this.uuid}).get(this, (e) => {
             this.title(e.resp.name);
-
             this.view = $(this.template(e.resp));
-            this.view.find(this.id('#refresh')).on('click', (e) => {
+            this.view.find('#header #refresh').on('click', (e) => {
                 this.render();
             });
             $(this.parent).html(this.view);
@@ -65,7 +64,7 @@ export class Network extends Container {
         <div id="header" class="card">
             <div class="card-header">
                 <div class="card-just-left">
-                    <a id="refresh" class="none">{{name}}</a>
+                    <a id="refresh" class="none" href="javascript:void(0)">{{name}}</a>
                 </div>
             </div>
             <!-- Overview -->
