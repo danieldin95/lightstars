@@ -1,8 +1,8 @@
 
 import {Ctl} from "./ctl.js"
 import {DataStoreApi} from "../api/datastores.js";
-import {DataStoreTable} from "../widget/datastores/table.js";
-import {FileUpload} from "../widget/datastores/upload.js";
+import {DataStoreTable} from "../widget/datastore/table.js";
+import {FileUpload} from "../widget/datastore/upload.js";
 import {UploadApi} from "../api/upload.js";
 import {CheckBox} from "../widget/checkbox/checkbox.js";
 
@@ -47,9 +47,24 @@ export class DataStoresCtl extends Ctl {
         this.table.refresh((e) => {
             this.checkbox.refresh();
         });
+
+        this.refresh();
     }
 
     create(data) {
         new DataStoreApi().create(data);
+    }
+
+    refresh() {
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+            // register click on this table row.
+            let func = this.props.onthis;
+            if (func) {
+                $(this.child('#on-this')).on('click', function (e) {
+                    func({uuid: $(this).attr('data')});
+                });
+            }
+        });
     }
 }

@@ -9,6 +9,7 @@ export class DataStoreApi extends Api {
     // }
     constructor(props) {
         super(props);
+        console.log("load once")
     }
 
     url(uuid) {

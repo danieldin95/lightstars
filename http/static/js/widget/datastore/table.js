@@ -1,6 +1,7 @@
 import {Widget} from "../widget.js";
 import {Api} from "../../api/api.js";
 import {DataStoreApi} from "../../api/datastores.js";
+import {Location} from "../../com/location.js";
 
 export class DataStoreTable extends Widget {
     // {
@@ -27,6 +28,7 @@ export class DataStoreTable extends Widget {
     }
 
     render(data) {
+        let query = Location.query();
         let prefix = Api.prefix();
 
         return this.compile(`
@@ -34,7 +36,8 @@ export class DataStoreTable extends Widget {
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
                 <td>{{i+1}}</td>
-                <td><a href="${prefix}/ext/files/{{v.id}}">{{v.uuid}}</a></td>
+<!--                <td><a href="${prefix}/ext/files/{{v.id}}">{{v.uuid}}</a></td>-->
+                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/datastore/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
                 <td>{{v.source}}</td>
                 <td>{{v.capacity | prettyByte}}</td>

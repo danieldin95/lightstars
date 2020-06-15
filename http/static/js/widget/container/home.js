@@ -13,9 +13,10 @@ import {NATCreate} from "../network/create.js";
 import {BridgeCreate} from "../network/bridge/create.js";
 import {RoutedCreate} from "../network/routed/create.js";
 import {IsolatedCreate} from "../network/isolated/create.js";
-import {DirCreate} from "../datastores/create.js";
-import {NFSCreate} from "../datastores/nfs/create.js";
-import {iSCSICreate} from "../datastores/iscsi/create.js";
+import {DirCreate} from "../datastore/create.js";
+import {NFSCreate} from "../datastore/nfs/create.js";
+import {iSCSICreate} from "../datastore/iscsi/create.js";
+import {Pool} from "./pool.js";
 
 export class Home extends Container {
     // {
@@ -102,6 +103,12 @@ export class Home extends Container {
         // loading data storage.
         let store = new DataStoresCtl({
             id: this.id('#datastores'),
+            onthis: (e) => {
+                new Pool({
+                    parent: this.parent,
+                    uuid: e.uuid,
+                });
+            },
             upload: '#FileUploadModal',
         });
         new DirCreate({id: '#DirCreateModal'})
