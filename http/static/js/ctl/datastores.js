@@ -1,13 +1,8 @@
-<<<<<<< HEAD:http/static/js/ctl/datastores.js
+
+import {Ctl} from "./ctl.js"
 import {DataStoreApi} from "../api/datastores.js";
 import {DataStoreTable} from "../widget/datastores/table.js";
 import {FileUpload} from "../widget/datastores/upload.js";
-=======
-import {Ctl} from "./ctl.js"
-import {DataStoreApi} from "../api/datastore.js";
-import {DataStoreTable} from "../widget/datastore/table.js";
-import {FileUpload} from "../widget/datastore/upload.js";
->>>>>>> master:http/static/js/ctl/datastores.js
 import {UploadApi} from "../api/upload.js";
 import {CheckBox} from "../widget/checkbox/checkbox.js";
 
@@ -24,11 +19,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-<<<<<<< HEAD:http/static/js/ctl/datastores.js
-export class Datastores {
-=======
 export class DataStoresCtl extends Ctl {
->>>>>>> master:http/static/js/ctl/datastores.js
     // {
     //   id: "#datastores"
     // }

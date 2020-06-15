@@ -3,15 +3,9 @@ import {Guest} from "./guest.js"
 import {Network} from "./network.js";
 import {Utils} from "../../com/utils.js";
 import {Location} from "../../com/location.js";
-<<<<<<< HEAD:http/static/js/widget/container/index.js
-import {Instances} from '../../ctl/instances.js';
-import {Network} from "../../ctl/network.js";
-import {Datastores} from "../../ctl/datastores.js";
-=======
 import {InstanceCtl} from '../../ctl/instance.js';
 import {NetworksCtl} from "../../ctl/networks.js";
 import {DataStoresCtl} from "../../ctl/datastores.js";
->>>>>>> master:http/static/js/widget/container/home.js
 import {Collapse} from "../collapse.js";
 import {Overview} from "../index/overview.js";
 import {InstanceCreate} from '../instance/create.js';
@@ -105,17 +99,10 @@ export class Home extends Container {
             .onsubmit((e) => {
                 net.create(Utils.toJSON(e.form));
             });
-<<<<<<< HEAD:http/static/js/widget/container/index.js
-        // loading datastore.
-        let store = new Datastores({
-            id: '#datastores',
-            upload: '#fileUploadModal',
-=======
         // loading data storage.
         let store = new DataStoresCtl({
             id: this.id('#datastores'),
             upload: '#FileUploadModal',
->>>>>>> master:http/static/js/widget/container/home.js
         });
         new DirCreate({id: '#DirCreateModal'})
             .onsubmit((e) => {

@@ -7,7 +7,10 @@ export class FileApi extends Api {
         super(props);
     }
 
-    url() {
-        return window.location.pathname
+    url(uuid) {
+        if (uuid) {
+            return super.url(`/api/volume/${uuid}`);
+        }
+        return super.url(`/api/volume/`);
     }
 }
