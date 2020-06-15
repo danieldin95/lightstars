@@ -1,5 +1,5 @@
 Name: lightstar
-Version: 0.8.06
+Version: 0.8.10
 Release: 1%{?dist}
 Summary: LightStar's Project Software
 Group: Applications/Communications
@@ -19,8 +19,8 @@ cd %_source_dir && make
 
 %install
 mkdir -p %{buildroot}/usr/bin
-cp %_source_dir/lightstar %{buildroot}/usr/bin/lightstar
-cp %_source_dir/lightpix %{buildroot}/usr/bin/lightpix
+cp %_source_dir/build/lightstar %{buildroot}/usr/bin/lightstar
+cp %_source_dir/build/lightpix %{buildroot}/usr/bin/lightpix
 
 mkdir -p %{buildroot}/etc/sysconfig
 cat > %{buildroot}/etc/sysconfig/lightstar.cfg << EOF
@@ -31,11 +31,12 @@ mkdir -p %{buildroot}/usr/lib/systemd/system
 cp %_source_dir/packaging/lightstar.service %{buildroot}/usr/lib/systemd/system
 
 mkdir -p %{buildroot}/var/lightstar
-cp -R %_source_dir/resource/ca %{buildroot}/var/lightstar
+cp -R %_source_dir/packaging/resource/ca %{buildroot}/var/lightstar
+cp -R %_source_dir/packaging/script %{buildroot}/var/lightstar
 cp -R %_source_dir/http/static %{buildroot}/var/lightstar
 
 mkdir -p %{buildroot}/etc/lightstar
-cp -R %_source_dir/resource/*.json.example %{buildroot}/etc/lightstar
+cp -R %_source_dir/packaging/resource/*.json.example %{buildroot}/etc/lightstar
 mkdir -p %{buildroot}/lightstar/datastore/01
 
 %pre

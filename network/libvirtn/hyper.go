@@ -33,7 +33,7 @@ func (h *HyperVisor) AddListener(listen HyperListener) {
 func (h *HyperVisor) OpenNotSafe() error {
 	if hyper.Conn != nil {
 		if _, err := hyper.Conn.GetVersion(); err != nil {
-			libstar.Error("HyperVisor.Open %s", err)
+			libstar.Error("HyperVisor.open %s", err)
 			_, _ = hyper.Conn.Close()
 			hyper.Conn = nil
 		}
@@ -155,6 +155,30 @@ func (h *HyperVisor) GetLeases() map[string]DHCPLease {
 		leases[name] = value
 	}
 	return leases
+}
+
+func (h *HyperVisor) LookupLeases(uuid string) ([]DHCPLease, error) {
+	n, err := hyper.LookupNetwork(uuid)
+	if err != nil {
+		return nil, err
+	}
+	defer n.Free()
+
+	data := make([]DHCPLease, 0, 128)
+	leases, err := n.GetDHCPLeases()
+	if err != nil {
+		return nil, err
+	}
+	for _, le := range leases {
+		data = append(data, DHCPLease{
+			Type:     int(le.Type),
+			IPAddr:   le.IPaddr,
+			Prefix:   le.Prefix,
+			Hostname: le.Hostname,
+			Mac:      le.Mac,
+		})
+	}
+	return data, nil
 }
 
 func (h *HyperVisor) LoopForever() {

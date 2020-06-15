@@ -38,7 +38,7 @@ func (cl Client) GetJSON(client *libstar.HttpClient, v interface{}) error {
 	if err != nil {
 		return err
 	}
-	libstar.Debug("Client.GetJSON %s", body)
+	libstar.Debug("client.GetJSON %s", body)
 	if err := json.Unmarshal([]byte(body), v); err != nil {
 		return err
 	}

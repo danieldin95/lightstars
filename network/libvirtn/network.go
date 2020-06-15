@@ -28,10 +28,26 @@ func ListNetworks() ([]Network, error) {
 	return hyper.ListAllNetworks()
 }
 
+func LookupNetwork(uuid string) (*Network, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
+	}
+	return hyper.LookupNetwork(uuid)
+}
+
 func ListLeases() (map[string]DHCPLease, error) {
 	hyper, err := GetHyper()
 	if err != nil {
 		return nil, err
 	}
 	return hyper.GetLeases(), nil
+}
+
+func LookupLeases(uuid string) ([]DHCPLease, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
+	}
+	return hyper.LookupLeases(uuid)
 }

@@ -12,6 +12,7 @@ type HttpClient struct {
 	Payload   io.Reader
 	Auth      Auth
 	TlsConfig *tls.Config
+	Client    *http.Client
 }
 
 func (cl *HttpClient) Do() (*http.Response, error) {
@@ -28,10 +29,16 @@ func (cl *HttpClient) Do() (*http.Response, error) {
 	if cl.Auth.Type == "basic" {
 		req.Header.Set("Authorization", BasicAuth(cl.Auth.Username, cl.Auth.Password))
 	}
-	client := http.Client{
+	cl.Client = &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: cl.TlsConfig,
 		},
 	}
-	return client.Do(req)
+	return cl.Client.Do(req)
+}
+
+func (cl *HttpClient) Close() {
+	if cl.Client != nil {
+		cl.Client.CloseIdleConnections()
+	}
 }

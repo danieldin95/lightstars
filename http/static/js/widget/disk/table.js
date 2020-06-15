@@ -1,8 +1,8 @@
-import {WidgetBase} from "../base.js";
+import {Widget} from "../widget.js";
 import {DiskApi} from "../../api/disk.js";
 
 
-export class DiskTable extends  WidgetBase {
+export class DiskTable extends Widget {
     // {
     //   id: '#xx',
     //   inst: 'uuid',
@@ -10,10 +10,12 @@ export class DiskTable extends  WidgetBase {
     constructor(props) {
         super(props);
         this.inst = props.inst;
+        this.name = props.name;
+        console.log("DiskTable", $(this.id))
     }
 
     loading() {
-        return `<tr><td colspan="7" style="text-align: center">Loading...</td></tr>`;
+        return `<tr><td colspan="8" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -40,6 +42,8 @@ export class DiskTable extends  WidgetBase {
                 <td>{{v.bus}}</td>
                 <td>{{v.device}}</td>
                 <td>{{v.source}}</td>
+                <td>{{if v.volume.type === ""}} - {{else}} {{v.volume.capacity | prettyByte}} {{/if}}</td>
+                <td>{{if v.volume.type === ""}} - {{else}} {{v.volume.allocation | prettyByte}} {{/if}}</td>
                 <td><span>
                     {{if v.addrType == "pci"}}
                         pci:{{v.addrBus | aton 2}}:{{v.addrSlot | aton 2}}.{{v.addrFunc}}
@@ -47,7 +51,6 @@ export class DiskTable extends  WidgetBase {
                         drv:{{v.addrBus | aton 2}}:{{v.addrTgt | aton 2}}.{{v.addrUnit}}
                     {{/if}}</span>
                 </td>
-                <td>{{v.format}}</td>
             </tr>
         {{/each}}
         `, data);

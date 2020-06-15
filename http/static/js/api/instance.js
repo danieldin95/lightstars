@@ -6,7 +6,7 @@ import {Utils} from "../com/utils.js";
 export class InstanceApi extends Api {
     // {
     //   uuids: [],
-    //   tasks: 'tasks',
+    //   tasks: 'Tasks',
     //   name: ''
     // }
     constructor(props) {
@@ -19,25 +19,6 @@ export class InstanceApi extends Api {
         }
         return super.url(`/instance`);
     }
-
-    list(data, func) {
-        $.GET(this.url(), {format: 'schema'}, (resp, status) => {
-            func({data, resp});
-        }).fail((e) => {
-            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
-        });
-    }
-
-    get(data, func) {
-        let url = this.url(this.uuids[0]);
-
-        $.GET(url, {format: 'schema'}, (resp, status) => {
-            func({data, resp});
-        }).fail((e) => {
-            $(this.tasks).append(Alert.danger(`GET ${url}: ${e.responseText}`));
-        });
-    }
-
     start() {
         this.uuids.forEach((uuid) => {
             let url = this.url(uuid);
@@ -194,10 +175,9 @@ export class InstanceApi extends Api {
                 Modal: data.interface0Model || 'virtio',
             },
         ];
-
         console.log('InstanceApi.create', schema, data);
         $.POST(this.url(), JSON.stringify(schema), (resp, status) => {
-            $(this.tasks).append(Alert.success(`create '${resp.name}' success`));
+            $(this.tasks).append(Alert.success(`create ${resp.name} success`));
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
         });

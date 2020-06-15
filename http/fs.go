@@ -15,9 +15,9 @@ import (
 
 type FileInfo struct {
 	FileName string
-	Size string
-	ModTime string
-	IsDir bool
+	Size     string
+	ModTime  string
+	IsDir    bool
 }
 
 type ListFileInfo struct {
@@ -94,7 +94,6 @@ func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name 
 		}
 	}
 
-
 	// Still a directory? (we didn't find an index.html file)
 	if d.IsDir() {
 		if checkIfModifiedSince(r, d.ModTime()) == condFalse {
@@ -122,7 +121,7 @@ func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name 
 	http.ServeContent(w, r, d.Name(), d.ModTime(), f)
 }
 
-func dirList(w http.ResponseWriter, r *http.Request, f http.File)  {
+func dirList(w http.ResponseWriter, r *http.Request, f http.File) {
 	dirs, err := f.Readdir(-1)
 
 	if err != nil {
@@ -144,8 +143,8 @@ func dirList(w http.ResponseWriter, r *http.Request, f http.File)  {
 		list.Items = append(list.Items, *info)
 	}
 	sort.Slice(list.Items, func(i, j int) bool {
-			return list.Items[i].FileName < list.Items[j].FileName
-		})
+		return list.Items[i].FileName < list.Items[j].FileName
+	})
 	list.Metadata.Size = len(list.Items)
 	list.Metadata.Total = len(list.Items)
 	api.ResponseJson(w, list)
@@ -211,7 +210,7 @@ func isZeroTime(t time.Time) bool {
 	return t.IsZero() || t.Equal(unixEpochTime)
 }
 
-func formatFileSize(size int64)  string{
+func formatFileSize(size int64) string {
 	s := int(size)
 	KB := 1024
 	MB := 1024 * KB
@@ -220,18 +219,15 @@ func formatFileSize(size int64)  string{
 	if s < KB {
 		return strconv.Itoa(s)
 	} else if KB < s && s < MB {
-		return strconv.Itoa(s / KB) + "KB"
-	} else if MB < s && s < GB{
-		return strconv.Itoa(s / MB) + "MB"
+		return strconv.Itoa(s/KB) + "KB"
+	} else if MB < s && s < GB {
+		return strconv.Itoa(s/MB) + "MB"
 	} else {
-		return strconv.Itoa(s / GB) + "GB"
+		return strconv.Itoa(s/GB) + "GB"
 	}
 }
 
-func GetTime(t time.Time)  string{
+func GetTime(t time.Time) string {
 	tmp1 := "2006-01-02 15:04:05"
 	return t.Format(tmp1)
 }
-
-
-

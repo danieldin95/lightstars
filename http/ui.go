@@ -21,7 +21,6 @@ func (ui UI) Router(router *mux.Router) {
 	router.HandleFunc("/ui/", ui.Index)
 	router.HandleFunc("/ui/index", ui.Index)
 	router.HandleFunc("/ui/console", ui.Console)
-	router.HandleFunc("/ui/spice", ui.Spice)
 }
 
 func (ui UI) Index(w http.ResponseWriter, r *http.Request) {
@@ -53,18 +52,6 @@ func (ui UI) Console(w http.ResponseWriter, r *http.Request) {
 	file := api.GetFile("ui/console.html")
 	if err := api.ParseFiles(w, file, nil); err != nil {
 		libstar.Error("UI.Console %s", err)
-	}
-}
-
-func (ui UI) Spice(w http.ResponseWriter, r *http.Request) {
-	uuid := api.GetQueryOne(r, "id")
-	if uuid == "" {
-		http.Error(w, "Not found instance", http.StatusNotFound)
-		return
-	}
-	file := api.GetFile("ui/spice.html")
-	if err := api.ParseFiles(w, file, nil); err != nil {
-		libstar.Error("UI.Spice %s", err)
 	}
 }
 

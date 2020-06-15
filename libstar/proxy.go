@@ -56,6 +56,7 @@ func (pri *ProxyUrl) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadGateway)
 		return
 	}
+	defer pri.Transport.CloseIdleConnections()
 	defer resp.Body.Close()
 	for key, value := range resp.Header {
 		for _, v := range value {

@@ -1,8 +1,8 @@
-import {WidgetBase} from "../base.js";
+import {Widget} from "../widget.js";
 import {HyperApi} from "../../api/hyper.js";
 
 
-export class Overview extends WidgetBase {
+export class Overview extends Widget {
     // {
     //   id: '#xx'.
     // }

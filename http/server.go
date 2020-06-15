@@ -75,6 +75,7 @@ func (h *Server) LoadRouter() {
 	api.Zone{}.Router(router)
 	api.ProxyTcp{}.Router(router)
 	api.DHCPLease{}.Router(router)
+	api.Volume{}.Router(router)
 	api.User{}.Router(router)
 }
 

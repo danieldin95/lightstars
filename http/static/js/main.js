@@ -1,14 +1,13 @@
-import {Filters} from "./ctl/filter.js";
+import {Api} from "./api/api.js";
+import {Location} from "./com/location.js";
+import {Filters} from "./com/filter.js";
 import {Navigation} from "./widget/navigation.js";
 import {Routes} from "./routes.js";
-import {Location} from "./com/location.js";
-import {Api} from "./api/api.js";
 
-console.log('init');
 
 $(function() {
     let hyper = $('hyper');
-    let container = "#container";
+    let container = "#Container";
     let host = Location.query('node');
 
     if (host === undefined) {
@@ -19,7 +18,7 @@ $(function() {
     Api.Host(host);
 
     new Navigation({
-        id: "nav",
+        parent: "nav",
         home: ".",
         container: container,
         name: hyper.attr('name'),

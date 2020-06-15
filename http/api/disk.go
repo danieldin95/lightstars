@@ -24,6 +24,59 @@ func (disk Disk) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.DELETE).Methods("DELETE")
 }
 
+func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo {
+	name := instance.Name
+	disks := instance.Disks
+
+	vols := make(map[string]libvirts.VolumeInfo, 32)
+	sources := make(map[string]int, 4)
+	for _, disk := range disks {
+		if _, ok := vols[disk.Name]; ok {
+			continue
+		}
+		dir := path.Dir(disk.Name)
+		volsDir, err := (&libvirts.Pool{Path: dir}).ListByTarget()
+		if err == nil {
+			for file, vol := range volsDir {
+				vols[file] = vol
+			}
+			continue
+		}
+		if _, ok := sources[dir]; ok {
+			sources[dir] += 1
+		} else {
+			sources[dir] = 1
+		}
+	}
+	libstar.Debug("Disk.Check %v", sources)
+
+	curDir := ""
+	curUsed := 0
+	for dir, c := range sources {
+		if curUsed < c {
+			curUsed = c
+			curDir = dir
+		} else if curUsed == c {
+			// select has more deep directory.
+			if len(strings.Split(curDir, "/")) < len(strings.Split(dir, "/")) {
+				curDir = dir
+			}
+		}
+	}
+	if curDir != "" {
+		if _, err := libvirts.CreatePool(libvirts.ToDomainPool(name), curDir); err != nil {
+			libstar.Warn("Disk.Travel %s", err)
+		}
+	}
+	volsDir, err := (&libvirts.Pool{Name: libvirts.ToDomainPool(name)}).List()
+	if err == nil {
+		for file, vol := range volsDir {
+			vols[file] = vol
+		}
+	}
+	return vols
+}
+
 func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dev, ok := GetArg(r, "dev")
@@ -34,11 +87,21 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer dom.Free()
+
 		instance := compute.NewInstance(*dom)
+		vols := disk.Travel(instance)
+
 		list := schema.ListDisk{
 			Items: make([]schema.Disk, 0, 32),
 		}
 		for _, disk := range instance.Disks {
+			if vol, ok := vols[disk.Name]; ok {
+				disk.Volume = schema.VolumeInfo{
+					Type:       vol.Type,
+					Capacity:   vol.Capacity,
+					Allocation: vol.Allocation,
+				}
+			}
 			list.Items = append(list.Items, disk)
 		}
 		sort.SliceStable(list.Items, func(i, j int) bool {
@@ -48,6 +111,8 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 		list.Metadata.Total = len(list.Items)
 		ResponseJson(w, list)
 		return
+	} else {
+		//TODO
 	}
 	ResponseMsg(w, 0, dev)
 }

@@ -1,32 +1,33 @@
+import {Ctl} from "./ctl.js";
 import {DiskApi} from "../api/disk.js";
 import {DiskTable} from "../widget/disk/table.js";
-import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
+import {CheckBox} from "../widget/checkbox/checkbox.js";
 
 
-class CheckBox extends CheckBoxTab {
+class CheckBoxCtl extends CheckBox {
 }
 
 
-export class Disk {
+export class DiskCtl extends Ctl {
     // {
     //   id: '#instance #disk',
     //   uuid: uuid of instance,
     //   name: name of instance,
     // }
     constructor(props) {
-        this.id = props.id;
+        super(props);
         this.name = props.name;
         this.inst = props.uuid;
 
-        this.checkbox = new CheckBox(props);
+        this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
         this.table = new DiskTable({
-            id: `${this.id} #display-table`,
+            id: this.child('#display-table'),
             inst: this.inst,
         });
 
         // register button's click.
-        $(`${this.id} #remove`).on("click", (e) => {
+        $(this.child('#remove')).on("click", (e) => {
             new DiskApi({
                 inst: this.inst,
                 uuids: this.uuids.store,
@@ -34,7 +35,7 @@ export class Disk {
         });
 
         // refresh table and register refresh click.
-        $(`${this.id} #refresh`).on("click", (e) => {
+        $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
                 this.checkbox.refresh();
             });

@@ -1,69 +1,55 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/storage"
+	"github.com/danieldin95/lightstar/schema"
 	"github.com/danieldin95/lightstar/storage/libvirts"
-
-	//"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
 	"net/http"
-	"path"
 )
 
-
 type Volume struct {
-	Name string
-	State string
-	Autostart	bool
-	Persistent	bool
-	Capacity	string
-	Allocation	string
-	Available	string
 }
 
 func (v Volume) Router(router *mux.Router) {
-	router.PathPrefix("/api/datastore/{id}/vol").HandlerFunc(v.GET).Methods("GET")
+	router.HandleFunc("/api/volume/{id}", v.GET).Methods("GET")
 }
 
-
-func (v Volume) GET(w http.ResponseWriter, r *http.Request)  {
-	var store string
-	uuid, ok := GetArg(r, "id")
-	if !ok {
-		http.Error(w, "store uuid not found", http.StatusNotFound)
-		return
-	}
-
-	pool, err := libvirts.LookupPoolByUUID(uuid)
-
+func (v Volume) Get(name string, data schema.VolumeInfos) error {
+	infos, err := (&libvirts.Pool{Name: name}).List()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		return err
+	}
+	for name, info := range infos {
+		data[name] = schema.VolumeInfo{
+			Pool:       info.Pool,
+			Name:       info.Name,
+			Type:       info.Type,
+			Allocation: info.Allocation,
+			Capacity:   info.Capacity,
+		}
+	}
+	return nil
+}
+
+func (v Volume) GET(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	data := make(schema.VolumeInfos, 128)
+	if err := v.Get(uuid, data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer pool.Free()
-	libstar.Info("store is  %s", storage.NewDataStore(*pool).Name)
-	store = storage.NewDataStore(*pool).Name
-	p := storage.PATH.Unix(store)
-
-	dir := GetQueryOne(r, "dir")
-	if dir != "" {
-		p = path.Join(p, dir)
-	}
-
-	libstar.Info("file is  %s %s", p, store)
-	ResponseJson(w, storage.FILE.List(p))
+	ResponseJson(w, data)
 }
 
-func (v Volume) POST(w http.ResponseWriter, r *http.Request)  {
+func (v Volume) POST(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (v Volume) PUT(w http.ResponseWriter, r *http.Request)  {
+func (v Volume) PUT(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (v Volume) DELETE(w http.ResponseWriter, r *http.Request)  {
+func (v Volume) DELETE(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 

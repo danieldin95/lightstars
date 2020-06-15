@@ -12,39 +12,39 @@
     <link rel="stylesheet" href="/static/css/modal.css">
 </head>
 <body>
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+<nav id="Navs" class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
 </nav>
 <hyper name="{{.Hyper.Name}}" default="{{.Default}}">
     <!--Loading-->
 </hyper>
-<div id="notice" class="container">
+<div id="Notice" class="container">
     <!-- Tasks -->
-    <div id="tasks" class="card-no-border">
+    <div id="Tasks" class="card-no-border">
         <tasks></tasks>
     </div>
-    <div id="process" class="card-no-border">
+    <div id="Process" class="card-no-border">
         <!-- Loading -->
     </div>
 </div>
-<div id="container" class="container">
+<div id="Container" class="container">
     <!-- Loading -->
 </div>
-<div class="modals">
+<div id="Modals" class="modals">
     <!-- Create instance modal -->
-    <div id="instanceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="InstanceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     <!-- Create datastore modal -->
-    <div id="dirCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="DirCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     <!-- Upload file modal -->
-    <div id="fileUploadModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="nfsCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="iscsiCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="FileUploadModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="NfsCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="IscsiCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     <!-- Create network modal -->
-    <div id="natCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="bridgeCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="routedCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="isolatedCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="NatCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="BridgeCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="RoutedCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="IsolatedCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     <!-- Console modal -->
-    <div id="consoleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="ConsoleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-console">
             <div class="modal-content">
                 <div class="modal-body"></div>
@@ -52,13 +52,13 @@
         </div>
     </div>
     <!-- Set instance modal -->
-    <div id="instanceSetModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="InstanceSetModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     <!-- Create disk modal -->
-    <div id="diskCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="DiskCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     <!-- Create interface modal -->
-    <div id="interfaceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="InterfaceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     <!-- Change password modal -->
-    <div id="changePasswordModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="ChangePasswordModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 </div>
 <!-- JQuery Javascript -->
 <script src="/static/asset/jquery-1.12.4.js"></script>

@@ -1,11 +1,10 @@
 import {Api} from "./api.js"
-import {Alert} from "../com/alert.js";
 
 
 export class ZoneApi extends Api {
     // {
     //   uuids: [],
-    //   tasks: 'tasks',
+    //   tasks: 'Tasks',
     //   name: ''
     // }
     constructor(props) {
@@ -17,16 +16,5 @@ export class ZoneApi extends Api {
             return `/api/zone/${uuid}`;
         }
         return '/api/zone';
-    }
-
-    list(data, func) {
-        if (typeof data == "function") {
-            func = data;
-        }
-        $.GET(this.url(), (resp, status) => {
-            func({data, resp});
-        }).fail((e) => {
-            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
-        });
     }
 }

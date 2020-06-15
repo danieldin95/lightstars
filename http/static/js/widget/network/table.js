@@ -1,8 +1,9 @@
 import {NetworkApi} from "../../api/network.js";
-import {WidgetBase} from "../base.js";
+import {Widget} from "../widget.js";
+import {Location} from "../../com/location.js";
 
 
-export class NetworkTable extends WidgetBase {
+export class NetworkTable extends Widget {
     // {
     //   id: '#xx'.
     // }
@@ -27,20 +28,20 @@ export class NetworkTable extends WidgetBase {
     }
 
     render(data) {
+        let query = Location.query();
         return this.compile(`
         {{each items v i}}
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
                 <td>{{i+1}}</td>
-                <td><a href="/ui/network/{{v.uuid}}">{{v.uuid}}</a></td>
+                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/network/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
-                <td>{{if v.address == ""}}
-                    --
-                    {{else}}
-                    {{v.address}}/{{v.netmask | netmask2prefix }}{{v.prefix ? v.prefix : ''}}
-                    {{/if}}
-                </td>
-                <td>{{v.mode != '' ? v.mode : 'isolated'}}</td>
+                <td>{{if v.address == ""}} 
+                  - 
+                {{else}} 
+                  {{v.address}}/{{if v.prefix }}  {{v.prefix}} {{else}} {{v.netmask | netmask2prefix}} {{/if}} 
+                {{/if}}</td>
+                <td>{{v.mode == '' ? 'isolated' : mode}}</td>
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}

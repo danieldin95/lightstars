@@ -1,40 +1,29 @@
+import {Ctl} from "./ctl.js"
 import {NetworkApi} from "../api/network.js";
-import {NetworkTable} from "../widget/network/table.js";
-import {CheckBoxTab} from "../widget/checkbox/checkbox.js";
+import {LeasesCtl} from "./leases.js";
 
-
-class CheckBox extends CheckBoxTab {
-}
-
-
-export class Network {
+export class NetworkCtl extends Ctl {
     // {
-    //   id: "#networks"
+    //   id: '#network'
+    //   header: {
+    //     id: '#'
+    //  }
+    //   leases: {
+    //     id: '#leases'
+    //   },
+    //   subnets: {
+    //     id: "#subnets"
+    //   },
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        this.checkbox = new CheckBox(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new NetworkTable({id: `${this.id} #display-table`});
+        super(props);
+        let name = $(this.id).attr("name");
+        let uuid = $(this.id).attr("data");
+        this.uuid = uuid;
+        this.name = name;
+        this.tasks = props.tasks || "Tasks";
 
-        // register buttons's click.
-        $(`${this.id} #delete`).on("click", (e) => {
-            new NetworkApi({uuids: this.uuids.store}).delete();
-        });
-
-        // refresh table and register refresh click.
-        $(`${this.id} #refresh`).on("click", (e) => {
-            this.table.refresh((e) => {
-                this.checkbox.refresh();
-            })
-        });
-        this.table.refresh((e) => {
-            this.checkbox.refresh();
-        });
-    }
-
-    create(data) {
-        new NetworkApi().create(data);
+        console.log("NetworkCtl", this.props, $(this.id));
+        this.leases = new LeasesCtl({id: props.leases.id, uuid, name});
     }
 }

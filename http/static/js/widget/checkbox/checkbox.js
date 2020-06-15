@@ -1,7 +1,7 @@
-import {CheckBoxAll} from "../../com/checkbox.js";
+import {CheckBox as CheckBoxCom} from "../../com/checkbox.js";
 
 
-export class CheckBoxTab {
+export class CheckBox {
     // {
     //   id: "#networks"
     // }
@@ -10,14 +10,13 @@ export class CheckBoxTab {
         this.props = props;
         this.uuids = {store: [], id: this.id};
 
-        this.top = new CheckBoxAll({
-            one: `${this.id} #on-one`,
-            all: `${this.id} #on-all`,
+        this.top = new CheckBoxCom({
+            one: this.child('#on-one'),
+            all: this.child('#on-all'),
             change: (e) => {
                 this.change(e);
             },
         });
-
         // disable firstly.
         this.change(this.uuids);
     }
@@ -26,18 +25,21 @@ export class CheckBoxTab {
         this.top.refresh();
     }
 
+    child(id) {
+        return [this.id, id].join(" ")
+    }
+
     change(from) {
         this.uuids.store = from.store;
-
         if (from.store.length === 0) {
-            $(`${this.uuids.id} #delete`).addClass('disabled');
+            $(this.child('#delete')).addClass('disabled');
         } else {
-            $(`${this.uuids.id} #delete`).removeClass('disabled');
+            $(this.child('#delete')).removeClass('disabled');
         }
         if (from.store.length !== 1) {
-            $(`${this.uuids.id} #edit`).addClass('disabled');
+            $(this.child('#edit')).addClass('disabled');
         } else {
-            $(`${this.uuids.id} #edit`).removeClass('disabled');
+            $(this.child('#edit')).removeClass('disabled');
         }
     }
 }

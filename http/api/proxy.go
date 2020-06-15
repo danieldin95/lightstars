@@ -39,7 +39,7 @@ func (pro ProxyTcp) Graphics(inst *schema.Instance) []schema.Target {
 	return dst
 }
 
-func (pro ProxyTcp) GetTarget(host string, inst *schema.Instance, leases schema.ListLeases) []schema.Target {
+func (pro ProxyTcp) GetTarget(host string, inst *schema.Instance, leases schema.DHCPLeases) []schema.Target {
 	dst := make([]schema.Target, 0, 32)
 	for _, inf := range inst.Interfaces {
 		libstar.Debug("ProxyTcp.GET %s", inf.Address)
@@ -95,7 +95,7 @@ func (pro ProxyTcp) Remote(user *schema.User) []schema.Target {
 			},
 			Host: zone.Url,
 		}
-		leases := schema.ListLeases{}
+		leases := schema.DHCPLeases{}
 		err := client.DHCPLease{Client: cl}.Get(&leases)
 		if err != nil {
 			libstar.Error("ProxyTcp.Remote.Lease %s", err)

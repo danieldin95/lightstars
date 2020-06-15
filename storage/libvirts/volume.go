@@ -1,6 +1,7 @@
 package libvirts
 
 import (
+	"github.com/libvirt/libvirt-go"
 	"strconv"
 )
 
@@ -112,4 +113,31 @@ func (vol *Volume) Remove() error {
 	defer volume.Free()
 
 	return nil
+}
+
+func VolumeType(t libvirt.StorageVolType) string {
+	switch t {
+	case libvirt.STORAGE_VOL_FILE:
+		return "file"
+	case libvirt.STORAGE_VOL_BLOCK:
+		return "block"
+	case libvirt.STORAGE_VOL_DIR:
+		return "dir"
+	case libvirt.STORAGE_VOL_NETDIR:
+		return "netdir"
+	case libvirt.STORAGE_VOL_NETWORK:
+		return "network"
+	case libvirt.STORAGE_VOL_PLOOP:
+		return "ploop"
+	default:
+		return ""
+	}
+}
+
+type VolumeInfo struct {
+	Pool       string
+	Name       string
+	Type       string
+	Capacity   uint64
+	Allocation uint64
 }

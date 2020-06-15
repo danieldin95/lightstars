@@ -51,25 +51,26 @@ type ListInstance struct {
 }
 
 type Disk struct {
-	Action     string `json:"action,omitempty"`
-	Seq        string `json:"seq,omitempty"`       // configure
-	Name       string `json:"name,omitempty"`      // disk name
-	UUID       string `json:"uuid,omitempty"`      // disk UUID
-	Store      string `json:"datastore,omitempty"` // disk saved to datastore
-	Size       string `json:"size"`                // configure
-	SizeUnit   string `json:"sizeUnit,omitempty"`  //configure
-	Format     string `json:"format"`
-	Source     string `json:"source"`
-	Device     string `json:"device"`
-	Bus        string `json:"bus"`      //configre
-	AddrType   string `json:"addrType"` // pci, and drive
-	AddrSlot   uint16 `json:"addrSlot"`
-	AddrDomain uint16 `json:"addrDomain"`
-	AddrBus    uint16 `json:"addrBus"`
-	AddrFunc   uint16 `json:"addrFunc"`
-	AddrCtl    uint16 `json:"addrCtl"`
-	AddrTgt    uint16 `json:"addrTgt"`
-	AddrUnit   uint16 `json:"addrUnit"`
+	Action     string     `json:"action,omitempty"`
+	Seq        string     `json:"seq,omitempty"`       // configure
+	Name       string     `json:"name,omitempty"`      // disk name
+	UUID       string     `json:"uuid,omitempty"`      // disk UUID
+	Store      string     `json:"datastore,omitempty"` // disk saved to datastore
+	Size       string     `json:"size"`                // configure
+	SizeUnit   string     `json:"sizeUnit,omitempty"`  //configure
+	Format     string     `json:"format"`
+	Source     string     `json:"source"`
+	Device     string     `json:"device"`
+	Bus        string     `json:"bus"`      //configre
+	AddrType   string     `json:"addrType"` // pci, and drive
+	AddrSlot   uint16     `json:"addrSlot"`
+	AddrDomain uint16     `json:"addrDomain"`
+	AddrBus    uint16     `json:"addrBus"`
+	AddrFunc   uint16     `json:"addrFunc"`
+	AddrCtl    uint16     `json:"addrCtl"`
+	AddrTgt    uint16     `json:"addrTgt"`
+	AddrUnit   uint16     `json:"addrUnit"`
+	Volume     VolumeInfo `json:"volume"`
 }
 
 type ListDisk struct {

@@ -29,13 +29,13 @@ func (s *Service) Load(path string) {
 	if err := s.Zone.Load(path + "/zone.json"); err != nil {
 		libstar.Error("Service.Load.Zone %s", err)
 	}
-	libstar.Debug("Service.Load %s", s.Zone)
+	libstar.Debug("Service.Load %v", s.Zone)
 	if err := s.Users.Load(path + "/auth.json"); err != nil {
 		libstar.Error("Service.Load.Users %s", err)
 	}
-	libstar.Debug("Service.Load %s", s.Users)
+	libstar.Debug("Service.Load %v", s.Users)
 	if err := s.Permission.Load(path + "/permission.json"); err != nil {
 		libstar.Error("Service.Load.Permission %s", err)
 	}
-	libstar.Debug("Service.Load %s", s.Permission)
+	libstar.Debug("Service.Load %v", s.Permission)
 }

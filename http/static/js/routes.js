@@ -1,5 +1,6 @@
-import {Index} from "./widget/container/index.js";
+import {Home} from "./widget/container/home.js";
 import {Guest} from "./widget/container/guest.js";
+import {Network} from "./widget/container/network.js";
 import {Location} from "./com/location.js";
 
 
@@ -11,11 +12,11 @@ export class Routes {
     constructor(props) {
         this.routes = [
             {
-                prefix: "/instance/",
+                prefix: "/guest/",
                 function: (p) => {
                     let uuid = p.split('/', 3)[2];
                     new Guest({
-                        id: props.container,
+                        parent: props.container,
                         uuid: uuid,
                     });
                 },
@@ -29,14 +30,18 @@ export class Routes {
             {
                 prefix: "/network/",
                 function: (p) => {
-                    //TODO
+                    let uuid = p.split('/', 3)[2];
+                    new Network({
+                        parent: props.container,
+                        uuid: uuid,
+                    });
                 },
             },
             {
                 prefix: "",
                 function: (p) => {
-                    new Index({
-                        id: props.container,
+                    new Home({
+                        parent: props.container,
                         default: "/instances",
                         name: props.hyper.attr('name'),
                     });

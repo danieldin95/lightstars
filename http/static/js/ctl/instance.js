@@ -1,100 +1,93 @@
+import {Ctl} from './ctl.js';
 import {InstanceApi} from "../api/instance.js";
-import {Disk} from "./disk.js";
-import {Interface} from "./interface.js"
-import {Graphics} from "./graphics.js";
+import {InstanceTable} from "../widget/instance/table.js";
+import {CheckBox} from "../widget/checkbox/checkbox.js";
 
 
-export class Instance {
+class CheckboxCtl extends CheckBox {
+    change(from) {
+        super.change(from);
+        if (from.store.length === 0) {
+            $(this.child('#start')).addClass('disabled');
+            $(this.child('#console')).addClass('disabled');
+            $(this.child('#shutdown')).addClass('disabled');
+            $(this.child('#more')).addClass('disabled');
+        } else {
+            $(this.child('#start')).removeClass('disabled');
+            $(this.child('#console')).removeClass('disabled');
+            $(this.child('#shutdown')).removeClass('disabled');
+            $(this.child('#more')).removeClass('disabled');
+        }
+    }
+}
+
+
+export class InstanceCtl extends Ctl {
     // {
-    //   id: '#instance'
-    //   header: {
-    //     id: '#'
-    //  }
-    //   disks: {
-    //     id: '#disks'
-    //   },
-    //   interfaces: {
-    //     id: "#interfaces"
-    //   },
+    //   id: '#instances'
+    //   onthis: function (e) {},
     // }
     constructor(props) {
-        this.id = props.id;
-        this.props = props;
-        let name = $(this.id).attr("name");
-        let uuid = $(this.id).attr("data");
-        this.cpu = $("#instance").attr("cpu");
-        this.mem = $("#instance").attr("mem");
-        this.uuid = uuid;
-        this.name = name;
-        this.tasks = props.tasks || "tasks";
-
-        this.disk = new Disk({id: props.disks.id, uuid, name});
-        this.interface = new Interface({id: props.interfaces.id, uuid, name});
-        this.graphics = new Graphics({id: props.graphics.id, uuid, name});
+        super(props);
+        this.checkbox = new CheckboxCtl(props);
+        this.uuids = this.checkbox.uuids;
+        this.table = new InstanceTable({id: `${this.id} #display-body`});
 
         // register buttons's click.
-        $(`${this.id} #console`).on("click", this, function (e) {
-            if ($(this).hasClass('disabled')) {
-                return
-            }
-            let url = $(this).attr('data');
-            let target = $(this).attr('data-target');
-            let iframe = `<iframe width="800px" height="600px" src="${url}" frameborder="0"></iframe>`;
-
-            $(target).modal('show');
-            $(`${target} .modal-body`).html(iframe);
-            $(target).on('hidden.bs.modal', function (e) {
-                $(target).find(".modal-body").empty();
+        $(this.child('#console')).on("click", this.uuids, function (e) {
+            let props = {uuids: e.data.store, passwd: {}};
+            e.data.store.forEach(function (v) {
+                props.passwd[v] = $(`input[data=${v}]`).attr('passwd');
             });
+            new InstanceApi(props).console();
         });
-        $(`${this.id} #start, ${this.id} #more-start`).on("click", this, function (e) {
-            new InstanceApi({uuids: uuid}).start();
+        $(this.child('#start')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).start();
         });
-        $(`${this.id} #shutdown`).on("click", this, function (e) {
-            new InstanceApi({uuids: uuid}).shutdown();
+        $(this.child('#more-start')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).start();
         });
-        $(`${this.id} #reset`).on("click", this, function (e) {
-            new InstanceApi({uuids: uuid}).reset();
+        $(this.child('#more-shutdown')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).shutdown();
         });
-        $(`${this.id} #suspend`).on("click", this, function (e) {
-            if ($(this).hasClass('disabled')) {
-                return
-            }
-            new InstanceApi({uuids: uuid}).suspend();
+        $(this.child('#more-reset')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).reset();
         });
-        $(`${this.id} #resume`).on("click", this, function (e) {
-            if ($(this).hasClass('disabled')) {
-                return
-            }
-            new InstanceApi({uuids: uuid}).resume();
+        $(this.child('#more-suspend')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).suspend();
         });
-        $(`${this.id} #destroy`).on("click", this, function (e) {
-            new InstanceApi({uuids: uuid}).destroy();
+        $(this.child('#more-resume')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).resume();
         });
-        $(`${this.id} #remove`).on("click", this, function (e) {
-            new InstanceApi({uuids: uuid}).remove();
+        $(this.child('#more-destroy')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).destroy();
+        });
+        $(this.child('#more-remove')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).remove();
         });
 
-        // console
-        $(`${this.id} #console-self`).on('click', this, function (e) {
-            let url = $(this).attr('data');
-            window.open(url, '_self');
+        // refresh table and register refresh click.
+        $(this.child('#refresh')).on("click", (e) => {
+            this.refresh();
         });
-        $(`${this.id} #console-blank`).on('click', this, function (e) {
-            let url = $(this).attr('data');
-            window.open(url, '_blank');
-        });
-        $(`${this.id} #console-window`).on('click', this, function (e) {
-            let url = $(this).attr('data');
-            window.open(url, e.data.name,'width=873,height=655');
-        });
-        $(`${this.id} #console-spice`).on('click', this, function (e) {
-            let url = $(this).attr('data');
-            window.open(url, '_blank');
+        this.refresh();
+    }
+
+    refresh() {
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+
+            // register click on this table row.
+            let func = this.props.onthis;
+            if (func) {
+                $(this.child('#on-this')).on('click', function(e) {
+                    func({uuid: $(this).attr('data')});
+                });
+            }
         });
     }
 
-    edit(data) {
-        new InstanceApi({uuids: this.uuid}).edit(data);
+    create(data) {
+        new InstanceApi().create(data);
     }
 }

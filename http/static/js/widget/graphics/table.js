@@ -1,8 +1,8 @@
-import {WidgetBase} from "../base.js";
+import {Widget} from "../widget.js";
 import {GraphicsApi} from "../../api/graphics.js";
 
 
-export class GraphicsTable extends WidgetBase {
+export class GraphicsTable extends Widget {
     // {
     //   id: '#xx',
     //   inst: 'uuid',

@@ -2,7 +2,7 @@ import {Api} from "../api/api.js";
 import {HyperApi} from "../api/hyper.js";
 import {ZoneApi} from "../api/zone.js";
 import {Location} from "../com/location.js";
-import {Index} from "../widget/container/index.js";
+import {Home} from "../widget/container/home.js";
 import {ChangePassword} from "./password/change.js";
 import {PasswordApi} from "../api/password.js";
 import {Utils} from "../com/utils.js";
@@ -11,14 +11,14 @@ import {Utils} from "../com/utils.js";
 
 export class Navigation {
     // {
-    //   id: '#xx'.
+    //   parent: '#xx'.
     //   home: '.'
     // }
     constructor(props) {
-        this.id = props.id;
+        this.parent = props.parent;
         this.home = props.home;
         this.props = props;
-        this.active = Location.get("instances");
+        this.active = Location.get("/instances");
         console.log("Navigation.constructor", this.active);
         this.navs = ["#system", "#instances", "#datastore", "#network"];
 
@@ -53,8 +53,8 @@ export class Navigation {
             for (let nav of this.navs) {
                 this.view.find(nav).on('click', function (e) {
                     active($(this).parent('li a').attr("id"));
-                    new Index({
-                        id: container,
+                    new Home({
+                        parent: container,
                         name: name,
                         force: true,
                         default: $(this).attr("data-target"),
@@ -70,11 +70,11 @@ export class Navigation {
             });
 
             let password = new PasswordApi();
-            new ChangePassword({id: '#changePasswordModal'})
+            new ChangePassword({id: '#ChangePasswordModal'})
                 .onsubmit((e) => {
                     password.set(Utils.toJSON(e.form));
             });
-            $(this.id).html(this.view);
+            $(this.parent).html(this.view);
         });
     }
 
@@ -104,7 +104,6 @@ export class Navigation {
                     value = '';
                 }
                 let elem = $(`
-                   <div class="dropdown-divider"></div>
                    <a class="dropdown-item" data="${value}">${name}</a>
                 `);
                 if (i === 0) {
@@ -120,8 +119,8 @@ export class Navigation {
                 Api.Host(host);
 
                 e.data.refresh();
-                new Index({
-                    id: container,
+                new Home({
+                    parent: container,
                     name: name,
                     force: true,
                     default: e.data.active,
@@ -194,7 +193,10 @@ export class Navigation {
                         <a id="fullscreen" class="dropdown-item">Full screen</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)">Setting</a>
-                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#changePasswordModal">Change password</a>
+                        <a class="dropdown-item" href="javascript:void(0)" 
+                            data-toggle="modal" data-target="#ChangePasswordModal">
+                            Change password
+                        </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/ui/login">Logout</a>
                     </div>

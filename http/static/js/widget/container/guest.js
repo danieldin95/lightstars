@@ -1,6 +1,6 @@
-import {Base} from "./base.js"
+import {Container} from "./container.js"
 import {Utils} from "../../com/utils.js";
-import {Instance} from '../../ctl/instance.js';
+import {GuestCtl} from '../../ctl/guest.js';
 import {Api} from "../../api/api.js";
 import {InstanceApi} from "../../api/instance.js";
 
@@ -10,9 +10,9 @@ import {InterfaceCreate} from '../interface/create.js';
 import {InstanceSet} from "../instance/setting.js";
 
 
-export class Guest extends Base {
+export class Guest extends Container {
     // {
-    //    id: ".container",
+    //    parent: "#Container",
     //    uuid: "",
     //    default: "disk"
     //    force: false, // force to apply default.
@@ -20,6 +20,7 @@ export class Guest extends Base {
     constructor(props) {
         super(props);
         this.default = props.default || 'disk';
+        this.current = "#instance";
         this.uuid = props.uuid;
         console.log('Instance', props);
 
@@ -28,65 +29,65 @@ export class Guest extends Base {
 
     render() {
         new InstanceApi({uuids: this.uuid}).get(this, (e) => {
-            this.title(`${e.resp.name} - LightStar`);
-
+            this.title(e.resp.name);
             this.view = $(this.template(e.resp));
-            this.view.find('#instance #refresh').on('click', (e) => {
+            this.view.find('#header #refresh').on('click', (e) => {
                 this.render();
             });
-            $(this.id).html(this.view);
+            $(this.parent).html(this.view);
             this.loading();
         });
     }
 
     loading() {
         // collapse
-        $('#collapseOver').fadeIn('slow');
-        $('#collapseOver').collapse();
+        $(this.id('#collapseOver')).fadeIn('slow');
+        $(this.id('#collapseOver')).collapse();
         new Collapse({
             pages: [
-                {id: '#collapseInt', name: 'interface'},
-                {id: '#collapseDis', name: 'disk'},
-                {id: '#collapseGra', name: 'graphics'},
+                {id: this.id('#collapseInt'), name: 'interface'},
+                {id: this.id('#collapseDis'), name: 'disk'},
+                {id: this.id('#collapseGra'), name: 'graphics'},
             ],
             default: this.default,
             update: false,
         });
 
-        let instance = new Instance({
-            id: "#instance",
-            disks: {id: "#disk"},
-            interfaces: {id: "#interface"},
-            graphics: {id: "#graphics"},
+        let instance = new GuestCtl({
+            id: this.id(),
+            header: {id: this.id("#header")},
+            disks: {id: this.id("#disk")},
+            interfaces: {id: this.id("#interface")},
+            graphics: {id: this.id("#graphics")},
         });
-        new InstanceSet({id: '#instanceSetModal', cpu: instance.cpu, mem: instance.mem })
+        new InstanceSet({id: '#InstanceSetModal', cpu: instance.cpu, mem: instance.mem })
             .onsubmit((e) => {
                 instance.edit(Utils.toJSON(e.form));
             });
 
         // loading disks and interfaces.
-        new DiskCreate({id: '#diskCreateModal'})
+        new DiskCreate({id: '#DiskCreateModal'})
             .onsubmit((e) => {
                 instance.disk.create(Utils.toJSON(e.form));
             });
-        new InterfaceCreate({id: '#interfaceCreateModal'})
+        new InterfaceCreate({id: '#InterfaceCreateModal'})
             .onsubmit((e) => {
                 instance.interface.create(Utils.toJSON(e.form));
             });
 
         // register console draggable.
         $(function (e) {
-            $('#consoleModal').draggable();
+            $('#ConsoleModal').draggable();
         });
     }
 
     template(v) {
         let cls = 'disabled';
         let vncUrl = '#';
-        let hostUrl = '#';
+        let xmlUrl = '/api/instance/'+ v.uuid + '?format=xml';
 
         if (Api.host !== '') {
-           hostUrl = "/host/" + Api.host;
+           xmlUrl = "/host/" + Api.host + xmlUrl;
         }
         if (v.state === 'running') {
             cls = '';
@@ -95,11 +96,11 @@ export class Guest extends Base {
         }
 
         return template.compile(`
-        <instance>
-        <div id="instance" class="card instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" mem="{{maxMem}}">
+        <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">
+        <div id="header" class="card header">
             <div class="card-header">
                 <div class="card-just-left">
-                    <a id="refresh" class="none">{{name}}</a>
+                    <a id="refresh" class="none" href="javascript:void(0)">{{name}}</a>
                 </div>
             </div>
             <!-- Overview -->
@@ -109,7 +110,7 @@ export class Guest extends Base {
                 <div class="card-header-cnt">
                     <div id="console-btns" class="btn-group btn-group-sm" role="group">
                         <button id="console" type="button" class="btn btn-outline-dark ${cls}"
-                                data-target="#consoleModal" data="${vncUrl}">
+                                data-target="#ConsoleModal" data="${vncUrl}">
                             Console
                         </button>
                         <button id="consoles" type="button"
@@ -159,9 +160,9 @@ export class Guest extends Base {
                             <div class="dropdown-divider"></div>
                             <a id="remove" class="dropdown-item" href="javascript:void(0)">Remove</a>
                             <div class="dropdown-divider"></div>
-                            <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#instanceSetModal">Setting</a>
+                            <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#InstanceSetModal">Setting</a>
                             <div class="dropdown-divider"></div>
-                            <a id="dumpxml" class="dropdown-item" href="${hostUrl}/api/instance/{{uuid}}?format=xml">Dump XML</a>
+                            <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">Dump XML</a>
                         </div>
                     </div>
                 </div>
@@ -181,8 +182,8 @@ export class Guest extends Base {
             </div>
         </div>
     
+        <div id="collapse">
         <!-- Virtual Disk -->
-        <div id="devices">
         <div id="disk" class="card device">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm"
@@ -191,11 +192,11 @@ export class Guest extends Base {
                     Virtual Disk
                 </button>
             </div>
-            <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#devices">
+            <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#diskCreateModal">
+                            data-toggle="modal" data-target="#DiskCreateModal">
                         Attach disk
                     </button>
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
@@ -211,8 +212,9 @@ export class Guest extends Base {
                             <th>Bus</th>
                             <th>Device</th>
                             <th>Source</th>
+                            <th>Capacity</th>
+                            <th>Available</th>
                             <th>Address</th>
-                            <th>Format</th>
                         </tr>
                         </thead>
                         <tbody id="display-table">
@@ -232,11 +234,11 @@ export class Guest extends Base {
                     Network Interface
                 </button>
             </div>
-            <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#devices">
+            <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#interfaceCreateModal">
+                            data-toggle="modal" data-target="#InterfaceCreateModal">
                         Attach one
                     </button>
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
@@ -273,11 +275,11 @@ export class Guest extends Base {
                     Graphics Device
                 </button>
             </div>
-            <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#devices">
+            <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
                 <div class="card-body">
                     <div class="card-header-cnt">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#graphicCreateModal">
+                                data-toggle="modal" data-target="#GraphicCreateModal">
                             Attach graphic
                         </button>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
@@ -303,6 +305,6 @@ export class Guest extends Base {
             </div>
         </div>
         </div>
-        </instance>`)(v);
+        </div>`)(v);
     }
 }

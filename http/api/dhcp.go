@@ -10,44 +10,67 @@ import (
 type DHCPLease struct {
 }
 
-func (le DHCPLease) Router(router *mux.Router) {
-	router.HandleFunc("/api/dhcp/lease", le.GET).Methods("GET")
+func (l DHCPLease) Router(router *mux.Router) {
+	router.HandleFunc("/api/network/all/lease", l.GET).Methods("GET")
+	router.HandleFunc("/api/network/{id}/lease", l.GET).Methods("GET")
 }
 
-func (le DHCPLease) Get(data map[string]schema.DHCPLease) error {
+func (l DHCPLease) Get(data schema.DHCPLeases) error {
 	leases, err := libvirtn.ListLeases()
 	if err != nil {
 		return err
 	}
-	for addr, le := range leases {
+	for addr, l := range leases {
 		data[addr] = schema.DHCPLease{
-			Mac:      le.Mac,
-			IPAddr:   le.IPAddr,
-			Prefix:   le.Prefix,
-			Hostname: le.Hostname,
-			Type:     le.Type,
+			Mac:      l.Mac,
+			IPAddr:   l.IPAddr,
+			Prefix:   l.Prefix,
+			Hostname: l.Hostname,
+			Type:     l.Type,
 		}
 	}
 	return nil
 }
 
-func (le DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
-	data := make(map[string]schema.DHCPLease, 128)
-	if err := le.Get(data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+func (l DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
+	uuid, ok := GetArg(r, "id")
+	if !ok || uuid == "all" {
+		data := make(schema.DHCPLeases, 128)
+		if err := l.Get(data); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		ResponseJson(w, data)
+	} else {
+		leases, err := libvirtn.LookupLeases(uuid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
+		list := schema.ListDHCPLease{
+			Items: make([]schema.DHCPLease, 0, 32),
+		}
+		for _, l := range leases {
+			list.Items = append(list.Items, schema.DHCPLease{
+				Mac:      l.Mac,
+				IPAddr:   l.IPAddr,
+				Prefix:   l.Prefix,
+				Hostname: l.Hostname,
+				Type:     l.Type,
+			})
+		}
+		ResponseJson(w, list)
 	}
-	ResponseJson(w, data)
 }
 
-func (le DHCPLease) POST(w http.ResponseWriter, r *http.Request) {
+func (l DHCPLease) POST(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (le DHCPLease) PUT(w http.ResponseWriter, r *http.Request) {
+func (l DHCPLease) PUT(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (le DHCPLease) DELETE(w http.ResponseWriter, r *http.Request) {
+func (l DHCPLease) DELETE(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
