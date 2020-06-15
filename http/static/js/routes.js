@@ -2,7 +2,7 @@ import {Home} from "./widget/container/home.js";
 import {Guest} from "./widget/container/guest.js";
 import {Network} from "./widget/container/network.js";
 import {Location} from "./com/location.js";
-
+import {Pool} from "./widget/container/pool.js";
 
 export class Routes {
     // {
@@ -24,7 +24,11 @@ export class Routes {
             {
                 prefix: "/datastore/",
                 function: (p) => {
-                    //TODO
+                    let uuid = p.split('/', 3)[2];
+                    new Pool({
+                        parent: props.container,
+                        uuid: uuid,
+                    });
                 },
             },
             {

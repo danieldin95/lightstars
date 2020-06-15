@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"github.com/danieldin95/lightstar/libstar"
 	"strings"
 )
 
@@ -65,6 +66,7 @@ func IsStoreID(name string) bool {
 
 // path: datastore@01:/centos.77 or 01.
 func (p StorePath) Unix(path string) string {
+	libstar.Info(path)
 	newPath := path
 	if IsStoreID(path) {
 		newPath = DataStore + path
