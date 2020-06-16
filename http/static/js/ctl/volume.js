@@ -23,6 +23,7 @@ export class VolumeCtl extends Ctl {
         this.table = new VolumeTable({
             id: this.child('#display-table'),
             uuid: this.uuid,
+            name: this.name
         });
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {

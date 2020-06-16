@@ -45,6 +45,10 @@ func NewPool(name, target string) Pool {
 }
 
 func LookupPoolByUUID(uuid string) (*Pool, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
+	}
 	pool, err := hyper.Conn.LookupStoragePoolByUUIDString(uuid)
 	if err != nil {
 		return nil, err

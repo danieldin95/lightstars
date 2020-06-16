@@ -2,7 +2,7 @@ import {Widget} from "../widget.js";
 import {VolumeApi} from "../../api/volume.js";
 import {CheckBox} from "../checkbox/checkbox.js";
 
-
+const prefix = /datastore@/
 
 export default class VolumeTable extends Widget {
 
@@ -10,7 +10,7 @@ export default class VolumeTable extends Widget {
         super(props);
         this.checkbox = new CheckBox(props)
         this.uuid = props.uuid
-
+        console.log("cur name",this.props.name)
     }
 
     loading() {
@@ -24,6 +24,10 @@ export default class VolumeTable extends Widget {
         }
 
         $(this.id).html(this.loading());
+
+        // if (this.props.name) {
+        //     this.uuid = this.props.name.replace(prefix, '')
+        // }
 
         new VolumeApi({
             uuid: this.uuid
@@ -54,10 +58,10 @@ export default class VolumeTable extends Widget {
                         {{/if}}
                         
                     </td>
-                    <td><a href="${prefix}{{v.Name}}">{{v.name}}</a></td>
+                    <td><a href="#datastore{{v.name.split('datastore/01')[1]}}">{{v.name}}</a></td>
                     <td>{{v.pool}}</td>
-                    <td>{{v.capacity}}</td>
-                    <td>{{v.allocation}}</td>
+                    <td>{{if v.type == "dir"}} - {{else}} {{v.capacity | prettyByte}} {{/if}}</td>
+                    <td>{{if v.type == "dir"}} - {{else}} {{v.allocation | prettyByte}} {{/if}}</td>
                 </tr>
             {{/each}}
             `, data);

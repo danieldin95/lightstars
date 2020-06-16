@@ -8,7 +8,7 @@ export class Pool extends Container {
 
     constructor(props) {
         super(props);
-        this.default = props.default || 'lease';
+        this.default = props.default || 'volumes';
         this.uuid = props.uuid;
         this.current = "#datastores";
 
@@ -34,7 +34,7 @@ export class Pool extends Container {
         $(this.id('#collapseOver')).collapse();
         new Collapse({
             pages: [
-                {id: this.id('#collapseLea'), name: 'lease'},
+                {id: this.id('#collapseVol'), name: 'volumes'},
             ],
             default: this.default,
             update: false,
@@ -100,7 +100,7 @@ export class Pool extends Container {
                     File Manager
                 </button>
             </div>
-            <div id="collapseLea" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
+            <div id="collapseVol" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <!-- volume actions button-->
             <div class="card-body">
                 <div class="card-header-cnt">
@@ -117,9 +117,9 @@ export class Pool extends Container {
                         <thead>
                         <tr>
                             <th><input id="on-all" type="checkbox"></th>
-                            <th>Type</th>
-                            <th>Name</th>
-                            <th>Pool</th>
+                            <th>type</th>
+                            <th>name</th>
+                            <th>pool</th>
                             <th>capacity</th>
                             <th>allocation</th>
                         </tr>
