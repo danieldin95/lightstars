@@ -8,4 +8,7 @@ type VolumeInfo struct {
 	Allocation uint64 `json:"allocation"`
 }
 
-type VolumeInfos map[string]VolumeInfo
+type VolumeInfos struct {
+	List
+	Items []VolumeInfo `json:"items"`
+}
