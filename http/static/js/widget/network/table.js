@@ -12,7 +12,7 @@ export class NetworkTable extends Widget {
     }
 
     loading() {
-        return `<tr><td colspan="5" style="text-align: center">Loading...</td></tr>`;
+        return `<tr><td colspan="6" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
