@@ -24,20 +24,7 @@ export class IsolatedCreate extends FormModal {
             },
             selector: this.view.find("select[name='prefix']"),
         };
-
-        let name = {
-            fresh: function() {
-                this.selector.find('option').remove();
-                for (let i = 0; i < 10; i++) {
-                    let alias = "isobr"+i;
-                    this.selector.append(new Option(alias, alias));
-                }
-            },
-            selector: this.view.find("select[name='name']"),
-        };
-
         prefix.fresh();
-        name.fresh();
     }
 
     template() {
@@ -51,14 +38,10 @@ export class IsolatedCreate extends FormModal {
                 <input type="text" class="d-none" name="mode" value=""/>
                 <div id="" class="modal-body">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label-sm ">Bridge's name</label>
+                        <label for="name" class="col-sm-4 col-form-label-sm ">Name</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="select-md" name="name">
-                                    <option value="virbr0" selected>virbrx0</option>
-                                    <option value="virbr1">isobr1</option>
-                                    <option value="virbr2">isobr2</option>
-                                </select>
+                                <input type="text" class="form-control form-control-sm" name="name" value=""/>
                             </div>
                         </div>
                     </div>
@@ -78,7 +61,7 @@ export class IsolatedCreate extends FormModal {
                         <label for="dhcp" class="col-sm-4 col-form-label-sm ">DHCP setting</label>
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <select class="select-md" name="dhcp">
+                                <select class="select-lg" name="dhcp">
                                     <option value="yes" selected>enable</option>
                                     <option value="no">disable</option>
                                 </select>

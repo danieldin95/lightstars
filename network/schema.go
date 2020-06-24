@@ -11,12 +11,12 @@ func NewNetwork(net libvirtn.Network) schema.Network {
 	}
 	obj.Name, _ = net.GetName()
 	obj.UUID, _ = net.GetUUIDString()
+	obj.Bridge, _ = net.GetBridgeName()
 	if ok, _ := net.IsActive(); ok {
 		obj.State = "active"
 	} else {
 		obj.State = "inactive"
 	}
-
 	xml := libvirtn.NewNetworkXMLFromNet(&net)
 	if xml.Forward != nil {
 		obj.Mode = xml.Forward.Mode
@@ -33,9 +33,6 @@ func NewNetwork(net libvirtn.Network) schema.Network {
 				})
 			}
 		}
-	}
-	if xml.Bridge.Name != "" {
-		obj.Name = xml.Bridge.Name
 	}
 	return obj
 }

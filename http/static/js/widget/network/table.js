@@ -36,6 +36,7 @@ export class NetworkTable extends Widget {
                 <td>{{i+1}}</td>
                 <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/network/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
+                <td>{{v.bridge}}</td>
                 <td><span class="{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}

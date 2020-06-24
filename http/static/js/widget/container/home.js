@@ -298,13 +298,13 @@ export class Home extends Container {
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
                                 <a id="create-routed" class="dropdown-item" data-toggle="modal" data-target="#RoutedCreateModal">
-                                    Create routed network
+                                    Routed network
                                 </a>
                                 <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#IsolatedCreateModal">
-                                    Create isolated network
+                                    Isolated network
                                 </a>
                                 <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#BridgeCreateModal">
-                                    Create host bridge
+                                    Existing bridge
                                 </a>
                             </div>
                         </div>
@@ -322,6 +322,7 @@ export class Home extends Container {
                                 <th>ID</th>
                                 <th>UUID</th>
                                 <th>Name</th>
+                                <th>Bridge</th>
                                 <th>State</th>
                             </tr>
                             </thead>
