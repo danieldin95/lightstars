@@ -322,8 +322,6 @@ export class Home extends Container {
                                 <th>ID</th>
                                 <th>UUID</th>
                                 <th>Name</th>
-                                <th>Address</th>
-                                <th>Mode</th>
                                 <th>State</th>
                             </tr>
                             </thead>
