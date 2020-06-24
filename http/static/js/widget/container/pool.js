@@ -85,7 +85,12 @@ export class Pool extends Container {
                     <dd>{{uuid}}</dd>
                     <dt>Source:</dt>
                     <dd>{{source}}</dd>
-
+                    <dt>Allocation:</dt>
+                    <dd>{{allocation | prettyByte}}</dd>
+                    <dt>Available:</dt>
+                    <dd>{{available | prettyByte}}</dd>
+                    <dt>Capacity:</dt>
+                    <dd>{{capacity | prettyByte}}</dd>
                 </dl>
             </div>
             </div>
@@ -117,11 +122,11 @@ export class Pool extends Container {
                         <thead>
                         <tr>
                             <th><input id="on-all" type="checkbox"></th>
-                            <th>type</th>
-                            <th>name</th>
-                            <th>pool</th>
-                            <th>capacity</th>
-                            <th>allocation</th>
+                            <th>Type</th>
+                            <th>Name</th>
+                            <th>Pool</th>
+                            <th>Capacity</th>
+                            <th>Allocation</th>
                         </tr>
                         </thead>
                         <tbody id="display-table">

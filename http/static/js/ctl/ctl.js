@@ -6,7 +6,6 @@ export class Ctl {
         this.id = props.id;
         this.props = props;
 
-        console.log("Ctl", props);
     }
 
     child(id) {

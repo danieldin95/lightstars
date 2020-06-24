@@ -1,6 +1,6 @@
 package schema
 
-type VolumeInfo struct {
+type Volume struct {
 	Pool       string `json:"pool"`
 	Name       string `json:"name"`
 	Type       string `json:"type"`
@@ -8,7 +8,7 @@ type VolumeInfo struct {
 	Allocation uint64 `json:"allocation"`
 }
 
-type VolumeInfos struct {
+type Volumes struct {
 	List
-	Items []VolumeInfo `json:"items"`
+	Items []Volume `json:"items"`
 }

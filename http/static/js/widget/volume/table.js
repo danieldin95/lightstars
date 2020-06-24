@@ -11,6 +11,10 @@ export default class VolumeTable extends Widget {
         this.checkbox = new CheckBox(props)
         this.uuid = props.uuid
         console.log("cur name",this.props.name)
+
+        this.refresh( (e) => {
+            this.checkbox.refresh()
+        })
     }
 
     loading() {
@@ -58,7 +62,7 @@ export default class VolumeTable extends Widget {
                         {{/if}}
                         
                     </td>
-                    <td><a href="#datastore{{v.name.split('datastore/01')[1]}}">{{v.name}}</a></td>
+                    <td><a id="onthis" data=".guest01" href="#/datastore/.guest01">{{v.name}}</a></td>
                     <td>{{v.pool}}</td>
                     <td>{{if v.type == "dir"}} - {{else}} {{v.capacity | prettyByte}} {{/if}}</td>
                     <td>{{if v.type == "dir"}} - {{else}} {{v.allocation | prettyByte}} {{/if}}</td>

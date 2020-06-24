@@ -96,7 +96,7 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 		}
 		for _, disk := range instance.Disks {
 			if vol, ok := vols[disk.Name]; ok {
-				disk.Volume = schema.VolumeInfo{
+				disk.Volume = schema.Volume{
 					Type:       vol.Type,
 					Capacity:   vol.Capacity,
 					Allocation: vol.Allocation,

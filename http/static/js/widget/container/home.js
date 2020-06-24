@@ -104,6 +104,7 @@ export class Home extends Container {
         let store = new DataStoresCtl({
             id: this.id('#datastores'),
             onthis: (e) => {
+                console.log("storage loading", e)
                 new Pool({
                     parent: this.parent,
                     uuid: e.uuid,
