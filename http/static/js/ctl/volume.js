@@ -23,16 +23,22 @@ export class VolumeCtl extends Ctl {
         this.table = new VolumeTable({
             id: this.child('#display-table'),
             uuid: this.uuid,
-            name: this.name
+            name: this.name,
+        });
+        // click table
+        $(this.child('#onthis')).on("click", (e) => {
+
+            this.table = new VolumeTable({
+                id: this.child('#display-table'),
+                uuid: $(this).attr('data'),
+                name: this.name,
+            })
         });
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
                 this.checkbox.refresh();
             });
-        });
-        this.table.refresh((e) => {
-            this.checkbox.refresh();
         });
     }
 }

@@ -60,17 +60,17 @@ type Disk struct {
 	SizeUnit   string     `json:"sizeUnit,omitempty"`  //configure
 	Format     string     `json:"format"`
 	Source     string     `json:"source"`
-	Device     string     `json:"device"`
-	Bus        string     `json:"bus"`      //configre
-	AddrType   string     `json:"addrType"` // pci, and drive
-	AddrSlot   uint16     `json:"addrSlot"`
-	AddrDomain uint16     `json:"addrDomain"`
-	AddrBus    uint16     `json:"addrBus"`
-	AddrFunc   uint16     `json:"addrFunc"`
-	AddrCtl    uint16     `json:"addrCtl"`
-	AddrTgt    uint16     `json:"addrTgt"`
-	AddrUnit   uint16     `json:"addrUnit"`
-	Volume     VolumeInfo `json:"volume"`
+	Device     string `json:"device"`
+	Bus        string `json:"bus"`      //configre
+	AddrType   string `json:"addrType"` // pci, and drive
+	AddrSlot   uint16 `json:"addrSlot"`
+	AddrDomain uint16 `json:"addrDomain"`
+	AddrBus    uint16 `json:"addrBus"`
+	AddrFunc   uint16 `json:"addrFunc"`
+	AddrCtl    uint16 `json:"addrCtl"`
+	AddrTgt    uint16 `json:"addrTgt"`
+	AddrUnit   uint16 `json:"addrUnit"`
+	Volume     Volume `json:"volume"`
 }
 
 type ListDisk struct {
