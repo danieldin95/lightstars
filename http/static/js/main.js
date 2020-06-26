@@ -17,16 +17,19 @@ $(function() {
     }
     Api.Host(host);
 
-    new Navigation({
+    let nav = new Navigation({
         parent: "nav",
         home: ".",
         container: container,
         name: hyper.attr('name'),
     });
-    new Filters();
-    new Routes({
+    let filter = new Filters();
+    let routes = new Routes({
         hyper: hyper,
         container: container,
+        onchange: function (e) {
+           nav.refresh();
+        },
     });
 });
 

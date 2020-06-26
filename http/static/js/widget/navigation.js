@@ -18,15 +18,16 @@ export class Navigation {
         this.parent = props.parent;
         this.home = props.home;
         this.props = props;
-        this.active = Location.get("/instances");
-        console.log("Navigation.constructor", this.active);
-        this.navs = ["#system", "#instances", "#datastore", "#network"];
-
+        this.active = "";
+        this.navIds = ["#system", "#instances", "#datastore", "#network"];
         this.refresh();
     }
 
     refresh() {
-        let active = (cur) => {
+        this.active = Location.get("/instances");
+        console.log("Navigation.refresh", this.active);
+
+        let forceActive = (cur) => {
             this.active = cur;
             this.view.find('li').each((i, e) => {
                 let href = $(e).find('a').attr("data-target");
@@ -41,7 +42,7 @@ export class Navigation {
         Location.listen({
             data: this,
             func: (e) => {
-              active(e.name);
+                forceActive(e.name);
             },
         });
         new HyperApi().get(this, (e) => {
@@ -50,9 +51,9 @@ export class Navigation {
             let container = this.props.container;
 
             this.view = view;
-            for (let nav of this.navs) {
+            for (let nav of this.navIds) {
                 this.view.find(nav).on('click', function (e) {
-                    active($(this).parent('li a').attr("id"));
+                    forceActive($(this).parent('li a').attr("id"));
                     new Home({
                         parent: container,
                         name: name,
@@ -62,7 +63,7 @@ export class Navigation {
                 })
             }
 
-            active(this.active);
+            forceActive(this.active);
             this.zone();
 
             this.view.find("#fullscreen").on('click', (e) => {

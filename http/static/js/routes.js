@@ -8,8 +8,10 @@ export class Routes {
     // {
     //   hyper: $,
     //   container: ''
+    //   onchange: function(e) {}.
     // }
     constructor(props) {
+        this.props = props;
         this.routes = [
             {
                 prefix: "/guest/",
@@ -54,6 +56,9 @@ export class Routes {
         ];
         this.render();
         window.onhashchange = (e) => {
+            if (this.props.onchange) {
+                this.props.onchange(e);
+            }
             this.render();
         };
     }
