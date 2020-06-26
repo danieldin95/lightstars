@@ -53,6 +53,9 @@ export class Routes {
             },
         ];
         this.render();
+        window.onhashchange = function(e) {
+            this.render();
+        };
     }
 
     render() {
