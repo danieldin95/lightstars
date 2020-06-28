@@ -1,8 +1,8 @@
 import {Widget} from "../widget.js";
 import {VolumeApi} from "../../api/volume.js";
 import {CheckBox} from "../checkbox/checkbox.js";
-
-const prefix = /datastore@/
+import {Location} from "../../com/location.js";
+import {Utils} from "../../com/utils.js";
 
 export default class VolumeTable extends Widget {
 
@@ -10,11 +10,7 @@ export default class VolumeTable extends Widget {
         super(props);
         this.checkbox = new CheckBox(props)
         this.uuid = props.uuid
-        console.log("cur name",this.props.name)
 
-        this.refresh( (e) => {
-            this.checkbox.refresh()
-        })
     }
 
     loading() {
@@ -29,21 +25,32 @@ export default class VolumeTable extends Widget {
 
         $(this.id).html(this.loading());
 
-        // if (this.props.name) {
-        //     this.uuid = this.props.name.replace(prefix, '')
-        // }
-
         new VolumeApi({
             uuid: this.uuid
         }).list(this, function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             func({data, resp: e.resp});
         })
+
+    }
+    formatData(data) {
+        let items = data.items
+        let formattedData = Object.assign({}, data, {
+            items: items.map((i) => {
+                return Object.assign({}, i,
+                    {
+                        name:  Utils.basename(i.name)
+                    })
+            })
+        })
+
+        return formattedData
     }
 
     render(data) {
+
+        let query = Location.query();
         let prefix = window.location.pathname
-        console.log(data)
         return this.compile(`
             
             {{each items v i}}
@@ -62,12 +69,11 @@ export default class VolumeTable extends Widget {
                         {{/if}}
                         
                     </td>
-                    <td><a id="onthis" data=".guest01" href="#/datastore/.guest01">{{v.name}}</a></td>
-                    <td>{{v.pool}}</td>
+                    <td><a id="on-this" data="{{v.name}}">{{v.name}}</a></td>
                     <td>{{if v.type == "dir"}} - {{else}} {{v.capacity | prettyByte}} {{/if}}</td>
                     <td>{{if v.type == "dir"}} - {{else}} {{v.allocation | prettyByte}} {{/if}}</td>
                 </tr>
             {{/each}}
-            `, data);
+            `, this.formatData(data));
     }
 }

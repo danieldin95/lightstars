@@ -25,19 +25,38 @@ export class VolumeCtl extends Ctl {
             uuid: this.uuid,
             name: this.name,
         });
-        // click table
-        $(this.child('#onthis')).on("click", (e) => {
 
-            this.table = new VolumeTable({
-                id: this.child('#display-table'),
-                uuid: $(this).attr('data'),
-                name: this.name,
-            })
-        });
         // refresh table and register refresh click.
+        $(this.child('#create')).on("click", (e) => {
+            console.log('create')
+
+        });
+        $(this.child('#edit')).on("click", (e) => {
+            console.log('edit')
+
+        });
+        $(this.child('#remove')).on("click", (e) => {
+            console.log('remove')
+
+        });
         $(this.child('#refresh')).on("click", (e) => {
+
             this.table.refresh((e) => {
                 this.checkbox.refresh();
+            });
+        });
+
+        this.refresh()
+    }
+
+    refresh() {
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+            console.log('length', $(this.child('#on-this')).length)
+            // register click on this table row.
+
+            $(this.child('#on-this')).on('click', function (e) {
+                console.log($(this).attr('data'))
             });
         });
     }

@@ -124,7 +124,6 @@ export class Pool extends Container {
                             <th><input id="on-all" type="checkbox"></th>
                             <th>Type</th>
                             <th>Name</th>
-                            <th>Pool</th>
                             <th>Capacity</th>
                             <th>Allocation</th>
                         </tr>
