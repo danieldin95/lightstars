@@ -22,11 +22,19 @@ export class BridgeCreate extends FormModal {
                 <input type="text" class="d-none" name="dhcp" value="no"/>
                 <div id="" class="modal-body">
                     <div class="form-group row">
+                        <label for="name" class="col-sm-4 col-form-label-sm ">Name</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" name="name" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="name" class="col-sm-4 col-form-label-sm ">Bridge's name</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm input-lg"
-                                        name="name" value="br0"/>                                    
+                                        name="bridge" value="br0"/>                                    
                             </div>
                         </div>
                     </div>

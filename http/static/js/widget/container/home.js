@@ -11,7 +11,6 @@ import {Overview} from "../index/overview.js";
 import {InstanceCreate} from '../instance/create.js';
 import {NATCreate} from "../network/create.js";
 import {BridgeCreate} from "../network/bridge/create.js";
-import {RoutedCreate} from "../network/routed/create.js";
 import {IsolatedCreate} from "../network/isolated/create.js";
 import {DirCreate} from "../datastore/create.js";
 import {NFSCreate} from "../datastore/nfs/create.js";
@@ -89,10 +88,6 @@ export class Home extends Container {
                 net.create(Utils.toJSON(e.form));
             });
         new BridgeCreate({id: '#BridgeCreateModal'})
-            .onsubmit((e) => {
-                net.create(Utils.toJSON(e.form));
-            });
-        new RoutedCreate({id: '#RoutedCreateModal'})
             .onsubmit((e) => {
                 net.create(Utils.toJSON(e.form));
             });
@@ -297,14 +292,11 @@ export class Home extends Container {
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-routed" class="dropdown-item" data-toggle="modal" data-target="#RoutedCreateModal">
-                                    Create routed network
-                                </a>
                                 <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#IsolatedCreateModal">
                                     Create isolated network
                                 </a>
                                 <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#BridgeCreateModal">
-                                    Create host bridge
+                                    Create existing bridge
                                 </a>
                             </div>
                         </div>
@@ -322,8 +314,7 @@ export class Home extends Container {
                                 <th>ID</th>
                                 <th>UUID</th>
                                 <th>Name</th>
-                                <th>Address</th>
-                                <th>Mode</th>
+                                <th>Bridge</th>
                                 <th>State</th>
                             </tr>
                             </thead>

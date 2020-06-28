@@ -8,6 +8,7 @@ type Range struct {
 type Network struct {
 	UUID    string  `json:"uuid"`
 	Name    string  `json:"name"`
+	Bridge  string  `json:"bridge"`
 	State   string  `json:"state"`
 	Address string  `json:"address"`
 	Netmask string  `json:"netmask,omitempty"`

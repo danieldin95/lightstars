@@ -29,7 +29,7 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 	xmlObj := libvirtn.NetworkXML{
 		Name: conf.Name,
 		Bridge: libvirtn.BridgeXML{
-			Name: conf.Name,
+			Name: conf.Bridge,
 		},
 	}
 	if conf.Mode != "" {
@@ -148,7 +148,6 @@ func (net Network) DELETE(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	netvir, err := hyper.LookupNetwork(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

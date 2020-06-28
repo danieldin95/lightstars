@@ -1,5 +1,5 @@
 Name: lightstar
-Version: 0.8.10
+Version: 0.8.15
 Release: 1%{?dist}
 Summary: LightStar's Project Software
 Group: Applications/Communications
@@ -41,7 +41,7 @@ mkdir -p %{buildroot}/lightstar/datastore/01
 
 %pre
 firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {
-  echo "You need allowed TCP port 10080 manually."
+  echo "YOU NEED ALLOWED TCP PORT:10080."
 }
 firewall-cmd --reload || :
 
