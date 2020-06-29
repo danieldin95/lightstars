@@ -64,7 +64,7 @@ export class Navigation {
             }
 
             forceActive(this.active);
-            this.zone();
+            this.node();
 
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
@@ -79,25 +79,25 @@ export class Navigation {
         });
     }
 
-    zoneName(host, view) {
+    nodeName(host, view) {
         view = view || this.view;
 
         if (host === "") {
-            view.find("zone-name").text('default');
+            view.find("node-name").text('default');
         } else {
-            view.find("zone-name").text(host);
+            view.find("node-name").text(host);
         }
     }
 
-    zone() {
+    node() {
         let view = this.view;
         let name = this.props.name;
         let container = this.props.container;
         let host = Location.query('node');
 
-        this.zoneName(host);
+        this.nodeName(host);
         new ZoneApi().list(this, (data) => {
-            view.find("#zone").empty();
+            view.find("#node").empty();
             data.resp.forEach((v, i) => {
                 let name = v['name'];
                 let value = v['name'];
@@ -110,12 +110,13 @@ export class Navigation {
                 if (i === 0) {
                     elem = $(`<a class="dropdown-item" data="${value}">${name}</a>`);
                 }
-                view.find("#zone").append(elem);
+                view.find("#node").append(elem);
             });
-            view.find("#zone a").on('click', this, function (e) {
+            view.find("#node a").on('click', this, function (e) {
                 let host = $(this).attr("data");
 
-                //e.data.zoneName(host, view);
+                //e.data.nodeName(host, view);
+                Location.set("/instances");
                 Location.query('node', host);
                 Api.Host(host);
 
@@ -131,13 +132,11 @@ export class Navigation {
     }
 
     fullscreen() {
-        let el = document.documentElement
-            , rfs =
-            el.requestFullScreen
+        let el = document.documentElement;
+        let rfs = el.requestFullScreen
             || el.webkitRequestFullScreen
             || el.mozRequestFullScreen
-            || el.msRequestFullScreen
-        ;
+            || el.msRequestFullScreen;
         if (rfs) {
             rfs.call(el);
         } else if (window.ActiveXObject) {
@@ -175,11 +174,11 @@ export class Navigation {
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a id="zoneMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
+                    <a id="nodeMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
-                        <zone-name>default</zone-name>@zone
+                        <node-name>default</node-name>@node
                     </a>
-                    <div id="zone" class="dropdown-menu" aria-labelledby="zoneMore">
+                    <div id="node" class="dropdown-menu" aria-labelledby="nodeMore">
                         <a class="dropdown-item" data="">default</a>
                     </div>
                 </li>            
