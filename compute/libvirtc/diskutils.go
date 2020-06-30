@@ -20,7 +20,7 @@ func (d *Disk) Slot2Dev(bus string, slot uint8) string {
 	return ""
 }
 
-func (d *Disk) Slot2DiskName(slot uint8) string {
+func (d *Disk) Slot2Name(slot uint8) string {
 	rand := libstar.GenToken(8)
 	return fmt.Sprintf("disk-%s-%d.img", rand, slot)
 }

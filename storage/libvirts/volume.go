@@ -1,25 +1,19 @@
 package libvirts
 
 import (
+	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
+	"os/exec"
 	"strconv"
 )
 
 type Volume struct {
+	Path     string
 	Pool     string
 	Name     string
 	Size     uint64
 	Format   string
 	BackFile string
-}
-
-func NewVolume(pool, name string, size uint64) Volume {
-	return Volume{
-		Pool:   pool,
-		Name:   name,
-		Size:   size,
-		Format: "qcow2",
-	}
 }
 
 func CreateVolume(pool, name string, size uint64) (*Volume, error) {
@@ -30,6 +24,29 @@ func CreateVolume(pool, name string, size uint64) (*Volume, error) {
 		Format: "qcow2",
 	}
 	return vol, vol.Create()
+}
+
+func CreateBackVolume(pool, name, backFile string) (*Volume, error) {
+	vol := &Volume{
+		Pool:   pool,
+		Name:   name,
+		BackFile: backFile,
+		Format: "qcow2",
+	}
+	err := vol.Create()
+	if err != nil {
+		return nil, err
+	}
+	// create a new image with backing file to override volume.
+	args := []string{
+		"create", "-f", vol.Format,
+		"-o", "backing_file="+backFile, vol.Path,
+	}
+	if out, err := exec.Command("/usr/bin/qemu-img", args...).CombinedOutput(); err != nil {
+		_ = vol.Remove()
+		return nil, libstar.NewErr(string(out))
+	}
+	return vol, nil
 }
 
 func RemoveVolume(pool string, name string) error {
@@ -67,7 +84,10 @@ func (vol *Volume) Create() error {
 		return err
 	}
 	defer volume.Free()
-
+	vol.Path, err = volume.GetPath()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

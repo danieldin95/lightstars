@@ -145,7 +145,6 @@ export class Guest extends Container {
                             <a id="shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
                             <div class="dropdown-divider"></div>
                             <a id="reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
-                            <div class="dropdown-divider"></div>
                             <a id="destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
                         </div>
                     </div>
@@ -157,12 +156,10 @@ export class Guest extends Container {
                         <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
                             <a id="suspend" class="dropdown-item ${cls}" href="javascript:void(0)">Suspend</a>
                             <a id="resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
+                            <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#InstanceSetModal">Setting</a>
+                            <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">Dump XML</a>
                             <div class="dropdown-divider"></div>
                             <a id="remove" class="dropdown-item" href="javascript:void(0)">Remove</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#InstanceSetModal">Setting</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">Dump XML</a>
                         </div>
                     </div>
                 </div>
@@ -213,7 +210,7 @@ export class Guest extends Container {
                             <th>Device</th>
                             <th>Source</th>
                             <th>Capacity</th>
-                            <th>Available</th>
+                            <th>Allocation</th>
                             <th>Address</th>
                         </tr>
                         </thead>

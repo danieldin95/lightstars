@@ -19,17 +19,17 @@ type Instance struct {
 }
 
 func GetTypeBySuffix(name string) (string, string) {
-	name = strings.ToUpper(name)
-	if strings.HasSuffix(name, ".ISO") || strings.HasSuffix(name, ".RAW") {
+	name = strings.ToLower(name)
+	if strings.HasSuffix(name, ".iso") {
 		return "cdrom", "raw"
-	} else if strings.HasSuffix(name, ".RAW") {
+	} else if strings.HasSuffix(name, ".raw") {
 		return "disk", "raw"
-	} else if strings.HasSuffix(name, ".QCOW2") || strings.HasSuffix(name, ".IMG") {
+	} else if strings.HasSuffix(name, ".qcow2") || strings.HasSuffix(name, ".img") {
 		return "disk", "qcow2"
-	} else if strings.HasSuffix(name, ".VMDK") {
+	} else if strings.HasSuffix(name, ".vmdk") {
 		return "disk", "vmdk"
 	}
-	return "disk", "raw"
+	return "disk", ""
 }
 
 func NewCDROMXML(file, family string, seq uint8) libvirtc.DiskXML {
@@ -63,7 +63,9 @@ func NewISOXML(file, family string, seq uint8) libvirtc.DiskXML {
 		},
 	}
 	name := strings.ToUpper(file)
-	xml.Device, xml.Driver.Type = GetTypeBySuffix(name)
+	device, format := GetTypeBySuffix(name)
+	xml.Device = device
+	xml.Driver.Type = format
 	if family == "linux" && !strings.HasSuffix(name, ".ISO") {
 		xml.Target = libvirtc.DiskTargetXML{
 			Bus: "virtio",
@@ -110,6 +112,41 @@ func NewDiskXML(format, file, bus string, seq uint8) libvirtc.DiskXML {
 		}
 	}
 	return disk
+}
+
+func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq uint8) (libvirtc.DiskXML, error) {
+	obj := libvirtc.DiskXML{}
+	file := disk.Source
+	size := libstar.ToBytes(disk.Size, disk.SizeUnit)
+	name := libvirtc.DISK.Slot2Name(seq)
+	device, format := GetTypeBySuffix(file)
+	if file == "" {
+		vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, name, size)
+		if err != nil {
+			return obj, err
+		}
+		file = vol.Target.Path
+		format = vol.Target.Format.Type
+	} else if device == "disk" && (format == "raw" || format == "qcow2") {
+		file = storage.PATH.Unix(file)
+		vol, err := NewBackVolumeAndPool(conf.DataStore, conf.Name, name, file)
+		if err != nil {
+			return obj, err
+		}
+		file = vol.Target.Path
+		format = vol.Target.Format.Type
+	} else {
+		file = storage.PATH.Unix(file)
+	}
+	switch conf.Family {
+	case "linux":
+		obj = NewDiskXML(format, file, "virtio", seq)
+	case "windows": // not scsi.
+		obj = NewDiskXML(format, file, "ide", seq)
+	default:
+		obj = NewDiskXML(format, file, "ide", seq)
+	}
+	return obj, nil
 }
 
 func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
@@ -205,8 +242,6 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	// disks
 	for i, disk := range conf.Disks {
 		file := disk.Source
-		size := disk.Size
-		unit := disk.SizeUnit
 		seq := uint8(i + 1)
 
 		obj := libvirtc.DiskXML{}
@@ -215,25 +250,10 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		} else if strings.HasSuffix(file, ".iso") || strings.HasSuffix(file, ".ISO") {
 			obj = NewISOXML(storage.PATH.Unix(file), conf.Family, seq)
 		} else {
-			_, format := GetTypeBySuffix(file)
-			if file == "" {
-				size := libstar.ToBytes(size, unit)
-				vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, Slot2Disk(seq), size)
-				if err != nil {
-					return dom, err
-				}
-				file = vol.Target.Path
-				format = vol.Target.Format.Type
-			} else {
-				file = storage.PATH.Unix(file)
-			}
-			switch conf.Family {
-			case "linux":
-				obj = NewDiskXML(format, file, "virtio", seq)
-			case "windows": // not scsi.
-				obj = NewDiskXML(format, file, "ide", seq)
-			default:
-				obj = NewDiskXML(format, file, "ide", seq)
+			var err error
+			obj, err = NewFileXML(&disk, conf, seq)
+			if err != nil {
+				return dom, err
 			}
 		}
 		dom.Devices.Disks = append(dom.Devices.Disks, obj)

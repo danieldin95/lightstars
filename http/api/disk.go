@@ -131,7 +131,8 @@ func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 	// create new disk firstly.
 	size := libstar.ToBytes(conf.Size, conf.SizeUnit)
 	slot := libstar.H2D8(conf.Seq)
-	vol, err := NewVolume(conf.Name, Slot2Disk(slot), size)
+	name := libvirtc.DISK.Slot2Name(slot)
+	vol, err := NewVolume(conf.Name, name, size)
 	if err != nil {
 		return nil, err
 	}
