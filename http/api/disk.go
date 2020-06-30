@@ -30,13 +30,12 @@ func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo
 
 	vols := make(map[string]libvirts.VolumeInfo, 32)
 	sources := make(map[string]int, 4)
-	for _, disk := range disks {
+	for _, disk := range disks { // to traver all disks and record it's path.
 		if _, ok := vols[disk.Name]; ok {
 			continue
 		}
 		dir := path.Dir(disk.Name)
-		volsDir, err := (&libvirts.Pool{Path: dir}).ListByTarget()
-		if err == nil {
+		if volsDir, err := (&libvirts.Pool{Path: dir}).ListByTarget(); err == nil {
 			for file, vol := range volsDir {
 				vols[file] = vol
 			}
@@ -49,11 +48,11 @@ func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo
 		}
 	}
 	libstar.Debug("Disk.Check %v", sources)
-
 	curDir := ""
 	curUsed := 0
+	// figure out default pool
 	for dir, c := range sources {
-		if curUsed < c {
+		if curUsed < c { // dir has more used wined.
 			curUsed = c
 			curDir = dir
 		} else if curUsed == c {
@@ -63,13 +62,13 @@ func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo
 			}
 		}
 	}
-	if curDir != "" {
+	if curDir != "" { // try to create it.
 		if _, err := libvirts.CreatePool(libvirts.ToDomainPool(name), curDir); err != nil {
 			libstar.Warn("Disk.Travel %s", err)
 		}
 	}
-	volsDir, err := (&libvirts.Pool{Name: libvirts.ToDomainPool(name)}).List()
-	if err == nil {
+	pol := &libvirts.Pool{Name: libvirts.ToDomainPool(name)}
+	if volsDir, err := pol.List(); err == nil {
 		for file, vol := range volsDir {
 			vols[file] = vol
 		}
@@ -87,10 +86,8 @@ func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer dom.Free()
-
 		instance := compute.NewInstance(*dom)
 		vols := disk.Travel(instance)
-
 		list := schema.ListDisk{
 			Items: make([]schema.Disk, 0, 32),
 		}
@@ -224,7 +221,6 @@ func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Cannot get domain's descXML", http.StatusInternalServerError)
 		return
 	}
-
 	if xml.Devices.Disks != nil {
 		for _, disk := range xml.Devices.Disks {
 			if disk.Target.Dev != dev {
@@ -244,7 +240,7 @@ func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 				dir := path.Dir(file)
 				volume := path.Base(file)
 				pool := path.Base(dir)
-				libvirts.RemoveVolume(libvirts.ToDomainPool(pool), volume)
+				_ = libvirts.RemoveVolume(libvirts.ToDomainPool(pool), volume)
 			}
 		}
 	}

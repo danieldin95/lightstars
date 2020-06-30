@@ -17,9 +17,9 @@ func TestDHCPLease_Get(t *testing.T) {
 			Host: "https://localhost:10080",
 		},
 	}
-	les := schema.ListLeases{}
+	les := schema.DHCPLeases{}
 	fmt.Println(api.Get(&les), les)
-	les = schema.ListLeases{}
+	les = schema.DHCPLeases{}
 	api.Client.Auth.Username = "123"
 	fmt.Println(api.Get(&les), les)
 }

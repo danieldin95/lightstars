@@ -329,7 +329,7 @@ func (ins Instance) GetByUser(user *schema.User, list *schema.ListInstance) {
 			if ins.HasPermission(user, inst.Name) {
 				list.Items = append(list.Items, inst)
 			}
-			d.Free()
+			_ = d.Free()
 		}
 	}
 }
