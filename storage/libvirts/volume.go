@@ -1,19 +1,18 @@
 package libvirts
 
 import (
-	"github.com/danieldin95/lightstar/libstar"
 	"github.com/libvirt/libvirt-go"
-	"os/exec"
 	"strconv"
 )
 
 type Volume struct {
-	Path     string
-	Pool     string
-	Name     string
-	Size     uint64
-	Format   string
-	BackFile string
+	Path          string
+	Pool          string
+	Name          string
+	Size          uint64
+	Format        string
+	BackingFile   string
+	BackingFormat string
 }
 
 func CreateVolume(pool, name string, size uint64) (*Volume, error) {
@@ -26,27 +25,15 @@ func CreateVolume(pool, name string, size uint64) (*Volume, error) {
 	return vol, vol.Create()
 }
 
-func CreateBackVolume(pool, name, backFile string) (*Volume, error) {
+func CreateBackingVolume(pool, name, backingFle, backingFmt string) (*Volume, error) {
 	vol := &Volume{
-		Pool:   pool,
-		Name:   name,
-		BackFile: backFile,
-		Format: "qcow2",
+		Pool:          pool,
+		Name:          name,
+		BackingFile:   backingFle,
+		BackingFormat: backingFmt,
+		Format:        "qcow2",
 	}
-	err := vol.Create()
-	if err != nil {
-		return nil, err
-	}
-	// create a new image with backing file to override volume.
-	args := []string{
-		"create", "-f", vol.Format,
-		"-o", "backing_file="+backFile, vol.Path,
-	}
-	if out, err := exec.Command("/usr/bin/qemu-img", args...).CombinedOutput(); err != nil {
-		_ = vol.Remove()
-		return nil, libstar.NewErr(string(out))
-	}
-	return vol, nil
+	return vol, vol.Create()
 }
 
 func RemoveVolume(pool string, name string) error {
@@ -73,6 +60,12 @@ func (vol *Volume) Create() error {
 				Type: vol.Format,
 			},
 		},
+		BackingStore: BackingStoreXML{
+			Path: vol.BackingFile,
+			Format: FormatXML{
+				Type: vol.BackingFormat,
+			},
+		},
 	}
 	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
@@ -84,8 +77,7 @@ func (vol *Volume) Create() error {
 		return err
 	}
 	defer volume.Free()
-	vol.Path, err = volume.GetPath()
-	if err != nil {
+	if vol.Path, err = volume.GetPath(); err != nil {
 		return err
 	}
 	return nil

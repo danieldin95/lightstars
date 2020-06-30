@@ -22,10 +22,12 @@ func GetTypeBySuffix(name string) (string, string) {
 	name = strings.ToLower(name)
 	if strings.HasSuffix(name, ".iso") {
 		return "cdrom", "raw"
-	} else if strings.HasSuffix(name, ".raw") {
+	} else if strings.HasSuffix(name, ".raw") || strings.HasSuffix(name, ".img") {
 		return "disk", "raw"
-	} else if strings.HasSuffix(name, ".qcow2") || strings.HasSuffix(name, ".img") {
+	} else if strings.HasSuffix(name, ".qcow2") {
 		return "disk", "qcow2"
+	} else if strings.HasSuffix(name, ".qcow") {
+		return "disk", "qcow"
 	} else if strings.HasSuffix(name, ".vmdk") {
 		return "disk", "vmdk"
 	}
@@ -127,9 +129,9 @@ func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq uint8) (libvirtc.D
 		}
 		file = vol.Target.Path
 		format = vol.Target.Format.Type
-	} else if device == "disk" && (format == "raw" || format == "qcow2") {
+	} else if device == "disk" && (format == "raw" || format == "qcow2" || format == "qcow") {
 		file = storage.PATH.Unix(file)
-		vol, err := NewBackVolumeAndPool(conf.DataStore, conf.Name, name, file)
+		vol, err := NewBackingVolumeAndPool(conf.DataStore, conf.Name, name, file, format)
 		if err != nil {
 			return obj, err
 		}

@@ -169,11 +169,10 @@ export class Home extends Container {
                         <a id="more-start" class="dropdown-item" href="javascript:void(0)">Power on</a>
                         <a id="more-shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
-                        <div class="dropdown-divider"></div>
                         <a id="more-suspend" class="dropdown-item" href="javascript:void(0)">Suspend</a>
                         <a id="more-resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
                         <div class="dropdown-divider"></div>
+                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">Reset</a>                        
                         <a id="more-destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
                     </div>
                 </div>

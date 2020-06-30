@@ -103,13 +103,13 @@ func NewVolumeAndPool(store, name, disk string, size uint64) (*libvirts.VolumeXM
 
 // name: Domain name.
 // store: like: datatore@01
-func NewBackVolumeAndPool(store, name, disk, backFile string,) (*libvirts.VolumeXML, error) {
+func NewBackingVolumeAndPool(store, name, disk, backingFle, backingFmt string) (*libvirts.VolumeXML, error) {
 	path := GetPath(store, name)
 	pol, err := libvirts.CreatePool(libvirts.ToDomainPool(name), path)
 	if err != nil {
 		return nil, err
 	}
-	vol, err := libvirts.CreateBackVolume(pol.Name, disk, backFile)
+	vol, err := libvirts.CreateBackingVolume(pol.Name, disk, backingFle, backingFmt)
 	if err != nil {
 		return nil, err
 	}
