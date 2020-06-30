@@ -120,8 +120,7 @@ func (store DataStore) PUT(w http.ResponseWriter, r *http.Request) {
 
 func (store DataStore) DELETE(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-
-	if err := libvirts.RemovePool(uuid); err != nil {
+	if err := RemovePool(uuid); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

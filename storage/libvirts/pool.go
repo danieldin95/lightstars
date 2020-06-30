@@ -36,14 +36,6 @@ type Pool struct {
 	XML  string
 }
 
-func NewPool(name, target string) Pool {
-	return Pool{
-		Type: "dir",
-		Name: name,
-		Path: target,
-	}
-}
-
 func LookupPoolByUUID(uuid string) (*Pool, error) {
 	hyper, err := GetHyper()
 	if err != nil {
@@ -75,13 +67,6 @@ func CreatePool(name, target string) (*Pool, error) {
 	}
 	pol.XML = polXml.Encode()
 	return pol, pol.Create()
-}
-
-func RemovePool(name string) error {
-	pol := &Pool{
-		Name: name,
-	}
-	return pol.Remove()
 }
 
 func (pol *Pool) Create() error {
@@ -116,17 +101,18 @@ func (pol *Pool) Clean() error {
 		pool, err = hyper.Conn.LookupStoragePoolByName(pol.Name)
 	}
 	if err == nil {
-		vols, err := pool.ListAllStorageVolumes(0)
-		if err == nil {
-			for _, vol := range vols {
-				if err := vol.Delete(0); err != nil {
-					_ = vol.Free()
-					return err
-				}
-				_ = vol.Free()
-			}
-		}
 		defer pool.Free()
+		vols, err := pool.ListAllStorageVolumes(0)
+		if err != nil {
+			return nil
+		}
+		for _, vol := range vols {
+			if err := vol.Delete(0); err != nil {
+				_ = vol.Free()
+				return err
+			}
+			_ = vol.Free()
+		}
 	}
 	return nil
 }

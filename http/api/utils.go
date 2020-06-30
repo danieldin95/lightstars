@@ -117,9 +117,17 @@ func NewBackingVolumeAndPool(store, name, disk, backingFle, backingFmt string) (
 }
 
 // name: Domain name.
-func DelVolumeAndPool(name string) error {
-	err := libvirts.RemovePool(libvirts.ToDomainPool(name))
-	if err != nil {
+func RemovePool(name string) error {
+	pol := &libvirts.Pool{Name: name}
+	if err := pol.Remove(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func CleanPool(name string) error {
+	pol := &libvirts.Pool{Name: name}
+	if err := pol.Clean(); err != nil {
 		return err
 	}
 	return nil

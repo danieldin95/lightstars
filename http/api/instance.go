@@ -8,6 +8,7 @@ import (
 	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/danieldin95/lightstar/schema"
 	"github.com/danieldin95/lightstar/storage"
+	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
 	"net/http"
 	"sort"
@@ -390,7 +391,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 	// need release created images if fails.
 	xmlData := xmlObj.Encode()
 	if xmlData == "" {
-		//DelVolumeAndPool(conf.Name)
+		//RemovePool(conf.Name)
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
 		return
 	}
@@ -399,7 +400,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 
 	dom, err := hyper.DomainDefineXML(xmlData)
 	if err != nil {
-		//DelVolumeAndPool(conf.Name)
+		//RemovePool(conf.Name)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -522,7 +523,7 @@ func (ins Instance) DELETE(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := DelVolumeAndPool(name); err != nil {
+	if err := CleanPool(libvirts.ToDomainPool(name)); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
