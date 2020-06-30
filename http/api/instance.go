@@ -11,6 +11,7 @@ import (
 	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
 	"net/http"
+	"path"
 	"sort"
 	"strconv"
 	"strings"
@@ -19,23 +20,25 @@ import (
 type Instance struct {
 }
 
-func GetTypeBySuffix(name string) (string, string) {
-	name = strings.ToLower(name)
-	if strings.HasSuffix(name, ".iso") {
-		return "cdrom", "raw"
-	} else if strings.HasSuffix(name, ".raw") || strings.HasSuffix(name, ".img") {
-		return "disk", "raw"
-	} else if strings.HasSuffix(name, ".qcow2") {
-		return "disk", "qcow2"
-	} else if strings.HasSuffix(name, ".qcow") {
-		return "disk", "qcow"
-	} else if strings.HasSuffix(name, ".vmdk") {
-		return "disk", "vmdk"
+func GetTypeByVolume(file string) (string, string) {
+	vol := libvirts.Volume{
+		Pool: path.Dir(file),
+		Name: path.Base(file),
 	}
-	return "disk", ""
+	desc, err := vol.GetXMLObj()
+	if err != nil {
+		libstar.Warn("GetTypeByVolume: %s", err)
+		return "disk", ""
+	}
+	libstar.Debug("GetTypeByVolume: %s:%v", file, desc.Target.Format)
+	fmt := desc.Target.Format.Type
+	if fmt == "iso" {
+		return "cdrom", "raw"
+	}
+	return "disk", fmt
 }
 
-func NewCDROMXML(file, family string, seq uint8) libvirtc.DiskXML {
+func NewCdXML(file, family string, seq uint8) libvirtc.DiskXML {
 	return libvirtc.DiskXML{
 		Type:   "block",
 		Device: "cdrom",
@@ -53,7 +56,7 @@ func NewCDROMXML(file, family string, seq uint8) libvirtc.DiskXML {
 	}
 }
 
-func NewISOXML(file, family string, seq uint8) libvirtc.DiskXML {
+func NewIsoXML(file, family string, seq uint8) libvirtc.DiskXML {
 	xml := libvirtc.DiskXML{
 		Type:   "file",
 		Device: "disk",
@@ -66,7 +69,7 @@ func NewISOXML(file, family string, seq uint8) libvirtc.DiskXML {
 		},
 	}
 	name := strings.ToUpper(file)
-	device, format := GetTypeBySuffix(name)
+	device, format := GetTypeByVolume(file)
 	xml.Device = device
 	xml.Driver.Type = format
 	if family == "linux" && !strings.HasSuffix(name, ".ISO") {
@@ -119,10 +122,10 @@ func NewDiskXML(format, file, bus string, seq uint8) libvirtc.DiskXML {
 
 func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq uint8) (libvirtc.DiskXML, error) {
 	obj := libvirtc.DiskXML{}
-	file := disk.Source
+	file := storage.PATH.Unix(disk.Source)
 	size := libstar.ToBytes(disk.Size, disk.SizeUnit)
 	name := libvirtc.DISK.Slot2Name(seq)
-	device, format := GetTypeBySuffix(file)
+	device, format := GetTypeByVolume(file)
 	if file == "" {
 		vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, name, size)
 		if err != nil {
@@ -131,15 +134,12 @@ func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq uint8) (libvirtc.D
 		file = vol.Target.Path
 		format = vol.Target.Format.Type
 	} else if device == "disk" && (format == "raw" || format == "qcow2" || format == "qcow") {
-		file = storage.PATH.Unix(file)
 		vol, err := NewBackingVolumeAndPool(conf.DataStore, conf.Name, name, file, format)
 		if err != nil {
 			return obj, err
 		}
 		file = vol.Target.Path
 		format = vol.Target.Format.Type
-	} else {
-		file = storage.PATH.Unix(file)
 	}
 	switch conf.Family {
 	case "linux":
@@ -249,9 +249,9 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 
 		obj := libvirtc.DiskXML{}
 		if strings.HasPrefix(file, "/dev") {
-			obj = NewCDROMXML(file, conf.Family, seq)
+			obj = NewCdXML(file, conf.Family, seq)
 		} else if strings.HasSuffix(file, ".iso") || strings.HasSuffix(file, ".ISO") {
-			obj = NewISOXML(storage.PATH.Unix(file), conf.Family, seq)
+			obj = NewIsoXML(storage.PATH.Unix(file), conf.Family, seq)
 		} else {
 			var err error
 			obj, err = NewFileXML(&disk, conf, seq)

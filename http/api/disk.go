@@ -197,7 +197,7 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 		file := xmlObj.Source.File
 		if IsVolume(file) {
 			volume := path.Base(file)
-			libvirts.RemoveVolume(libvirts.ToDomainPool(conf.Name), volume)
+			_ = libvirts.RemoveVolume(libvirts.ToDomainPool(conf.Name), volume)
 		}
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

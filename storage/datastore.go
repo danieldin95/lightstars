@@ -15,7 +15,6 @@ var PATH = StorePath{}
 // path: unix path, /lightstar/datastore/01/xx.xx
 func (p StorePath) Fmt(path string) string {
 	newPath := path
-
 	// datastore
 	if strings.HasPrefix(path, Location) {
 		newPath = strings.Split(path, Location)[1]
@@ -28,13 +27,10 @@ func (p StorePath) Fmt(path string) string {
 			}
 		}
 		return newPath
-	}
-	// dev
-	if strings.HasPrefix(path, "/dev/") {
+	} else if strings.HasPrefix(path, "/dev/") {
 		newPath = strings.Split(path, "/dev")[1]
 		return "device:" + newPath
 	}
-
 	return newPath
 }
 
@@ -66,7 +62,7 @@ func IsStoreID(name string) bool {
 
 // path: datastore@01:/centos.77 or 01.
 func (p StorePath) Unix(path string) string {
-	libstar.Info(path)
+	libstar.Debug("StorePath.Unix: %s", path)
 	newPath := path
 	if IsStoreID(path) {
 		newPath = DataStore + path
@@ -82,12 +78,10 @@ func (p StorePath) Unix(path string) string {
 			stores := strings.SplitN(splits[0], "@", 2)
 			newPath = Location + stores[0] + "/" + strings.TrimRight(stores[1], ":")
 		}
-	}
-	if strings.HasPrefix(path, "device:/") {
+	} else if strings.HasPrefix(path, "device:/") {
 		splits := strings.SplitN(newPath, "device:", 2)
 		return "/dev" + splits[1]
 	}
-
 	return newPath
 }
 

@@ -69,7 +69,10 @@ func (vol *Volume) Create() error {
 	}
 	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
-		return err
+		pool, err = hyper.Conn.LookupStoragePoolByTargetPath(vol.Pool)
+		if err != nil {
+			return err
+		}
 	}
 	defer pool.Free()
 	volume, err := pool.StorageVolCreateXML(volXml.Encode(), 0)
@@ -90,7 +93,10 @@ func (vol *Volume) GetXMLObj() (*VolumeXML, error) {
 	}
 	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
-		return nil, err
+		pool, err = hyper.Conn.LookupStoragePoolByTargetPath(vol.Pool)
+		if err != nil {
+			return nil, err
+		}
 	}
 	defer pool.Free()
 	volume, err := pool.LookupStorageVolByName(vol.Name)
@@ -113,7 +119,10 @@ func (vol *Volume) Remove() error {
 	}
 	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
-		return err
+		pool, err = hyper.Conn.LookupStoragePoolByTargetPath(vol.Pool)
+		if err != nil {
+			return err
+		}
 	}
 	defer pool.Free()
 
