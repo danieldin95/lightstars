@@ -10,7 +10,7 @@ export default class VolumeTable extends Widget {
         super(props);
         this.checkbox = new CheckBox(props)
         this.uuid = props.uuid
-
+        this.name = props.name
     }
 
     loading() {
@@ -35,7 +35,7 @@ export default class VolumeTable extends Widget {
     }
     formatData(data) {
         let items = data.items
-        let formattedData = Object.assign({}, data, {
+        return Object.assign({}, data, {
             items: items.map((i) => {
                 return Object.assign({}, i,
                     {
@@ -43,8 +43,6 @@ export default class VolumeTable extends Widget {
                     })
             })
         })
-
-        return formattedData
     }
 
     render(data) {
@@ -52,7 +50,6 @@ export default class VolumeTable extends Widget {
         let query = Location.query();
         let prefix = window.location.pathname
         return this.compile(`
-            
             {{each items v i}}
                 <tr class="sortable">
                     <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>

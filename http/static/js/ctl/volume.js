@@ -51,12 +51,15 @@ export class VolumeCtl extends Ctl {
 
     refresh() {
         this.table.refresh((e) => {
+            console.log(e.resp)
             this.checkbox.refresh();
-            console.log('length', $(this.child('#on-this')).length)
             // register click on this table row.
 
+            let _this = this
             $(this.child('#on-this')).on('click', function (e) {
-                console.log($(this).attr('data'))
+                _this.table.name = $(this).attr('data')
+                console.log(_this.table.name)
+                _this.refresh()
             });
         });
     }
