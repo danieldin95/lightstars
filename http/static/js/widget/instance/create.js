@@ -121,7 +121,7 @@ export class InstanceCreate extends FormModal {
             <div class="row">
                 <div class="col-3 border-right">
                     <div class="">
-                        <ul id="nav-tabs" class="nav flex-column nav-pills mt-4 mb-5">
+                        <ul id="nav-tabs" class="nav flex-column nav-pills">
                             <li class="nav-item">
                                 <a id="head1" class="nav-link" data-target="#guest">
                                     Configure Guest</a>
