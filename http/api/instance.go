@@ -27,8 +27,13 @@ func GetTypeByVolume(file string) (string, string) {
 	}
 	desc, err := vol.GetXMLObj()
 	if err != nil {
-		libstar.Warn("GetTypeByVolume: %s", err)
-		return "disk", ""
+		libstar.Warn("GetTypeByVolume: %s %s", vol.Pool, err)
+		vol.Pool = path.Base(vol.Pool)
+		desc, err = vol.GetXMLObj()
+		if err != nil {
+			libstar.Warn("GetTypeByVolume: %s %s", vol.Pool, err)
+			return "disk", ""
+		}
 	}
 	libstar.Debug("GetTypeByVolume: %s:%v", file, desc.Target.Format)
 	fmt := desc.Target.Format.Type
