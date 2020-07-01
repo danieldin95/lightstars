@@ -51,9 +51,6 @@ class HeaderCtl extends Ctl {
         $(this.child('#destroy')).on("click", (e) => {
             this.api.destroy();
         });
-        $(this.child('#remove')).on("click", (e) => {
-            this.api.remove();
-        });
 
         // console
         $(this.child('#console-self')).on('click', this, function (e) {
@@ -102,5 +99,9 @@ export class GuestCtl extends Ctl {
 
     edit(data) {
         this.api.edit(data);
+    }
+
+    remove() {
+        this.api.remove();
     }
 }

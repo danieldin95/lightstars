@@ -70,9 +70,10 @@ export class Navigation {
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
-            new ChangePassword({id: '#changePasswdModal'}).onsubmit((e) => {
-                new PasswordApi().set(Utils.toJSON(e.form));
-            });
+            new ChangePassword({id: '#changePasswdModal'})
+                .onsubmit((e) => {
+                    new PasswordApi().set(Utils.toJSON(e.form));
+                });
         });
     }
 

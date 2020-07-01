@@ -62,9 +62,6 @@ export class InstanceCtl extends Ctl {
         $(this.child('#more-destroy')).on("click", this.uuids, function (e) {
             new InstanceApi({uuids: e.data.store}).destroy();
         });
-        $(this.child('#more-remove')).on("click", this.uuids, function (e) {
-            new InstanceApi({uuids: e.data.store}).remove();
-        });
 
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {

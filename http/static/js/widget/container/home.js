@@ -58,7 +58,7 @@ export class Home extends Container {
             $(this.id('#collapseSys')).collapse('show');
         });
 
-        let ins = new InstanceCtl({
+        let iCtl = new InstanceCtl({
             id: this.id('#instances'),
             onthis: (e) => {
                 console.log("Guest.loading", e);
@@ -70,10 +70,10 @@ export class Home extends Container {
         });
         new InstanceCreate({id: '#createGuestModal'})
             .onsubmit((e) => {
-                ins.create(Utils.toJSON(e.form));
+                iCtl.create(Utils.toJSON(e.form));
             });
         // loading network.
-        let net = new NetworksCtl({
+        let nCtl = new NetworksCtl({
             id: this.id('#networks'),
             onthis: (e) => {
                 console.log("network.loading", e);
@@ -85,18 +85,18 @@ export class Home extends Container {
         });
         new NATCreate({id: '#createNatModal'})
             .onsubmit((e) => {
-                net.create(Utils.toJSON(e.form));
+                nCtl.create(Utils.toJSON(e.form));
             });
         new BridgeCreate({id: '#createBridgeModal'})
             .onsubmit((e) => {
-                net.create(Utils.toJSON(e.form));
+                nCtl.create(Utils.toJSON(e.form));
             });
         new IsolatedCreate({id: '#createIsolatedModal'})
             .onsubmit((e) => {
-                net.create(Utils.toJSON(e.form));
+                nCtl.create(Utils.toJSON(e.form));
             });
         // loading data storage.
-        let store = new DataStoresCtl({
+        let sCtl = new DataStoresCtl({
             id: this.id('#datastores'),
             onthis: (e) => {
                 console.log("storage loading", e)
@@ -109,15 +109,15 @@ export class Home extends Container {
         });
         new DirCreate({id: '#createDirModal'})
             .onsubmit((e) => {
-                store.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
         new NFSCreate({id: '#createNfsModal'})
             .onsubmit((e) => {
-                store.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
         new iSCSICreate({id: '#createIscsiModal'})
             .onsubmit((e) => {
-                store.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
     }
 

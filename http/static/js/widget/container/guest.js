@@ -8,7 +8,7 @@ import {Collapse} from "../collapse.js";
 import {DiskCreate} from '../disk/create.js';
 import {InterfaceCreate} from '../interface/create.js';
 import {InstanceSet} from "../instance/setting.js";
-
+import {InstanceRemove} from "../instance/remove.js";
 
 export class Guest extends Container {
     // {
@@ -21,6 +21,7 @@ export class Guest extends Container {
         super(props);
         this.default = props.default || 'disk';
         this.current = "#instance";
+        this.name = "";
         this.uuid = props.uuid;
         console.log('Instance', props);
 
@@ -29,7 +30,8 @@ export class Guest extends Container {
 
     render() {
         new InstanceApi({uuids: this.uuid}).get(this, (e) => {
-            this.title(e.resp.name);
+            this.name = e.resp.name;
+            this.title(this.name);
             this.view = $(this.template(e.resp));
             this.view.find('#header #refresh').on('click', (e) => {
                 this.render();
@@ -53,31 +55,34 @@ export class Guest extends Container {
             update: false,
         });
 
-        let instance = new GuestCtl({
+        let ctl = new GuestCtl({
             id: this.id(),
             header: {id: this.id("#header")},
             disks: {id: this.id("#disk")},
             interfaces: {id: this.id("#interface")},
             graphics: {id: this.id("#graphics")},
         });
-        new InstanceSet({id: this.id('#settingModal'), cpu: instance.cpu, mem: instance.mem })
+        new InstanceSet({id: this.id('#settingModal'), cpu: ctl.cpu, mem: ctl.mem })
             .onsubmit((e) => {
-                instance.edit(Utils.toJSON(e.form));
+                ctl.edit(Utils.toJSON(e.form));
             });
-
+        new InstanceRemove({id: this.id('#removeModal'), name: this.name, uuid: this.uuid })
+            .onsubmit((e) => {
+                ctl.remove();
+            });
         // loading disks and interfaces.
         new DiskCreate({id: this.id('#createDiskModal')})
             .onsubmit((e) => {
-                instance.disk.create(Utils.toJSON(e.form));
+                ctl.disk.create(Utils.toJSON(e.form));
             });
         new InterfaceCreate({id: this.id('#createInterfaceModal')})
             .onsubmit((e) => {
-                instance.interface.create(Utils.toJSON(e.form));
+                ctl.interface.create(Utils.toJSON(e.form));
             });
 
         // register console draggable.
-        $(function (e) {
-            $('#ConsoleModal').draggable();
+        $((e) => {
+            $(this.id('#consoleModal')).draggable();
         });
     }
 
@@ -156,7 +161,7 @@ export class Guest extends Container {
                             <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#settingModal">Setting</a>
                             <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">Dump XML</a>
                             <div class="dropdown-divider"></div>
-                            <a id="remove" class="dropdown-item" href="javascript:void(0)">Remove</a>
+                            <a id="remove" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#removeModal">Remove</a>
                         </div>
                     </div>
                 </div>
