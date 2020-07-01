@@ -21,28 +21,24 @@ export class FileUpload extends FormModal {
     template() {
         return (`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="">Upload a file</h5>
-                </div>
-                <form name="upload-new">
-                <div id="" class="modal-body">
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label-sm ">Select file</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="file" class="form-control-file" name="file" value="Upload">
-                            </div>
-                        </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Upload a file</h5>
+            </div>
+            <div id="" class="modal-body">
+            <form name="upload-new">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="file" class="form-control-file" name="file" value="Upload">
                     </div>
                 </div>
-                <div id="" class="modal-footer">
-                    <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
-                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                    <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
-                </div>
-                </form>
+            </form>
             </div>
+            <div id="" class="modal-footer">
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+            </div>
+        </div>
         </div>`);
     }
 }
