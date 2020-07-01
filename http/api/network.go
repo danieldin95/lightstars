@@ -99,7 +99,7 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 	} else {
 		if n, err := libvirtn.LookupNetwork(uuid); err == nil {
 			sn := network.NewNetwork(*n)
-			n.Free()
+			_ = n.Free()
 			ResponseJson(w, sn)
 		} else {
 			http.Error(w, err.Error(), http.StatusNotFound)

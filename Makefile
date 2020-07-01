@@ -83,6 +83,7 @@ linux/zip: env lightstar lightpix
 	@cp $(SD)/packaging/lightstar.service $(LD)/usr/lib/systemd/system
 
 	zip -r ./$(LD).zip $(LD) > /dev/null
+	@rm -rf $(LD)
 	@popd
 
 centos/devel:
@@ -104,6 +105,7 @@ windows/zip: env
 	@cp -rvf $(BD)/lightpix.windows.x86_64.exe $(WD)
 
 	zip -r $(WD).zip $(WD) > /dev/null
+	@rm -rf $(WD)
 	@popd
 
 ## unit test
@@ -112,3 +114,4 @@ test:
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/storage
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/compute/libvirtc
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/storage/libvirts
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/http/client

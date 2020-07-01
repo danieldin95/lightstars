@@ -37,7 +37,6 @@ func (v Volume) GET(w http.ResponseWriter, r *http.Request) {
 			Type:       info.Type,
 			Allocation: info.Allocation,
 			Capacity:   info.Capacity,
-
 		}
 		data.Items = append(data.Items, *i)
 	}
@@ -60,4 +59,3 @@ func (v Volume) PUT(w http.ResponseWriter, r *http.Request) {
 func (v Volume) DELETE(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
-

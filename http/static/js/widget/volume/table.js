@@ -14,7 +14,7 @@ export default class VolumeTable extends Widget {
     }
 
     loading() {
-        return `<tr><td colspan="8" style="text-align: center">Loading...</td></tr>`;
+        return `<tr><td colspan="5" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -24,7 +24,6 @@ export default class VolumeTable extends Widget {
         }
 
         $(this.id).html(this.loading());
-
         new VolumeApi({
             uuid: this.uuid
         }).list(this, function (e) {
@@ -64,7 +63,6 @@ export default class VolumeTable extends Widget {
                             <path d="M9 4.5V1l5 5h-3.5A1.5 1.5 0 0 1 9 4.5z"/>
                         </svg>
                         {{/if}}
-                        
                     </td>
                     <td><a id="on-this" data="{{v.name}}">{{v.name}}</a></td>
                     <td>{{if v.type == "dir"}} - {{else}} {{v.capacity | prettyByte}} {{/if}}</td>

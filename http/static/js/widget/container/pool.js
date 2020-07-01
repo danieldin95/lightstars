@@ -49,7 +49,7 @@ export class Pool extends Container {
     }
 
     template(v) {
-        return template.compile(`
+        return this.compile(`
         <div id="datastores" data="{{uuid}}" name="{{name}}">
         <div id="header" class="card">
             <div class="card-header">
@@ -70,11 +70,10 @@ export class Pool extends Container {
                         </button>
                         <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
                             <a id="edit" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="remove" class="dropdown-item" href="javascript:void(0)">Remove</a>
-                            <div class="dropdown-divider"></div>
                             <a id="dumpxml" class="dropdown-item" href="javascript:void(0)">Dump XML</a>
+                            <div class="dropdown-divider"></div>
+                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
+                            <a id="remove" class="dropdown-item" href="javascript:void(0)">Remove</a>
                         </div>
                     </div>
                 </div>
@@ -87,8 +86,6 @@ export class Pool extends Container {
                     <dd>{{source}}</dd>
                     <dt>Allocation:</dt>
                     <dd>{{allocation | prettyByte}}</dd>
-                    <dt>Available:</dt>
-                    <dd>{{available | prettyByte}}</dd>
                     <dt>Capacity:</dt>
                     <dd>{{capacity | prettyByte}}</dd>
                 </dl>
@@ -136,6 +133,6 @@ export class Pool extends Container {
             </div>
             </div>
         </div>
-        </div>`)(v);
+        </div>`, v);
     }
 }

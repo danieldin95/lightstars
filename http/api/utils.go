@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/danieldin95/lightstar/compute/libvirtc"
 	"github.com/danieldin95/lightstar/libstar"
 	"github.com/danieldin95/lightstar/schema"
 	"github.com/danieldin95/lightstar/service"
@@ -70,10 +69,6 @@ func ResponseMsg(w http.ResponseWriter, code int, message string) {
 	ResponseJson(w, ret)
 }
 
-func Slot2Disk(slot uint8) string {
-	return libvirtc.DISK.Slot2DiskName(slot)
-}
-
 // store: datastore@01
 // name: domain name
 func GetPath(store, name string) string {
@@ -107,9 +102,32 @@ func NewVolumeAndPool(store, name, disk string, size uint64) (*libvirts.VolumeXM
 }
 
 // name: Domain name.
-func DelVolumeAndPool(name string) error {
-	err := libvirts.RemovePool(libvirts.ToDomainPool(name))
+// store: like: datatore@01
+func NewBackingVolumeAndPool(store, name, disk, backingFle, backingFmt string) (*libvirts.VolumeXML, error) {
+	path := GetPath(store, name)
+	pol, err := libvirts.CreatePool(libvirts.ToDomainPool(name), path)
 	if err != nil {
+		return nil, err
+	}
+	vol, err := libvirts.CreateBackingVolume(pol.Name, disk, backingFle, backingFmt)
+	if err != nil {
+		return nil, err
+	}
+	return vol.GetXMLObj()
+}
+
+// name: Domain name.
+func RemovePool(name string) error {
+	pol := &libvirts.Pool{Name: name}
+	if err := pol.Remove(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func CleanPool(name string) error {
+	pol := &libvirts.Pool{Name: name}
+	if err := pol.Clean(); err != nil {
 		return err
 	}
 	return nil

@@ -116,140 +116,115 @@ export class InstanceCreate extends FormModal {
         return (`
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content ">
-            <div class="modal-header">
-                    Create a instance
-            </div>
+            <div class="modal-header">Create a instance</div>
             <div class="modal-body">
-            <div class="card">
-                <div class="card-header">
-                    <ul id="nav-tabs" class="nav nav-pills card-header-pills">
-                        <li class="nav-item">
-                            <a id="head1" class="nav-link text-center" data-target="#guest">
-                                1.Configure Guest</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="head2" class="nav-link text-center" data-target="#datastore">
-                                2.Select DataStore</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="head3" class="nav-link text-center" data-target="#custom">
-                                3.Custom Setting</a>
-                        </li>
-                    </ul>
+            <div class="row">
+                <div class="col-3 border-right">
+                    <div class="">
+                        <ul id="nav-tabs" class="nav flex-column nav-pills">
+                            <li class="nav-item">
+                                <a id="head1" class="nav-link" data-target="#guest">
+                                    Configure Guest</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="head2" class="nav-link" data-target="#datastore">
+                                    Select DataStore</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="head3" class="nav-link" data-target="#custom">
+                                    Custom Setting</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <form id="form">
-                <div id="guest" class="card-body text-center d-none">
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-md-4 col-form-label-sm">Name</label>
-                        <div class="col-sm-10 col-md-6"">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm"
-                                       name="name" value="guest.01"/>
-                            </div>
+                <div class="col-9">
+                <form>
+                <div id="guest" class="d-none">
+                    <div class="form-group">
+                        <label for="name" class="col-form-label-sm">Guest Name</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm" name="name" value="guest.01"/>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="family" class="col-sm-4 col-md-4 col-form-label-sm">Guest OS</label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <select class="select-lg" name="family">
-                                    <option value="linux" selected>Linux</option>
-                                    <option value="windows">Windows</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <label for="family" class="col-form-label-sm">Operating System</label>
+                        <div class="input-group">
+                            <select class="select-lg" name="family">
+                                <option value="linux" selected>Linux</option>
+                                <option value="windows">Windows</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div id="datastore" class="card-body text-center d-none">
-                    <div class="form-group row">
-                        <label for="datastore" class="col-sm-4 col-md-4 col-form-label-sm">
-                            DataStore location
-                        </label>
-                        <div class="col-sm-10 col-md-6"">
-                            <div class="input-group">
-                                <select class="select-lg" name="datastore">
-                                    <option value="datastore/01" selected>datastore01</option>
-                                    <option value="datastore/02">datastore02</option>
-                                </select>
-                            </div>
+                <div id="datastore" class="d-none">
+                    <div class="form-group">
+                        <label for="datastore" class="col-form-label-sm">DataStore location</label>
+                        <div class="input-group">
+                            <select class="select-lg" name="datastore">
+                                <option value="datastore/01" selected>datastore01</option>
+                                <option value="datastore/02">datastore02</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div id="custom" class="card-body text-center d-none">
-                    <div class="form-group row">
-                        <label for="cpu" class="col-sm-4 col-md-4 col-form-label-sm">
-                            Processors
-                        </label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <select class="select-sm" name="cpu">
-                                    <option value="1">1</option>
-                                    <option value="2" selected>2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                </select>
-                                <select class="select-twice-md" name="cpuMode">
-                                    <option value="" selected>Default</option>
-                                    <option value="host-passthrough">Enable Intel VT-x or AMD-V</option>
-                                </select>
-                            </div>
+                <div id="custom" class="d-none">
+                    <div class="form-group">
+                        <label for="cpu" class="col-form-label-sm">Processors</label>
+                        <div class="input-group">
+                            <select class="form-control form-control-sm" name="cpuMode">
+                                <option value="" selected>Default</option>
+                                <option value="host-passthrough">Intel VT-x or AMD-V</option>
+                            </select>
+                            <select class="select-twice-md" name="cpu">
+                                <option value="1">1</option>
+                                <option value="2" selected>2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="MaxMem" class="col-sm-4 col-md-4 col-form-label-sm">Memory size</label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm input-number-lg"
-                                       name="memSize" value="2048"/>
-                                <select class="select-unit-right" name="memUnit">
-                                    <option value="MiB" selected>MiB</option>
-                                    <option value="GiB">GiB</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <label for="MaxMem" class="col-form-label-sm">Memory size</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm"
+                                   name="memSize" value="2048"/>
+                            <select class="select-unit-right" name="memUnit">
+                                <option value="MiB" selected>MiB</option>
+                                <option value="GiB">GiB</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="diskSize" class="col-sm-4 col-md-4 col-form-label-sm">
-                            Hardware disk-01
-                        </label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm input-number-lg"
-                                       name="disk1Size" value="10"/>
-                                <select class="select-unit-right" name="disk1Unit">
-                                    <option value="Mib">MiB</option>
-                                    <option value="GiB" selected>GiB</option>
-                                    <option value="TiB">TiB</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <label for="diskSize" class="col-form-label-sm">Hardware disk</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm"
+                                   name="disk1Size" value="10"/>
+                            <select class="select-unit-right" name="disk1Unit">
+                                <option value="Mib">MiB</option>
+                                <option value="GiB" selected>GiB</option>
+                                <option value="TiB">TiB</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="disk0File" class="col-sm-4 col-md-4 col-form-label-sm">
-                            DataStore ISO file
-                        </label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <select class="" name="disk0File">
-                                    <option value="/dev/sr0">sr0</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <label for="disk0File" class="col-form-label-sm">Select ISO or Image</label>
+                        <div class="input-group">
+                            <select class="form-control form-control-sm" name="disk0File">
+                                <option value="/dev/sr0">sr0</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="interface0Source" class="col-sm-4 col-md-4 col-form-label-sm">
-                            Network interface-01
-                        </label>
-                        <div class="col-sm-10 col-md-6">
-                            <div class="input-group">
-                                <select class="select-md" name="interface0Source">
-                                    <option value="virbr0" selected>Linux Bridge #virbr0</option>
-                                    <option value="virbr1">Linux Bridge #virbr1</option>
-                                    <option value="virbr2">Linux Bridge #virbr2</option>
-                                    <option value="virbr3">Linux Bridge #virbr3</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <label for="interface0Source" class="col-form-label-sm">Network interface</label>
+                        <div class="input-group">
+                            <select class="form-control form-control-sm" name="interface0Source">
+                                <option value="virbr0" selected>Linux Bridge #virbr0</option>
+                                <option value="virbr1">Linux Bridge #virbr1</option>
+                                <option value="virbr2">Linux Bridge #virbr2</option>
+                                <option value="virbr3">Linux Bridge #virbr3</option>
+                            </select>
+                        </div>
                         </div>
                     </div>
                 </div>

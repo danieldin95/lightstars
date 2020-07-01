@@ -106,7 +106,7 @@ func (store DataStore) POST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pol := DataStore2XML(data)
-	libstar.Debug("Datastores.POST %s", pol.XML)
+	libstar.Debug("DataStore.POST %s", pol.XML)
 	if err := pol.Create(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -120,8 +120,7 @@ func (store DataStore) PUT(w http.ResponseWriter, r *http.Request) {
 
 func (store DataStore) DELETE(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-
-	if err := libvirts.RemovePool(uuid); err != nil {
+	if err := RemovePool(uuid); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

@@ -30,48 +30,41 @@ export class NFSCreate extends FormModal {
     template() {
         return (`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="">New datastore by NFS</h5>
-                </div>
-                <form name="datastore-new">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">New datastore by NFS</h5>
+            </div>
+            <div id="" class="modal-body">
+            <form name="datastore-new">
                 <input type="text" class="d-none" name="type" value="netfs"/>
                 <input type="text" class="d-none" name="format" value="nfs"/>
-                <div id="" class="modal-body">
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label-sm ">DataStore</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <select class="select-lg" name="name">
-                                    <option value="datastore@01" selected>datastore@01</option>
-                                </select>
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <label for="name" class="col-form-label-sm ">DataStore</label>
+                    <div class="input-group">
+                        <select class="select-lg" name="name">
+                            <option value="datastore@01" selected>datastore@01</option>
+                        </select>
                     </div>
-                    <div class="form-group row">
-                        <label for="host" class="col-sm-4 col-form-label-sm">Host address</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" name="host" value=""/>                                         
-                            </div>
-                        </div>
-                    </div>  
-                    <div class="form-group row">
-                        <label for="host" class="col-sm-4 col-form-label-sm">Directory path</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" name="path" value="/"/>                                         
-                            </div>
-                        </div>
-                    </div>                                        
                 </div>
-                <div id="" class="modal-footer">
-                    <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
-                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                    <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
-                </div>
-                </form>
+                <div class="form-group">
+                    <label for="host" class="col-form-label-sm">Host address</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm" name="host" value=""/>                                         
+                    </div>
+                </div>  
+                <div class="form-group">
+                    <label for="host" class="col-form-label-sm">Directory path</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm" name="path" value="/"/>                                         
+                    </div>
+                </div>  
+            </form>                                          
             </div>
+            <div id="" class="modal-footer">
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+            </div>
+        </div>
         </div>`);
     }
 }

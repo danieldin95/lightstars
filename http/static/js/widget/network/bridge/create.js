@@ -17,34 +17,28 @@ export class BridgeCreate extends FormModal {
             <div class="modal-header">
                 <h5 class="modal-title" id="">Create Network</h5>
             </div>
-            <form name="network-new">
-                <input type="text" class="d-none" name="mode" value="bridge"/>
-                <input type="text" class="d-none" name="dhcp" value="no"/>
-                <div id="" class="modal-body">
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label-sm ">Name</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" name="name" value=""/>
-                            </div>
+            <div id="" class="modal-body">
+                <form>
+                    <input type="text" class="d-none" name="mode" value="bridge"/>
+                    <input type="text" class="d-none" name="dhcp" value="no"/>
+                    <div class="form-group">
+                        <label for="name" class="col-form-label-sm ">Network Name</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm" name="name" value=""/>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label-sm ">Bridge's name</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm input-lg"
-                                        name="bridge" value="br0"/>                                    
-                            </div>
+                    <div class="form-group">
+                        <label for="name" class="col-form-label-sm ">Existing Bridge</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm input-lg" name="bridge" value="br0"/>                                    
                         </div>
                     </div>
-                </div>
-                <div id="" class="modal-footer">
-                    <button name="reset-btn" class="btn btn-outline-dark btn-sm" type="reset">Reset</button>
-                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                    <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
-                </div>
-            </form>
+                </form>    
+            </div>
+            <div id="" class="modal-footer">
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+            </div>
         </div>
         </div>`);
     }

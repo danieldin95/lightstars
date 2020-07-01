@@ -10,6 +10,8 @@ func TestPool(t *testing.T) {
 	fmt.Println(err)
 	_, err = CreateVolume(".test.xx", "disk0.qcow2", 1024*1024)
 	fmt.Println(err)
-	err = RemovePool(".test.xx")
+
+	pol := &Pool{Name: ".text.xx"}
+	err = pol.Remove()
 	fmt.Println(err)
 }

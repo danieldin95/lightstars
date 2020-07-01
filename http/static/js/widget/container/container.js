@@ -36,4 +36,8 @@ export class Container {
     title(name) {
         $(document).attr("title", name + ' - LightStar');
     }
+
+    compile(tmpl, data) {
+        return template.compile(tmpl)(data);
+    }
 }

@@ -6,20 +6,13 @@ import (
 )
 
 type Volume struct {
-	Pool     string
-	Name     string
-	Size     uint64
-	Format   string
-	BackFile string
-}
-
-func NewVolume(pool, name string, size uint64) Volume {
-	return Volume{
-		Pool:   pool,
-		Name:   name,
-		Size:   size,
-		Format: "qcow2",
-	}
+	Path          string
+	Pool          string
+	Name          string
+	Size          uint64
+	Format        string
+	BackingFile   string
+	BackingFormat string
 }
 
 func CreateVolume(pool, name string, size uint64) (*Volume, error) {
@@ -28,6 +21,17 @@ func CreateVolume(pool, name string, size uint64) (*Volume, error) {
 		Name:   name,
 		Size:   size,
 		Format: "qcow2",
+	}
+	return vol, vol.Create()
+}
+
+func CreateBackingVolume(pool, name, backingFle, backingFmt string) (*Volume, error) {
+	vol := &Volume{
+		Pool:          pool,
+		Name:          name,
+		BackingFile:   backingFle,
+		BackingFormat: backingFmt,
+		Format:        "qcow2",
 	}
 	return vol, vol.Create()
 }
@@ -56,10 +60,19 @@ func (vol *Volume) Create() error {
 				Type: vol.Format,
 			},
 		},
+		BackingStore: BackingStoreXML{
+			Path: vol.BackingFile,
+			Format: FormatXML{
+				Type: vol.BackingFormat,
+			},
+		},
 	}
 	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
-		return err
+		pool, err = hyper.Conn.LookupStoragePoolByTargetPath(vol.Pool)
+		if err != nil {
+			return err
+		}
 	}
 	defer pool.Free()
 	volume, err := pool.StorageVolCreateXML(volXml.Encode(), 0)
@@ -67,7 +80,9 @@ func (vol *Volume) Create() error {
 		return err
 	}
 	defer volume.Free()
-
+	if vol.Path, err = volume.GetPath(); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -78,7 +93,10 @@ func (vol *Volume) GetXMLObj() (*VolumeXML, error) {
 	}
 	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
-		return nil, err
+		pool, err = hyper.Conn.LookupStoragePoolByTargetPath(vol.Pool)
+		if err != nil {
+			return nil, err
+		}
 	}
 	defer pool.Free()
 	volume, err := pool.LookupStorageVolByName(vol.Name)
@@ -101,7 +119,10 @@ func (vol *Volume) Remove() error {
 	}
 	pool, err := hyper.Conn.LookupStoragePoolByName(vol.Pool)
 	if err != nil {
-		return err
+		pool, err = hyper.Conn.LookupStoragePoolByTargetPath(vol.Pool)
+		if err != nil {
+			return err
+		}
 	}
 	defer pool.Free()
 

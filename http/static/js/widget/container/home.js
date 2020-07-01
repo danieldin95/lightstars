@@ -58,7 +58,7 @@ export class Home extends Container {
             $(this.id('#collapseSys')).collapse('show');
         });
 
-        let ins = new InstanceCtl({
+        let iCtl = new InstanceCtl({
             id: this.id('#instances'),
             onthis: (e) => {
                 console.log("Guest.loading", e);
@@ -68,12 +68,12 @@ export class Home extends Container {
                 });
             },
         });
-        new InstanceCreate({id: '#InstanceCreateModal'})
+        new InstanceCreate({id: '#createGuestModal'})
             .onsubmit((e) => {
-                ins.create(Utils.toJSON(e.form));
+                iCtl.create(Utils.toJSON(e.form));
             });
         // loading network.
-        let net = new NetworksCtl({
+        let nCtl = new NetworksCtl({
             id: this.id('#networks'),
             onthis: (e) => {
                 console.log("network.loading", e);
@@ -83,20 +83,20 @@ export class Home extends Container {
                 });
             },
         });
-        new NATCreate({id: '#NatCreateModal'})
+        new NATCreate({id: '#createNatModal'})
             .onsubmit((e) => {
-                net.create(Utils.toJSON(e.form));
+                nCtl.create(Utils.toJSON(e.form));
             });
-        new BridgeCreate({id: '#BridgeCreateModal'})
+        new BridgeCreate({id: '#createBridgeModal'})
             .onsubmit((e) => {
-                net.create(Utils.toJSON(e.form));
+                nCtl.create(Utils.toJSON(e.form));
             });
-        new IsolatedCreate({id: '#IsolatedCreateModal'})
+        new IsolatedCreate({id: '#createIsolatedModal'})
             .onsubmit((e) => {
-                net.create(Utils.toJSON(e.form));
+                nCtl.create(Utils.toJSON(e.form));
             });
         // loading data storage.
-        let store = new DataStoresCtl({
+        let sCtl = new DataStoresCtl({
             id: this.id('#datastores'),
             onthis: (e) => {
                 console.log("storage loading", e)
@@ -105,19 +105,19 @@ export class Home extends Container {
                     uuid: e.uuid,
                 });
             },
-            upload: '#FileUploadModal',
+            upload: '#uploadFileModal',
         });
-        new DirCreate({id: '#DirCreateModal'})
+        new DirCreate({id: '#createDirModal'})
             .onsubmit((e) => {
-                store.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
-        new NFSCreate({id: '#NfsCreateModal'})
+        new NFSCreate({id: '#createNfsModal'})
             .onsubmit((e) => {
-                store.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
-        new iSCSICreate({id: '#IscsiCreateModal'})
+        new iSCSICreate({id: '#createIscsiModal'})
             .onsubmit((e) => {
-                store.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
     }
 
@@ -155,7 +155,7 @@ export class Home extends Container {
                 <!-- Instances buttons -->
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#InstanceCreateModal">
+                            data-toggle="modal" data-target="#createGuestModal">
                         Create new instance
                     </button>
                     <button id="console" type="button" class="btn btn-outline-dark btn-sm">Console</button>
@@ -169,11 +169,10 @@ export class Home extends Container {
                         <a id="more-start" class="dropdown-item" href="javascript:void(0)">Power on</a>
                         <a id="more-shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
-                        <div class="dropdown-divider"></div>
                         <a id="more-suspend" class="dropdown-item" href="javascript:void(0)">Suspend</a>
                         <a id="more-resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
                         <div class="dropdown-divider"></div>
+                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">Reset</a>                        
                         <a id="more-destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
                     </div>
                 </div>
@@ -218,7 +217,7 @@ export class Home extends Container {
                     <div class="card-header-cnt">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#DirCreateModal">
+                                    data-toggle="modal" data-target="#createDirModal">
                                 New a datastore
                             </button>
                             <button id="creates" type="button"
@@ -227,16 +226,16 @@ export class Home extends Container {
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#NfsCreateModal">
+                                <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#createNfsModal">
                                     New nfs datastore
                                 </a>
-                                <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#IscsiCreateModal">
+                                <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#createIscsiModal">
                                     New iscsi datastore
                                 </a>
                             </div>
                         </div>
                         <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#FileUploadModal">
+                                data-toggle="modal" data-target="#uploadFileModal">
                             Upload
                         </button>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
@@ -283,7 +282,7 @@ export class Home extends Container {
                     <div class="card-header-cnt">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal" data-target="#NatCreateModal">
+                                    data-toggle="modal" data-target="#createNatModal">
                                 Create network
                             </button>
                             <button id="creates" type="button"
@@ -292,10 +291,10 @@ export class Home extends Container {
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#IsolatedCreateModal">
+                                <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#createIsolatedModal">
                                     Create isolated network
                                 </a>
-                                <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#BridgeCreateModal">
+                                <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#createBridgeModal">
                                     Create existing bridge
                                 </a>
                             </div>
@@ -325,6 +324,22 @@ export class Home extends Container {
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <!-- Modal -->
+        <div id="modals">
+            <!-- Create instance modal -->
+            <div id="createGuestModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Create datastore modal -->
+            <div id="createDirModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Upload file modal -->
+            <div id="uploadFileModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="createNfsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="createIscsiModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Create network modal -->
+            <div id="createNatModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="createBridgeModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="createIsolatedModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>        
         </div>
         </div>`)
     }

@@ -8,7 +8,7 @@ import {Collapse} from "../collapse.js";
 import {DiskCreate} from '../disk/create.js';
 import {InterfaceCreate} from '../interface/create.js';
 import {InstanceSet} from "../instance/setting.js";
-
+import {InstanceRemove} from "../instance/remove.js";
 
 export class Guest extends Container {
     // {
@@ -21,6 +21,7 @@ export class Guest extends Container {
         super(props);
         this.default = props.default || 'disk';
         this.current = "#instance";
+        this.name = "";
         this.uuid = props.uuid;
         console.log('Instance', props);
 
@@ -29,7 +30,8 @@ export class Guest extends Container {
 
     render() {
         new InstanceApi({uuids: this.uuid}).get(this, (e) => {
-            this.title(e.resp.name);
+            this.name = e.resp.name;
+            this.title(this.name);
             this.view = $(this.template(e.resp));
             this.view.find('#header #refresh').on('click', (e) => {
                 this.render();
@@ -53,31 +55,34 @@ export class Guest extends Container {
             update: false,
         });
 
-        let instance = new GuestCtl({
+        let ctl = new GuestCtl({
             id: this.id(),
             header: {id: this.id("#header")},
             disks: {id: this.id("#disk")},
             interfaces: {id: this.id("#interface")},
             graphics: {id: this.id("#graphics")},
         });
-        new InstanceSet({id: '#InstanceSetModal', cpu: instance.cpu, mem: instance.mem })
+        new InstanceSet({id: this.id('#settingModal'), cpu: ctl.cpu, mem: ctl.mem })
             .onsubmit((e) => {
-                instance.edit(Utils.toJSON(e.form));
+                ctl.edit(Utils.toJSON(e.form));
             });
-
+        new InstanceRemove({id: this.id('#removeModal'), name: this.name, uuid: this.uuid })
+            .onsubmit((e) => {
+                ctl.remove();
+            });
         // loading disks and interfaces.
-        new DiskCreate({id: '#DiskCreateModal'})
+        new DiskCreate({id: this.id('#createDiskModal')})
             .onsubmit((e) => {
-                instance.disk.create(Utils.toJSON(e.form));
+                ctl.disk.create(Utils.toJSON(e.form));
             });
-        new InterfaceCreate({id: '#InterfaceCreateModal'})
+        new InterfaceCreate({id: this.id('#createInterfaceModal')})
             .onsubmit((e) => {
-                instance.interface.create(Utils.toJSON(e.form));
+                ctl.interface.create(Utils.toJSON(e.form));
             });
 
         // register console draggable.
-        $(function (e) {
-            $('#ConsoleModal').draggable();
+        $((e) => {
+            $(this.id('#consoleModal')).draggable();
         });
     }
 
@@ -95,7 +100,7 @@ export class Guest extends Container {
             vncUrl = "/ui/console?id=" + v.uuid + "&password=" + vnc + "&node=" + Api.host;
         }
 
-        return template.compile(`
+        return this.compile(`
         <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">
         <div id="header" class="card header">
             <div class="card-header">
@@ -110,14 +115,11 @@ export class Guest extends Container {
                 <div class="card-header-cnt">
                     <div id="console-btns" class="btn-group btn-group-sm" role="group">
                         <button id="console" type="button" class="btn btn-outline-dark ${cls}"
-                                data-target="#ConsoleModal" data="${vncUrl}">
-                            Console
-                        </button>
+                                data-target="#consoleModal" data="${vncUrl}">Console</button>
                         <button id="consoles" type="button"
                                 class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split ${cls}"
                                 data-toggle="dropdown" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
+                            <span class="sr-only">Toggle Dropdown</span></button>
                         <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
                             <a id="console-self" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
                                 Console in self
@@ -145,7 +147,6 @@ export class Guest extends Container {
                             <a id="shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
                             <div class="dropdown-divider"></div>
                             <a id="reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
-                            <div class="dropdown-divider"></div>
                             <a id="destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
                         </div>
                     </div>
@@ -157,12 +158,10 @@ export class Guest extends Container {
                         <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
                             <a id="suspend" class="dropdown-item ${cls}" href="javascript:void(0)">Suspend</a>
                             <a id="resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="remove" class="dropdown-item" href="javascript:void(0)">Remove</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#InstanceSetModal">Setting</a>
-                            <div class="dropdown-divider"></div>
+                            <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#settingModal">Setting</a>
                             <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">Dump XML</a>
+                            <div class="dropdown-divider"></div>
+                            <a id="remove" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#removeModal">Remove</a>
                         </div>
                     </div>
                 </div>
@@ -181,7 +180,7 @@ export class Guest extends Container {
             </div>
             </div>
         </div>
-    
+        
         <div id="collapse">
         <!-- Virtual Disk -->
         <div id="disk" class="card device">
@@ -196,7 +195,7 @@ export class Guest extends Container {
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#DiskCreateModal">
+                            data-toggle="modal" data-target="#createDiskModal">
                         Attach disk
                     </button>
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
@@ -213,7 +212,7 @@ export class Guest extends Container {
                             <th>Device</th>
                             <th>Source</th>
                             <th>Capacity</th>
-                            <th>Available</th>
+                            <th>Allocation</th>
                             <th>Address</th>
                         </tr>
                         </thead>
@@ -238,8 +237,8 @@ export class Guest extends Container {
             <div class="card-body">
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#InterfaceCreateModal">
-                        Attach one
+                            data-toggle="modal" data-target="#createInterfaceModal">
+                        Attach interface
                     </button>
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
                     <button id="remove" type="button" class="btn btn-outline-dark btn-sm">Remove</button>
@@ -279,7 +278,7 @@ export class Guest extends Container {
                 <div class="card-body">
                     <div class="card-header-cnt">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#GraphicCreateModal">
+                                data-toggle="modal" data-target="#createGraphicModal">
                             Attach graphic
                         </button>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
@@ -305,6 +304,25 @@ export class Guest extends Container {
             </div>
         </div>
         </div>
-        </div>`)(v);
+        <!-- Modals -->
+        <div id="modals">
+            <!-- Console modal -->
+            <div id="consoleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-console">
+                    <div class="modal-content">
+                        <div class="modal-body"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Remove confirm -->
+            <div id="removeModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Setting instance modal -->
+            <div id="settingModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Create disk modal -->
+            <div id="createDiskModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Create interface modal -->
+            <div id="createInterfaceModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+        </div>
+        </div>`, v);
     }
 }

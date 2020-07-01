@@ -7,7 +7,6 @@ import {Routes} from "./routes.js";
 
 $(function() {
     let hyper = $('hyper');
-    let container = "#Container";
     let host = Location.query('node');
 
     if (host === undefined) {
@@ -18,15 +17,15 @@ $(function() {
     Api.Host(host);
 
     let nav = new Navigation({
-        parent: "nav",
+        parent: "#Navigation",
         home: ".",
-        container: container,
+        container: "#Container",
         name: hyper.attr('name'),
     });
     let filter = new Filters();
     let routes = new Routes({
         hyper: hyper,
-        container: container,
+        container: "#Container",
         onchange: function (e) {
            nav.refresh();
         },

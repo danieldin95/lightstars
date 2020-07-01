@@ -24,11 +24,10 @@ func (u User) PUT(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	name, _, _ := GetAuth(request)
 	_, ok := service.SERVICE.Users.SetPass(name, data.Old, data.New)
 	if !ok {
-		ResponseMsg(writer, 200, "password error")
+		http.Error(writer, "invalid password", http.StatusBadRequest)
 		return
 	}
 	_ = service.SERVICE.Users.Save()

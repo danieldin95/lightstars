@@ -8,8 +8,10 @@ import (
 	"github.com/danieldin95/lightstar/network/libvirtn"
 	"github.com/danieldin95/lightstar/schema"
 	"github.com/danieldin95/lightstar/storage"
+	"github.com/danieldin95/lightstar/storage/libvirts"
 	"github.com/gorilla/mux"
 	"net/http"
+	"path"
 	"sort"
 	"strconv"
 	"strings"
@@ -18,21 +20,25 @@ import (
 type Instance struct {
 }
 
-func GetTypeBySuffix(name string) (string, string) {
-	name = strings.ToUpper(name)
-	if strings.HasSuffix(name, ".ISO") || strings.HasSuffix(name, ".RAW") {
-		return "cdrom", "raw"
-	} else if strings.HasSuffix(name, ".RAW") {
-		return "disk", "raw"
-	} else if strings.HasSuffix(name, ".QCOW2") || strings.HasSuffix(name, ".IMG") {
-		return "disk", "qcow2"
-	} else if strings.HasSuffix(name, ".VMDK") {
-		return "disk", "vmdk"
+func GetTypeByVolume(file string) (string, string) {
+	vol := libvirts.Volume{
+		Pool: path.Dir(file),
+		Name: path.Base(file),
 	}
-	return "disk", "raw"
+	desc, err := vol.GetXMLObj()
+	if err != nil {
+		libstar.Warn("GetTypeByVolume: %s", err)
+		return "disk", ""
+	}
+	libstar.Debug("GetTypeByVolume: %s:%v", file, desc.Target.Format)
+	fmt := desc.Target.Format.Type
+	if fmt == "iso" {
+		return "cdrom", "raw"
+	}
+	return "disk", fmt
 }
 
-func NewCDROMXML(file, family string, seq uint8) libvirtc.DiskXML {
+func NewCdXML(file, family string, seq uint8) libvirtc.DiskXML {
 	return libvirtc.DiskXML{
 		Type:   "block",
 		Device: "cdrom",
@@ -50,7 +56,7 @@ func NewCDROMXML(file, family string, seq uint8) libvirtc.DiskXML {
 	}
 }
 
-func NewISOXML(file, family string, seq uint8) libvirtc.DiskXML {
+func NewIsoXML(file, family string, seq uint8) libvirtc.DiskXML {
 	xml := libvirtc.DiskXML{
 		Type:   "file",
 		Device: "disk",
@@ -63,7 +69,9 @@ func NewISOXML(file, family string, seq uint8) libvirtc.DiskXML {
 		},
 	}
 	name := strings.ToUpper(file)
-	xml.Device, xml.Driver.Type = GetTypeBySuffix(name)
+	device, format := GetTypeByVolume(file)
+	xml.Device = device
+	xml.Driver.Type = format
 	if family == "linux" && !strings.HasSuffix(name, ".ISO") {
 		xml.Target = libvirtc.DiskTargetXML{
 			Bus: "virtio",
@@ -110,6 +118,38 @@ func NewDiskXML(format, file, bus string, seq uint8) libvirtc.DiskXML {
 		}
 	}
 	return disk
+}
+
+func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq uint8) (libvirtc.DiskXML, error) {
+	obj := libvirtc.DiskXML{}
+	file := storage.PATH.Unix(disk.Source)
+	size := libstar.ToBytes(disk.Size, disk.SizeUnit)
+	name := libvirtc.DISK.Slot2Name(seq)
+	device, format := GetTypeByVolume(file)
+	if file == "" {
+		vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, name, size)
+		if err != nil {
+			return obj, err
+		}
+		file = vol.Target.Path
+		format = vol.Target.Format.Type
+	} else if device == "disk" && (format == "raw" || format == "qcow2" || format == "qcow") {
+		vol, err := NewBackingVolumeAndPool(conf.DataStore, conf.Name, name, file, format)
+		if err != nil {
+			return obj, err
+		}
+		file = vol.Target.Path
+		format = vol.Target.Format.Type
+	}
+	switch conf.Family {
+	case "linux":
+		obj = NewDiskXML(format, file, "virtio", seq)
+	case "windows": // not scsi.
+		obj = NewDiskXML(format, file, "ide", seq)
+	default:
+		obj = NewDiskXML(format, file, "ide", seq)
+	}
+	return obj, nil
 }
 
 func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
@@ -205,35 +245,18 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	// disks
 	for i, disk := range conf.Disks {
 		file := disk.Source
-		size := disk.Size
-		unit := disk.SizeUnit
 		seq := uint8(i + 1)
 
 		obj := libvirtc.DiskXML{}
 		if strings.HasPrefix(file, "/dev") {
-			obj = NewCDROMXML(file, conf.Family, seq)
+			obj = NewCdXML(file, conf.Family, seq)
 		} else if strings.HasSuffix(file, ".iso") || strings.HasSuffix(file, ".ISO") {
-			obj = NewISOXML(storage.PATH.Unix(file), conf.Family, seq)
+			obj = NewIsoXML(storage.PATH.Unix(file), conf.Family, seq)
 		} else {
-			_, format := GetTypeBySuffix(file)
-			if file == "" {
-				size := libstar.ToBytes(size, unit)
-				vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, Slot2Disk(seq), size)
-				if err != nil {
-					return dom, err
-				}
-				file = vol.Target.Path
-				format = vol.Target.Format.Type
-			} else {
-				file = storage.PATH.Unix(file)
-			}
-			switch conf.Family {
-			case "linux":
-				obj = NewDiskXML(format, file, "virtio", seq)
-			case "windows": // not scsi.
-				obj = NewDiskXML(format, file, "ide", seq)
-			default:
-				obj = NewDiskXML(format, file, "ide", seq)
+			var err error
+			obj, err = NewFileXML(&disk, conf, seq)
+			if err != nil {
+				return dom, err
 			}
 		}
 		dom.Devices.Disks = append(dom.Devices.Disks, obj)
@@ -306,7 +329,7 @@ func (ins Instance) GetByUser(user *schema.User, list *schema.ListInstance) {
 			if ins.HasPermission(user, inst.Name) {
 				list.Items = append(list.Items, inst)
 			}
-			d.Free()
+			_ = d.Free()
 		}
 	}
 }
@@ -368,7 +391,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 	// need release created images if fails.
 	xmlData := xmlObj.Encode()
 	if xmlData == "" {
-		//DelVolumeAndPool(conf.Name)
+		//RemovePool(conf.Name)
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
 		return
 	}
@@ -377,7 +400,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 
 	dom, err := hyper.DomainDefineXML(xmlData)
 	if err != nil {
-		//DelVolumeAndPool(conf.Name)
+		//RemovePool(conf.Name)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -500,7 +523,7 @@ func (ins Instance) DELETE(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := DelVolumeAndPool(name); err != nil {
+	if err := CleanPool(libvirts.ToDomainPool(name)); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
