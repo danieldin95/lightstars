@@ -139,7 +139,7 @@ export class InstanceCreate extends FormModal {
                 </div>
                 <div class="col-9">
                 <form>
-                <div id="guest" class="card-body d-none">
+                <div id="guest" class="d-none">
                     <div class="form-group">
                         <label for="name" class="col-form-label-sm">Guest Name</label>
                         <div class="input-group">
@@ -157,7 +157,7 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                 </div>
-                <div id="datastore" class="card-body d-none">
+                <div id="datastore" class="d-none">
                     <div class="form-group">
                         <label for="datastore" class="col-form-label-sm">DataStore location</label>
                         <div class="input-group">
@@ -168,7 +168,7 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                 </div>
-                <div id="custom" class="card-body d-none">
+                <div id="custom" class="d-none">
                     <div class="form-group">
                         <label for="cpu" class="col-form-label-sm">Processors</label>
                         <div class="input-group">
