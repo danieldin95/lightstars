@@ -95,7 +95,7 @@ export class Guest extends Container {
             vncUrl = "/ui/console?id=" + v.uuid + "&password=" + vnc + "&node=" + Api.host;
         }
 
-        return template.compile(`
+        return this.compile(`
         <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">
         <div id="header" class="card header">
             <div class="card-header">
@@ -302,6 +302,6 @@ export class Guest extends Container {
             </div>
         </div>
         </div>
-        </div>`)(v);
+        </div>`, v);
     }
 }

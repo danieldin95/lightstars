@@ -2,23 +2,23 @@ import {Widget} from "../widget.js";
 import {VolumeApi} from "../../api/volume.js";
 import {CheckBox} from "../checkbox/checkbox.js";
 
-const prefix = /datastore@/
+const prefix = /datastore@/;
 
 export default class VolumeTable extends Widget {
 
     constructor(props) {
         super(props);
-        this.checkbox = new CheckBox(props)
-        this.uuid = props.uuid
-        console.log("cur name",this.props.name)
+        this.checkbox = new CheckBox(props);
+        this.uuid = props.uuid;
+        console.log("cur name",this.props.name);
 
         this.refresh( (e) => {
-            this.checkbox.refresh()
+            this.checkbox.refresh();
         })
     }
 
     loading() {
-        return `<tr><td colspan="8" style="text-align: center">Loading...</td></tr>`;
+        return `<tr><td colspan="5" style="text-align: center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -32,7 +32,6 @@ export default class VolumeTable extends Widget {
         // if (this.props.name) {
         //     this.uuid = this.props.name.replace(prefix, '')
         // }
-
         new VolumeApi({
             uuid: this.uuid
         }).list(this, function (e) {
@@ -42,10 +41,9 @@ export default class VolumeTable extends Widget {
     }
 
     render(data) {
-        let prefix = window.location.pathname
-        console.log(data)
-        return this.compile(`
-            
+        let prefix = window.location.pathname;
+
+        return this.compile(`    
             {{each items v i}}
                 <tr class="sortable">
                     <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
@@ -60,12 +58,10 @@ export default class VolumeTable extends Widget {
                             <path d="M9 4.5V1l5 5h-3.5A1.5 1.5 0 0 1 9 4.5z"/>
                         </svg>
                         {{/if}}
-                        
                     </td>
                     <td><a id="onthis" data=".guest01" href="#/datastore/.guest01">{{v.name}}</a></td>
-                    <td>{{v.pool}}</td>
-                    <td>{{if v.type == "dir"}} - {{else}} {{v.capacity | prettyByte}} {{/if}}</td>
-                    <td>{{if v.type == "dir"}} - {{else}} {{v.allocation | prettyByte}} {{/if}}</td>
+                    <td>{{v.capacity | prettyByte}}</td>
+                    <td>{{v.allocation | prettyByte}}</td>
                 </tr>
             {{/each}}
             `, data);
