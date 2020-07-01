@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="/static/css/modal.css">
 </head>
 <body>
-<nav id="Navs" class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-</nav>
+<div id="Navigation">
+</div>
 <hyper name="{{.Hyper.Name}}" default="{{.Default}}">
     <!--Loading-->
 </hyper>
@@ -28,36 +28,6 @@
 </div>
 <div id="Container" class="container">
     <!-- Loading -->
-</div>
-<div id="Modals" class="modals">
-    <!-- Create instance modal -->
-    <div id="InstanceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <!-- Create datastore modal -->
-    <div id="DirCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <!-- Upload file modal -->
-    <div id="FileUploadModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="NfsCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="IscsiCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <!-- Create network modal -->
-    <div id="NatCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="BridgeCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <div id="IsolatedCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <!-- Console modal -->
-    <div id="ConsoleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-console">
-            <div class="modal-content">
-                <div class="modal-body"></div>
-            </div>
-        </div>
-    </div>
-    <!-- Set instance modal -->
-    <div id="InstanceSetModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <!-- Create disk modal -->
-    <div id="DiskCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <!-- Create interface modal -->
-    <div id="InterfaceCreateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    <!-- Change password modal -->
-    <div id="ChangePasswordModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 </div>
 <!-- JQuery Javascript -->
 <script src="/static/asset/jquery-1.12.4.js"></script>

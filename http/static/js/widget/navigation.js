@@ -62,20 +62,17 @@ export class Navigation {
                     });
                 })
             }
-
             forceActive(this.active);
             this.node();
+            $(this.parent).html(this.view);
 
+            // register Listener
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
-
-            let password = new PasswordApi();
-            new ChangePassword({id: '#ChangePasswordModal'})
-                .onsubmit((e) => {
-                    password.set(Utils.toJSON(e.form));
+            new ChangePassword({id: '#changePasswdModal'}).onsubmit((e) => {
+                new PasswordApi().set(Utils.toJSON(e.form));
             });
-            $(this.parent).html(this.view);
         });
     }
 
@@ -150,13 +147,17 @@ export class Navigation {
 
     render(data) {
         return template.compile(`
+        <nav id="navs" class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <!-- Brand -->
         <a class="navbar-brand" href="${this.home}">
             <img src="/static/images/lightstar-6.png" width="30" height="30" alt="">
         </a>
+        <!-- Collapse bar -->
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarMore" aria-controls="navbarMore" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"/>
         </button>
+        <!-- More bar -->
         <div class="collapse navbar-collapse" id="navbarMore">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -194,7 +195,7 @@ export class Navigation {
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)">Setting</a>
                         <a class="dropdown-item" href="javascript:void(0)" 
-                            data-toggle="modal" data-target="#ChangePasswordModal">
+                            data-toggle="modal" data-target="#changePasswdModal">
                             Change password
                         </a>
                         <div class="dropdown-divider"></div>
@@ -202,6 +203,12 @@ export class Navigation {
                     </div>
                 </li>
             </ul>
-        </div>`)(data)
+        </div>
+        </nav>
+        <!-- Modals -->
+        <div id="modals" class="modals">
+            <div id="changePasswdModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+        </div>
+        `)(data)
     }
 }
