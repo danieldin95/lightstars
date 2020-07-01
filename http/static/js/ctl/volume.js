@@ -65,7 +65,7 @@ export class VolumeCtl extends Ctl {
                     new VolumeApi({
                         pool: _this.table.pool,
                         uuids: [name],
-                    }).get()
+                    }).get(_this, ()=>{})
                 }
             });
         });
