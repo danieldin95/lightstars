@@ -20,7 +20,7 @@ export class InstanceRemove extends FormModal {
             </div>
             <div id="" class="modal-body">
                 <p class="text-center">
-                  Are you sure to remove guest <span class="text-danger font-weight-bold">${this.name}</span>
+                   Are you sure you want to remove <span class="text-danger font-weight-bold">${this.name}</span>?
                 </p>
                 <p class="text-center font-weight-bold">
                   If you confirm to remove it, all data of this guest will be clear.

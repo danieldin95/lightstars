@@ -118,7 +118,8 @@ func IsVolume(file string) bool {
 	if !strings.HasPrefix(file, storage.Location) {
 		return false
 	}
-	if strings.HasSuffix(file, ".img") || strings.HasSuffix(file, ".qcow2") {
+	if strings.HasSuffix(file, ".img") || strings.HasSuffix(file, ".qcow2") ||
+		strings.HasSuffix(file, ".raw")  || strings.HasSuffix(file, ".qcow") {
 		return true
 	}
 	return false

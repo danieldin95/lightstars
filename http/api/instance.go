@@ -134,6 +134,7 @@ func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq uint8) (libvirtc.D
 		file = vol.Target.Path
 		format = vol.Target.Format.Type
 	} else if device == "disk" && (format == "raw" || format == "qcow2" || format == "qcow") {
+		name := path.Base(file)
 		vol, err := NewBackingVolumeAndPool(conf.DataStore, conf.Name, name, file, format)
 		if err != nil {
 			return obj, err
@@ -388,9 +389,9 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	// need release created images if fails.
 	xmlData := xmlObj.Encode()
 	if xmlData == "" {
+		// If name already existed, will be clear.
 		//RemovePool(conf.Name)
 		http.Error(w, "DomainXML.Encode has error.", http.StatusInternalServerError)
 		return
