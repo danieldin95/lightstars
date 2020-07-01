@@ -43,4 +43,13 @@ export class Utils {
         }
         return ''
     }
+
+    static basename(str) {
+        let idx = str.lastIndexOf('/')
+        idx = idx > -1 ? idx : str.lastIndexOf('\\')
+        if (idx < 0) {
+            return str
+        }
+        return str.substring(idx + 1);
+    }
 }

@@ -12,12 +12,8 @@ type Volume struct {
 }
 
 func (v Volume) Router(router *mux.Router) {
-	router.HandleFunc("/api/volume/{id}", v.GET).Methods("GET")
-}
-
-func (v Volume) Get(name string, data schema.Volumes) error {
-
-	return nil
+	router.HandleFunc("/api/datastore/{id}/volume", v.GET).Methods("GET")
+	router.HandleFunc("/api/datastore/{id}/volume/{name}", v.DOWNLOAD).Methods("GET")
 }
 
 func (v Volume) GET(w http.ResponseWriter, r *http.Request) {
@@ -57,5 +53,9 @@ func (v Volume) PUT(w http.ResponseWriter, r *http.Request) {
 }
 
 func (v Volume) DELETE(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}
+
+func (v Volume) DOWNLOAD(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }

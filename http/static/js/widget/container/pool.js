@@ -98,8 +98,8 @@ export class Pool extends Container {
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
-                        data-target="#collapseLea" aria-expanded="true" aria-controls="collapseLea">
-                    {{name}}:/
+                        data-target="#collapseVol" aria-expanded="true" aria-controls="collapseVol">
+                    File Manager
                 </button>
             </div>
             <div id="collapseVol" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
