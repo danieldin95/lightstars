@@ -18,7 +18,7 @@ export class ChangePassword extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
             <div class="modal-content ">
                 <div class="modal-header">
-                        Change User Password
+                        Change user password
                 </div>
                 <div class="modal-body">
                     <form id="form">
