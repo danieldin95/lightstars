@@ -12,7 +12,8 @@ type Volume struct {
 }
 
 func (v Volume) Router(router *mux.Router) {
-	router.HandleFunc("/api/volume/{id}", v.GET).Methods("GET")
+	router.HandleFunc("/api/datastore/{id}/volume", v.GET).Methods("GET")
+	router.HandleFunc("/api/datastore/{id}/volume/{name}", v.DOWN).Methods("GET")
 }
 
 func (v Volume) Get(name string, data schema.Volumes) error {
@@ -20,6 +21,9 @@ func (v Volume) Get(name string, data schema.Volumes) error {
 	return nil
 }
 
+
+// /api/datastore/{id}/volume/{name}
+// https://192.168.10.129:10080/api/datastore/f3c0c560-af51-4e89-8fd5-960423afad42?format=schema
 func (v Volume) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	data := schema.Volumes{
@@ -57,5 +61,9 @@ func (v Volume) PUT(w http.ResponseWriter, r *http.Request) {
 }
 
 func (v Volume) DELETE(w http.ResponseWriter, r *http.Request) {
+	ResponseMsg(w, 0, "")
+}
+
+func (v Volume) DOWN(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }

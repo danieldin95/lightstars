@@ -9,13 +9,14 @@ export class VolumeApi extends Api {
     // }
     constructor(props) {
         super(props);
-        this.uuid = this.props.uuid
+        this.pool = this.props.pool
     }
 
     url(uuid) {
+
         if (uuid) {
-            return super.url(`/volume/${this.uuid}`);
+            return super.url(`/datastore/${this.pool}/volume/${uuid}`);
         }
-        return super.url(`/volume/${this.uuid}`);
+        return super.url(`/datastore/${this.pool}/volume`);
     }
 }

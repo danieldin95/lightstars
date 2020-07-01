@@ -1,6 +1,7 @@
 import {Ctl} from "./ctl.js";
 import {CheckBox} from "../widget/checkbox/checkbox.js";
 import VolumeTable from "../widget/volume/table.js";
+import {VolumeApi} from "../api/volume.js";
 
 
 class CheckBoxCtl extends CheckBox {
@@ -16,14 +17,13 @@ export class VolumeCtl extends Ctl {
     constructor(props) {
         super(props);
         this.name = props.name;
-        this.uuid = props.uuid;
+        this.pool = props.uuid;
 
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
         this.table = new VolumeTable({
             id: this.child('#display-table'),
-            uuid: this.uuid,
-            name: this.name,
+            pool: this.pool
         });
 
         // refresh table and register refresh click.
@@ -57,9 +57,20 @@ export class VolumeCtl extends Ctl {
 
             let _this = this
             $(this.child('#on-this')).on('click', function (e) {
-                _this.table.name = $(this).attr('data')
-                console.log(_this.table.name)
-                _this.refresh()
+                let name = $(this).attr('data-name')
+                let type = $(this).attr('data-type')
+
+                if (type === "dir") {
+                    _this.table.pool = name
+                    _this.refresh()
+                } else {
+
+                    _this.uuids = [name]
+                    new VolumeApi({
+                        pool: _this.table.pool,
+                        uuids: [name],
+                    }).get()
+                }
             });
         });
     }
