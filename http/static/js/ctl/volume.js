@@ -28,15 +28,12 @@ export class VolumeCtl extends Ctl {
 
         // refresh table and register refresh click.
         $(this.child('#create')).on("click", (e) => {
-            console.log('create')
 
         });
         $(this.child('#edit')).on("click", (e) => {
-            console.log('edit')
 
         });
         $(this.child('#remove')).on("click", (e) => {
-            console.log('remove')
 
         });
         $(this.child('#refresh')).on("click", (e) => {
@@ -51,7 +48,6 @@ export class VolumeCtl extends Ctl {
 
     refresh() {
         this.table.refresh((e) => {
-            console.log(e.resp)
             this.checkbox.refresh();
             // register click on this table row.
 
