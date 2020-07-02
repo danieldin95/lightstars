@@ -12,7 +12,7 @@ openssl rsa -in private.key -pubout -out public.key
 
 # using private to sign pem and generate a csr request.
 
-openssl req -new -key private.key -out csr.pem -subj "/C=CN/ST=JS/L=NJ/O=lightstar-dev/OU=dev/CN=hilightstar.com/emailAddress=danieldin95@163.com"
+openssl req -new -key private.key -out csr.pem -subj "/C=CN/ST=JS/L=NJ/O=lightstars/OU=dev/CN=lightstars.xyz/emailAddress=danieldin95@163.com"
 
 # openssl req -noout -text -in csr.pem
 
@@ -20,7 +20,7 @@ openssl req -new -key private.key -out csr.pem -subj "/C=CN/ST=JS/L=NJ/O=lightst
 
 openssl genrsa -out ca.key 2048
 
-openssl req -new -x509 -days 365 -key ca.key -out ca.crt -subj "/C=CN/ST=JS/L=NJ/O=lightstar-dev/OU=dev/CN=hilightstar.com/emailAddress=hilightstar@163.com"
+openssl req -new -x509 -days 365 -key ca.key -out ca.crt -subj "/C=CN/ST=JS/L=NJ/O=openlan/OU=op/CN=openlan.net/emailAddress=danieldin95@163.com"
 
 # openssl x509 -in ca.crt -noout -text
 
