@@ -119,7 +119,7 @@ func IsVolume(file string) bool {
 		return false
 	}
 	if strings.HasSuffix(file, ".img") || strings.HasSuffix(file, ".qcow2") ||
-		strings.HasSuffix(file, ".raw")  || strings.HasSuffix(file, ".qcow") {
+		strings.HasSuffix(file, ".raw") || strings.HasSuffix(file, ".qcow") {
 		return true
 	}
 	return false

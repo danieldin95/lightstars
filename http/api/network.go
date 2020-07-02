@@ -52,8 +52,7 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 		if conf.Netmask != "" {
 			xmlObj.IPv4.Netmask = conf.Netmask
 		}
-	}
-	if conf.DHCP != "no" {
+		// DHCP address range
 		xmlObj.IPv4.DHCP = &libvirtn.DHCPXML{
 			Range: make([]libvirtn.DHCPRangeXML, 0, 32),
 		}
@@ -65,7 +64,6 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 				})
 		}
 	}
-
 	return xmlObj
 }
 
@@ -134,7 +132,7 @@ func (net Network) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	ResponseMsg(w, 0, "")
+	ResponseMsg(w, 0, conf.Name+" success")
 }
 
 func (net Network) PUT(w http.ResponseWriter, r *http.Request) {
@@ -161,5 +159,5 @@ func (net Network) DELETE(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	ResponseMsg(w, 0, "")
+	ResponseMsg(w, 0, "success")
 }

@@ -59,6 +59,9 @@ func ResponseXML(w http.ResponseWriter, v string) {
 }
 
 func ResponseMsg(w http.ResponseWriter, code int, message string) {
+	if code == 0 && message == "" {
+		message = "success"
+	}
 	ret := struct {
 		Code    int    `json:"code"`
 		Message string `json:"message"`

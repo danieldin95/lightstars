@@ -14,7 +14,6 @@ type Network struct {
 	Netmask string  `json:"netmask,omitempty"`
 	Prefix  string  `json:"prefix,omitempty"`
 	Range   []Range `json:"range"`
-	DHCP    string  `json:"dhcp,omitempty"`
 	Mode    string  `json:"mode"` // nat, router.
 }
 

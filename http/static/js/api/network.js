@@ -19,16 +19,19 @@ export class NetworkApi extends Api {
     }
 
     create(data) {
-        if (data.range && data.range !== "") {
-            let lines = data.range.split(/\r?\n/);
-
-            data.range = [];
+        let range = data.range || "";
+        data.range = [];
+        if (data.dhcp === "yes" && range !== "") {
+            let lines = range.split(/\r?\n/);
             for (let line of lines) {
                 if (line.indexOf(',') > 0) {
                     let [start, end] = line.split(',', 2);
                     data.range.push({start, end});
                 }
             }
+        } else if (data.dhcp === "no") {
+            data.address = "";
+            data.prefix = "0";
         }
         super.create(data);
     }

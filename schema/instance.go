@@ -51,15 +51,15 @@ type ListInstance struct {
 }
 
 type Disk struct {
-	Action     string     `json:"action,omitempty"`
-	Seq        string     `json:"seq,omitempty"`       // configure
-	Name       string     `json:"name,omitempty"`      // disk name
-	UUID       string     `json:"uuid,omitempty"`      // disk UUID
-	Store      string     `json:"datastore,omitempty"` // disk saved to datastore
-	Size       string     `json:"size"`                // configure
-	SizeUnit   string     `json:"sizeUnit,omitempty"`  //configure
-	Format     string     `json:"format"`
-	Source     string     `json:"source"`
+	Action     string `json:"action,omitempty"`
+	Seq        string `json:"seq,omitempty"`       // configure
+	Name       string `json:"name,omitempty"`      // disk name
+	UUID       string `json:"uuid,omitempty"`      // disk UUID
+	Store      string `json:"datastore,omitempty"` // disk saved to datastore
+	Size       string `json:"size"`                // configure
+	SizeUnit   string `json:"sizeUnit,omitempty"`  //configure
+	Format     string `json:"format"`
+	Source     string `json:"source"`
 	Device     string `json:"device"`
 	Bus        string `json:"bus"`      //configre
 	AddrType   string `json:"addrType"` // pci, and drive
