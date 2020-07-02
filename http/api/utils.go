@@ -171,7 +171,7 @@ func ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 }
 
 func GetAuth(req *http.Request) (name, pass string, ok bool) {
-	if t, err := req.Cookie("token"); err == nil {
+	if t, err := req.Cookie("token-id"); err == nil {
 		name, pass, ok = ParseBasicAuth(t.Value)
 	} else {
 		name, pass, ok = req.BasicAuth()

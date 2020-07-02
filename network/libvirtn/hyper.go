@@ -196,7 +196,7 @@ var hyper = HyperVisor{
 	Name:     "qemu:///system",
 	Listener: make([]HyperListener, 0, 32),
 	Ticker:   time.NewTicker(2 * time.Second),
-	Done:     make(chan bool),
+	Done:     make(chan bool, 2),
 }
 
 func GetHyper() (*HyperVisor, error) {

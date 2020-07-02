@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 type UI struct {
@@ -88,12 +89,20 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 			data.Error = "Invalid username or password."
 		} else {
 			basic := name + ":" + pass
-			cookie := http.Cookie{
-				Name:  "token",
-				Value: base64.StdEncoding.EncodeToString([]byte(basic)),
+			expired := time.Now().Add(time.Hour * 8)
+			http.SetCookie(w, &http.Cookie{
+				Name:    "token-id",
+				Value:   base64.StdEncoding.EncodeToString([]byte(basic)),
+				Path:    "/",
+				Expires: expired,
+			})
+			uuid := libstar.GenToken(32)
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session-id",
+				Value: uuid,
 				Path:  "/",
-			}
-			http.SetCookie(w, &cookie)
+				Expires: expired,
+			})
 			http.Redirect(w, r, "/ui", http.StatusMovedPermanently)
 			return
 		}
