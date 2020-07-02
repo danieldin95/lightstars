@@ -150,7 +150,7 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 		} else if strings.HasPrefix(r.URL.Path, "/ui") {
 			http.Redirect(w, r, "/ui/login", http.StatusMovedPermanently)
 		} else {
-			w.Header().Set("WWW-Authenticate", "Basic")
+			//w.Header().Set("WWW-Authenticate", "Basic")
 			http.Error(w, "Authorization Required", http.StatusUnauthorized)
 		}
 	})

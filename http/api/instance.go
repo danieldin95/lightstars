@@ -388,7 +388,10 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
+	if dom, _ := hyper.LookupDomainByName(conf.Name); dom != nil {
+		http.Error(w, conf.Name+" already existed", http.StatusConflict)
+		return
+	}
 	xmlObj, err := Instance2XML(conf)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
