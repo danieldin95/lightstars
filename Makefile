@@ -22,12 +22,16 @@ BD = $(SD)/build
 LD = lightstar-$(LSB)-$(VER)
 WD = lightpix-Windows-$(VER)
 
+help: ## show make targets
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);\
+		printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
 ## all light software
-all: lightstar lightpix windows/lightpix
+all: lightstar lightpix windows-lightpix ## build all binary
 
-pkg: rpm windows/zip
+pkg: rpm windows-zip ## build all packages
 
-rpm: rpm/lightstar rpm/lightsim
+rpm: rpm-lightstar rpm-lightsim ## build rpm packages
 
 # prepare environment
 env:
@@ -42,23 +46,23 @@ lightpix: env
 	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightpix lightpix.go
 
 ### linux packaging
-rpm/env:
+rpm-env:
 	@./packaging/spec.sh
 
-rpm/lightutils: rpm/env
+rpm-lightutils: rpm-env
 	rpmbuild -ba packaging/lightutils.spec
 	cp -rf ~/rpmbuild/RPMS/x86_64/lightutils-*.rpm $(BD)
 
-rpm/lightstar: rpm/env
+rpm-lightstar: rpm-env
 	rpmbuild -ba packaging/lightstar.spec
 	cp -rf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm $(BD)
 
-rpm/lightsim: rpm/env
+rpm-lightsim: rpm-env
 	rpmbuild -ba packaging/lightsim.spec
 	cp -rf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm $(BD)
 
 
-linux/zip: env lightstar lightpix
+linux-zip: env lightstar lightpix ## build linux zip packages
 	@pushd $(BD)
 	@rm -rf $(LD) && mkdir -p $(LD)
 
@@ -86,18 +90,18 @@ linux/zip: env lightstar lightpix
 	@rm -rf $(LD)
 	@popd
 
-centos/devel:
+centos-devel:
 	yum install libvirt-devel
 
-ubuntu/devel:
+ubuntu-devel:
 	apt-get install libvirt-dev
 
 ## cross build for windows
-windows/lightpix: env
+windows-lightpix: env
 	GOOS=windows GOARCH=amd64 go build -mod=vendor -o $(BD)/lightpix.windows.x86_64.exe lightpix.go
 
 ### packaging light pix for windows
-windows/zip: env
+windows-zip: env ## build windows packages
 	@pushd $(BD)
 	@rm -rf $(WD) && mkdir -p $(WD)
 
@@ -109,7 +113,7 @@ windows/zip: env
 	@popd
 
 ## unit test
-test:
+test: ## execute unit test
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/libstar
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/storage
 	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/compute/libvirtc
