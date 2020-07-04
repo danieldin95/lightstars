@@ -98,9 +98,9 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 			})
 			uuid := libstar.GenToken(32)
 			http.SetCookie(w, &http.Cookie{
-				Name:  "session-id",
-				Value: uuid,
-				Path:  "/",
+				Name:    "session-id",
+				Value:   uuid,
+				Path:    "/",
 				Expires: expired,
 			})
 			http.Redirect(w, r, "/ui", http.StatusMovedPermanently)
