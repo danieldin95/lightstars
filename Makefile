@@ -3,15 +3,14 @@
 #
 
 SHELL := /bin/bash
-
 .ONESHELL:
-.PHONY: lightstar lightpix test
+
 
 LSB = $(shell lsb_release -i -s)$(shell lsb_release -r -s)
 VER = $(shell cat VERSION)
 
 ## version
-MOD = github.com/danieldin95/lightstar/libstar
+MOD = github.com/danieldin95/lightstar/src/libstar
 LDFLAGS += -X $(MOD).Commit=$(shell git rev-list -1 HEAD)
 LDFLAGS += -X $(MOD).Date=$(shell date +%FT%T%z)
 LDFLAGS += -X $(MOD).Version=$(VER)
@@ -38,20 +37,18 @@ env:
 	@mkdir -p $(BD)
 
 ## light star
+.PHONY: lightstar
 lightstar: env
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightstar lightstar.go
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightstar ./src/cli/lightstar
 
 ## light pix to proxy tcp
+.PHONY: lightpix
 lightpix: env
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightpix lightpix.go
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightpix ./src/cli/lightpix
 
 ### linux packaging
 rpm-env:
 	@./packaging/spec.sh
-
-rpm-lightutils: rpm-env
-	rpmbuild -ba packaging/lightutils.spec
-	cp -rf ~/rpmbuild/RPMS/x86_64/lightutils-*.rpm $(BD)
 
 rpm-lightstar: rpm-env
 	rpmbuild -ba packaging/lightstar.spec
@@ -77,7 +74,7 @@ linux-zip: env lightstar lightpix ## build linux zip packages
 
 	@mkdir -p $(LD)/var/lightstar
 	@cp -R $(SD)/packaging/resource/ca $(LD)/var/lightstar
-	@cp -R $(SD)/http/static $(LD)/var/lightstar
+	@cp -R $(SD)/src/http/static $(LD)/var/lightstar
 
 	@mkdir -p $(LD)/usr/bin
 	@cp -rvf $(BD)/lightstar $(LD)/usr/bin
@@ -98,7 +95,7 @@ ubuntu-devel:
 
 ## cross build for windows
 windows-lightpix: env
-	GOOS=windows GOARCH=amd64 go build -mod=vendor -o $(BD)/lightpix.windows.x86_64.exe lightpix.go
+	GOOS=windows GOARCH=amd64 go build -mod=vendor -o $(BD)/lightpix.windows.x86_64.exe ./src/cli/lightpix
 
 ### packaging light pix for windows
 windows-zip: env ## build windows packages
@@ -113,12 +110,13 @@ windows-zip: env ## build windows packages
 	@popd
 
 ## unit test
+.PHONY: test
 test: ## execute unit test
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/libstar
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/storage
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/compute/libvirtc
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/storage/libvirts
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/http/client
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/libstar
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/storage
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/compute/libvirtc
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/storage/libvirts
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/http/client
 
 clean: ## clean cache
 	rm -rvf ./build
