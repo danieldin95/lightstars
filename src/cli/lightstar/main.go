@@ -2,13 +2,13 @@ package main
 
 import (
 	"flag"
-	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/http"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/network/libvirtn"
-	"github.com/danieldin95/lightstar/service"
-	"github.com/danieldin95/lightstar/storage"
-	"github.com/danieldin95/lightstar/storage/libvirts"
+	"github.com/danieldin95/lightstar/src/compute/libvirtc"
+	"github.com/danieldin95/lightstar/src/http"
+	"github.com/danieldin95/lightstar/src/libstar"
+	"github.com/danieldin95/lightstar/src/network/libvirtn"
+	"github.com/danieldin95/lightstar/src/service"
+	"github.com/danieldin95/lightstar/src/storage"
+	"github.com/danieldin95/lightstar/src/storage/libvirts"
 	"os"
 )
 

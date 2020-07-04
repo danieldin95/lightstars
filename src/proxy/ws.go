@@ -2,7 +2,7 @@ package proxy
 
 import (
 	"crypto/tls"
-	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"golang.org/x/net/websocket"
 	"net/http"
 	"net/url"

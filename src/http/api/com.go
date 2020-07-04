@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/network/libvirtn"
+	"github.com/danieldin95/lightstar/src/compute/libvirtc"
+	"github.com/danieldin95/lightstar/src/network/libvirtn"
 )
 
 func Interface2XML(source, model, seq, typ string) libvirtc.InterfaceXML {

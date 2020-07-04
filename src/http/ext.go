@@ -1,12 +1,12 @@
 package http
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/http/api"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/schema"
-	"github.com/danieldin95/lightstar/service"
-	"github.com/danieldin95/lightstar/storage"
+	"github.com/danieldin95/lightstar/src/compute/libvirtc"
+	"github.com/danieldin95/lightstar/src/http/api"
+	"github.com/danieldin95/lightstar/src/libstar"
+	"github.com/danieldin95/lightstar/src/schema"
+	"github.com/danieldin95/lightstar/src/service"
+	"github.com/danieldin95/lightstar/src/storage"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
 	"io"

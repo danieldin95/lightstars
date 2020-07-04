@@ -1,9 +1,9 @@
 package http
 
 import (
-	"github.com/danieldin95/lightstar/http/api"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/schema"
+	"github.com/danieldin95/lightstar/src/http/api"
+	"github.com/danieldin95/lightstar/src/libstar"
+	"github.com/danieldin95/lightstar/src/schema"
 	"net/http"
 	"os"
 	"path"

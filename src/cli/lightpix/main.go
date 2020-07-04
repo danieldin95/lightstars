@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/danieldin95/lightstar/http/client"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/proxy"
-	"github.com/danieldin95/lightstar/schema"
+	"github.com/danieldin95/lightstar/src/http/client"
+	"github.com/danieldin95/lightstar/src/libstar"
+	"github.com/danieldin95/lightstar/src/proxy"
+	"github.com/danieldin95/lightstar/src/schema"
 	"strings"
 )
 

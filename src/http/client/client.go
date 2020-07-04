@@ -2,7 +2,7 @@ package client
 
 import (
 	"encoding/json"
-	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"io/ioutil"
 	"net/http"
 )

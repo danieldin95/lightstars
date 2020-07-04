@@ -2,8 +2,8 @@ package proxy
 
 import (
 	"fmt"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/schema"
+	"github.com/danieldin95/lightstar/src/libstar"
+	"github.com/danieldin95/lightstar/src/schema"
 	"golang.org/x/net/websocket"
 	"io"
 	"math/rand"

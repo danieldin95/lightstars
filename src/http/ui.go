@@ -2,11 +2,11 @@ package http
 
 import (
 	"encoding/base64"
-	"github.com/danieldin95/lightstar/compute"
-	"github.com/danieldin95/lightstar/http/api"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/schema"
-	"github.com/danieldin95/lightstar/service"
+	"github.com/danieldin95/lightstar/src/compute"
+	"github.com/danieldin95/lightstar/src/http/api"
+	"github.com/danieldin95/lightstar/src/libstar"
+	"github.com/danieldin95/lightstar/src/schema"
+	"github.com/danieldin95/lightstar/src/service"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"

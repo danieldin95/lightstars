@@ -1,11 +1,11 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/http/client"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/schema"
-	"github.com/danieldin95/lightstar/service"
+	"github.com/danieldin95/lightstar/src/compute/libvirtc"
+	"github.com/danieldin95/lightstar/src/http/client"
+	"github.com/danieldin95/lightstar/src/libstar"
+	"github.com/danieldin95/lightstar/src/schema"
+	"github.com/danieldin95/lightstar/src/service"
 	"github.com/gorilla/mux"
 	"net/http"
 	"sort"

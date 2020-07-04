@@ -1,7 +1,7 @@
 package libvirts
 
 import (
-	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"github.com/libvirt/libvirt-go"
 	"strings"
 )

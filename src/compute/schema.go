@@ -1,10 +1,10 @@
 package compute
 
 import (
-	"github.com/danieldin95/lightstar/compute/libvirtc"
-	"github.com/danieldin95/lightstar/libstar"
-	"github.com/danieldin95/lightstar/schema"
-	"github.com/danieldin95/lightstar/storage"
+	"github.com/danieldin95/lightstar/src/compute/libvirtc"
+	"github.com/danieldin95/lightstar/src/libstar"
+	"github.com/danieldin95/lightstar/src/schema"
+	"github.com/danieldin95/lightstar/src/storage"
 )
 
 func NewHyper() (hs schema.Hyper) {

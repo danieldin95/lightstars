@@ -2,7 +2,7 @@ package http
 
 import (
 	"fmt"
-	"github.com/danieldin95/lightstar/http/api"
+	"github.com/danieldin95/lightstar/src/http/api"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"

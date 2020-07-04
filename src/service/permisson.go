@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"net/http"
 	"strings"
 )

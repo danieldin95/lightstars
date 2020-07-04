@@ -2,7 +2,7 @@ package libvirts
 
 import (
 	"encoding/xml"
-	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/src/libstar"
 )
 
 type PoolXML struct {

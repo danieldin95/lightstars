@@ -1,6 +1,6 @@
 package schema
 
-import "github.com/danieldin95/lightstar/libstar"
+import "github.com/danieldin95/lightstar/src/libstar"
 
 type Version struct {
 	Version string `json:"version"`
