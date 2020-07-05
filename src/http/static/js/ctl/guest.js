@@ -12,20 +12,13 @@ class HeaderCtl extends Ctl {
     constructor(props) {
         super(props);
         this.api = new InstanceApi({uuids: props.uuid});
-
         // register buttons's click.
-        $(this.child('#console')).on("click", this, function (e) {
-            if ($(this).hasClass('disabled')) {
-                return
-            }
-            let url = $(this).attr('data');
-            let target = $(this).attr('data-target');
-            let iframe = `<iframe width="800px" height="600px" src="${url}" frameborder="0"></iframe>`;
-            $(target).modal('show');
-            $(`${target} .modal-body`).html(iframe);
-            $(target).on('hidden.bs.modal', function (e) {
-                $(target).find(".modal-body").empty();
-            });
+        let vncUrl = $(this.child('#console')).attr('data');
+        let console = $(this.child('#console')).attr('data-target');
+        $(console).on('show.bs.modal', function (e) {
+            $(this).find(".modal-body").html(
+                `<iframe width="800px" height="600px" src="${vncUrl}" frameborder="0"></iframe>`
+            );
         });
         $(this.child('#start')).on("click", this, (e) => {
             this.api.start();

@@ -115,7 +115,7 @@ export class Guest extends Container {
                 <div class="card-header-cnt">
                     <div id="console-btns" class="btn-group btn-group-sm" role="group">
                         <button id="console" type="button" class="btn btn-outline-dark ${cls}"
-                                data-target="#consoleModal" data="${vncUrl}">Console</button>
+                                data-toggle="modal" data-target="#consoleModal" data="${vncUrl}">Console</button>
                         <button id="consoles" type="button"
                                 class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split ${cls}"
                                 data-toggle="dropdown" aria-expanded="false">
