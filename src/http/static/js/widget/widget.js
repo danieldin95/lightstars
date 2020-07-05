@@ -1,9 +1,9 @@
 
 export class Widget {
     constructor(props) {
-        this.id = props.id;
+        this.id = props.id || "";
         this.props = props;
-        this.tasks = props.tasks;
+        this.tasks = props.tasks || "Tasks";
         console.log("Widget", props);
     }
 

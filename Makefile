@@ -26,7 +26,7 @@ help: ## show make targets
 		printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 ## all light software
-all: lightstar lightpix windows-lightpix ## build all binary
+bin: lightstar lightpix windows-lightpix ## build all binary
 
 pkg: rpm windows-zip ## build all packages
 

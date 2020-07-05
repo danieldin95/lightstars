@@ -123,7 +123,7 @@ export class Home extends Container {
 
     template(v) {
         let query = Location.query();
-        return (`
+        return this.compile(`
         <div id="index">
         <!-- System -->
         <div id="system" class="card card-main system">

@@ -6,18 +6,19 @@ import {Home} from "../widget/container/home.js";
 import {ChangePassword} from "./password/change.js";
 import {PasswordApi} from "../api/password.js";
 import {Utils} from "../com/utils.js";
+import {Widget} from "./widget.js";
 
 
 
-export class Navigation {
+export class Navigation extends Widget {
     // {
     //   parent: '#xx'.
     //   home: '.'
     // }
     constructor(props) {
+        super(props);
         this.parent = props.parent;
         this.home = props.home;
-        this.props = props;
         this.active = "";
         this.navIds = ["#system", "#instances", "#datastore", "#network"];
         this.refresh();
@@ -146,8 +147,8 @@ export class Navigation {
         }
     }
 
-    render(data) {
-        return template.compile(`
+    render(v) {
+        return this.compile(`
         <nav id="navs" class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <!-- Brand -->
         <a class="navbar-brand" href="${this.home}">
@@ -210,6 +211,6 @@ export class Navigation {
         <div id="modals" class="modals">
             <div id="changePasswdModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
-        `)(data)
+        `, v)
     }
 }

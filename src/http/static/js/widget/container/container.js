@@ -1,3 +1,5 @@
+import {Widget} from "../widget.js";
+
 
 export class Container {
     // {
@@ -6,10 +8,10 @@ export class Container {
     //    force: false, // force to apply default.
     // }
     constructor(props) {
+        this.props = props;
         this.parent  = props.parent ? props.parent : '';
         this.current = props.current ? props.current : '';
         this.force = props.force;
-        this.props = props;
         console.log([this.parent, this.current].join(" "));
         console.log('Base', props);
     }
@@ -20,6 +22,10 @@ export class Container {
 
     loading() {
         console.log("Base", "implement me")
+    }
+
+    compile(tmpl, data) {
+        return template.compile(tmpl)(data);
     }
 
     template(v) {
@@ -35,9 +41,5 @@ export class Container {
 
     title(name) {
         $(document).attr("title", name + ' - LightStar');
-    }
-
-    compile(tmpl, data) {
-        return template.compile(tmpl)(data);
     }
 }
