@@ -14,7 +14,7 @@ Conflicts: lightstar
 LightStar's Project Software
 
 %build
-cd %_source_dir && make all
+cd %_source_dir && make bin
 
 %install
 mkdir -p %{buildroot}/usr/bin

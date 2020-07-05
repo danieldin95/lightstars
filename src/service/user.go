@@ -15,7 +15,6 @@ type Users struct {
 func (u *Users) Save() error {
 	u.Lock.RLock()
 	defer u.Lock.RUnlock()
-
 	if err := libstar.JSON.MarshalSave(&u.Users, u.File, true); err != nil {
 		return err
 	}
@@ -25,7 +24,6 @@ func (u *Users) Save() error {
 func (u *Users) Load(file string) error {
 	u.Lock.Lock()
 	defer u.Lock.Unlock()
-
 	u.File = file
 	if err := libstar.JSON.UnmarshalLoad(&u.Users, file); err != nil {
 		return err
@@ -44,7 +42,6 @@ func (u *Users) Load(file string) error {
 func (u *Users) Get(name string) (schema.User, bool) {
 	u.Lock.RLock()
 	defer u.Lock.RUnlock()
-
 	user, ok := u.Users[name]
 	if user == nil {
 		return schema.User{}, false
@@ -59,7 +56,6 @@ func (u *Users) SetPass(name, old, new string) (schema.User, bool) {
 	if user == nil || !(user.Password == old) {
 		return schema.User{}, false
 	}
-
 	user.Password = new
 	return *user, true
 }

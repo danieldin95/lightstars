@@ -13,20 +13,24 @@ type Zone struct {
 }
 
 func (l *Zone) Load(file string) error {
-	if err := libstar.JSON.UnmarshalLoad(&l.Host, file); err != nil {
+	var hosts map[string]*schema.Host
+
+	if l.Host == nil {
+		l.Host = make(map[string]*schema.Host, 32)
+	}
+	l.Add(&schema.Host{Name: "default", Url: ""})
+	if err := libstar.JSON.UnmarshalLoad(&hosts, file); err != nil {
 		return err
 	}
-	libstar.Debug("Zone.Load %v", l.Host)
-	for name, host := range l.Host {
+	libstar.Debug("Zone.Load %v", hosts)
+	for name, host := range hosts {
 		if host == nil {
 			continue
 		}
 		host.Name = name
 		host.Initialize()
 		libstar.Debug("Zone.Load %v", host)
-	}
-	if l.Get("default") == nil {
-		l.Add(&schema.Host{Name: "default", Url: ""})
+		l.Add(host)
 	}
 	return nil
 }
@@ -34,14 +38,12 @@ func (l *Zone) Load(file string) error {
 func (l *Zone) Get(name string) *schema.Host {
 	l.Lock.RLock()
 	defer l.Lock.RUnlock()
-
 	return l.Host[name]
 }
 
 func (l *Zone) Add(h *schema.Host) {
 	l.Lock.Lock()
 	defer l.Lock.Unlock()
-
 	l.Host[h.Name] = h
 }
 
@@ -56,6 +58,5 @@ func (l *Zone) List() <-chan *schema.Host {
 		}
 		c <- nil //Finish channel by nil.
 	}()
-
 	return c
 }
