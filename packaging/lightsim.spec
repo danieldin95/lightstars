@@ -37,14 +37,29 @@ mkdir -p %{buildroot}/etc/lightstar
 cp -R %_source_dir/packaging/resource/*.json.example %{buildroot}/etc/lightstar
 
 %pre
-firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {
+/usr/bin/firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {
   echo "YOU NEED ALLOWED TCP PORT:10080."
 }
-firewall-cmd --reload || :
+/usr/bin/firewall-cmd --reload || :
 
 %post
 [ -e '/etc/lightstar/permission.json' ] || {
   cp -rvf /etc/lightstar/permission.json.example /etc/lightstar/permission.json
+}
+
+[ -e '/etc/lightstar/auth.json' ] || {
+cat > /etc/lightstar/auth.json <<EOF
+{
+  "admin": {
+    "type": "admin",
+    "password": "$(/usr/bin/mkpasswd -l 16)"
+  },
+  "guest": {
+    "type": "guest",
+    "password": "$(/usr/bin/mkpasswd -l 16)"
+  }
+}
+EOF
 }
 
 

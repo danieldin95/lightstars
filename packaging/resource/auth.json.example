@@ -6,9 +6,5 @@
   "guest": {
     "type": "guest",
     "password": "2c814f8fx"
-  },
-  "hi": {
-    "type": "guest",
-    "password": "2c814f8fi"
   }
 }
