@@ -20,6 +20,10 @@ This software makes it easier for you to control compute resource.
     
     reboot
 
+## Install epel and qemu-ev release
+
+    yum install -y epel centos-release-qemu-ev
+
 ## Install by RPM packaging
 
     yum install -y wget
