@@ -21,7 +21,7 @@ export class NetworkApi extends Api {
     create(data) {
         let range = data.range || "";
         data.range = [];
-        if (data.dhcp === "yes" && range !== "") {
+        if (range !== "") {
             let lines = range.split(/\r?\n/);
             for (let line of lines) {
                 if (line.indexOf(',') > 0) {
@@ -29,9 +29,6 @@ export class NetworkApi extends Api {
                     data.range.push({start, end});
                 }
             }
-        } else if (data.dhcp === "no") {
-            data.address = "";
-            data.prefix = "0";
         }
         super.create(data);
     }

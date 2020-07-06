@@ -44,29 +44,20 @@ export class IsolatedCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="dhcp" class="col-form-label-sm ">DHCP setting</label>
-                        <div class="input-group">
-                            <select class="select-lg" name="dhcp">
-                                <option value="yes" selected>enable</option>
-                                <option value="no">disable</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label for="address" class="col-form-label-sm">Interface Address</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm"
-                                   name="address" value="192.168.30.1"/>
+                                   name="address" value="192.168.200.1"/>
                             <select class="select-unit-right" name="prefix">
                                 <option value="24" selected>/24</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="range" class="col-form-label-sm">Address range</label>
+                        <label for="range" class="col-form-label-sm">Address range for DHCP</label>
                         <div class="input-group">
                             <textarea type="text" class="form-control form-control-sm" 
-                                name="range" rows="3">192.168.30.100,192.168.30.200</textarea>                                   
+                                name="range" rows="3">192.168.200.100,192.168.200.200</textarea>                                   
                         </div>
                     </div>
                 </form>
