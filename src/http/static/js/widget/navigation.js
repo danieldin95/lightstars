@@ -163,23 +163,23 @@ export class Navigation extends Widget {
         <div class="collapse navbar-collapse" id="navbarMore">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a id="system" class="nav-link" data-target="/system">Home</a>
+                    <a id="system" class="nav-link" data-target="/system">{{'home' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="instances" class="nav-link" data-target="/instances">Guest Instances</a>
+                    <a id="instances" class="nav-link" data-target="/instances">{{'guest instances' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="datastore" class="nav-link" data-target="/datastore">DataStore</a>
+                    <a id="datastore" class="nav-link" data-target="/datastore">{{'dataStore' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="network" class="nav-link" data-target="/network">Network</a>
+                    <a id="network" class="nav-link" data-target="/network">{{'network' | i}}</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a id="nodeMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
-                        <node-name>default</node-name>@node
+                        <node-name>default</node-name>@{{'node' | i}}
                     </a>
                     <div id="node" class="dropdown-menu" aria-labelledby="nodeMore">
                         <a class="dropdown-item" data="">default</a>
@@ -193,15 +193,15 @@ export class Navigation extends Widget {
                         {{user.name}}@{{hyper.host}}
                     </a>
                     <div class="dropdown-menu dropdown-left" aria-labelledby="userMore">
-                        <a id="fullscreen" class="dropdown-item">Full screen</a>
+                        <a id="fullscreen" class="dropdown-item">{{'full screen' | i}}</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="javascript:void(0)">Setting</a>
+                        <a class="dropdown-item" href="javascript:void(0)">{{'setting' | i}}</a>
                         <a class="dropdown-item" href="javascript:void(0)" 
                             data-toggle="modal" data-target="#changePasswdModal">
-                            Change password
+                            {{'change password' | i}}
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/ui/login">Logout</a>
+                        <a class="dropdown-item" href="/ui/login">{{'logout' | i}}</a>
                     </div>
                 </li>
             </ul>

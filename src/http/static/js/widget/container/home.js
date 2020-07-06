@@ -147,7 +147,7 @@ export class Home extends Container {
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
                         data-target="#collapseIns" aria-expanded="true" aria-controls="collapseIns">
-                    Guest Instances
+                    {{'guest instances' | i}}
                 </button>
             </div>
             <div id="collapseIns" class="collapse" aria-labelledby="headingOne" data-parent="#index">
@@ -208,7 +208,7 @@ export class Home extends Container {
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
                         data-target="#collapseStore" aria-expanded="true" aria-controls="collapseStore">
-                    Local DataStores
+                    {{'local dataStores' | i}}
                 </button>
             </div>
             <div id="collapseStore" class="collapse" aria-labelledby="headingOne" data-parent="#index">
@@ -273,7 +273,7 @@ export class Home extends Container {
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
                         data-target="#collapseNet" aria-expanded="true" aria-controls="collapseNet">
-                    Virtual Networks
+                    {{'virtual networks' | i}}
                 </button>
             </div>
             <div id="collapseNet" class="collapse" aria-labelledby="headingOne" data-parent="#index">

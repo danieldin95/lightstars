@@ -1,4 +1,17 @@
 {
 	"username": "Username",
-	"password": "Password"
+	"password": "Password",
+	"home": "Home",
+	"reset": "Reset",
+	"login": "Login",
+	"guest instances": "Guest instances",
+	"dataStore": "DataStore",
+	"network": "Network",
+	"node": "Node",
+	"full screen": "Full screen",
+	"setting": "Setting",
+	"change password": "Change password",
+	"logout": "Logout",
+	"local dataStores": "Local dataStores",
+	"virtual networks": "Virtual networks"
 }
