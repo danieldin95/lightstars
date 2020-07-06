@@ -9,26 +9,27 @@ $(function() {
     let hyper = $('hyper');
     let host = Location.query('node');
 
-    if (host === undefined) {
+    if (!host) {
         // if host is null, using default.
         host = hyper.attr('default');
         Location.query('node', host);
     }
     Api.Host(host);
 
-    let nav = new Navigation({
-        parent: "#Navigation",
-        home: ".",
-        container: "#Container",
-        name: hyper.attr('name'),
-    });
-    let filter = new Filters();
-    let routes = new Routes({
-        hyper: hyper,
-        container: "#Container",
-        onchange: function (e) {
-           nav.refresh();
-        },
+    new Filters().promise().then(function () {
+        let nav = new Navigation({
+            parent: "#Navigation",
+            home: ".",
+            container: "#Container",
+            name: hyper.attr('name'),
+        });
+        let rte = new Routes({
+            hyper: hyper,
+            container: "#Container",
+            onchange: function (e) {
+                nav.refresh();
+            },
+        });
     });
 });
 

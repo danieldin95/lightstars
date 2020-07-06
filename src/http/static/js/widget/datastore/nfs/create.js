@@ -17,7 +17,7 @@ export class NFSCreate extends FormModal {
             fresh: function() {
                 this.selector.find('option').remove();
                 for (let i = 10; i <= 20; i++) {
-                    let alias = "datastore@"+Utils.iton(i, 2);
+                    let alias = "datastore@"+Utils.a2n(i, 2);
                     this.selector.append(new Option(alias, alias));
                 }
             },
