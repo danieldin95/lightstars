@@ -5,14 +5,14 @@
 
     cat /sys/module/kvm_amd/parameters/nested
     
-    cat  /etc/modprobe.d/kvm.conf    
-    # For Intel
+    cat  > /etc/modprobe.d/kvm.conf <<EOF   
+    # Intel
     options kvm_intel nested=1
     #
-    # For AMD
+    # AMD
     options kvm_amd nested=1
     
-    ## 
+    EOF
     
     modprobe -r kvm_intel
     modprobe -a kvm_intel

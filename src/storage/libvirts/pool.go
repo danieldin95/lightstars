@@ -99,20 +99,30 @@ func (pol *Pool) Clean() error {
 	pool, err := hyper.Conn.LookupStoragePoolByUUIDString(pol.Name)
 	if err != nil {
 		pool, err = hyper.Conn.LookupStoragePoolByName(pol.Name)
-	}
-	if err == nil {
-		defer pool.Free()
-		vols, err := pool.ListAllStorageVolumes(0)
 		if err != nil {
 			return nil
 		}
-		for _, vol := range vols {
-			if err := vol.Delete(0); err != nil {
-				_ = vol.Free()
-				return err
-			}
+	}
+	defer pool.Free()
+	vols, err := pool.ListAllStorageVolumes(0)
+	if err != nil {
+		return nil
+	}
+	for _, vol := range vols {
+		if err := vol.Delete(0); err != nil {
 			_ = vol.Free()
+			return err
 		}
+		_ = vol.Free()
+	}
+	if err := pool.Destroy(); err != nil {
+		libstar.Warn("Pool.Remove %s", err)
+	}
+	if err := pool.Delete(0); err != nil {
+		libstar.Warn("Pool.Delete %s", err)
+	}
+	if err := pool.Undefine(); err != nil {
+		libstar.Warn("Pool.Remove %s", err)
 	}
 	return nil
 }
@@ -129,6 +139,9 @@ func (pol *Pool) Remove() error {
 	if err == nil {
 		if err := pool.Destroy(); err != nil {
 			libstar.Warn("Pool.Remove %s", err)
+		}
+		if err := pool.Delete(0); err != nil {
+			libstar.Warn("Pool.Delete %s", err)
 		}
 		if err := pool.Undefine(); err != nil {
 			libstar.Warn("Pool.Remove %s", err)

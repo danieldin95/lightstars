@@ -57,7 +57,7 @@ export class NATCreate extends FormModal {
                         <label for="range" class="col-form-label-sm">Address range for DHCP</label>
                         <div class="input-group">
                             <textarea type="text" class="form-control form-control-sm" 
-                                name="range" rows="3">192.168.1000.100,192.168.100.200</textarea>                                         
+                                name="range" rows="3">192.168.100.100,192.168.100.200</textarea>                                         
                         </div>
                     </div>
                 </form>
