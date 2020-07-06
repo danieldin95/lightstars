@@ -44,9 +44,9 @@ export default class VolumeTable extends Widget {
     }
 
     render(data) {
-
         let query = Location.query();
-        let prefix = window.location.pathname
+        let prefix = window.location.pathname;
+
         return this.compile(`
             {{each items v i}}
                 <tr class="sortable">

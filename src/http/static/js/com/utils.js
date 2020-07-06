@@ -1,11 +1,11 @@
 export class Utils {
     // num: int
-    static iton (data, n) {
+    static i2n (data, n) {
         return (Array(n).join(0) + data).slice(-n);
     }
 
     // num: string
-    static aton(data, n) {
+    static a2n(data, n) {
         let num = "" + data;
         if (num.length > n) {
             return num

@@ -46,9 +46,9 @@ export class DiskTable extends Widget {
                 <td>{{if v.volume.type === ""}} - {{else}} {{v.volume.allocation | prettyByte}} {{/if}}</td>
                 <td><span>
                     {{if v.addrType == "pci"}}
-                        pci:{{v.addrBus | aton 2}}:{{v.addrSlot | aton 2}}.{{v.addrFunc}}
+                        pci:{{v.addrBus | a2n 2}}:{{v.addrSlot | a2n 2}}.{{v.addrFunc}}
                     {{else if  v.addrType == "drive"}}
-                        drv:{{v.addrBus | aton 2}}:{{v.addrTgt | aton 2}}.{{v.addrUnit}}
+                        drv:{{v.addrBus | a2n 2}}:{{v.addrTgt | a2n 2}}.{{v.addrUnit}}
                     {{/if}}</span>
                 </td>
             </tr>

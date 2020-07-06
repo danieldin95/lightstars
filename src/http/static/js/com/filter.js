@@ -1,14 +1,23 @@
 import {Utils} from "./utils.js";
 
-const art = template.defaults.imports;
 
 export class Filters {
     constructor() {
-        art.aton = function (data, n) {
+        this.i18n = $.i18n();
+
+        this.i18n.locale = navigator.language || navigator.userLanguage;
+        console.log(this.i18n.locale);
+
+        this.i = this.imports();
+    }
+
+    imports() {
+        let i = template.defaults.imports;
+
+        i.a2n = function (data, n) {
             return Utils.iton(data, n);
         };
-
-        art.prettyKiB = function (data, fra) {
+        i.prettyKiB = function (data, fra) {
             let dec = data;
             fra = fra === undefined ? 2 : fra;
             if (dec < 1024) {
@@ -25,8 +34,7 @@ export class Filters {
             dec /=  1024.0;
             return dec.toFixed(fra) + "TiB"
         };
-
-        art.prettyByte = function (data, fra) {
+        i.prettyByte = function (data, fra) {
             let dec = data;
             fra = fra === undefined ? 2 : fra;
             if (dec < 1024) {
@@ -47,23 +55,19 @@ export class Filters {
             dec = dec / 1024;
             return dec.toFixed(fra) + "TiB"
         };
-
-        art.figureCpuUsed = function (free, total) {
+        i.figureCpuUsed = function (free, total) {
             return ((1000 - free) / 1000 * total).toFixed(2)
         };
-
-        art.figureCpuFree = function (free, total) {
+        i.figureCpuFree = function (free, total) {
             return (free / 1000 * total).toFixed(2)
         };
-
-        art.netmask2prefix = function (netmask) {
+        i.netmask2prefix = function (netmask) {
             if (!netmask) return undefined;
             return netmask.split('.').map(Number)
                 .map(part => (part >>> 0).toString(2))
                 .join('').split('1').length - 1;
         };
-
-        art.prefix2netmask = function (prefix) {
+        i.prefix2netmask = function (prefix) {
             if (!prefix) return undefined;
             let mask = [];
             for(let i = 0;i < 4; i++) {
@@ -73,13 +77,26 @@ export class Filters {
             }
             return mask.join('.');
         };
-
-        art.vncPassword = function (inst) {
+        i.vncPassword = function (inst) {
             return Utils.graphic(inst, 'vnc', 'password')
         };
-
-        art.spicePassword = function (inst) {
+        i.spicePassword = function (inst) {
             return Utils.graphic(inst, 'spice', 'password')
         };
+        i.i = function (value) {
+            return $.i18n(value);
+        };
+        return i;
+    }
+
+    promise() {
+        let i18n = this.i18n;
+        return new Promise(function (resolve, reject) {
+            i18n.load(`/static/i18n/${i18n.locale}.json`, i18n.locale)
+                .done(function() {
+                    console.log("loading.i18n done", this);
+                    resolve()
+                });
+        })
     }
 }

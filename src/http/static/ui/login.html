@@ -20,48 +20,26 @@
             </div>
         {{ end }}
     </div>
-    <form action="/ui/login" method="post">
-    <div class="card login">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-sm-3">
-                    <img class="" src="/static/images/lightstar-6.png" alt="">
-                </div>
-                <div class="col-sm-7">
-                    <strong>LightStar</strong><br/>
-                    <small style="color: #ced4da">A simple and small platform to manage your cloud</small>
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="form-group row">
-                <label for="name" class="col-sm-3 col-form-label-sm">Username</label>
-                <div class="col-sm-7">
-                    <div class="input-group">
-                        <input type="text" class="form-control form-control-sm" name="name" value="" autofocus/>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="password" class="col-sm-3 col-form-label-sm">Password</label>
-                <div class="col-sm-7">
-                    <div class="input-group">
-                        <input type="password" class="form-control form-control-sm" name="password" value=""/>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card-footer d-flex justify-content-end">
-                <button id="reset" class="btn btn-outline-dark btn-sm mr-2" type="reset">Reset</button>
-                <button id="submit" class="btn btn-outline-success btn-sm mr-0">Login</button>
-        </div>
-    </div>
-    </form>
+    <!--Loading-->
+    <div id="Container">
 </div>
+
 <!-- JQuery Javascript -->
 <script src="/static/asset/jquery-1.12.4.js"></script>
+<script src="/static/asset/ui/1.12.1/jquery-ui.js"></script>
 <script src="/static/asset/popper.js/1.12.9/umd/popper.js"></script>
 <!-- Bootstrap Javascript -->
 <script src="/static/asset/bootstrap/4.0.0/js/bootstrap.js"></script>
+<!-- ART Template Javascript -->
+<script src="/static/asset/template-web.js"></script>
+<!-- JQuery i18n Javascript -->
+<script src="/static/asset/jquery.i18n/libs/CLDRPluralRuleParser/src/CLDRPluralRuleParser.js"></script>
+<script src="/static/asset/jquery.i18n/src/jquery.i18n.js"></script>
+<script src="/static/asset/jquery.i18n/src/jquery.i18n.messagestore.js"></script>
+<script src="/static/asset/jquery.i18n/src/jquery.i18n.fallbacks.js"></script>
+<script src="/static/asset/jquery.i18n/src/jquery.i18n.parser.js"></script>
+<script src="/static/asset/jquery.i18n/src/jquery.i18n.emitter.js"></script>
+<script src="/static/asset/jquery.i18n/src/jquery.i18n.language.js"></script>
+<script src="/static/js/login.js" type="module"></script>
 </body>
 </html>
