@@ -208,7 +208,7 @@ func (h *HyperVisor) ListAllDomains() ([]Domain, error) {
 		return nil, err
 	}
 
-	domains, err := h.Conn.ListAllDomains(DOMAIN_ALL)
+	domains, err := h.Conn.ListAllDomains(DomainAll)
 	if err != nil {
 		return nil, err
 	}

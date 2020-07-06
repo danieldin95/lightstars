@@ -39,11 +39,11 @@ func (mem Memory) PUT(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	size := libstar.ToKiB(conf.Size, conf.Unit)
-	if err := dom.SetMemoryFlags(size, libvirtc.DOMAIN_MEM_MAXIMUM); err != nil {
+	if err := dom.SetMemoryFlags(size, libvirtc.DomainMemMaximum); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := dom.SetMemoryFlags(size, libvirtc.DOMAIN_MEM_CONFIG); err != nil {
+	if err := dom.SetMemoryFlags(size, libvirtc.DomainMemConfig); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

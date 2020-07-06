@@ -43,11 +43,11 @@ func (proc Processor) PUT(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DOMAIN_CPU_MAXIMUM); err != nil {
+	if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DomainCpuMaximum); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DOMAIN_CPU_CONFIG); err != nil {
+	if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DomainCpuConfig); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

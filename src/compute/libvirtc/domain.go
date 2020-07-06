@@ -5,27 +5,22 @@ import (
 )
 
 var (
-	DOMAIN_ALL                      = libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE
-	DOMAIN_DEVICE_MODIFY_CONFIG     = libvirt.DOMAIN_DEVICE_MODIFY_CONFIG
-	DOMAIN_DEVICE_MODIFY_PERSISTENT = libvirt.DOMAIN_DEVICE_MODIFY_LIVE | libvirt.DOMAIN_DEVICE_MODIFY_CONFIG
-	DOMAIN_DESTROY_GRACEFUL         = libvirt.DOMAIN_DESTROY_GRACEFUL
-	DOMAIN_SHUTDOWN_ACPI            = libvirt.DOMAIN_SHUTDOWN_ACPI_POWER_BTN
-	DOMAIN_CPU_MAXIMUM              = libvirt.DOMAIN_VCPU_MAXIMUM | libvirt.DOMAIN_VCPU_CONFIG
-	DOMAIN_CPU_CONFIG               = libvirt.DOMAIN_VCPU_CONFIG
-	DOMAIN_MEM_MAXIMUM              = libvirt.DOMAIN_MEM_MAXIMUM | libvirt.DOMAIN_MEM_CONFIG
-	DOMAIN_MEM_CONFIG               = libvirt.DOMAIN_MEM_CONFIG
+	DomainAll                    = libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE
+	DomainDeviceModifyConfig     = libvirt.DOMAIN_DEVICE_MODIFY_CONFIG
+	DomainDeviceModifyPersistent = libvirt.DOMAIN_DEVICE_MODIFY_LIVE | libvirt.DOMAIN_DEVICE_MODIFY_CONFIG
+	DomainDestroyGraceful        = libvirt.DOMAIN_DESTROY_GRACEFUL
+	DomainShutdownAcpi           = libvirt.DOMAIN_SHUTDOWN_ACPI_POWER_BTN
+	DomainCpuMaximum             = libvirt.DOMAIN_VCPU_MAXIMUM | libvirt.DOMAIN_VCPU_CONFIG
+	DomainCpuConfig              = libvirt.DOMAIN_VCPU_CONFIG
+	DomainMemMaximum             = libvirt.DOMAIN_MEM_MAXIMUM | libvirt.DOMAIN_MEM_CONFIG
+	DomainMemConfig              = libvirt.DOMAIN_MEM_CONFIG
 )
 
 var (
-	PCI_DOMAIN        = "0x00"
-	PCI_ROOT_BUS      = "0x00"
-	PCI_DISK_BUS      = "0x01"
-	PCI_INTERFACE_BUS = "0x02"
-	PCI_FUNC          = "0x00"
-	DRV_CTL           = "0"
-	DRV_ROOT_BUS      = "0"
-	DRV_DISK_BUS      = "1"
-	DRV_INTERFACE_BUS = "2"
+	PciDomain         = "0x00"
+	PciDiskBus        = "0x01"
+	PciInterfaceBus   = "0x02"
+	PciFunc           = "0x00"
 )
 
 type Domain struct {

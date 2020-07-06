@@ -17,10 +17,10 @@ func Interface2XML(source, model, seq, typ string) libvirtc.InterfaceXML {
 		},
 		Address: &libvirtc.AddressXML{
 			Type:     "pci",
-			Domain:   libvirtc.PCI_DOMAIN,
-			Bus:      libvirtc.PCI_INTERFACE_BUS,
+			Domain:   libvirtc.PciDomain,
+			Bus:      libvirtc.PciInterfaceBus,
 			Slot:     seq,
-			Function: libvirtc.PCI_FUNC,
+			Function: libvirtc.PciFunc,
 		},
 	}
 	if br.Type == "openvswitch" || typ == "openvswitch" {

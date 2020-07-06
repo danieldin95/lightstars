@@ -154,10 +154,10 @@ func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 	case "virtio":
 		xml.Address = &libvirtc.AddressXML{
 			Type:     "pci",
-			Domain:   libvirtc.PCI_DOMAIN,
-			Bus:      libvirtc.PCI_DISK_BUS,
+			Domain:   libvirtc.PciDomain,
+			Bus:      libvirtc.PciDiskBus,
 			Slot:     conf.Seq,
-			Function: libvirtc.PCI_FUNC,
+			Function: libvirtc.PciFunc,
 		}
 	}
 	return &xml, nil
@@ -187,9 +187,9 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	libstar.Debug("Disk.POST: %s", xmlObj.Encode())
-	flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+	flags := libvirtc.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
-		flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+		flags = libvirtc.DomainDeviceModifyConfig
 	}
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
 		file := xmlObj.Source.File
@@ -228,9 +228,9 @@ func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			// found device
-			flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+			flags := libvirtc.DomainDeviceModifyPersistent
 			if active, _ := dom.IsActive(); !active {
-				flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+				flags = libvirtc.DomainDeviceModifyConfig
 			}
 			if err := dom.DetachDeviceFlags(disk.Encode(), flags); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)

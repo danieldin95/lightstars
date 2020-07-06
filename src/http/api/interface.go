@@ -66,9 +66,9 @@ func (in Interface) POST(w http.ResponseWriter, r *http.Request) {
 	xmlObj := Interface2XML(conf.Source, conf.Model, conf.Seq, conf.Type)
 	libstar.Debug("Interface.POST: %s", xmlObj.Encode())
 
-	flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+	flags := libvirtc.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
-		flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+		flags = libvirtc.DomainDeviceModifyConfig
 	}
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -93,12 +93,11 @@ func (in Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 	address, _ := GetArg(r, "dev")
 	xml := libvirtc.NewDomainXMLFromDom(dom, true)
 	if xml == nil {
-		http.Error(w, "Cannot get domain's descXML", http.StatusInternalServerError)
+		http.Error(w, "Cannot get domain's descXML", http.StatusNotFound)
 		return
 	}
-
 	if xml.Devices.Interfaces == nil {
-		ResponseMsg(w, 0, "success")
+		http.Error(w, "Cannot get domain's interface", http.StatusNotFound)
 		return
 	}
 	for _, inf := range xml.Devices.Interfaces {
@@ -106,9 +105,9 @@ func (in Interface) DELETE(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		// found device
-		flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+		flags := libvirtc.DomainDeviceModifyPersistent
 		if active, _ := dom.IsActive(); !active {
-			flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+			flags = libvirtc.DomainDeviceModifyConfig
 		}
 		if err := dom.DetachDeviceFlags(inf.Encode(), flags); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	NETWORK_ALL = libvirt.CONNECT_LIST_NETWORKS_ACTIVE | libvirt.CONNECT_LIST_NETWORKS_INACTIVE
+	NetworkAll = libvirt.CONNECT_LIST_NETWORKS_ACTIVE | libvirt.CONNECT_LIST_NETWORKS_INACTIVE
 )
 
 type HyperListener struct {
@@ -80,7 +80,7 @@ func (h *HyperVisor) ListAllNetworks() ([]Network, error) {
 		return nil, err
 	}
 
-	nets, err := h.Conn.ListAllNetworks(NETWORK_ALL)
+	nets, err := h.Conn.ListAllNetworks(NetworkAll)
 	if err != nil {
 		return nil, err
 	}

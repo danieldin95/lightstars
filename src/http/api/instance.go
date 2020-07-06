@@ -111,10 +111,10 @@ func NewDiskXML(format, file, bus string, seq uint8) libvirtc.DiskXML {
 		}
 		disk.Address = &libvirtc.AddressXML{
 			Type:     "pci",
-			Domain:   libvirtc.PCI_DOMAIN,
-			Bus:      libvirtc.PCI_DISK_BUS,
+			Domain:   libvirtc.PciDomain,
+			Bus:      libvirtc.PciDiskBus,
 			Slot:     fmt.Sprintf("0x%x", seq),
-			Function: libvirtc.PCI_FUNC,
+			Function: libvirtc.PciFunc,
 		}
 	case "ide", "scsi":
 		disk.Target = libvirtc.DiskTargetXML{
@@ -471,7 +471,7 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	case "shutdown":
-		if err := dom.ShutdownFlags(libvirtc.DOMAIN_SHUTDOWN_ACPI); err != nil {
+		if err := dom.ShutdownFlags(libvirtc.DomainShutdownAcpi); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -486,7 +486,7 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	case "destroy":
-		if err := dom.DestroyFlags(libvirtc.DOMAIN_DESTROY_GRACEFUL); err != nil {
+		if err := dom.DestroyFlags(libvirtc.DomainDestroyGraceful); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

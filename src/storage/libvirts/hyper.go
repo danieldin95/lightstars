@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	POOL_ALL = libvirt.CONNECT_LIST_STORAGE_POOLS_ACTIVE | libvirt.CONNECT_LIST_STORAGE_POOLS_INACTIVE
+	PoolAll = libvirt.CONNECT_LIST_STORAGE_POOLS_ACTIVE | libvirt.CONNECT_LIST_STORAGE_POOLS_INACTIVE
 )
 
 type HyperListener struct {
@@ -68,7 +68,7 @@ func (h *HyperVisor) ListAllPools() ([]Pool, error) {
 		return nil, err
 	}
 
-	pools, err := h.Conn.ListAllStoragePools(POOL_ALL)
+	pools, err := h.Conn.ListAllStoragePools(PoolAll)
 	if err != nil {
 		return nil, err
 	}

@@ -64,9 +64,9 @@ func (gra Graphics) POST(w http.ResponseWriter, r *http.Request) {
 		AutoPort: "yes",
 		Password: conf.Password,
 	}
-	flags := libvirtc.DOMAIN_DEVICE_MODIFY_PERSISTENT
+	flags := libvirtc.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
-		flags = libvirtc.DOMAIN_DEVICE_MODIFY_CONFIG
+		flags = libvirtc.DomainDeviceModifyConfig
 	}
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
