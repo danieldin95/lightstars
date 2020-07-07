@@ -6,8 +6,10 @@ import (
 )
 
 func Interface2XML(source, model, seq, typ string) libvirtc.InterfaceXML {
-	br, _ := libvirtn.BRIDGE.Get(source)
-	xml := libvirtc.InterfaceXML{
+	if br, err := libvirtn.BRIDGE.Get(source); err == nil {
+		typ = br.Type
+	}
+	xmlObj := libvirtc.InterfaceXML{
 		Type: "bridge",
 		Source: libvirtc.InterfaceSourceXML{
 			Bridge: source,
@@ -23,10 +25,10 @@ func Interface2XML(source, model, seq, typ string) libvirtc.InterfaceXML {
 			Function: libvirtc.PciFunc,
 		},
 	}
-	if br.Type == "openvswitch" || typ == "openvswitch" {
-		xml.VirtualPort = &libvirtc.InterfaceVirtualPortXML{
+	if typ == "openvswitch" {
+		xmlObj.VirtualPort = &libvirtc.InterfaceVirtualPortXML{
 			Type: typ,
 		}
 	}
-	return xml
+	return xmlObj
 }

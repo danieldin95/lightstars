@@ -39,16 +39,6 @@ export class DiskCreate extends FormModal {
                         </div>            
                     </div>
                     <div class="form-group">
-                        <label for="slot" class="col-form-label-sm ">{{'sequence number' | i}}</label>
-                        <div class="input-group">
-                            <select class="select-lg" name="seq">
-                                <option value="0" selected>0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                            </select>
-                        </div>              
-                    </div>
-                    <div class="form-group">
                         <label for="size" class="col-form-label-sm">{{'disk size' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" name="size" value="10"/>
@@ -58,6 +48,16 @@ export class DiskCreate extends FormModal {
                                 <option value="TiB">TiB</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="slot" class="col-form-label-sm ">{{'sequence number' | i}}</label>
+                        <div class="input-group">
+                            <select class="select-lg" name="seq">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>              
                     </div>
                 </form>
             </div>

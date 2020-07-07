@@ -55,15 +55,6 @@ export class InterfaceCreate extends FormModal {
             <div id="" class="modal-body">
             <form>
                 <div class="form-group">
-                    <label for="type" class="col-form-label-sm">{{'network type' | i}}</label>
-                    <div class="input-group">
-                        <select class="select-lg" name="type">
-                            <option value="bridge" selected>Linux Bridge</option>
-                            <option value="openvswitch">Open vSwitch</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="model" class="col-form-label-sm">{{'target model' | i}}</label>
                     <div class="input-group">
                         <select class="select-lg" name="model">

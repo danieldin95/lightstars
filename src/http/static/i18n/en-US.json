@@ -9,6 +9,7 @@
 	"network": "Network",
 	"node": "Node",
 	"full screen": "Full screen",
+	"preferences": "Preferences",
 	"setting": "Setting",
 	"change password": "Change password",
 	"logout": "Logout",
@@ -110,5 +111,5 @@
 	"autostart": "Autostart",
 	"dhcp lease": "DHCP lease",
 	"new a lease": "New a lease",
-	"ip address": "IP address"
+	"ip address": "IP address",
 }

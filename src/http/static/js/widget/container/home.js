@@ -187,7 +187,6 @@ export class Home extends Container {
                             </th>
                             <th>{{'id' | i}}</th>
                             <th>{{'uuid' | i}}</th>
-                            <th>{{'cpu time' | i}}</th>
                             <th>{{'name' | i}}</th>
                             <th>{{'processor' | i}}</th>
                             <th>{{'memory' | i}}</th>

@@ -195,7 +195,7 @@ export class Navigation extends Widget {
                     <div class="dropdown-menu dropdown-left" aria-labelledby="userMore">
                         <a id="fullscreen" class="dropdown-item">{{'full screen' | i}}</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="javascript:void(0)">{{'setting' | i}}</a>
+                        <a class="dropdown-item" href="javascript:void(0)">{{'preferences' | i}}</a>
                         <a class="dropdown-item" href="javascript:void(0)" 
                             data-toggle="modal" data-target="#changePasswdModal">
                             {{'change password' | i}}
