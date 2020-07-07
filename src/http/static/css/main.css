@@ -140,21 +140,18 @@ select {
 }
 
 .select-md, .input-md {
-    width: 80%;
+    width: 60%;
 }
 
 .select-lg {
     width: 100%;
 }
 
+.select-twice-md,
 .select-unit-right {
     width: auto;
-    margin-left: 1rem;
-}
-
-.select-twice-md {
-    width: auto;
-    max-width: 100px;
+    max-width: 8rem;
+    min-width: 4rem;
     margin-left: 1rem;
 }
 
@@ -178,7 +175,7 @@ select {
 
 .btn-spot {
     border: 1px solid #6c757d;
-    padding: 0px;
+    padding: 0;
     border-radius: .5rem;
     min-height: 1rem;
     min-width: 1.25rem;

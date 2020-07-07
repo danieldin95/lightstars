@@ -36,7 +36,11 @@ export class InstanceSet extends FormModal {
                     <div class="form-group">
                         <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
-                            <select class="select-md" name="cpu" value="${this.cpu}">
+                           <select class="form-control form-control-sm" name="cpuMode">
+                                <option value="" selected>Default</option>
+                                <option value="host-passthrough">Intel VT-x or AMD-V</option>
+                            </select>
+                            <select class="select-twice-md" name="cpu" value="${this.cpu}">
                                 <option value="1">1</option>
                                 <option value="2" selected>2</option>
                                 <option value="3">3</option>
@@ -49,7 +53,7 @@ export class InstanceSet extends FormModal {
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm input-md"
                                    name="memSize" value="${this.mem}"/>
-                            <select class="select-unit-right" name="memUnit">
+                            <select class="select-twice-md" name="memUnit">
                                 <option value="MiB" selected>MiB</option>
                                 <option value="GiB">GiB</option>
                             </select>

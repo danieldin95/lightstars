@@ -188,7 +188,7 @@ export class InstanceCreate extends FormModal {
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm"
                                    name="memSize" value="2048"/>
-                            <select class="select-unit-right" name="memUnit">
+                            <select class="select-twice-md" name="memUnit">
                                 <option value="MiB" selected>MiB</option>
                                 <option value="GiB">GiB</option>
                             </select>
@@ -199,7 +199,7 @@ export class InstanceCreate extends FormModal {
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm"
                                    name="disk1Size" value="10"/>
-                            <select class="select-unit-right" name="disk1Unit">
+                            <select class="select-twice-md" name="disk1Unit">
                                 <option value="Mib">MiB</option>
                                 <option value="GiB" selected>GiB</option>
                                 <option value="TiB">TiB</option>
