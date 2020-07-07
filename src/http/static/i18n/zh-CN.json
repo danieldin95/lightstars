@@ -110,5 +110,11 @@
 	"autostart": "自启动",
 	"dhcp lease": "DHCP租约",
 	"new a lease": "新加一个租约",
-	"ip address": "IP地址"
+	"ip address": "IP地址",
+	"warning": "警告",
+	"danger": "危险",
+	"are you sure you want to remove": "你确定想要删除",
+	"?": "？",
+	"if you confirm to remove it, all data of this guest will be clear.": "如果你确认删除，这个实例的所有数据将被删除。",
+	"confirm": "确认"
 }

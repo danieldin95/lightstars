@@ -12,23 +12,23 @@ export class InstanceRemove extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title text-dark" id="">Warning</h6>
+                <h6 class="modal-title text-danger" id="">{{'danger' | i}}</h6>
             </div>
             <div id="" class="modal-body">
-                <p class="text-center">
-                   Are you sure you want to remove <span class="text-danger font-weight-bold">${this.name}</span>?
-                </p>
                 <p class="text-center font-weight-bold">
-                  If you confirm to remove it, all data of this guest will be clear.
+                   {{'are you sure you want to remove' | i}} <span class="text-danger">${this.name}</span>{{'?' | i}}
+                </p>
+                <p class="text-center font-weight-normal font-italic">
+                  {{'if you confirm to remove it, all data of this guest will be clear.' | i}}
                 </p>
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-danger btn-sm">Confirm</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-danger btn-sm">{{'confirm' | i}}</button>
             </div>
         </div>
         </div>`);
