@@ -32,3 +32,7 @@
 .modal-body form {
     padding: .25rem 1rem;
 }
+
+.modal-header h7 {
+    font-weight: lighter;
+}

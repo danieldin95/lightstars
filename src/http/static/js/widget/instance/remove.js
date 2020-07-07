@@ -16,13 +16,13 @@ export class InstanceRemove extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title text-danger" id="">{{'danger' | i}}</h6>
+                <h7 class="modal-title text-danger" id="">{{'danger' | i}}</h7>
             </div>
             <div id="" class="modal-body">
-                <p class="text-center font-weight-bold">
-                   {{'are you sure you want to remove' | i}} <span class="text-danger">${this.name}</span>{{'?' | i}}
+                <p class="text-center font-weight-normal">
+                   {{'are you sure you want to remove' | i}} <span class="font-weight-bold">${this.name}</span class="font-weight-bold">{{'?' | i}}
                 </p>
-                <p class="text-center font-weight-normal font-italic">
+                <p class="text-center font-weight-light">
                   {{'if you confirm to remove it, all data of this guest will be clear.' | i}}
                 </p>
             </div>

@@ -116,7 +116,9 @@ export class InstanceCreate extends FormModal {
         return this.compile(`
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content ">
-            <div class="modal-header">{{'create a instance' | i}}</div>
+            <div class="modal-header">
+                <h7>{{'create a instance' | i}}</h7>
+            </div>
             <div class="modal-body">
             <div class="row">
                 <div class="col-3 border-right">

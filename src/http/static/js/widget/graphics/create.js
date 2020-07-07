@@ -20,11 +20,11 @@ export class DiskCreate extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">Create Graphics</h5>
+                <h7 class="modal-title" id="">Create Graphics</h7>
             </div>
             <div id="" class="modal-body">
                 <form name="disk-new">

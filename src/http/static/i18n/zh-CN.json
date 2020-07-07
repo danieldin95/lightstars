@@ -91,6 +91,7 @@
 	"host address": "主机地址",
 	"remote directory": "远端目录",
 	"new datastore by iscsi": "新建iSCSI存储",
+	"create nat network": "新建NAT网络",
 	"network name": "网络名称",
 	"interface address for bridge": "网桥接口的地址",
 	"address range for dhcp": "DHCP的地址范围",
@@ -116,5 +117,6 @@
 	"are you sure you want to remove": "你确定想要删除",
 	"?": "？",
 	"if you confirm to remove it, all data of this guest will be clear.": "如果你确认删除，这个实例的所有数据将被删除。",
-	"confirm": "确认"
+	"confirm": "确认",
+	"upload a file": "上传文件"
 }

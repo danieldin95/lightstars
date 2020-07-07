@@ -50,7 +50,7 @@ export class InterfaceCreate extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">{{'add interface' | i}}</h5>
+                <h7 class="modal-title" id="">{{'add interface' | i}}</h7>
             </div>
             <div id="" class="modal-body">
             <form>
