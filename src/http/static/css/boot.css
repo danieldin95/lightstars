@@ -1,5 +1,5 @@
 body {
-    font-family: Arial;
+    font-family: arial,sans-serif;
     font-size: small;
     background: #e9ecef;
 }
@@ -21,7 +21,7 @@ a:focus {
 }
 
 .fullScreen {
-    font-family: Arial;
+    font-family: arial,sans-serif;
     font-size: small;
     background: #e9ecef;
     width: 100%;

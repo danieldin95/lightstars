@@ -20,16 +20,16 @@ export class DiskCreate extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">Create Disk</h5>
+                <h5 class="modal-title" id="">{{'add disk' | i}}</h5>
             </div>
             <div id="" class="modal-body">
                 <form name="disk-new">
                     <div class="form-group">
-                        <label for="bus" class="col-form-label-sm ">Target bus</label>
+                        <label for="bus" class="col-form-label-sm ">{{'target bus' | i}}</label>
                         <div class="input-group">
                             <select class="select-lg" name="bus">
                                 <option value="virtio" selected>Linux Virtual IO</option>
@@ -39,7 +39,7 @@ export class DiskCreate extends FormModal {
                         </div>            
                     </div>
                     <div class="form-group">
-                        <label for="slot" class="col-form-label-sm ">Sequence number</label>
+                        <label for="slot" class="col-form-label-sm ">{{'sequence number' | i}}</label>
                         <div class="input-group">
                             <select class="select-lg" name="seq">
                                 <option value="0" selected>0</option>
@@ -49,7 +49,7 @@ export class DiskCreate extends FormModal {
                         </div>              
                     </div>
                     <div class="form-group">
-                        <label for="size" class="col-form-label-sm">Virtual disk size</label>
+                        <label for="size" class="col-form-label-sm">{{'disk size' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" name="size" value="10"/>
                             <select class="select-unit-right" name="sizeUnit">
@@ -62,8 +62,8 @@ export class DiskCreate extends FormModal {
                 </form>
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
             </div>
         </div>
         </div>`);

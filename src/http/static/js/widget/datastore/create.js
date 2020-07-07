@@ -2,6 +2,7 @@ import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
 import {Utils} from "../../com/utils.js";
 
+
 export class DirCreate extends FormModal {
     //
     constructor (props) {
@@ -28,17 +29,17 @@ export class DirCreate extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">New a datastore</h5>
+                <h5 class="modal-title" id="">{{'new a datastore' | i}}</h5>
             </div>
             <div id="" class="modal-body">
             <form name="datastore-new">
                 <input type="text" class="d-none" name="type" value="dir"/>
                 <div class="form-group">
-                    <label for="name" class="col-form-label-sm ">Select datastore</label>
+                    <label for="name" class="col-form-label-sm ">{{'select datastore' | i}}</label>
                     <div class="input-group">
                         <select class="select-lg" name="name">
                             <option value="datastore@01" selected>datastore@01</option>
@@ -47,8 +48,8 @@ export class DirCreate extends FormModal {
                 </div>
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
             </div>
             </form>
         </div>

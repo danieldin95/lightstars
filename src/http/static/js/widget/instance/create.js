@@ -113,26 +113,23 @@ export class InstanceCreate extends FormModal {
     }
 
     template(props) {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content ">
-            <div class="modal-header">Create a instance</div>
+            <div class="modal-header">{{'create a instance' | i}}</div>
             <div class="modal-body">
             <div class="row">
                 <div class="col-3 border-right">
                     <div class="">
                         <ul id="nav-tabs" class="nav flex-column nav-pills">
                             <li class="nav-item">
-                                <a id="head1" class="nav-link" data-target="#guest">
-                                    Configure Guest</a>
+                                <a id="head1" class="nav-link" data-target="#guest">{{'configure guest' | i}}</a>
                             </li>
                             <li class="nav-item">
-                                <a id="head2" class="nav-link" data-target="#datastore">
-                                    Select DataStore</a>
+                                <a id="head2" class="nav-link" data-target="#datastore">{{'select datastore' | i}}</a>
                             </li>
                             <li class="nav-item">
-                                <a id="head3" class="nav-link" data-target="#custom">
-                                    Custom Setting</a>
+                                <a id="head3" class="nav-link" data-target="#custom">{{'custom setting' | i}}</a>
                             </li>
                         </ul>
                     </div>
@@ -141,25 +138,25 @@ export class InstanceCreate extends FormModal {
                 <form>
                 <div id="guest" class="d-none">
                     <div class="form-group">
-                        <label for="name" class="col-form-label-sm">Guest Name</label>
+                        <label for="name" class="col-form-label-sm">{{'guest name' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" name="name" value="guest.01"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="family" class="col-form-label-sm">Operating System</label>
+                        <label for="family" class="col-form-label-sm">{{'operating system' | i}}</label>
                         <div class="input-group">
                             <select class="select-lg" name="family">
-                                <option value="linux" selected>Linux</option>
-                                <option value="windows">Windows</option>
-                                <option value="other">Other</option>
+                                <option value="linux" selected>linux</option>
+                                <option value="windows">windows</option>
+                                <option value="other">other</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div id="datastore" class="d-none">
                     <div class="form-group">
-                        <label for="datastore" class="col-form-label-sm">DataStore location</label>
+                        <label for="datastore" class="col-form-label-sm">{{'datastore location' | i}}</label>
                         <div class="input-group">
                             <select class="select-lg" name="datastore">
                                 <option value="datastore/01" selected>datastore01</option>
@@ -170,7 +167,7 @@ export class InstanceCreate extends FormModal {
                 </div>
                 <div id="custom" class="d-none">
                     <div class="form-group">
-                        <label for="cpu" class="col-form-label-sm">Processors</label>
+                        <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
                             <select class="form-control form-control-sm" name="cpuMode">
                                 <option value="" selected>Default</option>
@@ -185,7 +182,7 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="MaxMem" class="col-form-label-sm">Memory size</label>
+                        <label for="MaxMem" class="col-form-label-sm">{{'memory size' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm"
                                    name="memSize" value="2048"/>
@@ -196,7 +193,7 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="diskSize" class="col-form-label-sm">Hardware disk</label>
+                        <label for="diskSize" class="col-form-label-sm">{{'hardware disk' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm"
                                    name="disk1Size" value="10"/>
@@ -208,7 +205,7 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="disk0File" class="col-form-label-sm">Select ISO or Image</label>
+                        <label for="disk0File" class="col-form-label-sm">{{'select ISO or image' | i}}</label>
                         <div class="input-group">
                             <select class="form-control form-control-sm" name="disk0File">
                                 <option value="/dev/sr0">sr0</option>
@@ -216,7 +213,7 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="interface0Source" class="col-form-label-sm">Network interface</label>
+                        <label for="interface0Source" class="col-form-label-sm">{{'network interface' | i}}</label>
                         <div class="input-group">
                             <select class="form-control form-control-sm" name="interface0Source">
                                 <option value="virbr0" selected>Linux Bridge #virbr0</option>
@@ -232,10 +229,10 @@ export class InstanceCreate extends FormModal {
                 </div>
             </div>
             <div class="modal-footer text-right">
-                <button id="btn-prev" class="btn btn-outline-dark btn-sm">Previous</button>
-                <button id="btn-next" class="btn btn-outline-info btn-sm">Next</button>
-                <button id="btn-cancel" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button id="btn-submit" class="btn btn-outline-success btn-sm">Submit</button>
+                <button id="btn-prev" class="btn btn-outline-dark btn-sm">{{'previous' | i}}</button>
+                <button id="btn-next" class="btn btn-outline-info btn-sm">{{'next' | i}}</button>
+                <button id="btn-cancel" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button id="btn-submit" class="btn btn-outline-success btn-sm">{{'submit' | i}}</button>
             </div>
         </div>
         </div>`);

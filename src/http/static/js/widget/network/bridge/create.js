@@ -11,24 +11,24 @@ export class BridgeCreate extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">Create Network</h5>
+                <h5 class="modal-title" id="">{{'create network' | i}}</h5>
             </div>
             <div id="" class="modal-body">
                 <form>
                     <input type="text" class="d-none" name="mode" value="bridge"/>
                     <input type="text" class="d-none" name="dhcp" value="no"/>
                     <div class="form-group">
-                        <label for="name" class="col-form-label-sm ">Network Name</label>
+                        <label for="name" class="col-form-label-sm ">{{'network name' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" name="name" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="name" class="col-form-label-sm ">Existing Bridge</label>
+                        <label for="name" class="col-form-label-sm ">{{'existing bridge on host' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm input-lg" name="bridge" value="br0"/>                                    
                         </div>
@@ -36,8 +36,8 @@ export class BridgeCreate extends FormModal {
                 </form>    
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
             </div>
         </div>
         </div>`);

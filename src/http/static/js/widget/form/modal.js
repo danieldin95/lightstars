@@ -1,5 +1,4 @@
-
-
+//
 export class FormModal {
     // {
     //   id: '#disk'
@@ -69,5 +68,9 @@ export class FormModal {
                 return false;
             });
         });
+    }
+
+    compile(tmpl, data) {
+        return template.compile(tmpl)(data);
     }
 }

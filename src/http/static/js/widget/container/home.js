@@ -254,7 +254,7 @@ export class Home extends Container {
                                 <th>{{'name' | i}}</th>
                                 <th>{{'source' | i}}</th>
                                 <th>{{'capacity' | i}}</th>
-                                <th>{{'available' | i}}</th>
+                                <th>{{'allocation' | i}}</th>
                                 <th>{{'state' | i}}</th>
                             </tr>
                             </thead>

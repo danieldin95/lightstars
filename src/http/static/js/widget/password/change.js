@@ -1,5 +1,6 @@
 import {FormModal} from "../form/modal.js";
 
+
 export class ChangePassword extends FormModal {
 
     constructor (props) {
@@ -14,28 +15,28 @@ export class ChangePassword extends FormModal {
     }
 
     template(props) {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
             <div class="modal-content ">
                 <div class="modal-header">
-                        Change user password
+                  {{'change user password' | i}}
                 </div>
                 <div class="modal-body">
                     <form id="form">
                         <div class="form-group">
-                            <label for="name" class="col-form-label-sm">Old Password</label>
+                            <label for="name" class="col-form-label-sm">{{'old password' | i}}</label>
                             <div class="input-group">
                                 <input type="password" class="form-control form-control-sm" name="old" value=""/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="name" class=" col-form-label-sm">New Password</label>
+                            <label for="name" class=" col-form-label-sm">{{'new password' | i}}</label>
                             <div class="input-group">
                                 <input type="password" class="form-control form-control-sm" name="new" value=""/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="name" class="col-form-label-sm">Repeat New Password</label>
+                            <label for="name" class="col-form-label-sm">{{'repeat new password' | i}}</label>
                             <div class="input-group">
                                 <input type="password" class="form-control form-control-sm" name="repeat" value=""/>
                             </div>
@@ -43,8 +44,8 @@ export class ChangePassword extends FormModal {
                     </form>
                 </div>
                 <div id="" class="modal-footer">
-                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                    <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                    <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                    <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
                 </div>
             </div>
         </div>`);

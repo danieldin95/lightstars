@@ -40,7 +40,6 @@ export class LeaseTable extends Widget {
                 <td>{{i+1}}</td>
                 <td>{{v.mac}}</td>
                 <td>{{v.ipAddr}}/{{v.prefix}}</td>
-                <td>{{v.hostname}}</td>
             </tr>
         {{/each}}
         `, data);

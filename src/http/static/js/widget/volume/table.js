@@ -4,12 +4,13 @@ import {CheckBox} from "../checkbox/checkbox.js";
 import {Location} from "../../com/location.js";
 import {Utils} from "../../com/utils.js";
 
+
 export default class VolumeTable extends Widget {
 
     constructor(props) {
         super(props);
-        this.checkbox = new CheckBox(props)
-        this.pool = props.pool
+        this.checkbox = new CheckBox(props);
+        this.pool = props.pool;
     }
 
     loading() {
@@ -21,7 +22,6 @@ export default class VolumeTable extends Widget {
             func = data;
             data = {};
         }
-
         $(this.id).html(this.loading());
         new VolumeApi({
             pool: this.pool
@@ -29,16 +29,18 @@ export default class VolumeTable extends Widget {
             $(e.data.id).html(e.data.render(e.resp));
             func({data, resp: e.resp});
         })
-
     }
     formatData(data) {
-        let items = data.items
+        let items = data.items;
         return Object.assign({}, data, {
             items: items.map((i) => {
-                return Object.assign({}, i,
-                    {
-                        name:  (i.type === "dir") ? '.' + Utils.basename(i.name) : Utils.basename(i.name)
-                    })
+                let name = "";
+                if (i.type === "dir") {
+                    name = '.'+Utils.basename(i.name);
+                } else {
+                    name = Utils.basename(i.name);
+                }
+                return Object.assign({}, i, {name});
             })
         })
     }

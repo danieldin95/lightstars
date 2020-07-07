@@ -2,6 +2,7 @@ import {FormModal} from "../../form/modal.js";
 import {Option} from "../../option.js";
 import {Utils} from "../../../com/utils.js";
 
+
 export class iSCSICreate extends FormModal {
     //
     constructor (props) {
@@ -23,22 +24,21 @@ export class iSCSICreate extends FormModal {
             },
             selector: this.view.find("select[name='name']"),
         };
-
         name.fresh();
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">New datastore by iSCSI</h5>
+                <h5 class="modal-title" id="">{{'new datastore by iscsi' | i}}</h5>
             </div>
             <div id="" class="modal-body">
             <form name="datastore-new">
                 <input type="text" class="d-none" name="type" value="iscsi"/>            
                 <div class="form-group">
-                    <label for="name" class="col-form-label-sm ">Select datastore</label>
+                    <label for="name" class="col-form-label-sm ">{{'select datastore' | i}}</label>
                     <div class="input-group">
                         <select class="select-lg" name="name">
                             <option value="datastore@01" selected>datastore@01</option>
@@ -47,8 +47,8 @@ export class iSCSICreate extends FormModal {
                 </div>
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
             </div>
             </form>
         </div>

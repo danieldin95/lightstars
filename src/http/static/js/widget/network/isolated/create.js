@@ -28,23 +28,23 @@ export class IsolatedCreate extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">Create isolated network</h5>
+                <h5 class="modal-title" id="">{{'create isolated network' | i}}</h5>
             </div>
             <div id="" class="modal-body form-body">
                 <form>
                     <input type="text" class="d-none" name="mode" value=""/>
                     <div class="form-group">
-                        <label for="name" class="col-form-label-sm ">Network Name</label>
+                        <label for="name" class="col-form-label-sm ">{{'network name' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" name="name" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="address" class="col-form-label-sm">Interface Address</label>
+                        <label for="address" class="col-form-label-sm">{{'interface address for bridge' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm"
                                    name="address" value="192.168.200.1"/>
@@ -54,7 +54,7 @@ export class IsolatedCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="range" class="col-form-label-sm">Address range for DHCP</label>
+                        <label for="range" class="col-form-label-sm">{{'address range for dhcp' | i}}</label>
                         <div class="input-group">
                             <textarea type="text" class="form-control form-control-sm" 
                                 name="range" rows="3">192.168.200.100,192.168.200.200</textarea>                                   
@@ -63,8 +63,8 @@ export class IsolatedCreate extends FormModal {
                 </form>
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
             </div>
         </div>
         </div>`);

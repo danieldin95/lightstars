@@ -2,6 +2,7 @@ import {FormModal} from "../../form/modal.js";
 import {Option} from "../../option.js";
 import {Utils} from "../../../com/utils.js";
 
+
 export class NFSCreate extends FormModal {
     //
     constructor (props) {
@@ -28,18 +29,18 @@ export class NFSCreate extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">New datastore by NFS</h5>
+                <h5 class="modal-title" id="">{{'new datastore by nfs' | i}}</h5>
             </div>
             <div id="" class="modal-body">
             <form name="datastore-new">
                 <input type="text" class="d-none" name="type" value="netfs"/>
                 <input type="text" class="d-none" name="format" value="nfs"/>
                 <div class="form-group">
-                    <label for="name" class="col-form-label-sm ">DataStore</label>
+                    <label for="name" class="col-form-label-sm ">{{'datastore' | i}}</label>
                     <div class="input-group">
                         <select class="select-lg" name="name">
                             <option value="datastore@01" selected>datastore@01</option>
@@ -47,22 +48,22 @@ export class NFSCreate extends FormModal {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="host" class="col-form-label-sm">Host address</label>
+                    <label for="host" class="col-form-label-sm">{{'host address' | i}}</label>
                     <div class="input-group">
                         <input type="text" class="form-control form-control-sm" name="host" value=""/>                                         
                     </div>
                 </div>  
                 <div class="form-group">
-                    <label for="host" class="col-form-label-sm">Directory path</label>
+                    <label for="host" class="col-form-label-sm">{{'remote directory' | i}}</label>
                     <div class="input-group">
-                        <input type="text" class="form-control form-control-sm" name="path" value="/"/>                                         
+                        <input type="text" class="form-control form-control-sm" name="path" value="/public"/>                                         
                     </div>
                 </div>  
             </form>                                          
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
             </div>
         </div>
         </div>`);

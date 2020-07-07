@@ -2,6 +2,7 @@ import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
 import {BridgeApi} from "../../api/bridge.js";
 
+
 export class InterfaceCreate extends FormModal {
     //
     constructor (props) {
@@ -45,16 +46,16 @@ export class InterfaceCreate extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">Create Interface</h5>
+                <h5 class="modal-title" id="">{{'add interface' | i}}</h5>
             </div>
             <div id="" class="modal-body">
             <form>
                 <div class="form-group">
-                    <label for="type" class="col-form-label-sm">Network type</label>
+                    <label for="type" class="col-form-label-sm">{{'network type' | i}}</label>
                     <div class="input-group">
                         <select class="select-lg" name="type">
                             <option value="bridge" selected>Linux Bridge</option>
@@ -63,7 +64,7 @@ export class InterfaceCreate extends FormModal {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="model" class="col-form-label-sm">Target model</label>
+                    <label for="model" class="col-form-label-sm">{{'target model' | i}}</label>
                     <div class="input-group">
                         <select class="select-lg" name="model">
                             <option value="virtio" selected>Linux Virtual IO</option>
@@ -73,7 +74,7 @@ export class InterfaceCreate extends FormModal {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="source" class="col-form-label-sm">Bridge source</label>
+                    <label for="source" class="col-form-label-sm">{{'bridge name' | i}}</label>
                     <div class="input-group">
                         <select class="select-lg" name="source">
                             <option value="ovs-br1">Open vSwitch #ovs-br1</option>
@@ -83,7 +84,7 @@ export class InterfaceCreate extends FormModal {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="slot" class="col-form-label-sm ">Sequence number</label>
+                    <label for="slot" class="col-form-label-sm ">{{'sequence number' | i}}</label>
                     <div class="input-group">
                         <select class="select-lg" name="seq">
                             <option value="0" selected>0</option>
@@ -95,8 +96,8 @@ export class InterfaceCreate extends FormModal {
             </form>
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
             </div>
         </div>
         </div>`);

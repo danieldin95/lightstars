@@ -24,17 +24,17 @@ export class InstanceSet extends FormModal {
     }
 
     template() {
-        return (`
+        return this.compile(`
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="">Instance setting</h5>
+                <h5 class="modal-title" id="">{{'instance setting' | i}}</h5>
             </div>
             <div id="" class="modal-body">
                 <form>
                     <input type="text" class="d-none" name="mode" value=""/>
                     <div class="form-group">
-                        <label for="cpu" class="col-form-label-sm">Processors</label>
+                        <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
                             <select class="select-md" name="cpu" value="${this.cpu}">
                                 <option value="1">1</option>
@@ -45,7 +45,7 @@ export class InstanceSet extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="MaxMem" class="col-form-label-sm">Memory size</label>
+                        <label for="MaxMem" class="col-form-label-sm">{{'memory size' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm input-md"
                                    name="memSize" value="${this.mem}"/>
@@ -58,8 +58,8 @@ export class InstanceSet extends FormModal {
                 </form>
             </div>
             <div id="" class="modal-footer">
-                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">Cancel</button>
-                <button name="finish-btn" class="btn btn-outline-success btn-sm">Finish</button>
+                <button name="cancel-btn" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button name="finish-btn" class="btn btn-outline-success btn-sm">{{'finish' | i}}</button>
             </div>
         </div>
         </div>`);
