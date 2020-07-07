@@ -11,9 +11,9 @@ class CheckBoxCtl extends CheckBox {
     change(from) {
         super.change(from);
         if (from.store.length !== 1) {
-            $(this.child('#upload')).addClass('disabled');
+            $(this.child('#upload')).attr("disabled","disabled");
         } else {
-            $(this.child('#upload')).removeClass('disabled');
+            $(this.child('#upload')).removeAttr('disabled');
         }
     }
 }

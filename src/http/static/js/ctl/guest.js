@@ -12,14 +12,9 @@ class HeaderCtl extends Ctl {
     constructor(props) {
         super(props);
         this.api = new InstanceApi({uuids: props.uuid});
+
+        this.console();
         // register buttons's click.
-        let vncUrl = $(this.child('#console')).attr('data');
-        let console = $(this.child('#console')).attr('data-target');
-        $(console).on('show.bs.modal', function (e) {
-            $(this).find(".modal-body").html(
-                `<iframe width="800px" height="600px" src="${vncUrl}" frameborder="0"></iframe>`
-            );
-        });
         $(this.child('#start')).on("click", this, (e) => {
             this.api.start();
         });
@@ -30,15 +25,9 @@ class HeaderCtl extends Ctl {
             this.api.reset();
         });
         $(this.child('#suspend')).on("click", this, function (e) {
-            if ($(this).hasClass('disabled')) {
-                return
-            }
             e.data.api.suspend();
         });
         $(this.child('#resume')).on("click", this, function (e) {
-            if ($(this).hasClass('disabled')) {
-                return
-            }
             e.data.api.resume();
         });
         $(this.child('#destroy')).on("click", (e) => {
@@ -57,6 +46,16 @@ class HeaderCtl extends Ctl {
         $(this.child('#console-window')).on('click', this, function (e) {
             let url = $(this).attr('data');
             window.open(url, e.data.name,'width=800,height=600');
+        });
+    }
+
+    console() {
+        let url = $(this.child('#console')).attr('data');
+        let view = $(this.child('#console')).attr('data-target');
+        $(view).on('show.bs.modal', function (e) {
+            $(this).find(".modal-body").html(
+                `<iframe width="800px" height="600px" src="${url}" frameborder="0"></iframe>`
+            );
         });
     }
 }

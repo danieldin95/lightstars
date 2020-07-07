@@ -61,9 +61,7 @@ export class FormModal {
         this.container().find('[name=cancel-btn]').on('click', this, function(e) {
             e.data.container().modal("hide");
         });
-
         $(this.forms).each(function (i, e) {
-            //console.log("FormModal.loading disable", e);
             $(e).on('submit', function (e) {
                 return false;
             });

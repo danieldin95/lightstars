@@ -87,19 +87,17 @@ export class Guest extends Container {
     }
 
     template(v) {
-        let cls = 'disabled';
+        let disabled = 'disabled';
         let vncUrl = '#';
-        let xmlUrl = '/api/instance/'+ v.uuid + '?format=xml';
-
+        let dumpUrl = '/api/instance/'+ v.uuid + '?format=xml';
         if (Api.host !== '') {
-           xmlUrl = "/host/" + Api.host + xmlUrl;
+           dumpUrl = "/host/" + Api.host + dumpUrl;
         }
         if (v.state === 'running') {
-            cls = '';
+            disabled = '';
             let vnc = Utils.graphic(v, 'vnc', 'password');
             vncUrl = "/ui/console?id=" + v.uuid + "&password=" + vnc + "&node=" + Api.host;
         }
-
         return this.compile(`
         <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">
         <div id="header" class="card header">
@@ -114,11 +112,11 @@ export class Guest extends Container {
                 <!-- Header buttons -->
                 <div class="card-header-cnt">
                     <div id="console-btns" class="btn-group btn-group-sm" role="group">
-                        <button id="console" type="button" class="btn btn-outline-dark ${cls}"
-                                data-toggle="modal" data-target="#consoleModal" data="${vncUrl}">{{'console' | i}}</button>
+                        <button id="console" type="button" class="btn btn-outline-dark"
+                                data-toggle="modal" data-target="#consoleModal" data="${vncUrl}" ${disabled}>{{'console' | i}}</button>
                         <button id="consoles" type="button"
-                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split ${cls}"
-                                data-toggle="dropdown" aria-expanded="false">
+                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-expanded="false" ${disabled}>
                             <span class="sr-only">Toggle Dropdown</span></button>
                         <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
                             <a id="console-self" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
@@ -138,8 +136,8 @@ export class Guest extends Container {
                             {{'power on' | i}}
                         </button>
                         <button id="power" type="button"
-                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split ${cls}"
-                                data-toggle="dropdown" aria-expanded="false">
+                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-expanded="false" ${disabled}>
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div id="power-more" class="dropdown-menu" aria-labelledby="power">
@@ -156,11 +154,11 @@ export class Guest extends Container {
                             {{'actions' | i}}
                         </button>
                         <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                            <a id="suspend" class="dropdown-item ${cls}" href="javascript:void(0)">{{'suspend' | i}}</a>
-                            <a id="resume" class="dropdown-item" href="javascript:void(0)">{{'resume' | i}}</a>
+                            <a id="suspend" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'suspend' | i}}</a>
+                            <a id="resume" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'resume' | i}}</a>
                             <a id="setting" class="dropdown-item" href="javascript:void(0)" 
                                 data-toggle="modal" data-target="#settingModal">{{'setting' | i}}</a>
-                            <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">{{'dump xml' | i}}</a>
+                            <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
                             <div class="dropdown-divider"></div>
                             <a id="remove" class="dropdown-item" href="javascript:void(0)" 
                                 data-toggle="modal" data-target="#removeModal">{{'remove' | i}}</a>

@@ -8,15 +8,15 @@ class CheckboxCtl extends CheckBox {
     change(from) {
         super.change(from);
         if (from.store.length === 0) {
-            $(this.child('#start')).addClass('disabled');
-            $(this.child('#console')).addClass('disabled');
-            $(this.child('#shutdown')).addClass('disabled');
-            $(this.child('#more')).addClass('disabled');
+            $(this.child('#start')).attr("disabled","disabled");
+            $(this.child('#console')).attr("disabled","disabled");
+            $(this.child('#shutdown')).attr("disabled","disabled");
+            $(this.child('#more')).attr("disabled","disabled");;
         } else {
-            $(this.child('#start')).removeClass('disabled');
-            $(this.child('#console')).removeClass('disabled');
-            $(this.child('#shutdown')).removeClass('disabled');
-            $(this.child('#more')).removeClass('disabled');
+            $(this.child('#start')).removeAttr('disabled');
+            $(this.child('#console')).removeAttr('disabled');
+            $(this.child('#shutdown')).removeAttr('disabled');
+            $(this.child('#more')).removeAttr('disabled');
         }
     }
 }
@@ -73,7 +73,6 @@ export class InstanceCtl extends Ctl {
     refresh() {
         this.table.refresh((e) => {
             this.checkbox.refresh();
-
             // register click on this table row.
             let func = this.props.onthis;
             if (func) {

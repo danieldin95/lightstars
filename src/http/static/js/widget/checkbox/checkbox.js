@@ -32,14 +32,14 @@ export class CheckBox {
     change(from) {
         this.uuids.store = from.store;
         if (from.store.length === 0) {
-            $(this.child('#delete')).addClass('disabled');
+            $(this.child('#delete')).attr("disabled","disabled");;
         } else {
-            $(this.child('#delete')).removeClass('disabled');
+            $(this.child('#delete')).removeAttr('disabled');
         }
         if (from.store.length !== 1) {
-            $(this.child('#edit')).addClass('disabled');
+            $(this.child('#edit')).attr("disabled","disabled");;
         } else {
-            $(this.child('#edit')).removeClass('disabled');
+            $(this.child('#edit')).removeAttr('disabled');
         }
     }
 }

@@ -37,7 +37,6 @@ export class VolumeCtl extends Ctl {
 
         });
         $(this.child('#refresh')).on("click", (e) => {
-
             this.table.refresh((e) => {
                 this.checkbox.refresh();
             });
@@ -50,22 +49,19 @@ export class VolumeCtl extends Ctl {
         this.table.refresh((e) => {
             this.checkbox.refresh();
             // register click on this table row.
-
-            let _this = this
-            $(this.child('#on-this')).on('click', function (e) {
-                let name = $(this).attr('data-name')
-                let type = $(this).attr('data-type')
+            $(this.child('#on-this')).on('click', this, function (e) {
+                let name = $(this).attr('data-name');
+                let type = $(this).attr('data-type');
 
                 if (type === "dir") {
-                    _this.table.pool = name
-                    _this.refresh()
+                    e.data.table.pool = name;
+                    e.data.refresh();
                 } else {
-
-                    _this.uuids = [name]
+                    e.data.uuids = [name];
                     new VolumeApi({
-                        pool: _this.table.pool,
-                        uuids: [name],
-                    }).get(_this, ()=>{})
+                        pool: e.data.table.pool,
+                        uuids: name,
+                    }).get(e.data, ()=>{});
                 }
             });
         });
