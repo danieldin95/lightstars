@@ -124,17 +124,18 @@ func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func (h *Server) LogRequest(r *http.Request) {
-	if strings.HasPrefix(r.URL.Path, "/static") ||
-		strings.HasSuffix(r.URL.Path, ".ico") ||
-		strings.HasSuffix(r.URL.Path, ".png") ||
-		strings.HasSuffix(r.URL.Path, ".gif") {
-		return
-	}
 	path := r.URL.Path
 	if q, _ := url.QueryUnescape(r.URL.RawQuery); q != "" {
 		path += "?" + q
 	}
-	libstar.Info("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
+	if strings.HasPrefix(r.URL.Path, "/static") ||
+		strings.HasSuffix(r.URL.Path, ".ico") ||
+		strings.HasSuffix(r.URL.Path, ".png") ||
+		strings.HasSuffix(r.URL.Path, ".gif") {
+		libstar.Debug("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
+	} else {
+		libstar.Info("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
+	}
 }
 
 func (h *Server) Middleware(next http.Handler) http.Handler {
