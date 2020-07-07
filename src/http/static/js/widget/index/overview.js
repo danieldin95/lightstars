@@ -30,15 +30,15 @@ export class Overview extends Widget {
     render(data) {
         return this.compile(`
             <dl class="dl-horizontal">
-                <dt>Version:</dt>
+                <dt>{{'version' | i}}:</dt>
                 <dd>{{version.version}}</dd>
-                <dt>Built on:</dt>
+                <dt>{{'built on' | i}}:</dt>
                 <dd>{{version.date}}</dd>
-                <dt>Hypervisor:</dt>
+                <dt>{{'hypervisor' | i}}:</dt>
                 <dd>{{hyper.name}}</dd>
-                <dt>Processor:</dt>
+                <dt>{{'processor' | i}}:</dt>
                 <dd>{{hyper.cpuNum}} | {{hyper.cpuUtils | figureCpuFree hyper.cpuNum}} | {{hyper.cpuVendor}}</dd>
-                <dt>Memory</dt>
+                <dt>{{'memory' | i}}</dt>
                 <dd>
                     {{hyper.memTotal | prettyByte}} | {{hyper.memFree | prettyByte}} | {{hyper.memCached | prettyByte}}
                 </dd>

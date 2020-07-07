@@ -139,8 +139,8 @@ select {
     min-width: 4rem;
 }
 
-.select-md {
-    width: 60%;
+.select-md, .input-md {
+    width: 80%;
 }
 
 .select-lg {

@@ -115,27 +115,27 @@ export class Guest extends Container {
                 <div class="card-header-cnt">
                     <div id="console-btns" class="btn-group btn-group-sm" role="group">
                         <button id="console" type="button" class="btn btn-outline-dark ${cls}"
-                                data-toggle="modal" data-target="#consoleModal" data="${vncUrl}">Console</button>
+                                data-toggle="modal" data-target="#consoleModal" data="${vncUrl}">{{'console' | i}}</button>
                         <button id="consoles" type="button"
                                 class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split ${cls}"
                                 data-toggle="dropdown" aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span></button>
                         <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
                             <a id="console-self" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
-                                Console in self
+                                {{'console in self' | i}}
                             </a>
                             <a id="console-blank" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
-                                Console in new blank
+                                {{'console in new blank' | i}}
                             </a>
                             <a id="console-window" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
-                                Console in new window
+                                {{'console in new window' | i}}
                             </a>
                         </div>
                     </div>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">Refresh</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     <div id="power-btns" class="btn-group btn-group-sm" role="group">
                         <button id="start" type="button" class="btn btn-outline-dark">
-                            Power on
+                            {{'power on' | i}}
                         </button>
                         <button id="power" type="button"
                                 class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split ${cls}"
@@ -143,38 +143,40 @@ export class Guest extends Container {
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div id="power-more" class="dropdown-menu" aria-labelledby="power">
-                            <a id="start" class="dropdown-item" href="javascript:void(0)">Power on</a>
-                            <a id="shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
+                            <a id="start" class="dropdown-item" href="javascript:void(0)">{{'power on' | i}}</a>
+                            <a id="shutdown" class="dropdown-item" href="javascript:void(0)">{{'power off' | i}}</a>
                             <div class="dropdown-divider"></div>
-                            <a id="reset" class="dropdown-item" href="javascript:void(0)">Reset</a>
-                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
+                            <a id="reset" class="dropdown-item" href="javascript:void(0)">{{'reset' | i}}</a>
+                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
                         </div>
                     </div>
                     <div id="btns-more" class="btn-group btn-group-sm" role="group">
                         <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
                                 data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
-                            Actions
+                            {{'actions' | i}}
                         </button>
                         <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                            <a id="suspend" class="dropdown-item ${cls}" href="javascript:void(0)">Suspend</a>
-                            <a id="resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
-                            <a id="setting" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#settingModal">Setting</a>
-                            <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">Dump XML</a>
+                            <a id="suspend" class="dropdown-item ${cls}" href="javascript:void(0)">{{'suspend' | i}}</a>
+                            <a id="resume" class="dropdown-item" href="javascript:void(0)">{{'resume' | i}}</a>
+                            <a id="setting" class="dropdown-item" href="javascript:void(0)" 
+                                data-toggle="modal" data-target="#settingModal">{{'setting' | i}}</a>
+                            <a id="dumpxml" class="dropdown-item" href="${xmlUrl}">{{'dump xml' | i}}</a>
                             <div class="dropdown-divider"></div>
-                            <a id="remove" class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#removeModal">Remove</a>
+                            <a id="remove" class="dropdown-item" href="javascript:void(0)" 
+                                data-toggle="modal" data-target="#removeModal">{{'remove' | i}}</a>
                         </div>
                     </div>
                 </div>
                 <dl class="dl-horizontal">
-                    <dt>State:</dt>
+                    <dt>{{'state' | i}}:</dt>
                     <dd><span class="{{state}}">{{state}}</span></dd>
-                    <dt>UUID:</dt>
+                    <dt>{{'uuid' | i}}:</dt>
                     <dd>{{uuid}}</dd>
-                    <dt>Arch:</dt>
+                    <dt>{{'arch' | i}}:</dt>
                     <dd>{{arch}} | {{type}}</dd>
-                    <dt>Processor:</dt>
+                    <dt>{{'processor' | i}}:</dt>
                     <dd>{{maxCpu}} | {{cpuTime}}ms</dd>
-                    <dt>Memory:</dt>
+                    <dt>{{'memory' | i}}:</dt>
                     <dd>{{maxMem | prettyKiB}} | {{memory | prettyKiB}}</dd>
                 </dl>
             </div>
@@ -188,7 +190,7 @@ export class Guest extends Container {
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
                         data-target="#collapseDis" aria-expanded="true" aria-controls="collapseDis">
-                    Virtual Disk
+                    {{'virtual disk' | i}}
                 </button>
             </div>
             <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
@@ -196,24 +198,24 @@ export class Guest extends Container {
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#createDiskModal">
-                        Attach disk
+                        {{'attach disk' | i}}
                     </button>
-                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
-                    <button id="remove" type="button" class="btn btn-outline-dark btn-sm">Remove</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
+                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                    <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                 </div>
                 <div class="">
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th><input id="on-all" type="checkbox"></th>
-                            <th>ID</th>
-                            <th>Bus</th>
-                            <th>Device</th>
-                            <th>Source</th>
-                            <th>Capacity</th>
-                            <th>Allocation</th>
-                            <th>Address</th>
+                            <th>{{'id' | i}}</th>
+                            <th>{{'bus' | i}}</th>
+                            <th>{{'device' | i}}</th>
+                            <th>{{'source' | i}}</th>
+                            <th>{{'capacity' | i}}</th>
+                            <th>{{'allocation' | i}}</th>
+                            <th>{{'address' | i}}</th>
                         </tr>
                         </thead>
                         <tbody id="display-table">
@@ -230,7 +232,7 @@ export class Guest extends Container {
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
                         data-target="#collapseInt" aria-expanded="true" aria-controls="collapseInt">
-                    Network Interface
+                    {{'network interface' | i}}
                 </button>
             </div>
             <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
@@ -238,23 +240,23 @@ export class Guest extends Container {
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#createInterfaceModal">
-                        Attach interface
+                        {{'attach interface' | i}}
                     </button>
-                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
-                    <button id="remove" type="button" class="btn btn-outline-dark btn-sm">Remove</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
+                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                    <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                 </div>
                 <div class="">
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th><input id="on-all" type="checkbox" aria-label="select all interfaces"></th>
-                            <th>ID</th>
-                            <th>Model</th>
-                            <th>Device</th>
-                            <th>Mac</th>
-                            <th>Address</th>
-                            <th>Source</th>
+                            <th>{{'id' | i}}</th>
+                            <th>{{'model' | i}}</th>
+                            <th>{{'device' | i}}</th>
+                            <th>{{'mac' | i}}</th>
+                            <th>{{'address' | i}}</th>
+                            <th>{{'source' | i}}</th>
                         </tr>
                         </thead>
                         <tbody id="display-table">
@@ -271,7 +273,7 @@ export class Guest extends Container {
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
                         data-target="#collapseGra" aria-expanded="true" aria-controls="collapseGra">
-                    Graphics Device
+                    {{'graphics device' | i}}
                 </button>
             </div>
             <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
@@ -279,20 +281,20 @@ export class Guest extends Container {
                     <div class="card-header-cnt">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                                 data-toggle="modal" data-target="#createGraphicModal">
-                            Attach graphic
+                            {{'attach graphic' | i}}
                         </button>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
+                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
                     <div class="">
                         <table class="table table-striped">
                             <thead>
                             <tr>
                                 <th><input id="on-all" type="checkbox" aria-label="select all graphics"></th>
-                                <th>ID</th>
-                                <th>Type</th>
-                                <th>Password</th>
-                                <th>Listen</th>
+                                <th>{{'id' | i}}</th>
+                                <th>{{'type' | i}}</th>
+                                <th>{{'password' | i}}</th>
+                                <th>{{'listen' | i}}</th>
                             </tr>
                             </thead>
                             <tbody id="display-table">

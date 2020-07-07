@@ -169,7 +169,7 @@ export class Navigation extends Widget {
                     <a id="instances" class="nav-link" data-target="/instances">{{'guest instances' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="datastore" class="nav-link" data-target="/datastore">{{'dataStore' | i}}</a>
+                    <a id="datastore" class="nav-link" data-target="/datastore">{{'datastore' | i}}</a>
                 </li>
                 <li class="nav-item">
                     <a id="network" class="nav-link" data-target="/network">{{'network' | i}}</a>

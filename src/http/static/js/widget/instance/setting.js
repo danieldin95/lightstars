@@ -47,7 +47,7 @@ export class InstanceSet extends FormModal {
                     <div class="form-group">
                         <label for="MaxMem" class="col-form-label-sm">Memory size</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm"
+                            <input type="text" class="form-control form-control-sm input-md"
                                    name="memSize" value="${this.mem}"/>
                             <select class="select-unit-right" name="memUnit">
                                 <option value="MiB" selected>MiB</option>

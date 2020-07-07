@@ -156,24 +156,24 @@ export class Home extends Container {
                 <div class="card-header-cnt">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#createGuestModal">
-                        Create new instance
+                        {{'create new instance' | i}}
                     </button>
-                    <button id="console" type="button" class="btn btn-outline-dark btn-sm">Console</button>
-                    <button id="start" type="button" class="btn btn-outline-dark btn-sm">Power on</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
+                    <button id="console" type="button" class="btn btn-outline-dark btn-sm">{{'console' | i}}</button>
+                    <button id="start" type="button" class="btn btn-outline-dark btn-sm">{{'power on' | i}}</button>
+                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     <button id="more" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Actions
+                        {{'actions' | i}}
                     </button>
                     <div name="btn-more" class="dropdown-menu">
-                        <a id="more-start" class="dropdown-item" href="javascript:void(0)">Power on</a>
-                        <a id="more-shutdown" class="dropdown-item" href="javascript:void(0)">Power off</a>
+                        <a id="more-start" class="dropdown-item" href="javascript:void(0)">{{'power on' | i}}</a>
+                        <a id="more-shutdown" class="dropdown-item" href="javascript:void(0)">{{'power off' | i}}</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-suspend" class="dropdown-item" href="javascript:void(0)">Suspend</a>
-                        <a id="more-resume" class="dropdown-item" href="javascript:void(0)">Resume</a>
+                        <a id="more-suspend" class="dropdown-item" href="javascript:void(0)">{{'suspend' | i}}</a>
+                        <a id="more-resume" class="dropdown-item" href="javascript:void(0)">{{'resume' | i}}</a>
                         <div class="dropdown-divider"></div>
-                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">Reset</a>                        
-                        <a id="more-destroy" class="dropdown-item" href="javascript:void(0)">Destroy</a>
+                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">{{'reset' | i}}</a>                        
+                        <a id="more-destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
                     </div>
                 </div>
     
@@ -185,13 +185,13 @@ export class Home extends Container {
                             <th>
                                 <input id="on-all" type="checkbox" aria-label="select all instances">
                             </th>
-                            <th>ID</th>
-                            <th>UUID</th>
-                            <th>CPU Time</th>
-                            <th>Name</th>
-                            <th>CPU</th>
-                            <th>Memory</th>
-                            <th>State</th>
+                            <th>{{'id' | i}}</th>
+                            <th>{{'uuid' | i}}</th>
+                            <th>{{'cpu time' | i}}</th>
+                            <th>{{'name' | i}}</th>
+                            <th>{{'processor' | i}}</th>
+                            <th>{{'memory' | i}}</th>
+                            <th>{{'state' | i}}</th>
                         </tr>
                         </thead>
                         <tbody id="display-body">
@@ -208,7 +208,7 @@ export class Home extends Container {
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"
                         data-target="#collapseStore" aria-expanded="true" aria-controls="collapseStore">
-                    {{'local dataStores' | i}}
+                    {{'local datastores' | i}}
                 </button>
             </div>
             <div id="collapseStore" class="collapse" aria-labelledby="headingOne" data-parent="#index">
@@ -218,7 +218,7 @@ export class Home extends Container {
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                                     data-toggle="modal" data-target="#createDirModal">
-                                New a datastore
+                                {{'new a datastore' | i}}
                             </button>
                             <button id="creates" type="button"
                                     class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
@@ -227,20 +227,20 @@ export class Home extends Container {
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
                                 <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#createNfsModal">
-                                    New nfs datastore
+                                    {{'new nfs datastore' | i}}
                                 </a>
                                 <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#createIscsiModal">
-                                    New iscsi datastore
+                                    {{'new iscsi datastore' | i}}
                                 </a>
                             </div>
                         </div>
                         <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
                                 data-toggle="modal" data-target="#uploadFileModal">
-                            Upload
+                            {{'upload' | i}}
                         </button>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
-                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">Delete</button>
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
+                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">{{'delete' | i}}</button>
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
     
                     <!-- DataStore display -->
@@ -249,13 +249,13 @@ export class Home extends Container {
                             <thead>
                             <tr>
                                 <th><input id="on-all" type="checkbox"></th>
-                                <th>ID</th>
-                                <th>UUID</th>
-                                <th>Name</th>
-                                <th>Source</th>
-                                <th>Capacity</th>
-                                <th>Available</th>
-                                <th>State</th>
+                                <th>{{'id' | i}}</th>
+                                <th>{{'uuid' | i}}</th>
+                                <th>{{'name' | i}}</th>
+                                <th>{{'source' | i}}</th>
+                                <th>{{'capacity' | i}}</th>
+                                <th>{{'available' | i}}</th>
+                                <th>{{'state' | i}}</th>
                             </tr>
                             </thead>
                             <tbody id="display-table">
@@ -283,7 +283,7 @@ export class Home extends Container {
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                                     data-toggle="modal" data-target="#createNatModal">
-                                Create network
+                                {{'create network' | i}}
                             </button>
                             <button id="creates" type="button"
                                     class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
@@ -292,16 +292,16 @@ export class Home extends Container {
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
                                 <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#createIsolatedModal">
-                                    Create isolated network
+                                    {{'create isolated network' | i}}
                                 </a>
                                 <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#createBridgeModal">
-                                    Create existing bridge
+                                    {{'create existing bridge' | i}}
                                 </a>
                             </div>
                         </div>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">Edit</button>
-                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">Remove</button>
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >Refresh</button>
+                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
     
                     <!-- Network display -->
@@ -310,11 +310,11 @@ export class Home extends Container {
                             <thead>
                             <tr>
                                 <th><input id="on-all" type="checkbox"></th>
-                                <th>ID</th>
-                                <th>UUID</th>
-                                <th>Name</th>
-                                <th>Bridge</th>
-                                <th>State</th>
+                                <th>{{'id' | i}}</th>
+                                <th>{{'uuid' | i}}</th>
+                                <th>{{'name' | i}}</th>
+                                <th>{{'bridge' | i}}</th>
+                                <th>{{'state' | i}}</th>
                             </tr>
                             </thead>
                             <tbody id="display-table">
