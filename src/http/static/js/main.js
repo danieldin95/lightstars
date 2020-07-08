@@ -20,14 +20,14 @@ $(function() {
 
     new Template().promise().then(function () {
         let nav = new Navigation({
-            parent: "#Navigation",
+            parent: "#navigation",
             home: ".",
-            container: "#Container",
+            container: "#container",
             name: hyper.attr('name'),
         });
         let rte = new Routes({
             hyper: hyper,
-            container: "#Container",
+            container: "#container",
             onchange: function (e) {
                 // remove backdrop of modal.
                 $('.modal-backdrop').remove();

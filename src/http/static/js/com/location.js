@@ -25,14 +25,12 @@ export class Location {
         let uri = path.split('#', 2)[0];
         let query = this.query();
 
-        console.log('Location.set', path, name);
         this.href(uri + '#' + name + "?" + query);
         for (let on of this.on) {
             if (on && on.func) {
                 on.func({data: on.data, name});
             }
         }
-        console.log('Location.set and node is', this.query('node'));
     }
 
     static get (name) {
@@ -57,7 +55,6 @@ export class Location {
         let url = this.url();
         let page = this.get();
 
-        console.log("Location.query", name, value);
         if (name && value !== undefined) {
             this.href(url + "#" + page + "?" + name + "=" + value);
         }

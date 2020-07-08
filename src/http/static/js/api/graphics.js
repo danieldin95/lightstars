@@ -5,7 +5,7 @@ export class GraphicsApi extends Api {
     // {
     //   inst: 'uuid',
     //   uuids: [uuid],
-    //   tasks: 'Tasks',
+    //   tasks: 'tasks',
     //   name: ''
     // }
     constructor(props) {

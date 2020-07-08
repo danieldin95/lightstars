@@ -5,7 +5,7 @@ import {Template} from "./com/template.js";
 $(function() {
     new Template().promise().then(function () {
         new Login({
-            parent: "#Container",
+            parent: "#login",
         })
     })
 });

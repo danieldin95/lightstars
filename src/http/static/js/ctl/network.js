@@ -21,7 +21,7 @@ export class NetworkCtl extends Ctl {
         let uuid = $(this.id).attr("data");
         this.uuid = uuid;
         this.name = name;
-        this.tasks = props.tasks || "Tasks";
+        this.tasks = props.tasks || "tasks";
 
         console.log("NetworkCtl", this.props, $(this.id));
         this.leases = new LeasesCtl({id: props.leases.id, uuid, name});

@@ -31,7 +31,7 @@ export class DataStoresCtl extends Ctl {
         this.upload = new FileUpload({id: props.upload});
 
         this.upload.onsubmit(this.uuids, function (e) {
-            new UploadApi({uuids: e.data.store, id: '#Process'}).upload(e.form);
+            new UploadApi({uuids: e.data.store, id: '#process'}).upload(e.form);
         });
         // register buttons's  click.
         $(this.child('#delete')).on("click", this.uuids, function (e) {

@@ -8,7 +8,7 @@ import {NetworkCtl} from "../../ctl/network.js";
 
 export class Network extends Container {
     // {
-    //    parent: "#Container",
+    //    parent: "#container",
     //    uuid: "",
     //    default: "lease"
     //    force: false, // force to apply default.

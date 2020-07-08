@@ -5,7 +5,7 @@ import {Alert} from "../com/alert.js";
 export class IsoApi extends Api {
     // {
     //   uuids: [],
-    //   tasks: 'Tasks',
+    //   tasks: 'tasks',
     //   name: ''
     // }
     constructor(props) {

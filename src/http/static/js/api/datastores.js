@@ -4,7 +4,7 @@ import {Api} from "./api.js"
 export class DataStoreApi extends Api {
     // {
     //   uuids: [],
-    //   tasks: 'Tasks',
+    //   tasks: 'tasks',
     //   name: ''
     // }
     constructor(props) {

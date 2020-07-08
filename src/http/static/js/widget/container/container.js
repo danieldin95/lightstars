@@ -3,7 +3,7 @@ import {Widget} from "../widget.js";
 
 export class Container {
     // {
-    //    parent: "#Container",
+    //    parent: "#container",
     //    default: "instances" // set default panel
     //    force: false, // force to apply default.
     // }

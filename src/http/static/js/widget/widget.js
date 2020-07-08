@@ -3,7 +3,7 @@ export class Widget {
     constructor(props) {
         this.id = props.id || "";
         this.props = props;
-        this.tasks = props.tasks || "Tasks";
+        this.tasks = props.tasks || "tasks";
         console.log("Widget", props);
     }
 

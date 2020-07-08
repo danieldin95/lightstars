@@ -81,7 +81,7 @@ export class GuestCtl extends Ctl {
         this.mem = $(this.id).attr("memory");
         this.uuid = uuid;
         this.name = name;
-        this.tasks = props.tasks || "Tasks";
+        this.tasks = props.tasks || "tasks";
         this.api = new InstanceApi({uuids: uuid});
         this.header = new HeaderCtl({id: props.header.id, uuid, name});
         this.disk = new DiskCtl({id: props.disks.id, uuid, name});

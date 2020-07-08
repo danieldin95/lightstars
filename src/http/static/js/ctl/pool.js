@@ -11,7 +11,7 @@ export class PoolCtl extends Ctl {
         let uuid = $(this.id).attr("data");
         this.uuid = uuid;
         this.name = name;
-        this.tasks = props.tasks || "Tasks";
+        this.tasks = props.tasks || "tasks";
 
         this.volumes = new VolumeCtl({id: props.volumes.id, uuid, name});
     }

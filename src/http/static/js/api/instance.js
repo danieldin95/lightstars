@@ -6,7 +6,7 @@ import {Utils} from "../com/utils.js";
 export class InstanceApi extends Api {
     // {
     //   uuids: [],
-    //   tasks: 'Tasks',
+    //   tasks: 'tasks',
     //   name: ''
     // }
     constructor(props) {

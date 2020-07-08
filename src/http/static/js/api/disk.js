@@ -5,7 +5,7 @@ export class DiskApi extends Api {
     // {
     //   inst: 'uuid',
     //   uuids: [uuid],
-    //   tasks: 'Tasks',
+    //   tasks: 'tasks',
     //   name: ''
     // }
     constructor(props) {

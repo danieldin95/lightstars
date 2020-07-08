@@ -4,7 +4,7 @@ import {Api} from "./api.js"
 export class BridgeApi extends Api {
     // {
     //   uuids: [],
-    //   tasks: 'Tasks',
+    //   tasks: 'tasks',
     //   name: ''
     // }
     constructor(props) {

@@ -5,7 +5,7 @@ export class LeaseApi extends Api {
     // {
     //   net: 'uuid',
     //   uuids: [uuid],
-    //   tasks: 'Tasks',
+    //   tasks: 'tasks',
     //   name: ''
     // }
     constructor(props) {

@@ -12,7 +12,7 @@ import {InstanceRemove} from "../instance/remove.js";
 
 export class Guest extends Container {
     // {
-    //    parent: "#Container",
+    //    parent: "#container",
     //    uuid: "",
     //    default: "disk"
     //    force: false, // force to apply default.
