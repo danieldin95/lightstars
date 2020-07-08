@@ -27,7 +27,7 @@ export class Home extends Container {
         super(props);
         this.current = '#index';
         this.default = props.default || '/instances';
-        console.log('Index', props);
+
         this.render();
         this.loading();
     }

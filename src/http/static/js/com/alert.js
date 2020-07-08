@@ -1,23 +1,23 @@
 
 export class Alert {
     static info (message) {
-        return this.div('info', message)
+        return this.div('info', message);
     }
 
     static danger (message) {
-        return this.div('danger', message)
+        return this.div('danger', message);
     }
 
     static success (message) {
-        return this.div('success', message)
+        return this.div('success', message);
     }
 
     static warn (message) {
-        return this.div('warning', message)
+        return this.div('warning', message);
     }
 
     static primary (message) {
-        return this.div('primary', message)
+        return this.div('primary', message);
     }
 
     static div (cls, message) {

@@ -1,7 +1,7 @@
 import {Utils} from "./utils.js";
 
 
-export class Filters {
+export class Template {
     constructor() {
         this.i18n = $.i18n();
         this.i18n.locale = navigator.language || navigator.userLanguage;
@@ -87,8 +87,9 @@ export class Filters {
     }
 
     promise() {
+        console.log("Template.promise", this.i18n.locale);
+
         let i18n = this.i18n;
-        console.log("filter.promise", this.i18n.locale);
         return new Promise(function (resolve) {
             i18n.load(`/static/i18n/${i18n.locale}.json`, i18n.locale)
                 .done(function() {

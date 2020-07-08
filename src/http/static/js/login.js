@@ -1,9 +1,9 @@
 import {Login} from "./widget/login.js";
-import {Filters} from "./com/filter.js";
+import {Template} from "./com/template.js";
 
 
 $(function() {
-    new Filters().promise().then(function () {
+    new Template().promise().then(function () {
         new Login({
             parent: "#Container",
         })

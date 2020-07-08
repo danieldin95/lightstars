@@ -1,6 +1,6 @@
 import {Api} from "./api/api.js";
 import {Location} from "./com/location.js";
-import {Filters} from "./com/filter.js";
+import {Template} from "./com/template.js";
 import {Navigation} from "./widget/navigation.js";
 import {Routes} from "./routes.js";
 
@@ -16,7 +16,7 @@ $(function() {
     }
     Api.Host(host);
 
-    new Filters().promise().then(function () {
+    new Template().promise().then(function () {
         let nav = new Navigation({
             parent: "#Navigation",
             home: ".",

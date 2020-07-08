@@ -8,11 +8,11 @@ export class Utils {
     static a2n(data, n) {
         let num = "" + data;
         if (num.length > n) {
-            return num
+            return num;
         }
         let ret = "";
         for (let i = 0; i < n - num.length; i++) {
-            ret += "0"
+            ret += "0";
         }
         return ret + num;
     }
@@ -26,7 +26,6 @@ export class Utils {
                 ret[key] = value;
             }
         });
-        console.log(ret)
         return ret;
     }
 
@@ -45,10 +44,10 @@ export class Utils {
     }
 
     static basename(str) {
-        let idx = str.lastIndexOf('/')
-        idx = idx > -1 ? idx : str.lastIndexOf('\\')
+        let idx = str.lastIndexOf('/');
+        idx = idx > -1 ? idx : str.lastIndexOf('\\');
         if (idx < 0) {
-            return str
+            return str;
         }
         return str.substring(idx + 1);
     }
