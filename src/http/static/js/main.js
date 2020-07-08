@@ -29,6 +29,9 @@ $(function() {
             hyper: hyper,
             container: "#Container",
             onchange: function (e) {
+                // remove backdrop of modal.
+                $('.modal-backdrop').remove();
+                // refresh navigation
                 nav.refresh();
             },
         });
