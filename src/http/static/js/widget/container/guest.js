@@ -90,13 +90,13 @@ export class Guest extends Container {
         let disabled = 'disabled';
         let vncUrl = '#';
         let dumpUrl = '/api/instance/'+ v.uuid + '?format=xml';
-        if (Api.host !== '') {
-           dumpUrl = "/host/" + Api.host + dumpUrl;
-        }
+
+        dumpUrl = Api.path(dumpUrl);
         if (v.state === 'running') {
+            let host = Api.host();
+            let pass = Utils.graphic(v, 'vnc', 'password');
             disabled = '';
-            let vnc = Utils.graphic(v, 'vnc', 'password');
-            vncUrl = "/ui/console?id=" + v.uuid + "&password=" + vnc + "&node=" + Api.host;
+            vncUrl = `/ui/console?id=${v.uuid}&password=${pass}&node=${host}`;
         }
         return this.compile(`
         <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">

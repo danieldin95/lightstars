@@ -47,6 +47,9 @@ export class Container {
     }
 
     static alias(value) {
-        this._alias = value;
+        if (value !== undefined) {
+            this._alias = value;
+        }
+        return this._alias;
     }
 }

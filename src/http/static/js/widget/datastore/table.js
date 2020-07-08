@@ -29,7 +29,6 @@ export class DataStoreTable extends Widget {
 
     render(data) {
         let query = Location.query();
-        let prefix = Api.prefix();
 
         return this.compile(`
         {{each items v i}}

@@ -2,11 +2,12 @@ import {Alert} from "../com/alert.js";
 
 export class Api {
     // static func.
-    static prefix() {
-        if (this._host) {
-            return `/host/${this._host}`
+    static path(url) {
+        url = url || "";
+        if (this._host !== "") {
+            return `/host/${this._host}/${url}`;
         }
-        return ""
+        return url;
     }
 
     static host(name) {
