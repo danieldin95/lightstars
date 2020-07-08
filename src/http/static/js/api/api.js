@@ -3,17 +3,17 @@ import {Alert} from "../com/alert.js";
 export class Api {
     // static func.
     static prefix() {
-        if (this.host) {
-            return `/host/${this.host}`
+        if (this._host) {
+            return `/host/${this._host}`
         }
         return ""
     }
 
-    static Host(name) {
+    static host(name) {
         if (name !== undefined) {
-            this.host = name
+            this._host = name
         }
-        return this.host
+        return this._host
     }
 
     // {
@@ -36,13 +36,13 @@ export class Api {
         } else {
             this.uuids = [];
         }
-        this.host = Api.host || ""
+        this._host = Api._host || ""
     }
 
     url(suffix) {
         suffix = suffix || "";
-        if (this.host !== "") {
-            return `/host/${this.host}/api${suffix}`
+        if (this._host !== "") {
+            return `/host/${this._host}/api${suffix}`
         }
         return `/api${suffix}`
     }

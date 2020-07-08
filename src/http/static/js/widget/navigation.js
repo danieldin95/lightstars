@@ -117,7 +117,7 @@ export class Navigation extends Widget {
                 //e.data.nodeName(host, view);
                 Location.set("/instances");
                 Location.query('node', host);
-                Api.Host(host);
+                Api.host(host);
 
                 e.data.refresh();
                 new Home({

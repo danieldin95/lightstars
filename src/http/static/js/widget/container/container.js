@@ -12,8 +12,8 @@ export class Container {
         this.parent  = props.parent ? props.parent : '';
         this.current = props.current ? props.current : '';
         this.force = props.force;
-        console.log([this.parent, this.current].join(" "));
-        console.log('Base', props);
+        console.log('Container', props, [this.parent, this.current].join(" "));
+        this._alias = Container._alias;
     }
 
     render() {
@@ -21,7 +21,7 @@ export class Container {
     }
 
     loading() {
-        console.log("Base", "implement me")
+        console.log("Container", "implement me")
     }
 
     compile(tmpl, data) {
@@ -40,6 +40,13 @@ export class Container {
     }
 
     title(name) {
-        $(document).attr("title", name + ' - LightStar');
+        if (!this._alias) {
+            this._alias = "lightstar"
+        }
+        $(document).attr("title", `${name} - ${this._alias}`);
+    }
+
+    static alias(value) {
+        this._alias = value;
     }
 }
