@@ -152,6 +152,9 @@ func (pol *Pool) Remove() error {
 }
 
 func (pol *Pool) list(pool *libvirt.StoragePool) (map[string]VolumeInfo, error) {
+	// try to refresh and update volume.
+	_ = pool.Refresh(0)
+	// get all volumes.
 	vols, err := pool.ListAllStorageVolumes(0)
 	if err != nil {
 		return nil, err

@@ -37,7 +37,7 @@ func (v Volume) GET(w http.ResponseWriter, r *http.Request) {
 		data.Items = append(data.Items, *i)
 	}
 	sort.Slice(data.Items, func(i, j int) bool {
-		return data.Items[i].Type < data.Items[j].Type
+		return data.Items[i].Name < data.Items[j].Name
 	})
 	data.Metadata.Size = len(data.Items)
 	data.Metadata.Total = len(data.Items)
