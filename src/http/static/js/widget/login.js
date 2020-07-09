@@ -33,7 +33,7 @@ export class Login {
                         </span>
                         <br/>
                         <span>
-                            <small style="color: #ced4da">A simple and small platform to manage your cloud</small>
+                            <small style="color: #ced4da">{{'a simple and small platform to manage your cloud' | i}}</small>
                         </span>
                     </div>
                 </div>
