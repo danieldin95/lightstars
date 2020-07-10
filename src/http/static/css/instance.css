@@ -1,30 +1,10 @@
-.instance {
-    /*border-color: #f8f9fa;*/
-}
 
 .dl-horizontal {
     padding: .25rem .5rem;
 }
 
-.instance .card-body {
-    min-height: 230px;
-}
-
-.instance .btn-spot {
-    border: 1px solid #cccccc;
-    padding: 0px;
-    border-radius: .5rem;
-    min-height: 1rem;
-    min-width: 1.25rem;
-    background-color: inherit;
-}
-
-.instance .btn-spot:hover,
-.instance .btn-spot:focus{
-    text-decoration: none;
-    /*background-color: black;*/
-    /*color: #b21f2d;*/
-    border-color: #fdfdfe;
+.header .card-body {
+    min-height: 240px;
 }
 
 .device {
@@ -40,16 +20,9 @@
     color: black;
 }
 
-.device .card-body {
-    /*min-height: 300px;*/
-    /*max-height: 430px;*/
-}
-
 .modal-console {
-    min-width: 800px;
-    max-width: 100px;
-    min-height: 600px;
-    max-height: 600px;
+    width: 802px;
+    height: 602px;
 }
 
 .modal-console .modal-content {

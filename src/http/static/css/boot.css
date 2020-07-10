@@ -115,8 +115,8 @@ a:focus {
 
 .card-body-tbl {
     overflow: auto;
-    min-height: 430px;
-    max-height: 430px;
+    min-height: 380px;
+    max-height: 380px;
 }
 
 .form-control-sm {
