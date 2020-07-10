@@ -194,7 +194,7 @@ export class Guest extends Container {
             <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-header-cnt">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createDiskModal">
                         {{'attach disk' | i}}
                     </button>
@@ -236,7 +236,7 @@ export class Guest extends Container {
             <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-header-cnt">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createInterfaceModal">
                         {{'attach interface' | i}}
                     </button>
@@ -277,7 +277,7 @@ export class Guest extends Container {
             <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
                 <div class="card-body">
                     <div class="card-header-cnt">
-                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                 data-toggle="modal" data-target="#createGraphicModal">
                             {{'attach graphic' | i}}
                         </button>

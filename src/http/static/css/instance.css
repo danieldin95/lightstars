@@ -33,8 +33,7 @@
 }
 
 .device .card-header {
-    background-color: inherit;
-    border-bottom: 1px solid #0b3255;;
+    /*border-bottom: 1px solid #0b3255;;*/
 }
 
 .device .card-header .btn {

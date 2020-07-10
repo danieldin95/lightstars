@@ -32,6 +32,10 @@ a:focus {
     min-width: 801px;
 }
 
+.bg-dark {
+    background: #1d2124 linear-gradient(to top, #1d2124, #495057);
+}
+
 .container {
     min-width: 800px;
     padding: 0;
@@ -39,14 +43,12 @@ a:focus {
 
 .card {
     margin: 1.25rem -1px 1.25rem 0;
-    border-color: #0b3255;
+    /*border-color: #0b3255;*/
+    border-color: darkgray;
 }
 
 .card-header {
     padding: .35rem 1.25rem;
-    background-color: #13508d;
-    color: white;
-    border-bottom: 1px solid #0b3255;
     margin-bottom: -1px;
 }
 
@@ -110,7 +112,10 @@ a:focus {
     border-color: #343a40;
 }
 
-.card-header-cnt .btn-outline-dark {
+.card-header-cnt .btn-outline-dark,
+.card-header-cnt .btn-outline-success,
+.card-header-cnt .btn-outline-primary,
+.card-header-cnt .btn-outline-danger {
     border: none;
 }
 

@@ -32,7 +32,7 @@ body {
 .login .card-header {
     text-align: left;
     padding: 0.75rem .25rem;
-    background: #1d2124;
+    background: #1d2124 linear-gradient(to top, #1d2124, #495057);
     border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
 }
 

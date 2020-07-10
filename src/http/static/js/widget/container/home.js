@@ -154,7 +154,7 @@ export class Home extends Container {
             <div class="card-body">
                 <!-- Instances buttons -->
                 <div class="card-header-cnt">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createGuestModal">
                         {{'create new instance' | i}}
                     </button>
@@ -215,7 +215,7 @@ export class Home extends Container {
                     <!-- DataStore buttons -->
                     <div class="card-header-cnt">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
-                            <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                            <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                     data-toggle="modal" data-target="#createDirModal">
                                 {{'new a datastore' | i}}
                             </button>
@@ -280,7 +280,7 @@ export class Home extends Container {
                     <!-- Network buttons -->
                     <div class="card-header-cnt">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
-                            <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                            <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                     data-toggle="modal" data-target="#createNatModal">
                                 {{'create network' | i}}
                             </button>

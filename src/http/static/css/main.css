@@ -201,9 +201,8 @@ select {
 }
 
 .card-main .card-header {
-    color: inherit;
-    background-color: inherit;
-    border-bottom: 1px solid #0b3255;;
+    /*color: inherit;*/
+    /*border-bottom: 1px solid #0b3255;;*/
 }
 
 .card-main .card-body {

@@ -28,12 +28,12 @@ export class Login {
                         <img class="" src="/static/images/lightstar-6.png" alt="">
                     </div>
                     <div class="col-sm-7">
-                        <span>
+                        <span style="color: #ffffff">
                             <strong><a href="https://github.com/danieldin95/lightstar">LightStar</a></strong>
                         </span>
                         <br/>
-                        <span>
-                            <small style="color: #ced4da">{{'a simple and small platform to manage your cloud' | i}}</small>
+                        <span style="color: #ced4da">
+                            <small>{{'a simple and small platform to manage your cloud' | i}}</small>
                         </span>
                     </div>
                 </div>
