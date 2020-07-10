@@ -61,7 +61,7 @@ export class Pool extends Container {
             <div id="collapseOver" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
             <div class="card-body">
                 <!-- Header buttons -->
-                <div class="card-header-cnt">
+                <div class="card-body-hdl">
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     <div id="btns-more" class="btn-group btn-group-sm" role="group">
                         <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
@@ -105,7 +105,7 @@ export class Pool extends Container {
             <div id="collapseVol" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <!-- volume actions button-->
             <div class="card-body">
-                <div class="card-header-cnt">
+                <div class="card-body-hdl">
                     <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#LeaseCreateModal">
                         {{'new a volume' | i}}
@@ -114,7 +114,7 @@ export class Pool extends Container {
                     <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                 </div>
-                <div class="">
+                <div class="card-body-tbl">
                     <table class="table table-striped">
                         <thead>
                         <tr>

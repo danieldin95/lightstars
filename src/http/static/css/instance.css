@@ -41,8 +41,8 @@
 }
 
 .device .card-body {
-    min-height: 300px;
-    max-height: 430px;
+    /*min-height: 300px;*/
+    /*max-height: 430px;*/
 }
 
 .modal-console {

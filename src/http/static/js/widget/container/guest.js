@@ -110,7 +110,7 @@ export class Guest extends Container {
             <div id="collapseOver" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
             <div class="card-body">
                 <!-- Header buttons -->
-                <div class="card-header-cnt">
+                <div class="card-body-hdl">
                     <div id="console-btns" class="btn-group btn-group-sm" role="group">
                         <button id="console" type="button" class="btn btn-outline-dark"
                                 data-toggle="modal" data-target="#consoleModal" data="${vncUrl}" ${disabled}>{{'console' | i}}</button>
@@ -193,7 +193,7 @@ export class Guest extends Container {
             </div>
             <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
-                <div class="card-header-cnt">
+                <div class="card-body-hdl">
                     <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createDiskModal">
                         {{'attach disk' | i}}
@@ -202,7 +202,7 @@ export class Guest extends Container {
                     <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                 </div>
-                <div class="">
+                <div class="card-body-tbl">
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -235,7 +235,7 @@ export class Guest extends Container {
             </div>
             <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
-                <div class="card-header-cnt">
+                <div class="card-body-hdl">
                     <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createInterfaceModal">
                         {{'attach interface' | i}}
@@ -244,7 +244,7 @@ export class Guest extends Container {
                     <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                 </div>
-                <div class="">
+                <div class="card-body-tbl">
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -276,7 +276,7 @@ export class Guest extends Container {
             </div>
             <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
                 <div class="card-body">
-                    <div class="card-header-cnt">
+                    <div class="card-body-hdl">
                         <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                 data-toggle="modal" data-target="#createGraphicModal">
                             {{'attach graphic' | i}}
@@ -284,7 +284,7 @@ export class Guest extends Container {
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
-                    <div class="">
+                    <div class="card-body-tbl">
                         <table class="table table-striped">
                             <thead>
                             <tr>

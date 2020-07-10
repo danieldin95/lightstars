@@ -153,7 +153,7 @@ export class Home extends Container {
             <div id="collapseIns" class="collapse" aria-labelledby="headingOne" data-parent="#index">
             <div class="card-body">
                 <!-- Instances buttons -->
-                <div class="card-header-cnt">
+                <div class="card-body-hdl">
                     <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createGuestModal">
                         {{'create new instance' | i}}
@@ -178,7 +178,7 @@ export class Home extends Container {
                 </div>
     
                 <!-- Instances display -->
-                <div class="">
+                <div class="card-body-tbl">
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -213,7 +213,7 @@ export class Home extends Container {
             <div id="collapseStore" class="collapse" aria-labelledby="headingOne" data-parent="#index">
                 <div class="card-body">
                     <!-- DataStore buttons -->
-                    <div class="card-header-cnt">
+                    <div class="card-body-hdl">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                     data-toggle="modal" data-target="#createDirModal">
@@ -243,7 +243,7 @@ export class Home extends Container {
                     </div>
     
                     <!-- DataStore display -->
-                    <div class="l-content-body">
+                    <div class="card-body-tbl">
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -278,7 +278,7 @@ export class Home extends Container {
             <div id="collapseNet" class="collapse" aria-labelledby="headingOne" data-parent="#index">
                 <div class="card-body">
                     <!-- Network buttons -->
-                    <div class="card-header-cnt">
+                    <div class="card-body-hdl">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                     data-toggle="modal" data-target="#createNatModal">
@@ -304,7 +304,7 @@ export class Home extends Container {
                     </div>
     
                     <!-- Network display -->
-                    <div class="l-content-body">
+                    <div class="card-body-tbl">
                         <table class="table table-striped">
                             <thead>
                             <tr>

@@ -50,7 +50,7 @@ a:focus {
 .card-header {
     padding: .35rem 1.25rem;
     margin-bottom: -1px;
-    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.075), transparent);
+    background-image: linear-gradient(90deg, #dee2e6, transparent);
     border-radius: calc(0.25rem - 1px);
 }
 
@@ -62,7 +62,6 @@ a:focus {
 }
 
 .card-body {
-    overflow: auto;
     margin-top: .25rem;
 }
 
@@ -107,11 +106,17 @@ a:focus {
     border-color: #343a40;
 }
 
-.card-header-cnt .btn-outline-dark,
-.card-header-cnt .btn-outline-success,
-.card-header-cnt .btn-outline-primary,
-.card-header-cnt .btn-outline-danger {
+.card-body-hdl .btn-outline-dark,
+.card-body-hdl .btn-outline-success,
+.card-body-hdl .btn-outline-primary,
+.card-body-hdl .btn-outline-danger {
     border: none;
+}
+
+.card-body-tbl {
+    overflow: auto;
+    min-height: 430px;
+    max-height: 430px;
 }
 
 .form-control-sm {

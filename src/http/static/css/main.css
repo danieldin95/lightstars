@@ -35,7 +35,7 @@ div::-webkit-scrollbar-track {
 }
 
 /* Index */
-.card-header-cnt,
+.card-body-hdl,
 .card-header-btn {
     margin-bottom: 10px;
 }
@@ -191,11 +191,6 @@ select {
 
 /* instances */
 
-.instances .card-body {
-    min-height: 430px;
-    max-height: 430px;
-}
-
 .card-main {
 }
 
@@ -205,8 +200,8 @@ select {
 }
 
 .card-main .card-body {
-    min-height: 430px;
-    max-height: 430px;
+    /*min-height: 430px;*/
+    /*max-height: 430px;*/
 }
 
 .system .card-body {
