@@ -37,9 +37,11 @@ export class Overview extends Widget {
                 <dt>{{'hypervisor' | i}}:</dt>
                 <dd>{{hyper.name}}</dd>
                 <dt>{{'processor' | i}}:</dt>
-                <dd>{{hyper.cpuNum}} | {{hyper.cpuUtils | figureCpuFree hyper.cpuNum}} | {{hyper.cpuVendor}}</dd>
+                <dd title="{{'total|free|vendor' | i}}">
+                    {{hyper.cpuNum}} | {{hyper.cpuUtils | figureCpuFree hyper.cpuNum}} | {{hyper.cpuVendor}}
+                </dd>
                 <dt>{{'memory' | i}}</dt>
-                <dd>
+                <dd title="{{'total|free|cache' | i}}">
                     {{hyper.memTotal | prettyByte}} | {{hyper.memFree | prettyByte}} | {{hyper.memCached | prettyByte}}
                 </dd>
             </dl>
