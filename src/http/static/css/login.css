@@ -4,7 +4,7 @@ body {
     height: 100%;
     width: 100%;
     background-color: #13508d;
-    background-image: linear-gradient(to left,#117dca 0,#043a78 100%);
+    background-image: linear-gradient(270deg,#117dca, #043a78);
     /*background: url("/static/images/background-1920.jpg") no-repeat fixed center;*/
 }
 
@@ -32,7 +32,7 @@ body {
 .login .card-header {
     text-align: left;
     padding: 0.75rem .25rem;
-    background: #1d2124 linear-gradient(to top, #1d2124, #495057);
+    background: #1d2124 linear-gradient(270deg, #1d2124, #495057);
     border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
 }
 
