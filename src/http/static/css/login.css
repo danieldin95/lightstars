@@ -1,10 +1,16 @@
 
 body {
+    position: relative;
+    height: 100%;
+    width: 100%;
     background-color: #13508d;
+    background-image: linear-gradient(to left,#117dca 0,#043a78 100%);
+    /*background: url("/static/images/background-1920.jpg") no-repeat fixed center;*/
 }
 
 .container {
     margin: 8% auto auto;
+    padding: 1rem;
 }
 
 .notice {
@@ -26,7 +32,7 @@ body {
 .login .card-header {
     text-align: left;
     padding: 0.75rem .25rem;
-    background-color: #1d2124;
+    background: #1d2124;
     border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
 }
 
@@ -48,6 +54,9 @@ body {
 
 .login label {
     text-align: left;
+}
+
+.login .card-footer {
 }
 
 .login .card-footer .btn {
