@@ -4,8 +4,7 @@ body {
     background-color: #e9ecef;
 }
 
-th,
-td {
+th, td {
     font-weight: normal;
     font-size: small;
 }
@@ -15,8 +14,7 @@ a {
     font-size: inherit;
 }
 
-a:hover,
-a:focus {
+a:hover, a:focus {
     color: inherit;
 }
 
@@ -29,11 +27,25 @@ a:focus {
 }
 
 .navbar {
-    min-width: 801px;
+    /*min-width: 801px;*/
+    min-height: 3rem;
+    padding: 0 .5rem;
+}
+
+.navbar .form-control {
+    font-size: smaller;
+    background-color: #e9ecef;
+    border-radius: .5rem;
 }
 
 .bg-dark {
     background: #1d2124 linear-gradient(to top, #1d2124, #495057);
+}
+
+.context {
+    width: 100%;
+    height: 100%;
+    margin-top: 4rem;
 }
 
 .container {
@@ -179,17 +191,6 @@ ol, ul, dl {
 
 .dropdown-item {
     font-size: small;
-}
-
-.navbar {
-    min-height: 3rem;
-    padding: 0 2rem;
-}
-
-.navbar .form-control {
-    font-size: smaller;
-    background-color: #e9ecef;
-    border-radius: .5rem;
 }
 
 .progress {

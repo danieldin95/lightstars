@@ -149,7 +149,7 @@ export class Navigation extends Widget {
 
     render(v) {
         return this.compile(`
-        <nav id="navs" class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <nav id="navs" class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
         <!-- Brand -->
         <a class="navbar-brand" href="${this.home}">
             <img src="/static/images/lightstar-6.png" width="30" height="30" alt="">
@@ -174,7 +174,20 @@ export class Navigation extends Widget {
                 <li class="nav-item">
                     <a id="network" class="nav-link" data-target="/network">{{'network' | i}}</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <!-- Physical -->
+                    <a id="phyMore" class="nav-link dropdown-toggle" href="javascript:void(0)" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{'host' | i}} 
+                    </a>
+                    <div id="phy" class="dropdown-menu" aria-labelledby="phyMore">
+                        <a class="dropdown-item" data="">{{'hardware disk' | i}}</a>
+                        <a class="dropdown-item" data="">{{'network interface' | i}}</a>
+                        <a class="dropdown-item" data="">{{'filesystem' | i}}</a>
+                    </div>
+                </li>
             </ul>
+            <!-- Zone -->
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a id="nodeMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
@@ -185,7 +198,8 @@ export class Navigation extends Widget {
                         <a class="dropdown-item" data="">default</a>
                     </div>
                 </li>            
-            </ul>            
+            </ul>      
+            <!-- User -->      
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a id="userMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" 

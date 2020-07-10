@@ -121,5 +121,7 @@
 	"upload a file": "Upload a file",
 	"a simple and small platform to manage your cloud": "A simple and small platform to manage your cloud",
 	"total|free|vendor": "total | free | vendor",
-	"total|free|cache": "total | free | cache"
+	"total|free|cache": "total | free | cache",
+	"host": "Host",
+	"filesystem": "File system"
 }
