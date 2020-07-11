@@ -21,8 +21,8 @@
 }
 
 .modal-console {
-    width: 802px;
-    height: 602px;
+    min-width: 802px;
+    min-height: 660px;
 }
 
 .modal-console .modal-content {
@@ -32,6 +32,6 @@
 }
 
 .modal-console .modal-body {
-    padding: 1rem;
+    padding: 0;
     margin: 0;
 }

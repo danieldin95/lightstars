@@ -308,7 +308,7 @@ export class Guest extends Container {
         <div id="modals">
             <!-- Console modal -->
             <div id="consoleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-console">
+                <div class="modal-dialog modal-lg modal-console" role="document">
                     <div class="modal-content">
                         <div class="modal-body"></div>
                     </div>

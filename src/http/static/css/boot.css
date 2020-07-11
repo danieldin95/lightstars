@@ -27,9 +27,8 @@ a:hover, a:focus {
 }
 
 .navbar {
-    /*min-width: 801px;*/
     min-height: 3rem;
-    padding: 0 .5rem;
+    padding: 0 2rem;
 }
 
 .navbar .form-control {
@@ -48,8 +47,11 @@ a:hover, a:focus {
     margin-top: 4rem;
 }
 
+.context #notice, .context #container {
+    margin: 0 2rem;
+}
+
 .container {
-    min-width: 800px;
     padding: 0;
 }
 
