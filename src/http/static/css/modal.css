@@ -21,12 +21,12 @@
 }
 
 .modal-dialog {
-    min-height: 320px;
+    min-height: 200px;
 }
 
 .modal-lg {
     min-width: 680px;
-    min-height: 320px;
+    min-height: 200px;
 }
 
 .modal-body .card {
