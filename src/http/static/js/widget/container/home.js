@@ -33,7 +33,7 @@ export class Home extends Container {
     }
 
     loading() {
-        this.title('home');
+        this.title('Home');
         new Collapse({
             pages: [
                 {id: this.id('#collapseSys'), name: '/system'},
