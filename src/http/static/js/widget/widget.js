@@ -10,4 +10,11 @@ export class Widget {
     compile(tmpl, data) {
         return template.compile(tmpl)(data);
     }
+
+    title(name) {
+        if (!this._alias) {
+            this._alias = "LightStar"
+        }
+        $(document).attr("title", `${name} - ${this._alias}`);
+    }
 }

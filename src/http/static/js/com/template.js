@@ -1,11 +1,9 @@
 import {Utils} from "./utils.js";
+import {I18N} from "./i18n.js";
 
 
 export class Template {
     constructor() {
-        this.i18n = $.i18n();
-        this.i18n.locale = navigator.language || navigator.userLanguage;
-
         this.i = this.imports();
     }
 
@@ -80,21 +78,9 @@ export class Template {
         m.spicePassword = function (inst) {
             return Utils.graphic(inst, 'spice', 'password')
         };
-        m.i = function (value) {
-            return $.i18n(value);
+        m.i = function (key, param1) {
+            return I18N.i18n(key, param1);
         };
         return m;
-    }
-
-    promise() {
-        console.log("Template.promise", this.i18n.locale);
-
-        let i18n = this.i18n;
-        return new Promise(function (resolve) {
-            i18n.load(`/static/i18n/${i18n.locale}.json`, i18n.locale)
-                .done(function() {
-                    resolve()
-                });
-        })
     }
 }

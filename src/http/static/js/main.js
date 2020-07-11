@@ -1,9 +1,10 @@
 import {Api} from "./api/api.js";
 import {Location} from "./com/location.js";
-import {Template} from "./com/template.js";
+import {I18N} from "./com/i18n.js";
 import {Navigation} from "./widget/navigation.js";
 import {Container} from "./widget/container/container.js";
 import {Routes} from "./routes.js";
+import {Template} from "./com/template.js";
 
 
 $(function() {
@@ -18,7 +19,8 @@ $(function() {
     Api.host(host);
     Container.alias(alias);
 
-    new Template().promise().then(function () {
+    I18N.promise().then(function () {
+        let tmpl = new Template();
         let nav = new Navigation({
             parent: "#navigation",
             home: ".",

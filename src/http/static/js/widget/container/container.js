@@ -41,7 +41,7 @@ export class Container {
 
     title(name) {
         if (!this._alias) {
-            this._alias = "lightstar"
+            this._alias = "LightStar"
         }
         $(document).attr("title", `${name} - ${this._alias}`);
     }

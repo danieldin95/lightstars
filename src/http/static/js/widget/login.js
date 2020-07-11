@@ -1,8 +1,13 @@
-export class Login {
+import {I18N} from "../com/i18n.js";
+import {Widget} from "./widget.js";
+
+
+export class Login extends Widget {
     // {
     //   parent: "#container"
     // }
     constructor(props) {
+        super(props);
         this.props = props;
         this.parent = props.parent;
 
@@ -14,7 +19,7 @@ export class Login {
     }
 
     refresh() {
-        console.log(this.parent, $(this.parent));
+        this.title(I18N.i('login'));
         $(this.parent).html(this.render({}));
     }
 

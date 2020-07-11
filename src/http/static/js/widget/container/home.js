@@ -16,6 +16,7 @@ import {DirCreate} from "../datastore/create.js";
 import {NFSCreate} from "../datastore/nfs/create.js";
 import {iSCSICreate} from "../datastore/iscsi/create.js";
 import {Pool} from "./pool.js";
+import {I18N} from "../../com/i18n.js";
 
 export class Home extends Container {
     // {
@@ -33,7 +34,7 @@ export class Home extends Container {
     }
 
     loading() {
-        this.title('Home');
+        this.title(I18N.i('home'));
         new Collapse({
             pages: [
                 {id: this.id('#collapseSys'), name: '/system'},
