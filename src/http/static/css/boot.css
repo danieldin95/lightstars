@@ -26,9 +26,24 @@ a:hover, a:focus {
     height: 100%;
 }
 
-.navbar {
-    min-height: 3rem;
-    padding: 0 2rem;
+@media (min-width: 1024px) {
+    .navbar {
+        min-height: 2rem;
+        padding: 0 4rem;
+    }
+    .context #notice, .context #container {
+        margin: 0 8rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .navbar {
+        min-height: 2rem;
+        padding: 0 2rem;
+    }
+    .context #notice, .context #container {
+        margin: 0 2rem;
+    }
 }
 
 .navbar .form-control {
@@ -45,10 +60,6 @@ a:hover, a:focus {
     width: 100%;
     height: 100%;
     margin-top: 4rem;
-}
-
-.context #notice, .context #container {
-    margin: 0 2rem;
 }
 
 .container {
@@ -158,12 +169,6 @@ ol, ul, dl {
 
 .alert-dismissible .close {
     padding: 0.5rem 1.25rem;
-}
-
-.modal {
-    top: 10%;
-    bottom: inherit;
-    overflow: auto!important;
 }
 
 .overflow-auto {
