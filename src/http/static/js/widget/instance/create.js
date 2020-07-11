@@ -59,15 +59,10 @@ export class InstanceCreate extends FormModal {
         let iface = {
             fresh: function (){
                 let selector = this.selector;
-
                 new BridgeApi().list(this, (data) => {
                     selector.find("option").remove();
                     for (let ele of data.resp) {
-                        if (ele['type'] === 'bridge') {
-                            selector.append(Option(`Linux Bridge #${ele['name']}`, ele['name']));
-                        } else if (ele['type'] === 'openvswitch') {
-                            selector.append(Option(`Open vSwitch #${ele['name']}`, ele['name']));
-                        }
+                        selector.append(Option(`${ele['network']} #${ele['name']}`, ele['name']));
                     }
                 });
             },

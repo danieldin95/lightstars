@@ -5,8 +5,9 @@ import (
 )
 
 type Bridge struct {
-	Name string `json:"name"`
-	Type string `json:"type"` // bridge, ovs etc.
+	Network string `json:"network"`
+	Name    string `json:"name"`
+	Type    string `json:"type"` // bridge, ovs etc.
 }
 
 type BridgeMgr struct {
@@ -30,9 +31,17 @@ func (br *BridgeMgr) List() []Bridge {
 			br := NewNetworkXMLFromNet(NewNetworkFromVir(&net))
 			if br != nil {
 				if br.VirtualPort != nil {
-					brs = append(brs, Bridge{Name: br.Bridge.Name, Type: br.VirtualPort.Type})
+					brs = append(brs, Bridge{
+						Network: br.Name,
+						Name:    br.Bridge.Name,
+						Type:    br.VirtualPort.Type,
+					})
 				} else {
-					brs = append(brs, Bridge{Name: br.Bridge.Name, Type: "bridge"})
+					brs = append(brs, Bridge{
+						Network: br.Name,
+						Name:    br.Bridge.Name,
+						Type:    "bridge",
+					})
 				}
 			}
 			_ = net.Free()
