@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/danieldin95/lightstar)](https://goreportcard.com/report/danieldin95/lightstar)
 [![GPL 3.0 License](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](LICENSE)
 
-This software makes it easier for you to control compute resource.
+This software makes it easier for you to control virtual compute, network and storage resource.
 
 # CentOS7
 
