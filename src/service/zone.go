@@ -18,7 +18,7 @@ func (l *Zone) Load(file string) error {
 	if l.Host == nil {
 		l.Host = make(map[string]*schema.Host, 32)
 	}
-	l.Add(&schema.Host{Name: "default", Url: ""})
+	l.Add(&schema.Host{Name: "localhost", Url: ""})
 	if err := libstar.JSON.UnmarshalLoad(&hosts, file); err != nil {
 		return err
 	}

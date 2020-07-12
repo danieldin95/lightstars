@@ -53,7 +53,7 @@ a:hover, a:focus {
 }
 
 .bg-dark {
-    background: #1d2124 linear-gradient(to top, #1d2124, #495057);
+    background: #1d2124 linear-gradient(360deg, #1d2124, #495057);
 }
 
 .context {
