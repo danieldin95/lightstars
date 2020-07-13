@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"path"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -126,30 +127,51 @@ func IsVolume(file string) bool {
 }
 
 func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
-	// create new disk firstly.
-	size := libstar.ToBytes(conf.Size, conf.SizeUnit)
-	slot := libstar.H2D8(conf.Seq)
-	name := libvirtc.DISK.Slot2Name(slot)
-	vol, err := NewVolume(conf.Name, name, size)
-	if err != nil {
-		return nil, err
+	xml := libvirtc.DiskXML{}
+	if conf.Source == "" { // create new disk firstly.
+		size := libstar.ToBytes(conf.Size, conf.SizeUnit)
+		slot := libstar.H2D8(conf.Seq)
+		name := libvirtc.DISK.Slot2Name(slot)
+		vol, err := NewVolume(conf.Name, name, size)
+		if err != nil {
+			return nil, err
+		}
+		xml = libvirtc.DiskXML{
+			Type:   "file",
+			Device: "disk",
+			Driver: libvirtc.DiskDriverXML{
+				Name: "qemu",
+				Type: vol.Target.Format.Type,
+			},
+			Source: libvirtc.DiskSourceXML{
+				File: vol.Target.Path,
+			},
+			Target: libvirtc.DiskTargetXML{
+				Bus: conf.Bus,
+				Dev: libvirtc.DISK.Slot2Dev(conf.Bus, slot),
+			},
+		}
+	} else if strings.HasSuffix(conf.Source, ".iso") ||
+		strings.HasSuffix(conf.Source, ".ISO") {
+		// attach cdrom.
+		file := storage.PATH.Unix(conf.Source)
+		seq, _ := strconv.Atoi(conf.Seq)
+		xml = libvirtc.DiskXML{
+			Type:   "file",
+			Device: "cdrom",
+			Driver: libvirtc.DiskDriverXML{
+				Type: "raw",
+				Name: "qemu",
+			},
+			Source: libvirtc.DiskSourceXML{
+				File: file,
+			},
+			Target: libvirtc.DiskTargetXML{
+				Bus: "ide",
+				Dev: libvirtc.DISK.Slot2Dev("ide", uint8(seq)),
+			},
+		}
 	}
-	xml := libvirtc.DiskXML{
-		Type:   "file",
-		Device: "disk",
-		Driver: libvirtc.DiskDriverXML{
-			Name: "qemu",
-			Type: vol.Target.Format.Type,
-		},
-		Source: libvirtc.DiskSourceXML{
-			File: vol.Target.Path,
-		},
-		Target: libvirtc.DiskTargetXML{
-			Bus: conf.Bus,
-			Dev: libvirtc.DISK.Slot2Dev(conf.Bus, slot),
-		},
-	}
-
 	switch conf.Bus {
 	case "virtio":
 		xml.Address = &libvirtc.AddressXML{

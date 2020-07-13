@@ -124,5 +124,8 @@
 	"total|free|vendor": "total | free | vendor",
 	"total|free|cache": "total | free | cache",
 	"host": "Host",
-	"filesystem": "File system"
+	"filesystem": "File system",
+	"attach cdrom": "Attach CDROM",
+	"add cdrom": "Add CDROM",
+	"select ISO file": "Select ISO file"
 }

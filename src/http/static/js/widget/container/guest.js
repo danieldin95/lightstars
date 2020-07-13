@@ -6,6 +6,7 @@ import {InstanceApi} from "../../api/instance.js";
 
 import {Collapse} from "../collapse.js";
 import {DiskCreate} from '../disk/create.js';
+import {IsoCreate} from "../disk/iso/create.js";
 import {InterfaceCreate} from '../interface/create.js';
 import {InstanceSet} from "../instance/setting.js";
 import {InstanceRemove} from "../instance/remove.js";
@@ -72,6 +73,10 @@ export class Guest extends Container {
             });
         // loading disks and interfaces.
         new DiskCreate({id: this.id('#createDiskModal')})
+            .onsubmit((e) => {
+                ctl.disk.create(Utils.toJSON(e.form));
+            });
+        new IsoCreate({id: this.id("#createIsoModal")})
             .onsubmit((e) => {
                 ctl.disk.create(Utils.toJSON(e.form));
             });
@@ -194,10 +199,22 @@ export class Guest extends Container {
             <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                            data-toggle="modal" data-target="#createDiskModal">
-                        {{'attach disk' | i}}
-                    </button>
+                    <div id="create-btns" class="btn-group btn-group-sm" role="group">
+                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                data-toggle="modal" data-target="#createDiskModal">
+                            {{'attach disk' | i}}
+                        </button>
+                        <button id="creates" type="button"
+                            class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
+                            <a id="create-iso" class="dropdown-item" data-toggle="modal" data-target="#createIsoModal">
+                                {{'attach cdrom' | i}}
+                            </a>
+                        </div>
+                    </div>  
                     <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
                     <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
@@ -320,6 +337,8 @@ export class Guest extends Container {
             <div id="settingModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create disk modal -->
             <div id="createDiskModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Create ISO/CDROM modal -->
+            <div id="createIsoModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create interface modal -->
             <div id="createInterfaceModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>

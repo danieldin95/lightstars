@@ -36,11 +36,11 @@ func GetTypeByVolume(file string) (string, string) {
 		}
 	}
 	libstar.Debug("GetTypeByVolume: %s:%v", file, desc.Target.Format)
-	fmt := desc.Target.Format.Type
-	if fmt == "iso" {
+	format := desc.Target.Format.Type
+	if format == "iso" {
 		return "cdrom", "raw"
 	}
-	return "disk", fmt
+	return "disk", format
 }
 
 func NewCdXML(file, family string, seq uint8) libvirtc.DiskXML {

@@ -124,5 +124,8 @@
 	"total|free|vendor": "总计 | 空闲 | 信息",
 	"total|free|cache": "总计 | 空闲 | 缓存",
 	"host": "主机",
-	"filesystem": "文件系统"
+	"filesystem": "文件系统",
+	"attach cdrom": "挂载光盘",
+	"add cdrom": "添加光盘",
+	"select ISO file": "选择ISO文件"
 }
