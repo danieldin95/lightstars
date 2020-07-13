@@ -35,12 +35,7 @@ export default class VolumeTable extends Widget {
         let items = data.items;
         return Object.assign({}, data, {
             items: items.map((i) => {
-                let name = "";
-                if (i.type === "dir") {
-                    name = '.'+Utils.basename(i.name);
-                } else {
-                    name = Utils.basename(i.name);
-                }
+                let name = Utils.basename(i.name);
                 return Object.assign({}, i, {name});
             })
         })

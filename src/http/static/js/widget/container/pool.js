@@ -16,7 +16,6 @@ export class Pool extends Container {
     }
 
     render() {
-
         new DataStoreApi({uuids: this.uuid}).get(this, (e) => {
             this.title(e.resp.name);
             this.view = $(this.template(e.resp));
@@ -105,13 +104,19 @@ export class Pool extends Container {
             <div id="collapseVol" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <!-- volume actions button-->
             <div class="card-body">
-                <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                            data-toggle="modal" data-target="#LeaseCreateModal">
-                        {{'new a volume' | i}}
-                    </button>
-                    <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                <div class="card-body-hdl row">
+                    <div class="col-6">
+                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                                data-toggle="modal" data-target="#LeaseCreateModal">
+                            {{'new a volume' | i}}
+                        </button>
+                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                    </div>
+                    <div class="d-flex col-6 justify-content-end">
+                        <button id="datastore" class="btn btn-link btn-sm p-0" data="{{uuid}}">{{name}}:/</button>
+                        <button id="current"  class="btn btn-link btn-sm p-0 pr-2" data=""></button>
+                    </div>
                 </div>
                 <div class="card-body-tbl">
                     <table class="table table-striped">

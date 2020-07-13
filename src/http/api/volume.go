@@ -75,7 +75,7 @@ func (v Volume) DELETE(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	ResponseMsg(w, 0, name)
+	ResponseMsg(w, 0, "")
 }
 
 func (v Volume) DOWNLOAD(w http.ResponseWriter, r *http.Request) {

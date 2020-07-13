@@ -38,12 +38,21 @@ export class VolumeCtl extends Ctl {
             }).delete();
         });
         $(this.child('#refresh')).on("click", (e) => {
-            this.table.refresh((e) => {
-                this.checkbox.refresh();
-            });
+            this.refresh();
         });
-
+        $(this.child("#datastore")).on("click", (e) => {
+            this.table.pool = this.pool;
+            this.current("");
+            this.refresh();
+        });
+        $(this.child("#current")).on("click", (e) => {
+            this.refresh();
+        });
         this.refresh()
+    }
+
+    current(value) {
+        $(this.child("#current")).text(value);
     }
 
     refresh() {
@@ -55,7 +64,8 @@ export class VolumeCtl extends Ctl {
                 let type = $(this).attr('data-type');
 
                 if (type === "dir") {
-                    e.data.table.pool = name;
+                    e.data.table.pool = `.${name}`;
+                    e.data.current(name);
                     e.data.refresh();
                 } else {
                     e.data.uuids = [name];
