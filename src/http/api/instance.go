@@ -457,7 +457,10 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			domNew.Free()
+			_ = domNew.Free()
+			if err := dom.SetAutostart(true); err != nil {
+				libstar.Warn("Instance.PUT: start %s", err)
+			}
 		} else {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -466,6 +469,9 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 		if err := dom.ShutdownFlags(libvirtc.DomainShutdownAcpi); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		}
+		if err := dom.SetAutostart(false); err != nil {
+			libstar.Warn("Instance.PUT: shutdown %s", err)
 		}
 	case "suspend":
 		if err := dom.Suspend(); err != nil {
