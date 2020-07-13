@@ -19,6 +19,7 @@ func NewHyper() (hs schema.Hyper) {
 
 func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int schema.Interface) {
 	int.Source = xml.Source.Bridge
+	int.Network = xml.Source.Network
 	int.Address = xml.Mac.Address
 	int.Model = xml.Model.Type
 	int.Device = xml.Target.Dev

@@ -335,6 +335,7 @@ type InterfaceMacXML struct {
 type InterfaceSourceXML struct {
 	XMLName xml.Name `xml:"source" json:"-"`
 	Bridge  string   `xml:"bridge,attr,omitempty" json:"bridge,omitempty"`
+	Network string   `xml:"network,attr,omitempty" json:"network,omitempty"`
 }
 
 type InterfaceModelXML struct {

@@ -35,6 +35,7 @@ rpm: rpm-lightstar rpm-lightsim ## build rpm packages
 # prepare environment
 env:
 	@mkdir -p $(BD)
+	gofmt -w -s ./src
 
 ## light star
 .PHONY: lightstar

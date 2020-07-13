@@ -45,7 +45,7 @@ export class InterfaceTable extends Widget {
                     pci:{{v.addrBus | a2n 2}}:{{v.addrSlot | a2n 2}}.{{v.addrFunc}}
                 {{/if}}</span>
                 </td>
-                <td>{{v.source}}</td>
+                <td>{{v.source == "" ? v.network : v.source}}</td>
             </tr>
         {{/each}}
         `, data);

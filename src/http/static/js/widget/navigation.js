@@ -191,7 +191,7 @@ export class Navigation extends Widget {
                 <li class="nav-item dropdown">
                     <a id="nodeMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
-                        <node-name>local</node-name>@{{'node' | i}}
+                        <node-name>localhost</node-name>@{{'node' | i}}
                     </a>
                     <div id="node" class="dropdown-menu" aria-labelledby="nodeMore">
                         <a class="dropdown-item" data="">default</a>

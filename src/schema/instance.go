@@ -85,6 +85,7 @@ type Interface struct {
 	UUID       string `json:"uuid,omitempty"`
 	Type       string `json:"type,omitempty"` //bridge or openvswitch
 	Address    string `json:"address"`
+	Network    string `json:"network"`
 	Source     string `json:"source"`
 	Model      string `json:"model"` // configure
 	Device     string `json:"device"`
