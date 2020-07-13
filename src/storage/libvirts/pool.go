@@ -48,6 +48,21 @@ func LookupPoolByUUID(uuid string) (*Pool, error) {
 	return NewPoolFromVir(pool), nil
 }
 
+func LookupPoolByUUIDOrName(uuid string) (*Pool, error) {
+	hyper, err := GetHyper()
+	if err != nil {
+		return nil, err
+	}
+	pool, err := hyper.Conn.LookupStoragePoolByUUIDString(uuid)
+	if err != nil {
+		pool, err = hyper.Conn.LookupStoragePoolByName(uuid)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return NewPoolFromVir(pool), nil
+}
+
 func NewPoolFromVir(pool *libvirt.StoragePool) *Pool {
 	return &Pool{StoragePool: *pool}
 }

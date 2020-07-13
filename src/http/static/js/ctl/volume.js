@@ -10,9 +10,9 @@ class CheckBoxCtl extends CheckBox {
 
 export class VolumeCtl extends Ctl {
     // {
-    //   id: '#network #leases',
-    //   uuid: uuid of network,
-    //   name: name of network,
+    //   id: '#pool #volume',
+    //   uuid: uuid of pool,
+    //   name: name of pool,
     // }
     constructor(props) {
         super(props);
@@ -30,11 +30,12 @@ export class VolumeCtl extends Ctl {
         $(this.child('#create')).on("click", (e) => {
 
         });
-        $(this.child('#edit')).on("click", (e) => {
-
-        });
         $(this.child('#remove')).on("click", (e) => {
-
+            console.log(this.uuids.store);
+            new VolumeApi({
+                pool: this.pool,
+                uuids: this.uuids.store,
+            }).delete();
         });
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {

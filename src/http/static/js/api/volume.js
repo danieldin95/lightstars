@@ -13,7 +13,6 @@ export class VolumeApi extends Api {
     }
 
     url(uuid) {
-
         if (uuid) {
             return super.url(`/datastore/${this.pool}/volume/${uuid}`);
         }

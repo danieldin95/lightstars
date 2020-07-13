@@ -222,7 +222,7 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	ResponseMsg(w, 0, "success")
+	ResponseMsg(w, 0, xmlObj.Target.Dev)
 }
 
 func (disk Disk) PUT(w http.ResponseWriter, r *http.Request) {
@@ -267,5 +267,5 @@ func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	ResponseMsg(w, 0, "success")
+	ResponseMsg(w, 0, "")
 }

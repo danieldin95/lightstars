@@ -110,7 +110,6 @@ export class Pool extends Container {
                             data-toggle="modal" data-target="#LeaseCreateModal">
                         {{'new a volume' | i}}
                     </button>
-                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
                     <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                 </div>

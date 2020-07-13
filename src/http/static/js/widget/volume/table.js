@@ -30,6 +30,7 @@ export default class VolumeTable extends Widget {
             func({data, resp: e.resp});
         })
     }
+
     formatData(data) {
         let items = data.items;
         return Object.assign({}, data, {
@@ -52,15 +53,23 @@ export default class VolumeTable extends Widget {
         return this.compile(`
             {{each items v i}}
                 <tr class="sortable">
-                    <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
+                    <td><input id="on-one" type="checkbox" data="{{v.name}}"></td>
                     <td>
                         {{if v.type == "dir"}}
-                        <img src="/static/images/folder-icon.svg"/>
+                        <img src="/static/images/folder-icon.svg" style="opacity: 0.6; filter:alpha(opacity=60);"/>
                         {{else if v.type == "file"}}
-                        <img src="/static/images/file-icon.svg"/>
+                        <img src="/static/images/file-icon.svg" style="opacity: 0.6; filter:alpha(opacity=60);"/>
                         {{/if}}
                     </td>
-                    <td><a id="on-this" data-name="{{v.name}}" data-type="{{v.type}}" href="javascript:void(0)">{{v.name}}</a></td>
+                    <td>
+                      {{if v.type == "dir"}}
+                      <a id="on-this" data-name="{{v.name}}" data-type="{{v.type}}" href="javascript:void(0)">{{v.name}}</a>
+                      {{else if v.type == "file"}}
+                      <a href="/api/datastore/${this.pool}/volume/{{v.name}}">{{v.name}}</a>
+                      {{else}}
+                      <a data-name="{{v.name}}" href="#">{{v.name}}</a>
+                      {{/if}}
+                    </td>
                     <td>{{if v.type == "dir"}} - {{else}} {{v.capacity | prettyByte}} {{/if}}</td>
                     <td>{{if v.type == "dir"}} - {{else}} {{v.allocation | prettyByte}} {{/if}}</td>
                 </tr>

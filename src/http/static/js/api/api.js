@@ -1,22 +1,6 @@
 import {Alert} from "../com/alert.js";
 
 export class Api {
-    // static func.
-    static path(url) {
-        url = url || "";
-        if (this._host !== "") {
-            return `/host/${this._host}/${url}`;
-        }
-        return url;
-    }
-
-    static host(name) {
-        if (name !== undefined) {
-            this._host = name
-        }
-        return this._host
-    }
-
     // {
     //   uuids: [],
     //   tasks: 'tasks',
@@ -101,5 +85,21 @@ export class Api {
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
         });
+    }
+
+    // static func.
+    static path(url) {
+        url = url || "";
+        if (this._host !== "") {
+            return `/host/${this._host}/${url}`;
+        }
+        return url;
+    }
+
+    static host(name) {
+        if (name !== undefined) {
+            this._host = name
+        }
+        return this._host
     }
 }
