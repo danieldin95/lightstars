@@ -151,7 +151,7 @@ export class Navigation extends Widget {
         <nav id="navs" class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
         <!-- Brand -->
         <a class="navbar-brand" href="${this.home}">
-            <img src="/static/images/lightstar-6.png" width="30" height="30" alt="">
+            <img src="/static/images/lightstar.png" width="30" height="30" alt="">
         </a>
         <!-- Collapse bar -->
         <button class="navbar-toggler" type="button" data-toggle="collapse"
