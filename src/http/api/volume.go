@@ -58,7 +58,7 @@ func (v Volume) PUT(w http.ResponseWriter, r *http.Request) {
 
 func (v Volume) DELETE(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	pool, err := libvirts.LookupPoolByUUID(uuid)
+	pool, err := libvirts.LookupPoolByUUIDOrName(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return

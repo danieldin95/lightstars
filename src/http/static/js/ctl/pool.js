@@ -1,5 +1,7 @@
 import {Ctl} from "./ctl.js"
 import {VolumeCtl} from "./volume.js";
+import {FileUpload} from "../widget/volume/upload.js";
+import {UploadApi} from "../api/upload.js";
 
 
 export class PoolCtl extends Ctl {
@@ -12,7 +14,18 @@ export class PoolCtl extends Ctl {
         this.uuid = uuid;
         this.name = name;
         this.tasks = props.tasks || "tasks";
-
-        this.volumes = new VolumeCtl({id: props.volumes.id, uuid, name});
+        this.volumes = new VolumeCtl({
+            id: props.volumes.id, uuid, name,
+            upload: props.volumes.upload,
+        });
+        this.upload = new FileUpload({
+            id: props.upload
+        });
+        this.upload.onsubmit((e) => {
+            new UploadApi({
+                uuids: this.uuid,
+                id: '#process'
+            }).upload(e.form);
+        });
     }
 }

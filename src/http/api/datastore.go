@@ -20,7 +20,7 @@ func DataStore2XML(conf schema.DataStore) libvirts.Pool {
 	name := storage.PATH.GetStoreID(conf.Name)
 	path := storage.PATH.Unix(conf.Name)
 
-	polXml := libvirts.PoolXML{
+	xmlObj := libvirts.PoolXML{
 		Type: conf.Type,
 		Name: name,
 		Target: libvirts.TargetXML{
@@ -28,7 +28,7 @@ func DataStore2XML(conf schema.DataStore) libvirts.Pool {
 		},
 	}
 	if conf.Type == "netfs" && conf.NFS != nil {
-		polXml.Source = libvirts.SourceXML{
+		xmlObj.Source = libvirts.SourceXML{
 			Host: libvirts.HostXML{
 				Name: conf.NFS.Host,
 			},
@@ -44,7 +44,7 @@ func DataStore2XML(conf schema.DataStore) libvirts.Pool {
 		Type: conf.Type,
 		Name: name,
 		Path: path,
-		XML:  polXml.Encode(),
+		XML:  xmlObj.Encode(),
 	}
 }
 

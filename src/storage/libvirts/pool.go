@@ -73,14 +73,14 @@ func CreatePool(name, target string) (*Pool, error) {
 		Name: name,
 		Path: target,
 	}
-	polXml := PoolXML{
+	xmlObj := PoolXML{
 		Type: pol.Type,
 		Name: pol.Name,
 		Target: TargetXML{
 			Path: pol.Path,
 		},
 	}
-	pol.XML = polXml.Encode()
+	pol.XML = xmlObj.Encode()
 	return pol, pol.Create()
 }
 

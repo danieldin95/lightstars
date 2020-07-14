@@ -2,6 +2,7 @@ import {Container} from "./container.js"
 import {Collapse} from "../collapse.js";
 import {DataStoreApi} from "../../api/datastores.js";
 import {PoolCtl} from "../../ctl/pool.js";
+import {Api} from "../../api/api.js";
 
 
 export class Pool extends Container {
@@ -42,12 +43,18 @@ export class Pool extends Container {
         new PoolCtl({
             id: this.id(),
             header: {id: this.id("#header")},
-            volumes: {id: this.id("#volumes")},
+            volumes: {
+                id: this.id("#volumes"),
+                upload: "#uploadPoolModal",
+            },
+            upload: '#uploadStoreModal',
         });
 
     }
 
     template(v) {
+        let dumpUrl = Api.path(`/api/datastore/${v.uuid}?format=xml`);
+
         return this.compile(`
         <div id="datastores" data="{{uuid}}" name="{{name}}">
         <div id="header" class="card">
@@ -62,6 +69,8 @@ export class Pool extends Container {
                 <!-- Header buttons -->
                 <div class="card-body-hdl">
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
+                    <button id="upload" type="button" class="btn btn-outline-dark btn-sm" 
+                             data-toggle="modal" data-target="#uploadStoreModal">{{'upload' | i}}</button>
                     <div id="btns-more" class="btn-group btn-group-sm" role="group">
                         <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
                                 data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
@@ -69,7 +78,7 @@ export class Pool extends Container {
                         </button>
                         <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
                             <a id="edit" class="dropdown-item" href="javascript:void(0)">{{'edit' | i}}</a>
-                            <a id="dumpxml" class="dropdown-item" href="javascript:void(0)">{{'dump xml' | i}}</a>
+                            <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
                             <div class="dropdown-divider"></div>
                             <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
                             <a id="remove" class="dropdown-item" href="javascript:void(0)">{{'remove' | i}}</a>
@@ -107,9 +116,11 @@ export class Pool extends Container {
                 <div class="card-body-hdl row">
                     <div class="col-6">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#LeaseCreateModal">
+                                data-toggle="modal" data-target="#createVolumeModal">
                             {{'new a volume' | i}}
                         </button>
+                        <button id="upload" type="button" class="btn btn-outline-dark btn-sm" 
+                                data-toggle="modal" data-target="#uploadPoolModal">{{'upload' | i}}</button>
                         <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
@@ -136,6 +147,10 @@ export class Pool extends Container {
                 </div>
             </div>
             </div>
+        </div>
+        <div id="modals">
+            <div id="uploadStoreModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="uploadPoolModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         </div>`, v);
     }

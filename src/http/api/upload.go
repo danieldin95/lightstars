@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/src/libstar"
-	"github.com/danieldin95/lightstar/src/storage"
 	"github.com/danieldin95/lightstar/src/storage/libvirts"
 	"github.com/gorilla/mux"
 	"io"
@@ -19,17 +18,23 @@ func (up Upload) Router(router *mux.Router) {
 
 func (up Upload) Upload(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-
-	pol, err := libvirts.LookupPoolByUUID(uuid)
+	pol, err := libvirts.LookupPoolByUUIDOrName(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer pol.Free()
+	desc, err := pol.GetXMLDesc(0)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer pol.Free()
-
-	name, err := pol.GetName()
-	path := storage.PATH.Unix(name)
-
+	pool := &libvirts.PoolXML{}
+	if err := pool.Decode(desc); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	path := pool.Target.Path
 	// no more than 50MiB of memory
 	_ = r.ParseMultipartForm(50 << 20)
 	file, handler, err := r.FormFile("file")

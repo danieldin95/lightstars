@@ -2,9 +2,14 @@ import {Ctl} from "./ctl.js";
 import {CheckBox} from "../widget/checkbox/checkbox.js";
 import VolumeTable from "../widget/volume/table.js";
 import {VolumeApi} from "../api/volume.js";
+import {FileUpload} from "../widget/volume/upload.js";
+import {UploadApi} from "../api/upload.js";
 
 
 class CheckBoxCtl extends CheckBox {
+    change(from) {
+        super.change(from);
+    }
 }
 
 
@@ -25,15 +30,21 @@ export class VolumeCtl extends Ctl {
             id: this.child('#display-table'),
             pool: this.pool
         });
+        this.upload = new FileUpload({id: props.upload});
+        this.upload.onsubmit((e) => {
+            new UploadApi({
+                uuids: this.table.pool,
+                id: '#process'
+            }).upload(e.form);
+        });
 
         // refresh table and register refresh click.
         $(this.child('#create')).on("click", (e) => {
-
+            console.log("todo");
         });
         $(this.child('#remove')).on("click", (e) => {
-            console.log(this.uuids.store);
             new VolumeApi({
-                pool: this.pool,
+                pool: this.table.pool,
                 uuids: this.uuids.store,
             }).delete();
         });
