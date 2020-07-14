@@ -1,0 +1,18 @@
+---
+- hosts: lightstar
+  remote_user: root
+  vars:
+    version: 0.8.20
+
+  tasks:
+  - name: download lightstar-{{ version }} 
+    copy: src=/code/lightstar/build/lightstar-{{ version }}-1.el7.x86_64.rpm dest=~
+
+  - name: upgrade lightstar
+    shell: rpm -ivh --force ~/lightstar-{{ version }}-1.el7.x86_64.rpm
+    notify:
+      - restart lightstar
+
+  handlers:
+    - name: restart lightstar
+      service: name=lightstar state=restarted

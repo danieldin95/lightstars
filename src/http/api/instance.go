@@ -21,6 +21,9 @@ type Instance struct {
 }
 
 func GetTypeByVolume(file string) (string, string) {
+	if file == "" {
+		return "", ""
+	}
 	vol := libvirts.Volume{
 		Pool: path.Dir(file),
 		Name: path.Base(file),
@@ -43,7 +46,13 @@ func GetTypeByVolume(file string) (string, string) {
 	return "disk", format
 }
 
-func NewCdXML(file, family string, seq uint8) libvirtc.DiskXML {
+type diskSeq struct {
+	HdId uint8
+	VdId uint8
+}
+
+func NewCdXML(file, family string, seq *diskSeq) libvirtc.DiskXML {
+	seq.HdId++
 	return libvirtc.DiskXML{
 		Type:   "block",
 		Device: "cdrom",
@@ -56,12 +65,12 @@ func NewCdXML(file, family string, seq uint8) libvirtc.DiskXML {
 		},
 		Target: libvirtc.DiskTargetXML{
 			Bus: "ide",
-			Dev: libvirtc.DISK.Slot2Dev("ide", seq),
+			Dev: libvirtc.DISK.Slot2Dev("ide", seq.HdId),
 		},
 	}
 }
 
-func NewIsoXML(file, family string, seq uint8) libvirtc.DiskXML {
+func NewIsoXML(file, family string, seq *diskSeq) libvirtc.DiskXML {
 	xml := libvirtc.DiskXML{
 		Type:   "file",
 		Device: "disk",
@@ -78,20 +87,22 @@ func NewIsoXML(file, family string, seq uint8) libvirtc.DiskXML {
 	xml.Device = device
 	xml.Driver.Type = format
 	if family == "linux" && !strings.HasSuffix(name, ".ISO") {
+		seq.VdId++
 		xml.Target = libvirtc.DiskTargetXML{
 			Bus: "virtio",
-			Dev: libvirtc.DISK.Slot2Dev("virtio", seq),
+			Dev: libvirtc.DISK.Slot2Dev("virtio", seq.VdId),
 		}
 	} else {
+		seq.HdId++
 		xml.Target = libvirtc.DiskTargetXML{
 			Bus: "ide",
-			Dev: libvirtc.DISK.Slot2Dev("ide", seq),
+			Dev: libvirtc.DISK.Slot2Dev("ide", seq.HdId),
 		}
 	}
 	return xml
 }
 
-func NewDiskXML(format, file, bus string, seq uint8) libvirtc.DiskXML {
+func NewDiskXML(format, file, bus string, seq *diskSeq) libvirtc.DiskXML {
 	disk := libvirtc.DiskXML{
 		Type:   "file",
 		Device: "disk",
@@ -105,31 +116,33 @@ func NewDiskXML(format, file, bus string, seq uint8) libvirtc.DiskXML {
 	}
 	switch bus {
 	case "virtio":
+		seq.VdId++
 		disk.Target = libvirtc.DiskTargetXML{
 			Bus: bus,
-			Dev: libvirtc.DISK.Slot2Dev(bus, seq),
+			Dev: libvirtc.DISK.Slot2Dev(bus, seq.VdId),
 		}
 		disk.Address = &libvirtc.AddressXML{
 			Type:     "pci",
 			Domain:   libvirtc.PciDomain,
 			Bus:      libvirtc.PciDiskBus,
-			Slot:     fmt.Sprintf("0x%x", seq),
+			Slot:     fmt.Sprintf("0x%x", seq.VdId),
 			Function: libvirtc.PciFunc,
 		}
 	case "ide", "scsi":
+		seq.HdId++
 		disk.Target = libvirtc.DiskTargetXML{
 			Bus: bus,
-			Dev: libvirtc.DISK.Slot2Dev(bus, seq),
+			Dev: libvirtc.DISK.Slot2Dev(bus, seq.HdId),
 		}
 	}
 	return disk
 }
 
-func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq uint8) (libvirtc.DiskXML, error) {
+func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq *diskSeq) (libvirtc.DiskXML, error) {
 	obj := libvirtc.DiskXML{}
 	file := storage.PATH.Unix(disk.Source)
+	name := libvirtc.DISK.Slot2Name(seq.VdId)
 	size := libstar.ToBytes(disk.Size, disk.SizeUnit)
-	name := libvirtc.DISK.Slot2Name(seq)
 	device, format := GetTypeByVolume(file)
 	if file == "" {
 		vol, err := NewVolumeAndPool(conf.DataStore, conf.Name, name, size)
@@ -241,10 +254,9 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		}
 	}
 	// disks
-	for i, disk := range conf.Disks {
+	seq := &diskSeq{}
+	for _, disk := range conf.Disks {
 		file := disk.Source
-		seq := uint8(i + 1)
-
 		obj := libvirtc.DiskXML{}
 		if strings.HasPrefix(file, "/dev") {
 			obj = NewCdXML(file, conf.Family, seq)
@@ -252,8 +264,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 			obj = NewIsoXML(storage.PATH.Unix(file), conf.Family, seq)
 		} else {
 			var err error
-			obj, err = NewFileXML(&disk, conf, seq)
-			if err != nil {
+			if obj, err = NewFileXML(&disk, conf, seq); err != nil {
 				return dom, err
 			}
 		}
