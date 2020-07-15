@@ -24,6 +24,15 @@ export class Navigation extends Widget {
         this.refresh();
     }
 
+    chrome() {
+        return navigator.userAgent.match(/Chrome/i);
+    }
+
+    nassh(host) {
+        let url = 'chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html';
+        return `${url}#root@${host}`;
+    }
+
     refresh() {
         this.active = Location.get("/instances");
         console.log("Navigation.refresh", this.active);
@@ -46,6 +55,7 @@ export class Navigation extends Widget {
                 forceActive(e.name);
             },
         });
+
         new HyperApi().get(this, (e) => {
             let view = $(this.render(e.resp));
             let name = this.props.name;
@@ -71,10 +81,20 @@ export class Navigation extends Widget {
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
+            if (this.chrome()) {
+                this.view.find("#phy #ssh").on('click', (e) => {
+                    window.open(this.nassh($(location).attr("hostname")));
+                });
+            } else {
+                this.view.find("#phy #ssh").attr("title", "Support on chrome");
+                this.view.find("#phy #ssh").addClass("disabled");
+            }
             new ChangePassword({id: '#changePasswdModal'})
                 .onsubmit((e) => {
                     new PasswordApi().set(Utils.toJSON(e.form));
                 });
+
+
         });
     }
 
@@ -180,9 +200,11 @@ export class Navigation extends Widget {
                         {{'host' | i}} 
                     </a>
                     <div id="phy" class="dropdown-menu" aria-labelledby="phyMore">
-                        <a class="dropdown-item" data="">{{'hardware disk' | i}}</a>
-                        <a class="dropdown-item" data="">{{'network interface' | i}}</a>
-                        <a class="dropdown-item" data="">{{'filesystem' | i}}</a>
+                        <a id="disk" class="dropdown-item" href="javascript:void(0);">{{'hardware disk' | i}}</a>
+                        <a id="network" class="dropdown-item" href="javascript:void(0);">{{'network interface' | i}}</a>
+                        <a id="rootfs" class="dropdown-item" href="javascript:void(0);">{{'filesystem' | i}}</a>
+                        <div class="dropdown-divider"></div>
+                        <a id="ssh" class="dropdown-item" href="javascript:void(0);">{{'ssh console' | i}}</a>
                     </div>
                 </li>
             </ul>
