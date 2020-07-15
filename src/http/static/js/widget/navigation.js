@@ -24,12 +24,15 @@ export class Navigation extends Widget {
         this.refresh();
     }
 
-    chrome() {
-        return navigator.userAgent.match(/Chrome/i);
+    firefox() {
+        return navigator.userAgent.match(/firefox/i);
     }
 
-    nassh() {
-        let host = $(location).attr("hostname");
+    chrome() {
+        return navigator.userAgent.match(/chrome/i);
+    }
+
+    nassh(host) {
         let name = 'pnhechapfaindjhompbnflcldabbghjo';
         let extension = `chrome-extension://${name}/html/nassh.html`;
         let webstore = `https://chrome.google.com/webstore/detail/secure-shell-app/${name}`;
@@ -89,12 +92,15 @@ export class Navigation extends Widget {
                 this.fullscreen();
             });
             if (this.chrome()) {
+                let host = $(location).attr("hostname");
                 this.view.find("#phy #ssh").on('click', (e) => {
-                    this.nassh();
+                    this.nassh(host);
                 });
             } else {
-                this.view.find("#phy #ssh").attr("title", "Support on chrome");
-                this.view.find("#phy #ssh").addClass("disabled");
+                let host = $(location).attr("hostname");
+                this.view.find("#phy #ssh").on('click', (e) => {
+                    window.open("ssh://"+host);
+                });
             }
             new ChangePassword({id: '#changePasswdModal'})
                 .onsubmit((e) => {
