@@ -28,9 +28,16 @@ export class Navigation extends Widget {
         return navigator.userAgent.match(/Chrome/i);
     }
 
-    nassh(host) {
-        let url = 'chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html';
-        return `${url}#root@${host}`;
+    nassh() {
+        let host = $(location).attr("hostname");
+        let name = 'pnhechapfaindjhompbnflcldabbghjo';
+        let extension = `chrome-extension://${name}/html/nassh.html`;
+        let webstore = `https://chrome.google.com/webstore/detail/secure-shell-app/${name}`;
+        $.get(extension, (resp) => {
+            window.open(extension + '#root@' + host);
+        }).fail((e)=> {
+            window.open(webstore);
+        });
     }
 
     refresh() {
@@ -83,7 +90,7 @@ export class Navigation extends Widget {
             });
             if (this.chrome()) {
                 this.view.find("#phy #ssh").on('click', (e) => {
-                    window.open(this.nassh($(location).attr("hostname")));
+                    this.nassh();
                 });
             } else {
                 this.view.find("#phy #ssh").attr("title", "Support on chrome");
@@ -93,8 +100,6 @@ export class Navigation extends Widget {
                 .onsubmit((e) => {
                     new PasswordApi().set(Utils.toJSON(e.form));
                 });
-
-
         });
     }
 
