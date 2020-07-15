@@ -1,8 +1,8 @@
 import {Container} from "./container.js"
 import {Guest} from "./guest.js"
 import {Network} from "./network.js";
-import {Utils} from "../../com/utils.js";
-import {Location} from "../../com/location.js";
+import {Utils} from "../../lib/utils.js";
+import {Location} from "../../lib/location.js";
 import {InstanceCtl} from '../../ctl/instance.js';
 import {NetworksCtl} from "../../ctl/networks.js";
 import {DataStoresCtl} from "../../ctl/datastores.js";
@@ -16,7 +16,7 @@ import {DirCreate} from "../datastore/create.js";
 import {NFSCreate} from "../datastore/nfs/create.js";
 import {iSCSICreate} from "../datastore/iscsi/create.js";
 import {Pool} from "./pool.js";
-import {I18N} from "../../com/i18n.js";
+import {I18N} from "../../lib/i18n.js";
 
 export class Home extends Container {
     // {

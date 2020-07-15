@@ -1,6 +1,6 @@
 import {Ctl} from "./ctl.js"
 import {VolumeCtl} from "./volume.js";
-import {FileUpload} from "../widget/volume/upload.js";
+import {FileUpload} from "../widget/common/upload.js";
 import {UploadApi} from "../api/upload.js";
 
 

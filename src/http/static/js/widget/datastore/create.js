@@ -1,6 +1,6 @@
 import {FormModal} from "../form/modal.js";
 import {Option} from "../option.js";
-import {Utils} from "../../com/utils.js";
+import {Utils} from "../../lib/utils.js";
 
 
 export class DirCreate extends FormModal {

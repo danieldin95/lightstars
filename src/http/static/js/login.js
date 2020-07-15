@@ -1,6 +1,6 @@
 import {Login} from "./widget/login.js";
-import {I18N} from "./com/i18n.js";
-import {Template} from "./com/template.js";
+import {I18N} from "./lib/i18n.js";
+import {Template} from "./lib/template.js";
 
 
 $(function() {

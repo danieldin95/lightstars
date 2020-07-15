@@ -13,10 +13,38 @@ type Upload struct {
 }
 
 func (up Upload) Router(router *mux.Router) {
-	router.HandleFunc("/api/upload/{id}", up.Upload).Methods("POST")
+	router.HandleFunc("/api/upload/{id}", up.POST).Methods("POST")
+	router.HandleFunc("/api/upload/{id}/volume/{name}", up.GET).Methods("GET")
 }
 
-func (up Upload) Upload(w http.ResponseWriter, r *http.Request) {
+func (up Upload) GET(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	pool, err := libvirts.LookupPoolByUUIDOrName(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer pool.Free()
+	name, _ := GetArg(r, "name")
+	vol, err := pool.LookupStorageVolByName(name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	path, err := vol.GetPath()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	_, _ = io.Copy(w, file)
+}
+
+func (up Upload) POST(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	pol, err := libvirts.LookupPoolByUUIDOrName(uuid)
 	if err != nil {
@@ -40,7 +68,7 @@ func (up Upload) Upload(w http.ResponseWriter, r *http.Request) {
 	file, handler, err := r.FormFile("file")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		libstar.Error("Upload.Upload %v", err)
+		libstar.Error("Upload.POST %v", err)
 		return
 	}
 	defer file.Close()
@@ -48,12 +76,12 @@ func (up Upload) Upload(w http.ResponseWriter, r *http.Request) {
 	tempFile, err := os.OpenFile(path+"/"+handler.Filename, modes, 0660)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		libstar.Error("Upload.Upload: %v", err)
+		libstar.Error("Upload.POST: %v", err)
 		return
 	}
 	defer tempFile.Close()
 	_, _ = io.Copy(tempFile, file)
 
-	libstar.Info("Upload.Upload saved to %s", path)
+	libstar.Info("Upload.POST saved to %s", path)
 	ResponseMsg(w, 0, handler.Filename+" success")
 }

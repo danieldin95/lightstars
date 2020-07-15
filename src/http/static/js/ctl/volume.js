@@ -1,8 +1,8 @@
 import {Ctl} from "./ctl.js";
-import {CheckBox} from "../widget/checkbox/checkbox.js";
+import {CheckBox} from "../widget/common/checkbox.js";
 import VolumeTable from "../widget/volume/table.js";
 import {VolumeApi} from "../api/volume.js";
-import {FileUpload} from "../widget/volume/upload.js";
+import {FileUpload} from "../widget/common/upload.js";
 import {UploadApi} from "../api/upload.js";
 
 

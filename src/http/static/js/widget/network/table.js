@@ -1,6 +1,6 @@
 import {NetworkApi} from "../../api/network.js";
 import {Widget} from "../widget.js";
-import {Location} from "../../com/location.js";
+import {Location} from "../../lib/location.js";
 
 
 export class NetworkTable extends Widget {

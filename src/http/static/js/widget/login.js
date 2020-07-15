@@ -1,4 +1,4 @@
-import {I18N} from "../com/i18n.js";
+import {I18N} from "../lib/i18n.js";
 import {Widget} from "./widget.js";
 
 
@@ -30,7 +30,7 @@ export class Login extends Widget {
             <div class="card-header">
                 <div class="row">
                     <div class="col-sm-3">
-                        <img class="" src="/static/images/lightstar-6.png" alt="">
+                        <img class="" src="/static/images/lightstar.png" alt="">
                     </div>
                     <div class="col-sm-7">
                         <span style="color: #ffffff">

@@ -1,11 +1,11 @@
 import {Api} from "../api/api.js";
 import {HyperApi} from "../api/hyper.js";
 import {ZoneApi} from "../api/zone.js";
-import {Location} from "../com/location.js";
+import {Location} from "../lib/location.js";
 import {Home} from "../widget/container/home.js";
 import {ChangePassword} from "./password/change.js";
 import {PasswordApi} from "../api/password.js";
-import {Utils} from "../com/utils.js";
+import {Utils} from "../lib/utils.js";
 import {Widget} from "./widget.js";
 
 

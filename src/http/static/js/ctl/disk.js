@@ -1,7 +1,7 @@
 import {Ctl} from "./ctl.js";
 import {DiskApi} from "../api/disk.js";
 import {DiskTable} from "../widget/disk/table.js";
-import {CheckBox} from "../widget/checkbox/checkbox.js";
+import {CheckBox} from "../widget/common/checkbox.js";
 
 
 class CheckBoxCtl extends CheckBox {

@@ -1,5 +1,5 @@
 import {Api} from "./api.js"
-import {Alert} from "../com/alert.js";
+import {Alert} from "../lib/alert.js";
 
 
 export class IsoApi extends Api {

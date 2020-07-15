@@ -4,9 +4,7 @@ import (
 	"github.com/danieldin95/lightstar/src/schema"
 	"github.com/danieldin95/lightstar/src/storage/libvirts"
 	"github.com/gorilla/mux"
-	"io"
 	"net/http"
-	"os"
 	"sort"
 )
 
@@ -15,7 +13,6 @@ type Volume struct {
 
 func (v Volume) Router(router *mux.Router) {
 	router.HandleFunc("/api/datastore/{id}/volume", v.GET).Methods("GET")
-	router.HandleFunc("/api/datastore/{id}/volume/{name}", v.DOWNLOAD).Methods("GET")
 	router.HandleFunc("/api/datastore/{id}/volume/{name}", v.DELETE).Methods("DELETE")
 }
 
@@ -76,31 +73,4 @@ func (v Volume) DELETE(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ResponseMsg(w, 0, "")
-}
-
-func (v Volume) DOWNLOAD(w http.ResponseWriter, r *http.Request) {
-	uuid, _ := GetArg(r, "id")
-	pool, err := libvirts.LookupPoolByUUIDOrName(uuid)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
-		return
-	}
-	defer pool.Free()
-	name, _ := GetArg(r, "name")
-	vol, err := pool.LookupStorageVolByName(name)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
-		return
-	}
-	path, err := vol.GetPath()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	file, err := os.Open(path)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	_, _ = io.Copy(w, file)
 }

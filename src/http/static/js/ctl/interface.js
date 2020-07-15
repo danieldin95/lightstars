@@ -1,7 +1,7 @@
 import {Ctl} from './ctl.js'
 import {InterfaceApi} from "../api/interface.js";
 import {InterfaceTable} from "../widget/interface/table.js";
-import {CheckBox} from "../widget/checkbox/checkbox.js";
+import {CheckBox} from "../widget/common/checkbox.js";
 
 
 class CheckBoxCtl extends CheckBox {

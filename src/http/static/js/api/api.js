@@ -1,4 +1,4 @@
-import {Alert} from "../com/alert.js";
+import {Alert} from "../lib/alert.js";
 
 export class Api {
     // {

@@ -1,6 +1,6 @@
 import {Widget} from "../widget.js";
 import {InstanceApi} from "../../api/instance.js";
-import {Location} from "../../com/location.js";
+import {Location} from "../../lib/location.js";
 
 
 export class InstanceTable extends Widget {

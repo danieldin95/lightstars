@@ -1,4 +1,4 @@
-import {CheckBox as CheckBoxCom} from "../../com/checkbox.js";
+import {CheckBox as CheckBoxCom} from "../../lib/checkbox.js";
 
 
 export class CheckBox {

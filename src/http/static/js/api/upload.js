@@ -1,6 +1,6 @@
 import {Api} from "./api.js";
-import {Alert} from "../com/alert.js";
-import {ProgressBar} from "../com/progressbar.js"
+import {Alert} from "../lib/alert.js";
+import {ProgressBar} from "../lib/progressbar.js"
 
 export class UploadApi extends Api {
     // {

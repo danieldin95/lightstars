@@ -1,4 +1,4 @@
-import {Location} from "../com/location.js";
+import {Location} from "../lib/location.js";
 
 export class Collapse {
     // {

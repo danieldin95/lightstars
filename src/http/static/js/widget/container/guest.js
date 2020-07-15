@@ -1,5 +1,5 @@
 import {Container} from "./container.js"
-import {Utils} from "../../com/utils.js";
+import {Utils} from "../../lib/utils.js";
 import {GuestCtl} from '../../ctl/guest.js';
 import {Api} from "../../api/api.js";
 import {InstanceApi} from "../../api/instance.js";

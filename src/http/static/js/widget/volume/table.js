@@ -1,8 +1,8 @@
 import {Widget} from "../widget.js";
 import {VolumeApi} from "../../api/volume.js";
-import {CheckBox} from "../checkbox/checkbox.js";
-import {Location} from "../../com/location.js";
-import {Utils} from "../../com/utils.js";
+import {CheckBox} from "../common/checkbox.js";
+import {Location} from "../../lib/location.js";
+import {Utils} from "../../lib/utils.js";
 
 
 export default class VolumeTable extends Widget {
@@ -60,7 +60,7 @@ export default class VolumeTable extends Widget {
                       {{if v.type == "dir"}}
                       <a id="on-this" data-name="{{v.name}}" data-type="{{v.type}}" href="javascript:void(0)">{{v.name}}</a>
                       {{else if v.type == "file"}}
-                      <a href="/api/datastore/${this.pool}/volume/{{v.name}}">{{v.name}}</a>
+                      <a href="/api/upload/${this.pool}/volume/{{v.name}}">{{v.name}}</a>
                       {{else}}
                       <a data-name="{{v.name}}" href="#">{{v.name}}</a>
                       {{/if}}

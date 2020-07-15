@@ -1,7 +1,7 @@
 import {Ctl} from "./ctl.js";
 import {NetworkApi} from "../api/network.js";
 import {NetworkTable} from "../widget/network/table.js";
-import {CheckBox} from "../widget/checkbox/checkbox.js";
+import {CheckBox} from "../widget/common/checkbox.js";
 
 
 class CheckBoxCtl extends CheckBox {

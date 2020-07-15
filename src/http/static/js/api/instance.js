@@ -1,6 +1,6 @@
 import {Api} from "./api.js";
-import {Alert} from "../com/alert.js";
-import {Utils} from "../com/utils.js";
+import {Alert} from "../lib/alert.js";
+import {Utils} from "../lib/utils.js";
 
 
 export class InstanceApi extends Api {

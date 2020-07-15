@@ -63,3 +63,7 @@
 .modal-header h7 {
     font-weight: normal;
 }
+
+.modal-footer {
+    background-color: #f8f9fa;
+}
