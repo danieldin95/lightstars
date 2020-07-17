@@ -35,6 +35,9 @@ export class Utils {
     }
 
     static graphic(instance, type, name) {
+        if (!instance.graphics) {
+            return ""
+        }
         for (let g of instance.graphics) {
             if (g.type === type) {
                 return g[name];
