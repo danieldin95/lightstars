@@ -30,6 +30,8 @@ export class Overview extends Widget {
     render(data) {
         return this.compile(`
             <dl class="dl-horizontal">
+                <dt>{{'uptime' | i}}:</dt>
+                <dd>{{hyper.uptime}}s</dd>
                 <dt>{{'version' | i}}:</dt>
                 <dd>{{version.version}}</dd>
                 <dt>{{'built on' | i}}:</dt>

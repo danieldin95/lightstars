@@ -9,11 +9,11 @@ import (
 
 func NewHyper() (hs schema.Hyper) {
 	hyper, _ := libvirtc.GetHyper()
-
 	hs.Name = hyper.Url
 	hs.Host = hyper.Host
 	hs.CpuNum, hs.CpuVendor, hs.CpuUtils = hyper.GetCPU()
 	hs.MemTotal, hs.MemFree, hs.MemCached = hyper.GetMem()
+	hs.UpTime = hyper.UpTime()
 	return hs
 }
 

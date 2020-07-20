@@ -11,7 +11,6 @@ export class Network extends Container {
     //    parent: "#container",
     //    uuid: "",
     //    default: "lease"
-    //    force: false, // force to apply default.
     // }
     constructor(props) {
         super(props);

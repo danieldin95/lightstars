@@ -26,6 +26,7 @@ type Hyper struct {
 	MemFree    uint64  `json:"memFree"`
 	MemCached  uint64  `json:"memCached"`
 	MemPercent float64 `json:"memPercent"`
+	UpTime     int64   `json:"uptime"`
 }
 
 type Index struct {

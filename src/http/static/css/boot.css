@@ -68,7 +68,6 @@ a:hover, a:focus {
 
 .card {
     margin: 1.25rem -1px 1.25rem 0;
-    /*border-color: #0b3255;*/
     border-color: darkgray;
 }
 
@@ -88,6 +87,7 @@ a:hover, a:focus {
 
 .card-body {
     margin-top: .25rem;
+    max-height: 600px;
 }
 
 .dropdown-menu {
@@ -140,8 +140,8 @@ a:hover, a:focus {
 
 .card-body-tbl {
     overflow: auto;
-    min-height: 380px;
-    max-height: 380px;
+    min-height: 200px;
+    max-height: 500px;
 }
 
 .form-control-sm {

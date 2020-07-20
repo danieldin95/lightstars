@@ -17,15 +17,12 @@ export class Guest extends Container {
     //    parent: "#container",
     //    uuid: "",
     //    default: "disk"
-    //    force: false, // force to apply default.
     // }
     constructor(props) {
         super(props);
-        this.default = props.default || 'disk';
         this.current = "#instance";
         this.name = "";
         this.uuid = props.uuid;
-        console.log('Instance', props);
 
         this.render();
     }
@@ -44,19 +41,6 @@ export class Guest extends Container {
     }
 
     loading() {
-        // collapse
-        $(this.id('#collapseOver')).fadeIn('slow');
-        $(this.id('#collapseOver')).collapse();
-        new Collapse({
-            pages: [
-                {id: this.id('#collapseInt'), name: 'interface'},
-                {id: this.id('#collapseDis'), name: 'disk'},
-                {id: this.id('#collapseGra'), name: 'graphics'},
-            ],
-            default: this.default,
-            update: false,
-        });
-
         let ctl = new GuestCtl({
             id: this.id(),
             header: {id: this.id("#header")},
@@ -115,7 +99,7 @@ export class Guest extends Container {
                 </div>
             </div>
             <!-- Overview -->
-            <div id="collapseOver" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
+            <div id="collapseOver">
             <div class="card-body">
                 <!-- Header buttons -->
                 <div class="card-body-hdl">
@@ -193,13 +177,11 @@ export class Guest extends Container {
         <!-- Virtual Disk -->
         <div id="disk" class="card device">
             <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm"
-                        type="button" data-toggle="collapse"
-                        data-target="#collapseDis" aria-expanded="true" aria-controls="collapseDis">
+                <button class="btn btn-link btn-block text-left btn-sm" type="button">
                     {{'virtual disk' | i}}
                 </button>
             </div>
-            <div id="collapseDis" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
+            <div id="collapseDis">
             <div class="card-body">
                 <div class="card-body-hdl">
                     <div id="create-btns" class="btn-group btn-group-sm" role="group">
@@ -247,13 +229,11 @@ export class Guest extends Container {
         <!-- Interface -->
         <div id="interface" class="card device">
             <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm"
-                        type="button" data-toggle="collapse"
-                        data-target="#collapseInt" aria-expanded="true" aria-controls="collapseInt">
+                <button class="btn btn-link btn-block text-left btn-sm" type="button">
                     {{'network interface' | i}}
                 </button>
             </div>
-            <div id="collapseInt" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
+            <div id="collapseInt">
             <div class="card-body">
                 <div class="card-body-hdl">
                     <button id="create" type="button" class="btn btn-outline-success btn-sm"
@@ -286,6 +266,7 @@ export class Guest extends Container {
             </div>
         </div>
         <!-- Graphics -->
+        <!--
         <div id="graphics" class="card device">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm"
@@ -297,13 +278,11 @@ export class Guest extends Container {
             <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
                 <div class="card-body">
                     <div class="card-body-hdl">
-                        <!--
                         <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                 data-toggle="modal" data-target="#createGraphicModal">
                             {{'attach graphic' | i}}
                         </button>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                        -->
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
                     <div class="card-body-tbl">
@@ -318,13 +297,13 @@ export class Guest extends Container {
                             </tr>
                             </thead>
                             <tbody id="display-table">
-                            <!-- Loading -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+        -->
         </div>
         <!-- Modals -->
         <div id="modals">

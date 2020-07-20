@@ -14,20 +14,20 @@ type HyperListener struct {
 }
 
 type HyperVisor struct {
-	Url      string
-	Schema   string
-	Address  string
-	Path     string
-	Host     string
-	Conn     *libvirt.Connect
-	Listener []HyperListener
-
-	Lock     sync.RWMutex
-	Ticker   *time.Ticker
-	CpuSts   *libvirt.NodeCPUStats
-	Done     chan bool
-	IdleUtil uint64
-	DomUtil  map[string]uint64
+	Url        string
+	Schema     string
+	Address    string
+	Path       string
+	Host       string
+	Conn       *libvirt.Connect
+	Listener   []HyperListener
+	ConnedTime int64
+	Lock       sync.RWMutex
+	Ticker     *time.Ticker
+	CpuSts     *libvirt.NodeCPUStats
+	Done       chan bool
+	IdleUtil   uint64
+	DomUtil    map[string]uint64
 }
 
 func parseQemuTCP(name string) (address, path string) {
@@ -68,6 +68,7 @@ func (h *HyperVisor) open() error {
 		if err != nil {
 			return err
 		}
+		hyper.ConnedTime = time.Now().Unix()
 		hyper.Conn = conn
 		if name, err := conn.GetHostname(); err == nil {
 			hyper.Host = name
@@ -82,6 +83,10 @@ func (h *HyperVisor) open() error {
 		return libstar.NewErr("Not connect.")
 	}
 	return nil
+}
+
+func (h *HyperVisor) UpTime() int64 {
+	return time.Now().Unix() - h.ConnedTime
 }
 
 func (h *HyperVisor) Open() error {

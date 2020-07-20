@@ -1,3 +1,4 @@
+import {Location} from "../lib/location.js";
 
 export class Widget {
     constructor(props) {
@@ -16,5 +17,10 @@ export class Widget {
             this._alias = "LightStar"
         }
         $(document).attr("title", `${name} - ${this._alias}`);
+    }
+
+    url(page) {
+        let query = Location.query();
+        return page + "?" + query
     }
 }

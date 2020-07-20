@@ -26,6 +26,9 @@ export class Location {
         let query = this.query();
 
         this.href(uri + '#' + name + "?" + query);
+        if (!this.on) {
+            this.on = [];
+        }
         for (let on of this.on) {
             if (on && on.func) {
                 on.func({data: on.data, name});

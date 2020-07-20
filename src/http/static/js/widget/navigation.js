@@ -2,7 +2,6 @@ import {Api} from "../api/api.js";
 import {HyperApi} from "../api/hyper.js";
 import {ZoneApi} from "../api/zone.js";
 import {Location} from "../lib/location.js";
-import {Home} from "../widget/container/home.js";
 import {ChangePassword} from "./password/change.js";
 import {PasswordApi} from "../api/password.js";
 import {Utils} from "../lib/utils.js";
@@ -20,7 +19,6 @@ export class Navigation extends Widget {
         this.parent = props.parent;
         this.home = props.home;
         this.active = "";
-        this.navIds = ["#system", "#instances", "#datastore", "#network"];
         this.refresh();
     }
 
@@ -43,15 +41,24 @@ export class Navigation extends Widget {
         });
     }
 
+    page(url) {
+        if (url.indexOf('?') >= 0) {
+            return url.split("?", 2)[0];
+        }
+        return url
+    }
+
     refresh() {
-        this.active = Location.get("/instances");
+        let page = Location.get("/system");
+        this.active = "#" + page;
         console.log("Navigation.refresh", this.active);
 
         let forceActive = (cur) => {
             this.active = cur;
+            console.log("foreActive", cur);
             this.view.find('li').each((i, e) => {
-                let href = $(e).find('a').attr("data-target");
-                if (cur && cur === href) {
+                let href = $(e).find('a').attr("href");
+                if (cur && cur === this.page(href)) {
                     $(e).addClass("active");
                 } else {
                     $(e).removeClass("active");
@@ -59,30 +66,8 @@ export class Navigation extends Widget {
             });
         };
 
-        Location.listen({
-            data: this,
-            func: (e) => {
-                forceActive(e.name);
-            },
-        });
-
         new HyperApi().get(this, (e) => {
-            let view = $(this.render(e.resp));
-            let name = this.props.name;
-            let container = this.props.container;
-
-            this.view = view;
-            for (let nav of this.navIds) {
-                this.view.find(nav).on('click', function (e) {
-                    forceActive($(this).parent('li a').attr("id"));
-                    new Home({
-                        parent: container,
-                        name: name,
-                        force: true,
-                        default: $(this).attr("data-target"),
-                    });
-                })
-            }
+            this.view = $(this.render(e.resp));
             forceActive(this.active);
             this.node();
             $(this.parent).html(this.view);
@@ -120,8 +105,6 @@ export class Navigation extends Widget {
 
     node() {
         let view = this.view;
-        let name = this.props.name;
-        let container = this.props.container;
         let host = Location.query('node');
 
         this.nodeName(host);
@@ -144,18 +127,11 @@ export class Navigation extends Widget {
             view.find("#node a").on('click', this, function (e) {
                 let host = $(this).attr("data");
 
-                //e.data.nodeName(host, view);
-                Location.set("/instances");
+                // reset host.
                 Location.query('node', host);
                 Api.host(host);
-
-                e.data.refresh();
-                new Home({
-                    parent: container,
-                    name: name,
-                    force: true,
-                    default: e.data.active,
-                });
+                // fore to instances
+                Location.set("/instances");
             });
         });
     }
@@ -193,16 +169,16 @@ export class Navigation extends Widget {
         <div class="collapse navbar-collapse" id="navbarMore">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a id="system" class="nav-link" data-target="/system">{{'home' | i}}</a>
+                    <a id="system" class="nav-link" href="${this.url('#/system')}">{{'home' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="instances" class="nav-link" data-target="/instances">{{'guest instances' | i}}</a>
+                    <a id="instances" class="nav-link" href="${this.url('#/instances')}">{{'guest instances' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="datastore" class="nav-link" data-target="/datastore">{{'datastore' | i}}</a>
+                    <a id="datastore" class="nav-link" href="${this.url('#/datastores')}">{{'datastore' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="network" class="nav-link" data-target="/network">{{'network' | i}}</a>
+                    <a id="network" class="nav-link" href="${this.url('#/networks')}">{{'network' | i}}</a>
                 </li>
                 <li class="nav-item dropdown">
                     <!-- Physical -->

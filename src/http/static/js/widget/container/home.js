@@ -1,33 +1,15 @@
 import {Container} from "./container.js"
-import {Guest} from "./guest.js"
-import {Network} from "./network.js";
-import {Utils} from "../../lib/utils.js";
 import {Location} from "../../lib/location.js";
-import {InstanceCtl} from '../../ctl/instance.js';
-import {NetworksCtl} from "../../ctl/networks.js";
-import {DataStoresCtl} from "../../ctl/datastores.js";
-import {Collapse} from "../collapse.js";
 import {Overview} from "../index/overview.js";
-import {InstanceCreate} from '../instance/create.js';
-import {NATCreate} from "../network/create.js";
-import {BridgeCreate} from "../network/bridge/create.js";
-import {IsolatedCreate} from "../network/isolated/create.js";
-import {DirCreate} from "../datastore/create.js";
-import {NFSCreate} from "../datastore/nfs/create.js";
-import {iSCSICreate} from "../datastore/iscsi/create.js";
-import {Pool} from "./pool.js";
 import {I18N} from "../../lib/i18n.js";
 
 export class Home extends Container {
     // {
     //    parent: "#container",
-    //    default: "/instances"
-    //    force: false, // force to apply default.
     // }
     constructor(props) {
         super(props);
         this.current = '#index';
-        this.default = props.default || '/instances';
 
         this.render();
         this.loading();
@@ -35,16 +17,6 @@ export class Home extends Container {
 
     loading() {
         this.title(I18N.i('home'));
-        new Collapse({
-            pages: [
-                {id: this.id('#collapseSys'), name: '/system'},
-                {id: this.id('#collapseIns'), name: '/instances'},
-                {id: this.id('#collapseStore'), name: '/datastore'},
-                {id: this.id('#collapseNet'), name: '/network'}
-            ],
-            force: this.force,
-            default: this.default,
-        });
         // loading overview.
         let view = new Overview({
             id: this.id('#overview'),
@@ -56,289 +28,29 @@ export class Home extends Container {
         // register click on overview.
         $(this.id('#system-ref')).on('click', () => {
             view.refresh();
-            $(this.id('#collapseSys')).collapse('show');
         });
-
-        let iCtl = new InstanceCtl({
-            id: this.id('#instances'),
-            onthis: (e) => {
-                console.log("Guest.loading", e);
-                new Guest({
-                    parent: this.parent,
-                    uuid: e.uuid,
-                });
-            },
-        });
-        new InstanceCreate({id: '#createGuestModal'})
-            .onsubmit((e) => {
-                iCtl.create(Utils.toJSON(e.form));
-            });
-        // loading network.
-        let nCtl = new NetworksCtl({
-            id: this.id('#networks'),
-            onthis: (e) => {
-                console.log("network.loading", e);
-                new Network({
-                    parent: this.parent,
-                    uuid: e.uuid,
-                });
-            },
-        });
-        new NATCreate({id: '#createNatModal'})
-            .onsubmit((e) => {
-                nCtl.create(Utils.toJSON(e.form));
-            });
-        new BridgeCreate({id: '#createBridgeModal'})
-            .onsubmit((e) => {
-                nCtl.create(Utils.toJSON(e.form));
-            });
-        new IsolatedCreate({id: '#createIsolatedModal'})
-            .onsubmit((e) => {
-                nCtl.create(Utils.toJSON(e.form));
-            });
-        // loading data storage.
-        let sCtl = new DataStoresCtl({
-            id: this.id('#datastores'),
-            onthis: (e) => {
-                new Pool({
-                    parent: this.parent,
-                    uuid: e.uuid,
-                });
-            },
-            upload: '#uploadFileModal',
-        });
-        new DirCreate({id: '#createDirModal'})
-            .onsubmit((e) => {
-                sCtl.create(Utils.toJSON(e.form));
-            });
-        new NFSCreate({id: '#createNfsModal'})
-            .onsubmit((e) => {
-                sCtl.create(Utils.toJSON(e.form));
-            });
-        new iSCSICreate({id: '#createIscsiModal'})
-            .onsubmit((e) => {
-                sCtl.create(Utils.toJSON(e.form));
-            });
     }
 
     template(v) {
-        let query = Location.query();
         return this.compile(`
         <div id="index">
         <!-- System -->
         <div id="system" class="card card-main system">
             <div class="card-header">
                 <div class="">
-                    <a id="system-col" href="javascript:void(0)" data-toggle="collapse"
-                       data-target="#collapseSys" aria-expanded="true" aria-controls="collapseSys">${this.props.name}</a>
-                    <a class="btn-spot float-right" id="system-ref" href="#/system?${query}"></a>
+                    <a id="system-col" href="javascript:void(0)">${this.props.name}</a>
+                    <a class="btn-spot float-right" id="system-ref" href="${this.url('#/system')}"></a>
                 </div>
             </div>
-            <div id="collapseSys" class="collapse" aria-labelledby="headingOne" data-parent="#index">
+            <div id="collapseSys">
             <div id="overview" class="card-body">
             <!-- Loading -->
             </div>
             </div>
         </div>
         
-        <!-- Instances -->
-        <div id="instances" class="card instances">
-            <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm"
-                        type="button" data-toggle="collapse"
-                        data-target="#collapseIns" aria-expanded="true" aria-controls="collapseIns">
-                    {{'guest instances' | i}}
-                </button>
-            </div>
-            <div id="collapseIns" class="collapse" aria-labelledby="headingOne" data-parent="#index">
-            <div class="card-body">
-                <!-- Instances buttons -->
-                <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                            data-toggle="modal" data-target="#createGuestModal">
-                        {{'create new instance' | i}}
-                    </button>
-                    <button id="console" type="button" class="btn btn-outline-dark btn-sm">{{'console' | i}}</button>
-                    <button id="start" type="button" class="btn btn-outline-dark btn-sm">{{'power on' | i}}</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
-                    <button id="more" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{'actions' | i}}
-                    </button>
-                    <div name="btn-more" class="dropdown-menu">
-                        <a id="more-start" class="dropdown-item" href="javascript:void(0)">{{'power on' | i}}</a>
-                        <a id="more-shutdown" class="dropdown-item" href="javascript:void(0)">{{'power off' | i}}</a>
-                        <div class="dropdown-divider"></div>
-                        <a id="more-suspend" class="dropdown-item" href="javascript:void(0)">{{'suspend' | i}}</a>
-                        <a id="more-resume" class="dropdown-item" href="javascript:void(0)">{{'resume' | i}}</a>
-                        <div class="dropdown-divider"></div>
-                        <a id="more-reset" class="dropdown-item" href="javascript:void(0)">{{'reset' | i}}</a>                        
-                        <a id="more-destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
-                    </div>
-                </div>
-    
-                <!-- Instances display -->
-                <div class="card-body-tbl">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>
-                                <input id="on-all" type="checkbox" aria-label="select all instances">
-                            </th>
-                            <th>{{'id' | i}}</th>
-                            <th>{{'uuid' | i}}</th>
-                            <th>{{'name' | i}}</th>
-                            <th>{{'processor' | i}}</th>
-                            <th>{{'memory' | i}}</th>
-                            <th>{{'state' | i}}</th>
-                        </tr>
-                        </thead>
-                        <tbody id="display-body">
-                        <!-- Loading... -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            </div>
-        </div>
-        <!-- DataStore -->
-        <div id="datastores" class="card card-main">
-            <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm"
-                        type="button" data-toggle="collapse"
-                        data-target="#collapseStore" aria-expanded="true" aria-controls="collapseStore">
-                    {{'local datastores' | i}}
-                </button>
-            </div>
-            <div id="collapseStore" class="collapse" aria-labelledby="headingOne" data-parent="#index">
-                <div class="card-body">
-                    <!-- DataStore buttons -->
-                    <div class="card-body-hdl">
-                        <div id="create-btns" class="btn-group btn-group-sm" role="group">
-                            <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                                    data-toggle="modal" data-target="#createDirModal">
-                                {{'new a datastore' | i}}
-                            </button>
-                            <button id="creates" type="button"
-                                    class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                                    data-toggle="dropdown" aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#createNfsModal">
-                                    {{'new nfs datastore' | i}}
-                                </a>
-                                <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#createIscsiModal">
-                                    {{'new iscsi datastore' | i}}
-                                </a>
-                            </div>
-                        </div>
-                        <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#uploadFileModal">
-                            {{'upload' | i}}
-                        </button>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">{{'delete' | i}}</button>
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
-                    </div>
-    
-                    <!-- DataStore display -->
-                    <div class="card-body-tbl">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th><input id="on-all" type="checkbox"></th>
-                                <th>{{'id' | i}}</th>
-                                <th>{{'uuid' | i}}</th>
-                                <th>{{'name' | i}}</th>
-                                <th>{{'source' | i}}</th>
-                                <th>{{'capacity' | i}}</th>
-                                <th>{{'allocation' | i}}</th>
-                                <th>{{'state' | i}}</th>
-                            </tr>
-                            </thead>
-                            <tbody id="display-table">
-                            <!-- Loading... -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <!-- Network -->
-        <div id="networks" class="card card-main">
-            <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm"
-                        type="button" data-toggle="collapse"
-                        data-target="#collapseNet" aria-expanded="true" aria-controls="collapseNet">
-                    {{'virtual networks' | i}}
-                </button>
-            </div>
-            <div id="collapseNet" class="collapse" aria-labelledby="headingOne" data-parent="#index">
-                <div class="card-body">
-                    <!-- Network buttons -->
-                    <div class="card-body-hdl">
-                        <div id="create-btns" class="btn-group btn-group-sm" role="group">
-                            <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                                    data-toggle="modal" data-target="#createNatModal">
-                                {{'create network' | i}}
-                            </button>
-                            <button id="creates" type="button"
-                                    class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                                    data-toggle="dropdown" aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#createIsolatedModal">
-                                    {{'create isolated network' | i}}
-                                </a>
-                                <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#createBridgeModal">
-                                    {{'create existing bridge' | i}}
-                                </a>
-                            </div>
-                        </div>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
-                    </div>
-    
-                    <!-- Network display -->
-                    <div class="card-body-tbl">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th><input id="on-all" type="checkbox"></th>
-                                <th>{{'id' | i}}</th>
-                                <th>{{'uuid' | i}}</th>
-                                <th>{{'name' | i}}</th>
-                                <th>{{'bridge' | i}}</th>
-                                <th>{{'state' | i}}</th>
-                            </tr>
-                            </thead>
-                            <tbody id="display-table">
-                            <!-- Loading -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
         <!-- Modal -->
         <div id="modals">
-            <!-- Create instance modal -->
-            <div id="createGuestModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <!-- Create datastore modal -->
-            <div id="createDirModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <!-- Upload file modal -->
-            <div id="uploadFileModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createNfsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createIscsiModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <!-- Create network modal -->
-            <div id="createNatModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createBridgeModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createIsolatedModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>        
         </div>
         </div>`)
     }

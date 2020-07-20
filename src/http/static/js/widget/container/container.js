@@ -1,17 +1,15 @@
-import {Widget} from "../widget.js";
+import {Location} from "../../lib/location.js";
 
 
 export class Container {
     // {
     //    parent: "#container",
     //    default: "instances" // set default panel
-    //    force: false, // force to apply default.
     // }
     constructor(props) {
         this.props = props;
         this.parent  = props.parent ? props.parent : '';
         this.current = props.current ? props.current : '';
-        this.force = props.force;
         console.log('Container', props, [this.parent, this.current].join(" "));
         this._alias = Container._alias;
     }
@@ -44,6 +42,11 @@ export class Container {
             this._alias = "LightStar"
         }
         $(document).attr("title", `${name} - ${this._alias}`);
+    }
+
+    url(page) {
+        let query = Location.query();
+        return page + "?" + query
     }
 
     static alias(value) {

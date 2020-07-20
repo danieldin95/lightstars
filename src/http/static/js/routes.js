@@ -1,8 +1,11 @@
+import {Location} from "./lib/location.js";
 import {Home} from "./widget/container/home.js";
 import {Guest} from "./widget/container/guest.js";
 import {Network} from "./widget/container/network.js";
-import {Location} from "./lib/location.js";
 import {Pool} from "./widget/container/pool.js";
+import {Instances} from "./widget/container/instances.js"
+import {Networks} from "./widget/container/networks.js";
+import {Datastores} from "./widget/container/datastores.js";
 
 export class Routes {
     // {
@@ -44,11 +47,37 @@ export class Routes {
                 },
             },
             {
+                prefix: "/instances",
+                function: (p) => {
+                    new Instances({
+                        parent: props.container,
+                        name: props.hyper.attr('name'),
+                    });
+                },
+            },
+            {
+                prefix: "/datastores",
+                function: (p) => {
+                    new Datastores({
+                        parent: props.container,
+                        name: props.hyper.attr('name'),
+                    });
+                },
+            },
+            {
+                prefix: "/networks",
+                function: (p) => {
+                    new Networks({
+                        parent: props.container,
+                        name: props.hyper.attr('name'),
+                    });
+                },
+            },
+            {
                 prefix: "",
                 function: (p) => {
                     new Home({
                         parent: props.container,
-                        default: "/instances",
                         name: props.hyper.attr('name'),
                     });
                 },
@@ -59,6 +88,7 @@ export class Routes {
             if (this.props.onchange) {
                 this.props.onchange(e);
             }
+            console.log("onhashchange", e);
             this.render();
         };
     }
