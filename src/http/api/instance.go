@@ -454,27 +454,12 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 
 	switch conf.Action {
 	case "start":
-		xmlData, err := dom.GetXMLDesc(true)
-		if err != nil {
+		if err := dom.Create(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if err := dom.Undefine(); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		if domNew, err := hyper.DomainDefineXML(xmlData); err == nil {
-			if err := dom.Create(); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			_ = domNew.Free()
-			if err := dom.SetAutostart(true); err != nil {
-				libstar.Warn("Instance.PUT: start %s", err)
-			}
-		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+		if err := dom.SetAutostart(true); err != nil {
+			libstar.Warn("Instance.PUT: start %s", err)
 		}
 	case "shutdown":
 		if err := dom.ShutdownFlags(libvirtc.DomainShutdownAcpi); err != nil {

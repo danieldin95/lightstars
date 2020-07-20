@@ -5,6 +5,7 @@ type Graphics struct {
 	Password string `json:"password"`
 	Listen   string `json:"listen"`
 	Port     string `json:"port"`
+	AutoPort string `json:"autoport"`
 }
 
 type ListGraphics struct {

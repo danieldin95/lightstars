@@ -229,6 +229,20 @@ func (disk Disk) PUT(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
+func (disk Disk) FindByDev(devices *libvirtc.DevicesXML, dev string) *libvirtc.DiskXML {
+	if devices == nil || devices.Disks == nil {
+		return nil
+	}
+	for _, disk := range devices.Disks {
+		if disk.Target.Dev != dev {
+			continue
+		}
+		// found device
+		return &disk
+	}
+	return nil
+}
+
 func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
@@ -244,27 +258,22 @@ func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Cannot get domain's descXML", http.StatusInternalServerError)
 		return
 	}
-	if xml.Devices.Disks != nil {
-		for _, disk := range xml.Devices.Disks {
-			if disk.Target.Dev != dev {
-				continue
-			}
-			// found device
-			flags := libvirtc.DomainDeviceModifyPersistent
-			if active, _ := dom.IsActive(); !active {
-				flags = libvirtc.DomainDeviceModifyConfig
-			}
-			if err := dom.DetachDeviceFlags(disk.Encode(), flags); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			file := disk.Source.File
-			if IsVolume(file) {
-				dir := path.Dir(file)
-				volume := path.Base(file)
-				pool := path.Base(dir)
-				_ = libvirts.RemoveVolume(libvirts.ToDomainPool(pool), volume)
-			}
+	if d := disk.FindByDev(&xml.Devices, dev); d != nil {
+		// found device
+		flags := libvirtc.DomainDeviceModifyPersistent
+		if active, _ := dom.IsActive(); !active {
+			flags = libvirtc.DomainDeviceModifyConfig
+		}
+		if err := dom.DetachDeviceFlags(d.Encode(), flags); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		file := d.Source.File
+		if IsVolume(file) {
+			dir := path.Dir(file)
+			volume := path.Base(file)
+			pool := path.Base(dir)
+			_ = libvirts.RemoveVolume(libvirts.ToDomainPool(pool), volume)
 		}
 	}
 	ResponseMsg(w, 0, "")

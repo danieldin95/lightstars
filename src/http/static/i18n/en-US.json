@@ -128,5 +128,6 @@
 	"attach cdrom": "Attach CDROM",
 	"add cdrom": "Add CDROM",
 	"select ISO file": "Select ISO file",
-	"ssh console": "SSH console"
+	"ssh console": "SSH console",
+	"add graphics": "Add graphics"
 }

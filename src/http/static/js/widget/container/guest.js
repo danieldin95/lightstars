@@ -10,6 +10,7 @@ import {IsoCreate} from "../disk/iso/create.js";
 import {InterfaceCreate} from '../interface/create.js';
 import {InstanceSet} from "../instance/setting.js";
 import {InstanceRemove} from "../instance/remove.js";
+import {GraphicsCreate} from "../graphics/create.js";
 
 export class Guest extends Container {
     // {
@@ -84,7 +85,10 @@ export class Guest extends Container {
             .onsubmit((e) => {
                 ctl.interface.create(Utils.toJSON(e.form));
             });
-
+        new GraphicsCreate({id: this.id('#createGraphicModal')})
+            .onsubmit((e) => {
+                ctl.graphics.create(Utils.toJSON(e.form));
+            });
         // register console draggable.
         $((e) => {
             $(this.id('#consoleModal')).draggable();
@@ -293,11 +297,13 @@ export class Guest extends Container {
             <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
                 <div class="card-body">
                     <div class="card-body-hdl">
+                        <!--
                         <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                 data-toggle="modal" data-target="#createGraphicModal">
                             {{'attach graphic' | i}}
                         </button>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                        -->
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
                     <div class="card-body-tbl">
@@ -340,6 +346,8 @@ export class Guest extends Container {
             <div id="createIsoModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create interface modal -->
             <div id="createInterfaceModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Create graphics modal -->
+            <div id="createGraphicModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         </div>`, v);
     }

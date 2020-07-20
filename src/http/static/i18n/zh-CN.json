@@ -128,5 +128,6 @@
 	"attach cdrom": "挂载光盘",
 	"add cdrom": "添加光盘",
 	"select ISO file": "选择ISO文件",
-	"ssh console": "SSH控制台"
+	"ssh console": "SSH控制台",
+	"add graphics": "新增图形设备"
 }

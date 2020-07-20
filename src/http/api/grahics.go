@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/danieldin95/lightstar/src/compute"
 	"github.com/danieldin95/lightstar/src/compute/libvirtc"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"github.com/danieldin95/lightstar/src/schema"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -48,7 +49,6 @@ func (gra Graphics) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
@@ -56,18 +56,24 @@ func (gra Graphics) POST(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer dom.Free()
-
+	if conf.Password == "" {
+		conf.Password = libstar.GenToken(32)
+	}
+	if conf.Listen == "" {
+		conf.Listen = "0.0.0.0"
+	}
+	if conf.AutoPort == "yes" {
+		conf.Port = "-1"
+	}
 	xmlObj := libvirtc.GraphicsXML{
-		Type:   conf.Type,
-		Listen: conf.Listen,
-		//Port:     conf.Port,
-		AutoPort: "yes",
+		Type:     conf.Type,
+		Listen:   conf.Listen,
+		Port:     conf.Port,
+		AutoPort: conf.AutoPort,
 		Password: conf.Password,
 	}
-	flags := libvirtc.DomainDeviceModifyPersistent
-	if active, _ := dom.IsActive(); !active {
-		flags = libvirtc.DomainDeviceModifyConfig
-	}
+
+	flags := libvirtc.DomainDeviceModifyConfig
 	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
