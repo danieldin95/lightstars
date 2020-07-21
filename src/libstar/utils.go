@@ -30,7 +30,6 @@ func GenToken(n int) string {
 	for i := range buffer {
 		buffer[i] = letters[rand.Int63()%int64(size)]
 	}
-
 	return string(buffer)
 }
 
@@ -38,15 +37,12 @@ func GenEthAddr(n int) []byte {
 	if n == 0 {
 		n = 6
 	}
-
 	data := make([]byte, n)
 	rand.Seed(time.Now().UnixNano())
 	for i := range data {
 		data[i] = byte(rand.Uint32() & 0xFF)
 	}
-
 	data[0] &= 0xfe
-
 	return data
 }
 
@@ -62,13 +58,13 @@ func Netmask2Len(s string) int {
 }
 
 func PrettySecs(t uint64) string {
-	mins := t / 60
-	if mins < 60 {
-		return fmt.Sprintf("%dm%ds", mins, t%60)
+	min := t / 60
+	if min < 60 {
+		return fmt.Sprintf("%dm%ds", min, t%60)
 	}
-	hours := mins / 60
+	hours := min / 60
 	if hours < 24 {
-		return fmt.Sprintf("%dh%dm", hours, mins%60)
+		return fmt.Sprintf("%dh%dm", hours, min%60)
 	}
 	days := hours / 24
 	return fmt.Sprintf("%dd%dh", days, hours%24)
@@ -79,7 +75,6 @@ func PrettyBytes(b uint64) string {
 		v := float64(_v%_m) / float64(_m)
 		return _v / _m, int(v * 100) //move two decimal to integer
 	}
-
 	if b < 1024 {
 		return fmt.Sprintf("%dB", b)
 	}
@@ -100,7 +95,6 @@ func PrettyKBytes(k uint64) string {
 		v := float64(_v%_m) / float64(_m)
 		return _v / _m, int(v * 100) //move two decimal to integer
 	}
-
 	if k < 1024 {
 		return fmt.Sprintf("%dK", k)
 	}
@@ -159,17 +153,13 @@ func (j jsonUtils) Marshal(v interface{}, pretty bool) (string, error) {
 		Error("Marshal error: %s", err)
 		return "", err
 	}
-
 	if !pretty {
 		return string(str), nil
 	}
-
 	var out bytes.Buffer
-
 	if err := json.Indent(&out, str, "", "  "); err != nil {
 		return string(str), nil
 	}
-
 	return out.String(), nil
 }
 
@@ -180,18 +170,15 @@ func (j jsonUtils) MarshalSave(v interface{}, file string, pretty bool) error {
 		Error("MarshalSave: %s", err)
 		return err
 	}
-
 	str, err := j.Marshal(v, true)
 	if err != nil {
 		Error("MarshalSave error: %s", err)
 		return err
 	}
-
 	if _, err := f.Write([]byte(str)); err != nil {
 		Error("MarshalSave: %s", err)
 		return err
 	}
-
 	return nil
 }
 
@@ -199,16 +186,13 @@ func (j jsonUtils) UnmarshalLoad(v interface{}, file string) error {
 	if _, err := os.Stat(file); os.IsNotExist(err) {
 		return NewErr("UnmarshalLoad: file:<%s> does not exist", file)
 	}
-
 	contents, err := ioutil.ReadFile(file)
 	if err != nil {
 		return NewErr("UnmarshalLoad: file:<%s> %s", file, err)
 	}
-
 	if err := json.Unmarshal([]byte(contents), v); err != nil {
 		return NewErr("UnmarshalLoad: %s", err)
 	}
-
 	return nil
 }
 
@@ -242,18 +226,15 @@ func (x xmlUtils) MarshalSave(v interface{}, file string, pretty bool) error {
 		Error("MarshalSave: %s", err)
 		return err
 	}
-
 	str, err := x.Marshal(v, true)
 	if err != nil {
 		Error("MarshalSave error: %s", err)
 		return err
 	}
-
 	if _, err := f.Write([]byte(str)); err != nil {
 		Error("MarshalSave: %s", err)
 		return err
 	}
-
 	return nil
 }
 
@@ -261,16 +242,13 @@ func (x xmlUtils) UnmarshalLoad(v interface{}, file string) error {
 	if _, err := os.Stat(file); os.IsNotExist(err) {
 		return NewErr("UnmarshalLoad: file:<%s> does not exist", file)
 	}
-
 	contents, err := ioutil.ReadFile(file)
 	if err != nil {
 		return NewErr("UnmarshalLoad: file:<%s> %s", file, err)
 	}
-
 	if err := xml.Unmarshal([]byte(contents), v); err != nil {
 		return NewErr("UnmarshalLoad: %s", err)
 	}
-
 	return nil
 }
 
@@ -286,7 +264,6 @@ func (d Dir) ListFiles(dirPth string, suffix string) (files []string, err error)
 	if err != nil {
 		return nil, err
 	}
-
 	PthSep := string(os.PathSeparator)
 	suffix = strings.ToUpper(suffix)
 	for _, fi := range dir {
@@ -297,7 +274,6 @@ func (d Dir) ListFiles(dirPth string, suffix string) (files []string, err error)
 			files = append(files, dirPth+PthSep+fi.Name())
 		}
 	}
-
 	return files, nil
 }
 
@@ -308,7 +284,6 @@ func (d Dir) ListDirs(dirPth string) (dirs []string, err error) {
 	if err != nil {
 		return nil, err
 	}
-
 	PthSep := string(os.PathSeparator)
 	for _, fi := range dir {
 		if !fi.IsDir() {
@@ -316,7 +291,6 @@ func (d Dir) ListDirs(dirPth string) (dirs []string, err error) {
 		}
 		dirs = append(dirs, dirPth+PthSep+fi.Name())
 	}
-
 	return dirs, nil
 }
 
