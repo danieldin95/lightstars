@@ -81,6 +81,24 @@ export class Template {
         m.i = function (key, param1) {
             return I18N.i18n(key, param1);
         };
+        m.prettyTime = function(second) {
+            let time = [];
+            let min = (second / 60).toFixed();
+            time.push((second % 60) + "s");
+            if (min < 60) {
+                time.push(min + "m");
+                return time.reverse().join("");
+            }
+            let hour = (min / 60).toFixed();
+            time.push((min % 60) + "m");
+            if (hour < 24) {
+                time.push(hour + "h");
+                return time.reverse().join("");
+            }
+            time.push((hour % 24) + "h");
+            time.push((hour / 24).toFixed() + "d");
+            return time.reverse().join("");
+        };
         return m;
     }
 }

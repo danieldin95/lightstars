@@ -12,10 +12,6 @@
     border-color: darkgray;
 }
 
-.device .card-header {
-    /*border-bottom: 1px solid #0b3255;;*/
-}
-
 .device .card-header .btn {
     color: black;
 }

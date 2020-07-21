@@ -98,7 +98,7 @@ ubuntu-devel:
 windows-lightpix: env
 	GOOS=windows GOARCH=amd64 go build -mod=vendor -o $(BD)/lightpix.windows.x86_64.exe ./src/cli/lightpix
 
-### packaging light pix for windows
+## packaging light pix for windows
 windows-zip: env ## build windows packages
 	@pushd $(BD)
 	@rm -rf $(WD) && mkdir -p $(WD)
@@ -109,6 +109,10 @@ windows-zip: env ## build windows packages
 	zip -r $(WD).zip $(WD) > /dev/null
 	@rm -rf $(WD)
 	@popd
+
+## upgrade
+upgrade:
+	ansible-playbook ./misc/playbook/upgrade.yaml -e "version=$(VER)" 
 
 ## unit test
 .PHONY: test

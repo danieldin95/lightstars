@@ -23,10 +23,10 @@ export class Home extends Container {
         });
         view.refresh((e) => {
             this.props.name = e.resp.hyper.name;
-            $(this.id('#system-col')).text(this.props.name);
+            $(this.id('#refresh')).text(this.props.name);
         });
         // register click on overview.
-        $(this.id('#system-ref')).on('click', () => {
+        $(this.id('#refresh')).on('click', () => {
             view.refresh();
         });
     }
@@ -37,10 +37,7 @@ export class Home extends Container {
         <!-- System -->
         <div id="system" class="card card-main system">
             <div class="card-header">
-                <div class="">
-                    <a id="system-col" href="javascript:void(0)">${this.props.name}</a>
-                    <a class="btn-spot float-right" id="system-ref" href="${this.url('#/system')}"></a>
-                </div>
+                <button id="refresh" class="btn btn-link btn-block text-left btn-sm">${this.props.name}</button>
             </div>
             <div id="collapseSys">
             <div id="overview" class="card-body">

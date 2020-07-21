@@ -1,6 +1,5 @@
 import {Container} from "./container.js"
 import {Utils} from "../../lib/utils.js";
-import {Location} from "../../lib/location.js";
 import {DataStoresCtl} from "../../ctl/datastores.js";
 import {DirCreate} from "../datastore/create.js";
 import {NFSCreate} from "../datastore/nfs/create.js";
@@ -8,7 +7,7 @@ import {iSCSICreate} from "../datastore/iscsi/create.js";
 import {Pool} from "./pool.js";
 import {I18N} from "../../lib/i18n.js";
 
-export class Datastores extends Container {
+export class DataStores extends Container {
     // {
     //    parent: "#container",
     // }
@@ -48,10 +47,8 @@ export class Datastores extends Container {
     }
 
     template(v) {
-        let query = Location.query();
         return this.compile(`
         <div id="index">
-        
         <!-- DataStore -->
         <div id="datastores" class="card card-main">
             <div class="card-header">

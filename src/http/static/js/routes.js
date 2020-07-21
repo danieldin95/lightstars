@@ -5,7 +5,7 @@ import {Network} from "./widget/container/network.js";
 import {Pool} from "./widget/container/pool.js";
 import {Instances} from "./widget/container/instances.js"
 import {Networks} from "./widget/container/networks.js";
-import {Datastores} from "./widget/container/datastores.js";
+import {DataStores} from "./widget/container/datastores.js";
 
 export class Routes {
     // {
@@ -58,7 +58,7 @@ export class Routes {
             {
                 prefix: "/datastores",
                 function: (p) => {
-                    new Datastores({
+                    new DataStores({
                         parent: props.container,
                         name: props.hyper.attr('name'),
                     });

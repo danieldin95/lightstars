@@ -83,7 +83,6 @@ export class Guest extends Container {
         let disabled = 'disabled';
         let vncUrl = '#';
         let dumpUrl = Api.path(`/api/instance/${v.uuid}?format=xml`);
-
         if (v.state === 'running') {
             let host = Api.host();
             let pass = Utils.graphic(v, 'vnc', 'password');

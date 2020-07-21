@@ -1,7 +1,6 @@
 import {Container} from "./container.js"
 import {Network} from "./network.js";
 import {Utils} from "../../lib/utils.js";
-import {Location} from "../../lib/location.js";
 import {NetworksCtl} from "../../ctl/networks.js";
 import {NATCreate} from "../network/create.js";
 import {BridgeCreate} from "../network/bridge/create.js";
@@ -48,7 +47,6 @@ export class Networks extends Container {
     }
 
     template(v) {
-        let query = Location.query();
         return this.compile(`
         <div id="index">
     

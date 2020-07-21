@@ -31,7 +31,7 @@ export class Overview extends Widget {
         return this.compile(`
             <dl class="dl-horizontal">
                 <dt>{{'uptime' | i}}:</dt>
-                <dd>{{hyper.uptime}}s</dd>
+                <dd>{{hyper.uptime | prettyTime}}</dd>
                 <dt>{{'version' | i}}:</dt>
                 <dd>{{version.version}}</dd>
                 <dt>{{'built on' | i}}:</dt>
