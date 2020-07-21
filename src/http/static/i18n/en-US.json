@@ -130,5 +130,6 @@
 	"select ISO file": "Select ISO file",
 	"ssh console": "SSH console",
 	"add graphics": "Add graphics",
-	"uptime": "UpTime"
+	"uptime": "UpTime",
+	"instances": "Instances"
 }

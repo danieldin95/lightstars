@@ -21,7 +21,7 @@ export class Datastores extends Container {
     }
 
     loading() {
-        this.title(I18N.i('home'));
+        this.title(I18N.i('datastore'));
         // loading data storage.
         let sCtl = new DataStoresCtl({
             id: this.id('#datastores'),
