@@ -80,10 +80,10 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Error string
 	}{}
-
 	if r.Method == "POST" {
 		name := r.FormValue("name")
 		pass := r.FormValue("password")
+		next := r.FormValue("next")
 		u, ok := service.SERVICE.Users.Get(name)
 		if !ok || u.Password != pass {
 			data.Error = "Invalid username or password."
@@ -103,7 +103,7 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 				Path:    "/",
 				Expires: expired,
 			})
-			http.Redirect(w, r, "/ui", http.StatusMovedPermanently)
+			http.Redirect(w, r, "/ui#"+next, http.StatusMovedPermanently)
 			return
 		}
 	}

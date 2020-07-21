@@ -1,5 +1,6 @@
 import {I18N} from "../lib/i18n.js";
 import {Widget} from "./widget.js";
+import {Location} from "../lib/location.js";
 
 
 export class Login extends Widget {
@@ -23,9 +24,16 @@ export class Login extends Widget {
         $(this.parent).html(this.render({}));
     }
 
+    next() {
+        let page = Location.get();
+        let query = Location.query();
+        return page + "?" + query
+    }
+
     render(v) {
         return this.compile(`
         <form action="/ui/login" method="post">
+        <input type="text" class="d-none" name="next" value="${this.next()}"/>
         <div class="card login">
             <div class="card-header">
                 <div class="row">
