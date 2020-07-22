@@ -5,7 +5,6 @@ body {
     width: 100%;
     background-color: #13508d;
     background-image: linear-gradient(270deg,#117dca, #043a78);
-    /*background: url("/static/images/background-1920.jpg") no-repeat fixed center;*/
 }
 
 .container {
@@ -40,11 +39,6 @@ body {
     width: 40px;
     height: 40px;
     float: left !important;
-}
-
-.login .card-header div {
-    /*margin-left: 40px;*/
-    /*margin-right: 40px;*/
 }
 
 .login .card-body {

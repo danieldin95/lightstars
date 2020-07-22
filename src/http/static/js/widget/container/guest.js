@@ -103,7 +103,7 @@ export class Guest extends Container {
                 <!-- Header buttons -->
                 <div class="card-body-hdl">
                     <div id="console-btns" class="btn-group btn-group-sm" role="group">
-                        <button id="console" type="button" class="btn btn-outline-dark"
+                        <button id="console" type="button" class="btn btn-outline-dark btn-sm"
                                 data-toggle="modal" data-target="#consoleModal" data="${vncUrl}" ${disabled}>{{'console' | i}}</button>
                         <button id="consoles" type="button"
                                 class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
@@ -123,7 +123,7 @@ export class Guest extends Container {
                     </div>
                     <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     <div id="power-btns" class="btn-group btn-group-sm" role="group">
-                        <button id="start" type="button" class="btn btn-outline-dark">
+                        <button id="start" type="button" class="btn btn-outline-dark btn-sm">
                             {{'power on' | i}}
                         </button>
                         <button id="power" type="button"
@@ -140,7 +140,7 @@ export class Guest extends Container {
                         </div>
                     </div>
                     <div id="btns-more" class="btn-group btn-group-sm" role="group">
-                        <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
+                        <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle btn-sm"
                                 data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
                             {{'actions' | i}}
                         </button>

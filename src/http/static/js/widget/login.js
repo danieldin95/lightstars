@@ -32,7 +32,7 @@ export class Login extends Widget {
 
     render(v) {
         return this.compile(`
-        <form action="/ui/login#${this.next()}" method="post">
+        <form action="" method="post">
         <input type="text" class="d-none" name="next" value="${this.next()}"/>
         <div class="card login">
             <div class="card-header">

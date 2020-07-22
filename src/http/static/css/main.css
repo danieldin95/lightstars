@@ -4,7 +4,6 @@
         width: 160px;
         overflow: hidden;
         clear: left;
-        /* text-align: right; */
         text-overflow: ellipsis;
         white-space: nowrap;
         font-weight: normal;
@@ -34,15 +33,12 @@ div::-webkit-scrollbar-track {
     background: rgba(0,0,0,0.1);
 }
 
-/* Index */
 .card-body-hdl,
 .card-header-btn {
     margin-bottom: 10px;
 }
 
 .card-header-dis {
-    /*margin-top: 10px;*/
-    /*margin-bottom: 10px;*/
     padding: 0 1.25rem;
 }
 
@@ -139,7 +135,8 @@ select {
     min-width: 4rem;
 }
 
-.select-md, .input-md {
+.select-md,
+.input-md {
     width: 60%;
 }
 
@@ -184,31 +181,15 @@ select {
 .btn-spot:hover,
 .btn-spot:focus {
     text-decoration: none;
-    /*background-color: black;*/
-    /*color: #b21f2d;*/
     border-color: #06386a;
 }
 
-/* instances */
-
 .card-main {
-}
-
-.card-main .card-header {
-    /*color: inherit;*/
-    /*border-bottom: 1px solid #0b3255;;*/
-}
-
-.card-main .card-body {
-    /*min-height: 430px;*/
-    /*max-height: 430px;*/
 }
 
 .system .card-body {
     min-height: 200px;
 }
-
-/* 404 */
 
 .error {
     border-color: darkgray;
@@ -219,7 +200,6 @@ select {
     background-color: inherit;
     border-bottom: 1px solid #0b3255;;
 }
-
 
 .dropdown-submenu {
     position: relative;

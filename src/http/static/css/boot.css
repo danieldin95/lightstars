@@ -31,7 +31,8 @@ a:hover, a:focus {
         min-height: 2rem;
         padding: 0 4rem;
     }
-    .context #notice, .context #container {
+    .context #notice,
+    .context #container {
         margin: 0 8rem;
     }
 }
@@ -41,7 +42,8 @@ a:hover, a:focus {
         min-height: 2rem;
         padding: 0 2rem;
     }
-    .context #notice, .context #container {
+    .context #notice,
+    .context #container {
         margin: 0 2rem;
     }
 }
@@ -74,7 +76,6 @@ a:hover, a:focus {
 .card-header {
     padding: .35rem 1.25rem;
     margin-bottom: -1px;
-    /*background-image: linear-gradient(90deg, #ced4da, transparent);*/
     background-color: #e9ecef;
     border-radius: calc(0.25rem - 1px);
 }
@@ -111,7 +112,6 @@ a:hover, a:focus {
     font-size: inherit;
 }
 
-
 .btn-link:focus,
 .btn-link.focus {
     text-decoration: underline;
@@ -132,11 +132,19 @@ a:hover, a:focus {
     border-color: #343a40;
 }
 
-.card-body-hdl .btn-outline-dark,
-.card-body-hdl .btn-outline-success,
-.card-body-hdl .btn-outline-primary,
-.card-body-hdl .btn-outline-danger {
-    border: none;
+.btn-outline-dark.disabled,
+.btn-outline-dark:disabled {
+    color: #6c757d;
+    background-color: white;
+    border-color: #6c757d;
+}
+.btn.disabled,
+.btn:disabled {
+    opacity: inherit;
+}
+
+.btn-link {
+    color: inherit;
 }
 
 .card-body-tbl {
@@ -152,10 +160,6 @@ a:hover, a:focus {
 .col-form-label-sm {
     font-size: inherit;
     text-align: right;
-}
-
-.btn-link {
-    color: inherit;
 }
 
 ol, ul, dl {

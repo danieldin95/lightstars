@@ -34,26 +34,19 @@
     margin: .5rem 0;
 }
 
-.modal-body .form-group:last-child {
-    /* margin-bottom: 0; */
-}
-
 .modal-body .card-header {
     color: #cccccc;
     border-radius: .25rem;
-    /* margin-bottom: 1rem; */
 }
 
 .modal-body .nav-pills .nav-link.active {
     color: #1e7e34;
     background-color: inherit;
     text-decoration: underline;
-    /* border: 1px solid #cccccc; */
 }
 
 .modal-body .nav-link {
     display: block;
-    /* padding: .25rem 1.25rem; */
 }
 
 .modal-body form {
