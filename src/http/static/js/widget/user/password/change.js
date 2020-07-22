@@ -1,8 +1,10 @@
-import {FormModal} from "../form/modal.js";
+import {FormModal} from "../../form/modal.js";
 
 
 export class ChangePassword extends FormModal {
-
+    // {
+    //   id: ""
+    // }
     constructor (props) {
         super(props);
 
@@ -26,7 +28,7 @@ export class ChangePassword extends FormModal {
                         <div class="form-group">
                             <label for="name" class="col-form-label-sm">{{'old password' | i}}</label>
                             <div class="input-group">
-                                <input type="password" class="form-control form-control-sm" name="old" value=""/>
+                                <input type="password" class="form-control form-control-sm" name="old" value="" autofocus/>
                             </div>
                         </div>
                         <div class="form-group">

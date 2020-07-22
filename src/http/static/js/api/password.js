@@ -11,14 +11,14 @@ export class PasswordApi extends Api {
         super(props);
     }
 
-    url(uuid) {
-        if (uuid) {
-            return `/api/user/password/${uuid}`;
+    url(name) {
+        if (name) {
+            return `/api/user/${name}/password`;
         }
         return '/api/user/password';
     }
 
     set(data) {
-        super.create(data);
+        super.edit(data);
     }
 }

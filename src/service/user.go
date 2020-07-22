@@ -39,6 +39,27 @@ func (u *Users) Load(file string) error {
 	return nil
 }
 
+func (u *Users) Add(v *schema.User) error {
+	u.Lock.Lock()
+	defer u.Lock.Unlock()
+
+	if _, ok := u.Users[v.Name]; !ok {
+		u.Users[v.Name] = v
+		return nil
+	}
+	return nil
+}
+
+func (u *Users) Del(name string) error {
+	u.Lock.Lock()
+	defer u.Lock.Unlock()
+	if _, ok := u.Users[name]; ok {
+		delete(u.Users, name)
+		return nil
+	}
+	return nil
+}
+
 func (u *Users) Get(name string) (schema.User, bool) {
 	u.Lock.RLock()
 	defer u.Lock.RUnlock()
@@ -58,4 +79,18 @@ func (u *Users) SetPass(name, old, new string) (schema.User, bool) {
 	}
 	user.Password = new
 	return *user, true
+}
+
+func (u *Users) List() <-chan *schema.User {
+	c := make(chan *schema.User, 128)
+	go func() {
+		u.Lock.RLock()
+		defer u.Lock.RUnlock()
+
+		for _, h := range u.Users {
+			c <- h
+		}
+		c <- nil //Finish channel by nil.
+	}()
+	return c
 }

@@ -2,10 +2,11 @@ import {Api} from "../api/api.js";
 import {HyperApi} from "../api/hyper.js";
 import {ZoneApi} from "../api/zone.js";
 import {Location} from "../lib/location.js";
-import {ChangePassword} from "./password/change.js";
+import {ChangePassword} from "./user/password/change.js";
 import {PasswordApi} from "../api/password.js";
 import {Utils} from "../lib/utils.js";
 import {Widget} from "./widget.js";
+import {Preferences} from "./user/preferences.js";
 
 
 
@@ -87,9 +88,14 @@ export class Navigation extends Widget {
                     window.open("ssh://"+host);
                 });
             }
+            let user = e.resp.user.name;
             new ChangePassword({id: '#changePasswdModal'})
                 .onsubmit((e) => {
-                    new PasswordApi().set(Utils.toJSON(e.form));
+                    new PasswordApi({uuids: user}).set(Utils.toJSON(e.form));
+                });
+            new Preferences({id: '#preferencesModal'})
+                .onsubmit((e) => {
+                    console.log(Utils.toJSON(e.form));
                 });
         });
     }
@@ -126,7 +132,6 @@ export class Navigation extends Widget {
             });
             view.find("#node a").on('click', this, function (e) {
                 let host = $(this).attr("data");
-
                 // reset host.
                 Location.query('node', host);
                 Api.host(host);
@@ -217,11 +222,10 @@ export class Navigation extends Widget {
                     <div class="dropdown-menu dropdown-left" aria-labelledby="userMore">
                         <a id="fullscreen" class="dropdown-item">{{'full screen' | i}}</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="javascript:void(0)">{{'preferences' | i}}</a>
+                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" 
+                            data-target="#preferencesModal">{{'preferences' | i}}</a>
                         <a class="dropdown-item" href="javascript:void(0)" 
-                            data-toggle="modal" data-target="#changePasswdModal">
-                            {{'change password' | i}}
-                        </a>
+                            data-toggle="modal" data-target="#changePasswdModal">{{'change password' | i}}</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/ui/login">{{'logout' | i}}</a>
                     </div>
@@ -231,6 +235,7 @@ export class Navigation extends Widget {
         </nav>
         <!-- Modals -->
         <div id="modals" class="modals">
+            <div id="preferencesModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="changePasswdModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         `, v)

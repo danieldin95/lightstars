@@ -132,5 +132,6 @@
 	"ssh console": "SSH控制台",
 	"add graphics": "新增图形设备",
 	"uptime": "运行时间",
-	"instances": "实例"
+	"instances": "实例",
+	"language and region": "语言与区域"
 }

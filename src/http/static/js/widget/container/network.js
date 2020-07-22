@@ -88,20 +88,24 @@ export class Network extends Container {
                         </div>
                     </div>
                 </div>
-                <dl class="dl-horizontal">
-                    <dt>{{'state' | i}}:</dt>
-                    <dd><span class="{{state}}">{{state}}</span></dd>
-                    <dt>UUID:</dt>
-                    <dd>{{uuid}}</dd>
-                    <dt>{{'mode' | i}}:</dt>
-                    <dd>{{mode == '' ? 'isolated' : mode}}</dd>
-                    <dt>{{'address' | i}}:</dt>
-                    <dd>{{if address == ''}} 
-                      - 
-                    {{else}} 
-                      {{address}}/{{if prefix}} {{prefix}} {{else}} {{netmask | netmask2prefix}} {{/if}}
-                    {{/if}}</dd>
-                </dl>
+                <div class="card-body-hdl">
+                    <div class="overview">                
+                        <dl class="dl-horizontal">
+                            <dt>{{'state' | i}}:</dt>
+                            <dd><span class="{{state}}">{{state}}</span></dd>
+                            <dt>UUID:</dt>
+                            <dd>{{uuid}}</dd>
+                            <dt>{{'mode' | i}}:</dt>
+                            <dd>{{mode == '' ? 'isolated' : mode}}</dd>
+                            <dt>{{'address' | i}}:</dt>
+                            <dd>{{if address == ''}} 
+                              - 
+                            {{else}} 
+                              {{address}}/{{if prefix}} {{prefix}} {{else}} {{netmask | netmask2prefix}} {{/if}}
+                            {{/if}}</dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
             </div>
         </div>

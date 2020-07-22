@@ -79,9 +79,10 @@ export class Api {
     }
 
     edit(data) {
-        let url = this.url(this.uuids[0]);
+        let uuid = this.uuids[0]
+        let url = this.url(uuid);
         $.PUT(url, JSON.stringify(data), (resp, success) => {
-            $(this.tasks).append(Alert.success(`edit ${resp.name} ${resp.message}`));
+            $(this.tasks).append(Alert.success(`edit ${uuid} ${resp.message}`));
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
         });
