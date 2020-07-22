@@ -3,6 +3,7 @@
 	"username": "用户名",
 	"password": "密码",
 	"home": "首页",
+	"reboot": "重启",
 	"reset": "重置",
 	"login": "登录",
 	"guest instances": "来宾实例",

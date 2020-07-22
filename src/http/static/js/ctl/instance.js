@@ -11,7 +11,7 @@ class CheckboxCtl extends CheckBox {
             $(this.child('#start')).attr("disabled","disabled");
             $(this.child('#console')).attr("disabled","disabled");
             $(this.child('#shutdown')).attr("disabled","disabled");
-            $(this.child('#more')).attr("disabled","disabled");;
+            $(this.child('#more')).attr("disabled","disabled");
         } else {
             $(this.child('#start')).removeAttr('disabled');
             $(this.child('#console')).removeAttr('disabled');

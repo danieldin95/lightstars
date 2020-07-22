@@ -50,7 +50,7 @@ div::-webkit-scrollbar-track {
 }
 
 .dl-horizontal {
-    padding: .25rem;
+    padding: 1rem .5rem;
 }
 
 .running,
@@ -211,4 +211,8 @@ select {
     left: 100%;
     margin-top: 0;
     margin-left: .125rem;
+}
+
+.overview {
+    border-top: 1px solid #dee2e6;
 }

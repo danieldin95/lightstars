@@ -76,7 +76,7 @@ a:hover, a:focus {
 .card-header {
     padding: .35rem 1.25rem;
     margin-bottom: -1px;
-    background-color: #e9ecef;
+    background: #dee2e6 linear-gradient(90deg, #dee2e6, #f8f9fa);
     border-radius: calc(0.25rem - 1px);
 }
 
@@ -152,6 +152,10 @@ a:hover, a:focus {
     overflow: auto;
     min-height: 200px;
     max-height: 500px;
+}
+
+.card-body-hdl .btn {
+    border: none;
 }
 
 .form-control-sm {

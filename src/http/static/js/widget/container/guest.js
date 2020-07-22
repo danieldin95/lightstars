@@ -156,18 +156,22 @@ export class Guest extends Container {
                         </div>
                     </div>
                 </div>
-                <dl class="dl-horizontal">
-                    <dt>{{'state' | i}}:</dt>
-                    <dd><span class="{{state}}">{{state}}</span></dd>
-                    <dt>{{'uuid' | i}}:</dt>
-                    <dd>{{uuid}}</dd>
-                    <dt>{{'arch' | i}}:</dt>
-                    <dd>{{arch}} | {{type}}</dd>
-                    <dt>{{'processor' | i}}:</dt>
-                    <dd>{{maxCpu}} | {{cpuTime}}ms</dd>
-                    <dt>{{'memory' | i}}:</dt>
-                    <dd>{{maxMem | prettyKiB}} | {{memory | prettyKiB}}</dd>
-                </dl>
+                <div class="card-body-tbl">
+                    <div class="overview">
+                        <dl class="dl-horizontal">
+                            <dt>{{'state' | i}}:</dt>
+                            <dd><span class="{{state}}">{{state}}</span></dd>
+                            <dt>{{'uuid' | i}}:</dt>
+                            <dd>{{uuid}}</dd>
+                            <dt>{{'arch' | i}}:</dt>
+                            <dd>{{arch}} | {{type}}</dd>
+                            <dt>{{'processor' | i}}:</dt>
+                            <dd>{{maxCpu}} | {{cpuTime}}ms</dd>
+                            <dt>{{'memory' | i}}:</dt>
+                            <dd>{{maxMem | prettyKiB}} | {{memory | prettyKiB}}</dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
             </div>
         </div>

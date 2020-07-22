@@ -29,6 +29,7 @@ export class Overview extends Widget {
 
     render(data) {
         return this.compile(`
+        <div class="overview">
             <dl class="dl-horizontal">
                 <dt>{{'uptime' | i}}:</dt>
                 <dd>{{hyper.uptime | prettyTime}}</dd>
@@ -47,6 +48,6 @@ export class Overview extends Widget {
                     {{hyper.memTotal | prettyByte}} | {{hyper.memFree | prettyByte}} | {{hyper.memCached | prettyByte}}
                 </dd>
             </dl>
-        `, data);
+        </div>`, data);
     }
 }

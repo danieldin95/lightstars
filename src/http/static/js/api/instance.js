@@ -138,7 +138,7 @@ export class InstanceApi extends Api {
     console() {
         this.uuids.forEach((uuid, index, err) => {
             let password = '';
-            let host = Api.host || "";
+            let host = Api.host() || "";
             if (this.props.passwd) {
                 password = this.props.passwd[uuid];
             }

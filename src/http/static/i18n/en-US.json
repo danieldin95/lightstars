@@ -3,6 +3,7 @@
 	"username": "Username",
 	"password": "Password",
 	"home": "Home",
+	"reboot": "Reboot",
 	"reset": "Reset",
 	"login": "Login",
 	"guest instances": "Guest instances",

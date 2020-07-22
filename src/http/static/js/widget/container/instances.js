@@ -4,6 +4,7 @@ import {Utils} from "../../lib/utils.js";
 import {InstanceCtl} from '../../ctl/instance.js';
 import {InstanceCreate} from '../instance/create.js';
 import {I18N} from "../../lib/i18n.js";
+import {InstanceApi} from "../../api/instance.js";
 
 export class Instances extends Container {
     // {
@@ -32,7 +33,7 @@ export class Instances extends Container {
         });
         new InstanceCreate({id: '#createGuestModal'})
             .onsubmit((e) => {
-                iCtl.create(Utils.toJSON(e.form));
+                new InstanceApi().create(Utils.toJSON(e.form));
             });
     }
 
