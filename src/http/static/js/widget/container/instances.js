@@ -51,7 +51,7 @@ export class Instances extends Container {
             <div class="card-body">
                 <!-- Instances buttons -->
                 <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#createGuestModal">
                         {{'create new instance' | i}}
                     </button>
