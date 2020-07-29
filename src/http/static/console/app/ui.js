@@ -1605,7 +1605,12 @@ const UI = {
     updateDesktopName(e) {
         UI.desktopName = e.detail.name;
         // Display the desktop name in the document title
-        document.title = e.detail.name + " - noVNC";
+        let title = WebUtil.getQueryVar('title');
+        if (title != null && title !== "") {
+            document.title = title + "("+WebUtil.getQueryVar('id')+")";
+        } else {
+            document.title = e.detail.name;
+        }
     },
 
     bell(e) {

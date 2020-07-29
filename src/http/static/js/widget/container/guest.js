@@ -87,7 +87,7 @@ export class Guest extends Container {
             let host = Api.host();
             let pass = Utils.graphic(v, 'vnc', 'password');
             disabled = '';
-            vncUrl = `/ui/console?id=${v.uuid}&password=${pass}&node=${host}`;
+            vncUrl = `/ui/console?id=${v.uuid}&password=${pass}&node=${host}&title=${v.name}`;
         }
         return this.compile(`
         <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">

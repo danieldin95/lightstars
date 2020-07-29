@@ -10,7 +10,7 @@ th, td {
 }
 
 a {
-    color: inherit;
+    color: #428bca;
     font-size: inherit;
 }
 
@@ -85,6 +85,10 @@ a:hover, a:focus {
     margin-left: .25rem;
     padding: .3rem 0;
     font-size: inherit;
+}
+
+.card-header a {
+    color: inherit;
 }
 
 .card-body {

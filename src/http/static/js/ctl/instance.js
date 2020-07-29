@@ -35,9 +35,11 @@ export class InstanceCtl extends Ctl {
 
         // register buttons's click.
         $(this.child('#console')).on("click", this.uuids, function (e) {
-            let props = {uuids: e.data.store, passwd: {}};
+            let props = {uuids: e.data.store, passwd: {}, name: {}};
             e.data.store.forEach(function (v) {
-                props.passwd[v] = $(`input[data=${v}]`).attr('passwd');
+                let obj = $('input[data='+v+']');
+                props.passwd[v] = obj.attr('passwd');
+                props.name[v] = obj.attr('name');
             });
             new InstanceApi(props).console();
         });

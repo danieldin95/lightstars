@@ -32,9 +32,7 @@ export class InstanceTable extends Widget {
         return this.compile(`
         {{each items v i}}
             <tr>
-                <td>
-                    <input id="on-one" type="checkbox" aria-label="" data="{{v.uuid}}" passwd="{{v | vncPassword}}">
-                </td>
+                <td><input id="on-one" type="checkbox" data="{{v.uuid}}" passwd="{{v | vncPassword}}" name="{{v.name}}"></td>
                 <td>{{i+1}}</td>
                 <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/guest/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
