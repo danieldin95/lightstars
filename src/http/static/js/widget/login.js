@@ -41,7 +41,7 @@ export class Login extends Widget {
                         <img class="" src="/static/images/lightstar.png" alt="">
                     </div>
                     <div class="col-sm-7">
-                        <span style="color: #ffffff">
+                        <span style="color: #ffffff;">
                             <strong><a href="https://github.com/danieldin95/lightstar">{{'lightstar' | i}}</a></strong>
                         </span>
                         <br/>
