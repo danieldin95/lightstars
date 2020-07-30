@@ -6,6 +6,7 @@ import {Pool} from "./widget/container/pool.js";
 import {Instances} from "./widget/container/instances.js"
 import {Networks} from "./widget/container/networks.js";
 import {DataStores} from "./widget/container/datastores.js";
+import {Api} from "./api/api.js";
 
 export class Routes {
     // {
@@ -85,10 +86,12 @@ export class Routes {
         ];
         this.render();
         window.onhashchange = (e) => {
+            let host = Location.query('node');
+            console.log("onhashchange", e, 'and ', host);
+            Api.host(host);
             if (this.props.onchange) {
                 this.props.onchange(e);
             }
-            console.log("onhashchange", e);
             this.render();
         };
     }

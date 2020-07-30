@@ -24,7 +24,7 @@ export class ChangePassword extends FormModal {
                     <h7>{{'change user password' | i}}</h7>
                 </div>
                 <div class="modal-body">
-                    <form id="form">
+                    <form id="form-change">
                         <div class="form-group">
                             <label for="name" class="col-form-label-sm">{{'old password' | i}}</label>
                             <div class="input-group">

@@ -80,15 +80,12 @@ export class Guest extends Container {
     }
 
     template(v) {
-        let disabled = 'disabled';
-        let vncUrl = '#';
+        let disabled = v.state === 'running' ? '' : 'disabled';
+        let host = Api.host();
+        let pass = Utils.graphic(v, 'vnc', 'password');
+        let vncUrl = `/ui/console?id=${v.uuid}&password=${pass}&node=${host}&title=${v.name}`;
         let dumpUrl = Api.path(`/api/instance/${v.uuid}?format=xml`);
-        if (v.state === 'running') {
-            let host = Api.host();
-            let pass = Utils.graphic(v, 'vnc', 'password');
-            disabled = '';
-            vncUrl = `/ui/console?id=${v.uuid}&password=${pass}&node=${host}&title=${v.name}`;
-        }
+
         return this.compile(`
         <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">
         <div id="header" class="card header">

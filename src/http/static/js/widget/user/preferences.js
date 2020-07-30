@@ -24,7 +24,7 @@ export class Preferences extends FormModal {
                     <h7>{{'preferences' | i}}</h7>
                 </div>
                 <div class="modal-body">
-                    <form id="form">
+                    <form id="form-preferences">
                         <div class="form-group">
                             <label for="name" class="col-form-label-sm">{{'language and region' | i}}</label>
                             <div class="input-group">
