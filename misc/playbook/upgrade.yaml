@@ -6,13 +6,19 @@
 
   tasks:
   - name: download lightstar-{{ version }} 
-    copy: src=/code/lightstar/build/lightstar-{{ version }}-1.el7.x86_64.rpm dest=~
+    copy: src=/code/lightstar/build/lightstar-{{ version }}-1.el7.x86_64.rpm dest=/tmp
+
+  - name: stop lightstar
+    shell: systemctl stop lightstar
+
+  - name: remove lightstar
+    yum: state=absent name=lightstar
 
   - name: upgrade lightstar
-    shell: rpm -ivh --force ~/lightstar-{{ version }}-1.el7.x86_64.rpm
+    yum: state=present name=/tmp/lightstar-{{ version }}-1.el7.x86_64.rpm
     notify:
       - restart lightstar
 
   handlers:
     - name: restart lightstar
-      service: name=lightstar state=restarted
+      service: name=lightstar enabled=yes state=restarted

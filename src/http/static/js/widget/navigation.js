@@ -23,25 +23,6 @@ export class Navigation extends Widget {
         this.refresh();
     }
 
-    firefox() {
-        return navigator.userAgent.match(/firefox/i);
-    }
-
-    chrome() {
-        return navigator.userAgent.match(/chrome/i);
-    }
-
-    nassh(host) {
-        let name = 'pnhechapfaindjhompbnflcldabbghjo';
-        let extension = `chrome-extension://${name}/html/nassh.html`;
-        let webstore = `https://chrome.google.com/webstore/detail/secure-shell-app/${name}`;
-        $.get(extension, (resp) => {
-            window.open(extension + '#root@' + host);
-        }).fail((e)=> {
-            window.open(webstore);
-        });
-    }
-
     page(url) {
         if (url.indexOf('?') >= 0) {
             return url.split("?", 2)[0];
@@ -73,21 +54,16 @@ export class Navigation extends Widget {
             this.node();
             $(this.parent).html(this.view);
 
-            // register Listener
+            // register fullscreen click.
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
-            if (this.chrome()) {
-                let host = $(location).attr("hostname");
-                this.view.find("#phy #ssh").on('click', (e) => {
-                    this.nassh(host);
-                });
-            } else {
-                let host = $(location).attr("hostname");
-                this.view.find("#phy #ssh").on('click', (e) => {
-                    window.open("ssh://"+host);
-                });
-            }
+            // register ssh click
+            let host = $(location).attr("hostname");
+            this.view.find("#phy #ssh").on('click', (e) => {
+                window.open("ssh://"+host, '_self');
+            });
+            // register change password and preferences.
             let user = e.resp.user.name;
             new ChangePassword({id: '#changePasswdModal'})
                 .onsubmit((e) => {

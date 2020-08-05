@@ -1,4 +1,12 @@
 export class Utils {
+    static firefox() {
+        return navigator.userAgent.match(/firefox/i);
+    }
+
+    static chrome() {
+        return navigator.userAgent.match(/chrome/i);
+    }
+
     // num: int
     static i2n (data, n) {
         return (Array(n).join(0) + data).slice(-n);
