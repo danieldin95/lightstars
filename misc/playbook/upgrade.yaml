@@ -6,7 +6,7 @@
 
   tasks:
   - name: download lightstar-{{ version }} 
-    copy: src=/code/lightstar/build/lightstar-{{ version }}-1.el7.x86_64.rpm dest=/tmp
+    copy: src=/root/rpmbuild/RPMS/x86_64/lightstar-{{ version }}-1.el7.x86_64.rpm dest=/tmp
 
   - name: stop lightstar
     shell: systemctl stop lightstar

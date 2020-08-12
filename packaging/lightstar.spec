@@ -37,7 +37,6 @@ cp -R %_source_dir/src/http/static %{buildroot}/var/lightstar
 
 mkdir -p %{buildroot}/etc/lightstar
 cp -R %_source_dir/packaging/resource/*.json.example %{buildroot}/etc/lightstar
-mkdir -p %{buildroot}/lightstar/datastore/01
 
 %pre
 /usr/bin/firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {
@@ -49,6 +48,10 @@ mkdir -p %{buildroot}/lightstar/datastore/01
 /usr/bin/firewall-cmd --reload || :
 
 %post
+[ -e '/lightstar/datastore/01' ] || {
+  mkdir -p /lightstar/datastore/01
+}
+
 [ -e '/etc/lightstar/permission.json' ] || {
   cp -rvf /etc/lightstar/permission.json.example /etc/lightstar/permission.json
 }
@@ -76,4 +79,3 @@ EOF
 /usr/bin/*
 /usr/lib/systemd/system/*
 /var/lightstar
-/lightstar/datastore

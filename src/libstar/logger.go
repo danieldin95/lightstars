@@ -35,48 +35,48 @@ type Message struct {
 
 func (l *Logger) Debug(format string, v ...interface{}) {
 	if DEUBG >= l.Level {
-		log.Printf("DEBUG "+format, v...)
+		log.Printf("[DEBUG] "+format, v...)
 	}
 }
 
 func (l *Logger) Info(format string, v ...interface{}) {
 	if INFO >= l.Level {
-		log.Printf("INFO "+format, v...)
+		log.Printf("[INFO] "+format, v...)
 	}
 	l.SaveError("INFO", format, v...)
 }
 
 func (l *Logger) Warn(format string, v ...interface{}) {
 	if WARN >= l.Level {
-		log.Printf("WARN"+format, v...)
+		log.Printf("[WARN] "+format, v...)
 	}
 	l.SaveError("WARN", format, v...)
 }
 
 func (l *Logger) Error(format string, v ...interface{}) {
 	if ERROR >= l.Level {
-		log.Printf("ERROR "+format, v...)
+		log.Printf("[ERROR] "+format, v...)
 	}
 	l.SaveError("ERROR", format, v...)
 }
 
 func (l *Logger) Fatal(format string, v ...interface{}) {
 	if FATAL >= l.Level {
-		log.Printf("FATAL "+format, v...)
+		log.Printf("[FATAL] "+format, v...)
 	}
 	l.SaveError("FATAL", format, v...)
 }
 
 func (l *Logger) Print(format string, v ...interface{}) {
 	if PRINT >= l.Level {
-		log.Printf("PRINT"+format, v...)
+		log.Printf("[PRINT] "+format, v...)
 	}
 }
 
 func (l *Logger) SaveError(level string, format string, v ...interface{}) {
 	m := fmt.Sprintf(format, v...)
 	if l.FileLog != nil {
-		l.FileLog.Println(level + " " + m)
+		l.FileLog.Println("[" + level + "] " + m)
 	}
 
 	l.Lock.Lock()
@@ -162,7 +162,7 @@ func Close() {
 
 func Catch(name string) {
 	if err := recover(); err != nil {
-		Fatal("%s Panic: ===%s===", name, err)
-		Fatal("%s Stack: ===%s===", name, debug.Stack())
+		Fatal("%s [PANIC] ===%s===", name, err)
+		Fatal("%s [STACK] ===%s===", name, debug.Stack())
 	}
 }
