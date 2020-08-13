@@ -1,8 +1,8 @@
 import {Widget} from "../widget.js";
 import {VolumeApi} from "../../api/volume.js";
 import {CheckBox} from "../common/checkbox.js";
-import {Location} from "../../lib/location.js";
 import {Utils} from "../../lib/utils.js";
+import {Api} from "../../api/api.js";
 
 
 export default class VolumeTable extends Widget {
@@ -42,8 +42,7 @@ export default class VolumeTable extends Widget {
     }
 
     render(data) {
-        let query = Location.query();
-        let prefix = window.location.pathname;
+        let prefix = Api.path('/api/upload/'+this.pool+'/volume');
 
         return this.compile(`
             {{each items v i}}
@@ -60,7 +59,7 @@ export default class VolumeTable extends Widget {
                       {{if v.type == "dir"}}
                       <a id="on-this" data-name="{{v.name}}" data-type="{{v.type}}" href="javascript:void(0)">{{v.name}}</a>
                       {{else if v.type == "file"}}
-                      <a href="/api/upload/${this.pool}/volume/{{v.name}}">{{v.name}}</a>
+                      <a href="${prefix}/{{v.name}}">{{v.name}}</a>
                       {{else}}
                       <a data-name="{{v.name}}" href="#">{{v.name}}</a>
                       {{/if}}
