@@ -1,6 +1,7 @@
 package compute
 
 import (
+	"fmt"
 	"github.com/danieldin95/lightstar/src/compute/libvirtc"
 	"github.com/danieldin95/lightstar/src/libstar"
 	"github.com/danieldin95/lightstar/src/schema"
@@ -20,16 +21,27 @@ func NewHyper() (hs schema.Hyper) {
 func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int schema.Interface) {
 	int.Source = xml.Source.Bridge
 	int.Network = xml.Source.Network
+	addr := xml.Source.Address
+	if addr != nil && addr.Type == "pci" {
+		int.HostDev = addr.Type
+		int.HostDev += fmt.Sprintf(":%02x", libstar.H2D16(addr.Bus))
+		int.HostDev += fmt.Sprintf(":%02x", libstar.H2D16(addr.Slot))
+		int.HostDev += fmt.Sprintf(".%x", libstar.H2D16(addr.Function))
+	}
 	int.Address = xml.Mac.Address
 	int.Model = xml.Model.Type
+	if int.Model == "" && xml.Driver != nil {
+		int.Model = xml.Driver.Name
+	}
 	int.Device = xml.Target.Dev
-	if xml.Address != nil {
-		int.AddrType = xml.Address.Type
+	addr = xml.Address
+	if addr != nil {
+		int.AddrType = addr.Type
 		if int.AddrType == "pci" {
-			int.AddrDomain = libstar.H2D16(xml.Address.Domain)
-			int.AddrBus = libstar.H2D16(xml.Address.Bus)
-			int.AddrSlot = libstar.H2D16(xml.Address.Slot)
-			int.AddrFunc = libstar.H2D16(xml.Address.Function)
+			int.AddrDomain = fmt.Sprintf("%04x", libstar.H2D16(addr.Domain))
+			int.AddrBus = fmt.Sprintf("%02x", libstar.H2D16(addr.Bus))
+			int.AddrSlot = fmt.Sprintf("%02x", libstar.H2D16(addr.Slot))
+			int.AddrFunc = fmt.Sprintf("%x", libstar.H2D16(addr.Function))
 		}
 	}
 	return int
@@ -46,18 +58,19 @@ func NewFromDiskXML(xml libvirtc.DiskXML) (disk schema.Disk) {
 		disk.Name = xml.Source.Device
 	}
 	disk.Format = xml.Driver.Type
-	if xml.Address != nil {
-		disk.AddrType = xml.Address.Type
+	addr := xml.Address
+	if addr != nil {
+		disk.AddrType = addr.Type
 		if disk.AddrType == "pci" {
-			disk.AddrDomain = libstar.H2D16(xml.Address.Domain)
-			disk.AddrBus = libstar.H2D16(xml.Address.Bus)
-			disk.AddrSlot = libstar.H2D16(xml.Address.Slot)
-			disk.AddrFunc = libstar.H2D16(xml.Address.Function)
+			disk.AddrDomain = fmt.Sprintf("%04x", libstar.H2D16(addr.Domain))
+			disk.AddrBus = fmt.Sprintf("%02x", libstar.H2D16(addr.Bus))
+			disk.AddrSlot = fmt.Sprintf("%02x", libstar.H2D16(addr.Slot))
+			disk.AddrFunc = fmt.Sprintf("%x", libstar.H2D16(addr.Function))
 		} else if xml.Address.Type == "drive" {
-			disk.AddrCtl = libstar.H2D16(xml.Address.Controller)
-			disk.AddrBus = libstar.H2D16(xml.Address.Bus)
-			disk.AddrTgt = libstar.H2D16(xml.Address.Target)
-			disk.AddrUnit = libstar.H2D16(xml.Address.Unit)
+			disk.AddrCtl = fmt.Sprintf("%04x", libstar.H2D16(addr.Controller))
+			disk.AddrBus = fmt.Sprintf("%02x", libstar.H2D16(xml.Address.Bus))
+			disk.AddrTgt = fmt.Sprintf("%02x", libstar.H2D16(xml.Address.Target))
+			disk.AddrUnit = fmt.Sprintf("%x", libstar.H2D16(xml.Address.Unit))
 		}
 	}
 	return disk

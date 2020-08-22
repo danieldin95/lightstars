@@ -64,13 +64,13 @@ type Disk struct {
 	Device     string `json:"device"`
 	Bus        string `json:"bus"`      //configre
 	AddrType   string `json:"addrType"` // pci, and drive
-	AddrSlot   uint16 `json:"addrSlot"`
-	AddrDomain uint16 `json:"addrDomain"`
-	AddrBus    uint16 `json:"addrBus"`
-	AddrFunc   uint16 `json:"addrFunc"`
-	AddrCtl    uint16 `json:"addrCtl"`
-	AddrTgt    uint16 `json:"addrTgt"`
-	AddrUnit   uint16 `json:"addrUnit"`
+	AddrSlot   string `json:"addrSlot"`
+	AddrDomain string `json:"addrDomain"`
+	AddrBus    string `json:"addrBus"`
+	AddrFunc   string `json:"addrFunc"`
+	AddrCtl    string `json:"addrCtl"`
+	AddrTgt    string `json:"addrTgt"`
+	AddrUnit   string `json:"addrUnit"`
 	Volume     Volume `json:"volume"`
 }
 
@@ -88,13 +88,14 @@ type Interface struct {
 	Address    string `json:"address"`
 	Network    string `json:"network"`
 	Source     string `json:"source"`
+	HostDev    string `json:"hostDev"`
 	Model      string `json:"model"` // configure
 	Device     string `json:"device"`
 	AddrType   string `json:"addrType"` // now only pci.
-	AddrSlot   uint16 `json:"addrSlot"`
-	AddrDomain uint16 `json:"addrDomain"`
-	AddrBus    uint16 `json:"addrBus"`
-	AddrFunc   uint16 `json:"addrFunc"`
+	AddrSlot   string `json:"addrSlot"`
+	AddrDomain string `json:"addrDomain"`
+	AddrBus    string `json:"addrBus"`
+	AddrFunc   string `json:"addrFunc"`
 }
 
 type ListInterface struct {

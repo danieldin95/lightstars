@@ -305,7 +305,8 @@ type InterfaceXML struct {
 	Mac         InterfaceMacXML          `xml:"mac" json:"mac"`
 	Source      InterfaceSourceXML       `xml:"source" json:"source"`
 	Model       InterfaceModelXML        `xml:"model" json:"model"`
-	Target      InterfaceTargetXML       `xml:"target" json:"tatget"`
+	Driver      *InterfaceDriverXML      `xml:"driver" json:"driver"`
+	Target      InterfaceTargetXML       `xml:"target" json:"target"`
 	VirtualPort *InterfaceVirtualPortXML `xml:"virtualport,omitempty" json:"virtualport,omitempty"`
 	Address     *AddressXML              `xml:"address,omitempty" json:"address,omitempty"`
 }
@@ -333,14 +334,20 @@ type InterfaceMacXML struct {
 }
 
 type InterfaceSourceXML struct {
-	XMLName xml.Name `xml:"source" json:"-"`
-	Bridge  string   `xml:"bridge,attr,omitempty" json:"bridge,omitempty"`
-	Network string   `xml:"network,attr,omitempty" json:"network,omitempty"`
+	XMLName xml.Name    `xml:"source" json:"-"`
+	Bridge  string      `xml:"bridge,attr,omitempty" json:"bridge,omitempty"`
+	Network string      `xml:"network,attr,omitempty" json:"network,omitempty"`
+	Address *AddressXML `xml:"address,omitempty" json:"address,omitempty"`
 }
 
 type InterfaceModelXML struct {
 	XMLName xml.Name `xml:"model" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"` //rtl8139, virtio, e1000
+}
+
+type InterfaceDriverXML struct {
+	XMLName xml.Name `xml:"driver" json:"-"`
+	Name    string   `xml:"name,attr" json:"name"` //vfio
 }
 
 type InterfaceTargetXML struct {

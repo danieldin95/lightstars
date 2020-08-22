@@ -38,14 +38,14 @@ export class InterfaceTable extends Widget {
                 <td><input id="on-one" type="checkbox" data="{{v.address}}"></td>
                 <td>{{i+1}}</td>
                 <td>{{v.model}}</td>
-                <td>{{v.device}}</td>
+                <td>{{v.device == "" ? '-' : v.device}}</td>
                 <td>{{v.address}}</td>
                 <td><span>
                 {{if  v.addrType == "pci"}}
-                    pci:{{v.addrBus | a2n 2}}:{{v.addrSlot | a2n 2}}.{{v.addrFunc}}
+                    pci:{{v.addrBus}}:{{v.addrSlot}}.{{v.addrFunc}}
                 {{/if}}</span>
                 </td>
-                <td>{{v.source == "" ? v.network : v.source}}</td>
+                <td>{{v.source == "" ? v.network == "" ? v.hostDev : v.network : v.source}}</td>
             </tr>
         {{/each}}
         `, data);

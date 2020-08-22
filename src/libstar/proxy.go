@@ -51,26 +51,26 @@ func (pri *ProxyUrl) Initialize() {
 }
 
 func (pri *ProxyUrl) ServeHttp(w http.ResponseWriter, r *http.Request) {
-	resp, err := pri.Transport.RoundTrip(r)
+	p, err := pri.Transport.RoundTrip(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadGateway)
 		return
 	}
 	defer pri.Transport.CloseIdleConnections()
-	defer resp.Body.Close()
-	for key, value := range resp.Header {
+	defer p.Body.Close()
+	for key, value := range p.Header {
 		for _, v := range value {
 			w.Header().Add(key, v)
 		}
 	}
-	status := resp.StatusCode
+	status := p.StatusCode
 	w.WriteHeader(status)
 	filtered := false
 	if pri.Filter != nil {
-		filtered = pri.Filter(w, resp, pri.Data)
+		filtered = pri.Filter(w, p, pri.Data)
 	}
 	if !filtered {
-		io.Copy(w, resp.Body)
+		io.Copy(w, p.Body)
 	}
 }
 
