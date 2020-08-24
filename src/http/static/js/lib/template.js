@@ -81,7 +81,7 @@ export class Template {
         m.i = function (key, param1) {
             return I18N.i18n(key, param1);
         };
-        m.prettyTime = function(second) {
+        m.fullTime = function(second) {
             let time = [];
             let min = Math.floor(second / 60);
             time.push((second % 60) + "s");
@@ -98,6 +98,21 @@ export class Template {
             time.push((hour % 24) + "h");
             time.push(Math.floor(hour / 24) + "d");
             return time.reverse().join("");
+        };
+        m.prettyTime = function(second) {
+            let min = Math.floor(second / 60);
+            let sec = (second % 60);
+            if (min < 60) {
+                return min + "m" + sec + "s";
+            }
+            let hour = Math.floor(min / 60);
+            min = (min % 60);
+            if (hour < 24) {
+                return hour + "h" + min + "m";
+            }
+            let day = Math.floor(hour / 24);
+            hour = (hour % 24);
+            return day + "d" + hour + "h";
         };
         return m;
     }
