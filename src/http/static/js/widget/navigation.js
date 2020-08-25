@@ -58,11 +58,6 @@ export class Navigation extends Widget {
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
-            // register ssh click
-            let host = $(location).attr("hostname");
-            this.view.find("#phy #ssh").on('click', (e) => {
-                window.open("ssh://"+host, '_self');
-            });
             // register change password and preferences.
             let user = e.resp.user.name;
             new ChangePassword({id: '#changePasswdModal'})
@@ -172,7 +167,7 @@ export class Navigation extends Widget {
                         <a id="network" class="dropdown-item" href="javascript:void(0);">{{'network interface' | i}}</a>
                         <a id="rootfs" class="dropdown-item" href="javascript:void(0);">{{'filesystem' | i}}</a>
                         <div class="dropdown-divider"></div>
-                        <a id="ssh" class="dropdown-item" href="javascript:void(0);">{{'ssh console' | i}}</a>
+                        <a id="ssh" class="dropdown-item" href="/static/sshy">{{'ssh console' | i}}</a>
                     </div>
                 </li>
             </ul>

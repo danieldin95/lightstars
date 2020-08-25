@@ -1,10 +1,24 @@
-<html>
+<html lang="en">
 <head>
 	<script type="text/javascript">
-		var wsproxyURL = "ws://192.168.209.141:10080/ext/wsproxy/localhost:22"
+		function readQueryVariable(name, defaultValue) {
+			const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+					match = document.location.href.match(re);
+			if (typeof defaultValue === 'undefined') { defaultValue = null; }
+			if (match) {
+				return decodeURIComponent(match[1]);
+			}
+			return defaultValue;
+		}
+		var host = window.location.hostname;
+		var port = window.location.port;
+		var proto = window.location.protocol === "https:" ? "wss" : "ws";
+		var target = readQueryVariable("target", "localhost:22");
+		var wsproxyURL = proto + "://" + host + ":" + port + "/ext/wsproxy/" + target
 	</script>
-	<link rel="stylesheet" href="css/xterm.css" async/>
-	<script type="text/javascript" src="js/combinedJS.comb.js" async></script>
+	<link rel="stylesheet" href="/static/sshy/css/xterm.css" async/>
+	<script type="text/javascript" src="/static/sshy/js/combinedJS.comb.js" async></script>
+	<title>SSHy</title>
 </head>
 <body>
 	<div id="terminal"></div>

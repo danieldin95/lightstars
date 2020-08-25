@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/base64"
 	"github.com/danieldin95/lightstar/src/compute/libvirtc"
 	"github.com/danieldin95/lightstar/src/http/api"
 	"github.com/danieldin95/lightstar/src/libstar"
@@ -23,18 +24,38 @@ func (down Download) Router(router *mux.Router) {
 	router.PathPrefix("/ext/files/").Handler(files)
 }
 
-type WebSocket struct {
+func proxy(src, dst net.Conn) {
+	libstar.Info("proxy by %s", src.RemoteAddr())
+	libstar.Info("proxy to %s", dst.RemoteAddr())
+	wait := libstar.NewWaitOne(2)
+	go func() {
+		defer wait.Done()
+		if _, err := io.Copy(dst, src); err != nil {
+			libstar.Warn("proxy from  %s", err)
+		}
+	}()
+	go func() {
+		defer wait.Done()
+		if _, err := io.Copy(src, dst); err != nil {
+			libstar.Warn("proxy from %s", err)
+		}
+	}()
+	wait.Wait()
+	libstar.Warn("proxy %s exit", src.RemoteAddr())
 }
 
-func (w WebSocket) Router(router *mux.Router) {
+type WsGraphics struct {
+}
+
+func (w WsGraphics) Router(router *mux.Router) {
 	router.Handle("/ext/websocket", websocket.Handler(w.Handle))
 }
 
-func (w WebSocket) GetRemote(id, name, typ string) string {
-	libstar.Debug("WebSocket.GetRemote %s://%s@%s", typ, id, name)
+func (w WsGraphics) GetRemote(id, name, typ string) string {
+	libstar.Debug("WsGraphics.GetRemote %s://%s@%s", typ, id, name)
 	node := service.SERVICE.Zone.Get(name)
 	if node == nil {
-		libstar.Error("WebSocket.GetRemote %s", name)
+		libstar.Error("WsGraphics.GetRemote %s", name)
 		return ""
 	}
 	host := node.Hostname
@@ -48,13 +69,13 @@ func (w WebSocket) GetRemote(id, name, typ string) string {
 	}
 	resp, err := client.Do()
 	if err != nil {
-		libstar.Error("WebSocket.GetRemote %s", err)
+		libstar.Error("WsGraphics.GetRemote %s", err)
 		return ""
 	}
 	defer client.Close()
 	inst := schema.Instance{}
 	if err := libstar.GetJSON(resp.Body, &inst); err != nil {
-		libstar.Error("WebSocket.GetRemote %s", name)
+		libstar.Error("WsGraphics.GetRemote %s", name)
 		return ""
 	}
 	port := ""
@@ -66,11 +87,11 @@ func (w WebSocket) GetRemote(id, name, typ string) string {
 	return host + ":" + port
 }
 
-func (w WebSocket) GetLocal(id, typ string) string {
-	libstar.Debug("WebSocket.GetLocal %s://%s", typ, id)
+func (w WsGraphics) GetLocal(id, typ string) string {
+	libstar.Debug("WsGraphics.GetLocal %s://%s", typ, id)
 	hyper, err := libvirtc.GetHyper()
 	if err != nil {
-		libstar.Error("WebSocket.GetLocal %s", err)
+		libstar.Error("WsGraphics.GetLocal %s", err)
 		return ""
 	}
 	dom, err := hyper.LookupDomainByUUIDString(id)
@@ -88,7 +109,7 @@ func (w WebSocket) GetLocal(id, typ string) string {
 	return ""
 }
 
-func (w WebSocket) GetTarget(r *http.Request) string {
+func (w WsGraphics) GetTarget(r *http.Request) string {
 	id := api.GetQueryOne(r, "id")
 	if id == "" {
 		return ""
@@ -104,39 +125,21 @@ func (w WebSocket) GetTarget(r *http.Request) string {
 	return w.GetRemote(id, name, format)
 }
 
-func (w WebSocket) Handle(ws *websocket.Conn) {
+func (w WsGraphics) Handle(ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
-
 	target := w.GetTarget(ws.Request())
 	if target == "" {
-		libstar.Error("WebSocket.Handle target not found.")
+		libstar.Error("WsGraphics.Handle target not found.")
 		return
 	}
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("WebSocket.Handle %s", err)
+		libstar.Error("WsGraphics.Handle %s", err)
 		return
 	}
 	defer conn.Close()
-	libstar.Info("WebSocket.Handle by %s", ws.RemoteAddr())
-	libstar.Info("WebSocket.Handle to %s", conn.RemoteAddr())
-
-	wait := libstar.NewWaitOne(2)
-	go func() {
-		defer wait.Done()
-		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Warn("WebSocket.Handle from ws %s", err)
-		}
-	}()
-	go func() {
-		defer wait.Done()
-		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Warn("WebSocket.Handle from target %s", err)
-		}
-	}()
-	wait.Wait()
-	libstar.Warn("WebSocket.Handle %s exit", ws.RemoteAddr())
+	proxy(ws, conn)
 }
 
 type TcpSocket struct {
@@ -149,7 +152,6 @@ func (t TcpSocket) Router(router *mux.Router) {
 func (t TcpSocket) Local(host string, ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
-
 	r := ws.Request()
 	target := api.GetQueryOne(r, "target")
 	conn, err := net.Dial("tcp", target)
@@ -160,24 +162,7 @@ func (t TcpSocket) Local(host string, ws *websocket.Conn) {
 	defer conn.Close()
 	user, _ := api.GetUser(r)
 	libstar.Info("TcpSocket.Local with %s", user.Name)
-	libstar.Info("TcpSocket.Local by %s", ws.RemoteAddr())
-	libstar.Info("TcpSocket.Local to %s", conn.RemoteAddr())
-
-	wait := libstar.NewWaitOne(2)
-	go func() {
-		defer wait.Done()
-		if _, err := io.Copy(conn, ws); err != nil {
-			libstar.Warn("TcpSocket.Local from ws %s", err)
-		}
-	}()
-	go func() {
-		defer wait.Done()
-		if _, err := io.Copy(ws, conn); err != nil {
-			libstar.Warn("TcpSocket.Local from target %s", err)
-		}
-	}()
-	wait.Wait()
-	libstar.Warn("ProxyWs.Socket %s exit", ws.RemoteAddr())
+	proxy(ws, conn)
 }
 
 func (t TcpSocket) Remote(host string, ws *websocket.Conn) {
@@ -212,4 +197,66 @@ func (t TcpSocket) Handle(ws *websocket.Conn) {
 	} else {
 		t.Remote(host, ws)
 	}
+}
+
+type WsProxy struct {
+}
+
+func (w WsProxy) Router(router *mux.Router) {
+	router.Handle("/ext/wsproxy/{target}", websocket.Handler(w.Handle))
+}
+
+func (w WsProxy) Handle(ws *websocket.Conn) {
+	defer ws.Close()
+	//ws.PayloadType = websocket.BinaryFrame
+	target, _ := api.GetArg(ws.Request(), "target")
+	if target == "" {
+		libstar.Error("WsProxy.Handle target notFound.")
+		return
+	}
+	conn, err := net.Dial("tcp", target)
+	if err != nil {
+		libstar.Error("TcpSocket.Local %s", err)
+		return
+	}
+	defer conn.Close()
+	libstar.Info("WsProxy.Handle %s", target)
+	wait := libstar.NewWaitOne(2)
+	go func() {
+		defer wait.Done()
+		for {
+			var data []byte
+			if err := websocket.Message.Receive(ws, &data); err != nil {
+				libstar.Warn("WsProxy.Handle.ws.Receive %s", err)
+				break
+			}
+			message := make([]byte, len(data))
+			n, err := base64.StdEncoding.Decode(message, data)
+			if err != nil {
+				libstar.Warn("WsProxy.Handle.base64.Decode %s", err)
+				break
+			}
+			if _, err := conn.Write(message[:n]); err != nil {
+				libstar.Warn("WsProxy.Handle.conn.Write %s", err)
+				break
+			}
+		}
+	}()
+	go func() {
+		defer wait.Done()
+		for {
+			message := make([]byte, 4096)
+			n, err := conn.Read(message)
+			if err != nil {
+				libstar.Warn("WsProxy.Handle.conn.Read %s", err)
+				break
+			}
+			data := base64.StdEncoding.EncodeToString(message[:n])
+			if err := websocket.Message.Send(ws, data); err != nil {
+				libstar.Warn("WsProxy.Handle.ws.Send %s", err)
+				break
+			}
+		}
+	}()
+	wait.Wait()
 }
