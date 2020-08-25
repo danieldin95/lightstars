@@ -102,20 +102,25 @@ func (h *Server) Initialize() {
 	h.LoadRouter()
 }
 
-func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
-	// not need to auth.
-	if r.URL.Path == "/" ||
-		strings.HasPrefix(r.URL.Path, "/ext/webs") ||
-		strings.HasPrefix(r.URL.Path, "/static") ||
-		strings.HasPrefix(r.URL.Path, "/favicon.ico") ||
-		strings.HasPrefix(r.URL.Path, "/ui/login") ||
-		strings.HasPrefix(r.URL.Path, "/ui/console") {
+func (h *Server) Filter(r *http.Request) bool {
+	path := r.URL.Path
+	if path == "/" || strings.HasPrefix(path, "/ext/webs") ||
+		(strings.HasPrefix(path, "/static") && !strings.HasPrefix(path, "/static/sshy")) ||
+		strings.HasPrefix(path, "/favicon.ico") ||
+		strings.HasPrefix(path, "/ui/login") ||
+		strings.HasPrefix(path, "/ui/console") {
 		return true
 	}
+	return false
+}
 
+func (h *Server) IsAuth(w http.ResponseWriter, r *http.Request) bool {
+	// not need to auth.
+	if h.Filter(r) {
+		return true
+	}
 	name, pass, _ := api.GetAuth(r)
 	libstar.Print("Server.IsAuth %s:%s", name, pass)
-
 	// auth by password and name
 	user, ok := service.SERVICE.Users.Get(name)
 	if !ok || user.Password != pass {
