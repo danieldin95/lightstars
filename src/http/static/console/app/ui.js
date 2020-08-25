@@ -151,7 +151,7 @@ const UI = {
         UI.initSetting('shared', true);
         UI.initSetting('view_only', false);
         UI.initSetting('show_dot', false);
-        UI.initSetting('path', 'ext/websocket');
+        UI.initSetting('path', 'ext/ws/graphics');
         UI.initSetting('repeaterID', '');
         UI.initSetting('reconnect', true);
         UI.initSetting('reconnect_delay', 5000);

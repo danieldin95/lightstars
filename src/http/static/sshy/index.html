@@ -14,7 +14,7 @@
 		var port = window.location.port;
 		var proto = window.location.protocol === "https:" ? "wss" : "ws";
 		var target = readQueryVariable("target", "localhost:22");
-		var wsproxyURL = proto + "://" + host + ":" + port + "/ext/wsproxy/" + target
+		var wsproxyURL = proto + "://" + host + ":" + port + "/ext/ws/proxy/" + target
 	</script>
 	<link rel="stylesheet" href="/static/sshy/css/xterm.css" async/>
 	<script type="text/javascript" src="/static/sshy/js/combinedJS.comb.js" async></script>

@@ -48,7 +48,7 @@ type WsGraphics struct {
 }
 
 func (w WsGraphics) Router(router *mux.Router) {
-	router.Handle("/ext/websocket", websocket.Handler(w.Handle))
+	router.Handle("/ext/ws/graphics", websocket.Handler(w.Handle))
 }
 
 func (w WsGraphics) GetRemote(id, name, typ string) string {
@@ -142,34 +142,34 @@ func (w WsGraphics) Handle(ws *websocket.Conn) {
 	proxy(ws, conn)
 }
 
-type TcpSocket struct {
+type WsTcp struct {
 }
 
-func (t TcpSocket) Router(router *mux.Router) {
-	router.Handle("/ext/tcpsocket", websocket.Handler(t.Handle))
+func (t WsTcp) Router(router *mux.Router) {
+	router.Handle("/ext/ws/tcp", websocket.Handler(t.Handle))
 }
 
-func (t TcpSocket) Local(host string, ws *websocket.Conn) {
+func (t WsTcp) Local(host string, ws *websocket.Conn) {
 	defer ws.Close()
 	ws.PayloadType = websocket.BinaryFrame
 	r := ws.Request()
 	target := api.GetQueryOne(r, "target")
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("TcpSocket.Local %s", err)
+		libstar.Error("WsTcp.Local %s", err)
 		return
 	}
 	defer conn.Close()
 	user, _ := api.GetUser(r)
-	libstar.Info("TcpSocket.Local with %s", user.Name)
+	libstar.Info("WsTcp.Local with %s", user.Name)
 	proxy(ws, conn)
 }
 
-func (t TcpSocket) Remote(host string, ws *websocket.Conn) {
+func (t WsTcp) Remote(host string, ws *websocket.Conn) {
 	r := ws.Request()
 	node := service.SERVICE.Zone.Get(host)
 	if node == nil {
-		libstar.Error("TcpSocket.Remote host not found: %s", host)
+		libstar.Error("WsTcp.Remote host not found: %s", host)
 		return
 	}
 	query := r.URL.Query()
@@ -189,7 +189,7 @@ func (t TcpSocket) Remote(host string, ws *websocket.Conn) {
 	pri.Socket(ws)
 }
 
-func (t TcpSocket) Handle(ws *websocket.Conn) {
+func (t WsTcp) Handle(ws *websocket.Conn) {
 	r := ws.Request()
 	host := api.GetQueryOne(r, "host")
 	if host == "" {
@@ -203,7 +203,7 @@ type WsProxy struct {
 }
 
 func (w WsProxy) Router(router *mux.Router) {
-	router.Handle("/ext/wsproxy/{target}", websocket.Handler(w.Handle))
+	router.Handle("/ext/ws/proxy/{target}", websocket.Handler(w.Handle))
 }
 
 func (w WsProxy) Handle(ws *websocket.Conn) {
@@ -216,7 +216,7 @@ func (w WsProxy) Handle(ws *websocket.Conn) {
 	}
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("TcpSocket.Local %s", err)
+		libstar.Error("WsTcp.Local %s", err)
 		return
 	}
 	defer conn.Close()

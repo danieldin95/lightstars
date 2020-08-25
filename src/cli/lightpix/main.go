@@ -84,7 +84,7 @@ func main() {
 				Type:     "basic",
 				Username: cfg.Auth,
 			},
-			Url: cfg.Url + "/ext/tcpsocket",
+			Url: cfg.Url + "/ext/ws/tcp",
 		},
 		Address: cfg.Listen,
 	}

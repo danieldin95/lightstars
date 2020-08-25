@@ -52,7 +52,7 @@ func (h *Server) LoadRouter() {
 	Download{}.Router(router)
 	// proxy websocket
 	WsGraphics{}.Router(router)
-	TcpSocket{}.Router(router)
+	WsTcp{}.Router(router)
 	WsProxy{}.Router(router)
 	// zone router
 	Host{}.Router(router)
