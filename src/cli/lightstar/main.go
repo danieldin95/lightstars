@@ -57,7 +57,7 @@ func main() {
 
 	libstar.PreNotify()
 	// Check and Start pprof.
-	pprof(cfg.ConfDir + "/pprof")
+	pprof(cfg.ConfDir + "/pprof.json")
 	libstar.Init(cfg.LogFile, cfg.Verbose)
 	// Initialize storage
 	storage.DATASTOR.Init()
