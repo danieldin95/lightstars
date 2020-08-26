@@ -32,6 +32,20 @@ var cfg = StarConfig{
 	Verbose:   2,
 }
 
+func pprof(file string) {
+	if _, err := os.Stat(file); os.IsNotExist(err) {
+		return
+	}
+	addr := ""
+	if err := libstar.JSON.UnmarshalLoad(&addr, file); err != nil {
+		libstar.Warn("pprof.JSON.UnmarshalLoad %v", err)
+	}
+	p := &libstar.PProf{
+		Listen: addr,
+	}
+	p.Start()
+}
+
 func main() {
 	flag.StringVar(&cfg.Listen, "listen", cfg.Listen, "the address http listen.")
 	flag.IntVar(&cfg.Verbose, "log:level", cfg.Verbose, "logger level")
@@ -42,20 +56,23 @@ func main() {
 	flag.Parse()
 
 	libstar.PreNotify()
+	// Check and Start pprof.
+	pprof(cfg.ConfDir + "/pprof")
 	libstar.Init(cfg.LogFile, cfg.Verbose)
-	// initialize storage
+	// Initialize storage
 	storage.DATASTOR.Init()
 	service.SERVICE.Load(cfg.ConfDir)
-
+	// Initialize hyper
 	_, _ = libvirtc.SetHyper(cfg.Hyper)
 	_, _ = libvirts.SetHyper(cfg.Hyper)
 	_, _ = libvirtn.SetHyper(cfg.Hyper)
-
+	// Configure cert and auth.
 	authFile := cfg.ConfDir + "/auth.json"
 	h := http.NewServer(cfg.Listen, cfg.StaticDir, authFile)
 	if _, err := os.Stat(cfg.CrtDir); !os.IsNotExist(err) {
 		h.SetCert(cfg.CrtDir+"/private.key", cfg.CrtDir+"/crt.pem")
 	}
+	// Start
 	go h.Start()
 	libstar.SdNotify()
 
