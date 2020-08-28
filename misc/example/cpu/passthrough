@@ -1,0 +1,2 @@
+<!-- qemu-system-x86_64 -cpu help -->
+<cpu mode="host-passthrough" check="none"/>

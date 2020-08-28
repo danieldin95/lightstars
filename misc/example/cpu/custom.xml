@@ -1,0 +1,18 @@
+<cpu mode="custom" match="exact" check="full">
+    <model fallback="forbid">Haswell</model>
+    <feature policy="disable" name="fma"/>
+    <feature policy="disable" name="movbe"/>
+    <feature policy="disable" name="bmi1"/>
+    <feature policy="disable" name="hle"/>
+    <feature policy="disable" name="avx2"/>
+    <feature policy="disable" name="bmi2"/>
+    <feature policy="disable" name="invpcid"/>
+    <feature policy="disable" name="rtm"/>
+    <feature policy="require" name="vme"/>
+    <feature policy="require" name="f16c"/>
+    <feature policy="require" name="rdrand"/>
+    <feature policy="require" name="hypervisor"/>
+    <feature policy="require" name="arat"/>
+    <feature policy="require" name="xsaveopt"/>
+    <feature policy="disable" name="abm"/>
+</cpu>

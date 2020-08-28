@@ -1,0 +1,9 @@
+<!-- lscpi | grep Virtual -->
+<interface type='hostdev' managed='yes'>
+    <source>
+        <address type='pci' domain='0x0000' bus='0x05' slot='0x11' function='0x0'/>
+    </source>
+    <vlan>
+        <tag id='1020'/>
+    </vlan>
+</interface>

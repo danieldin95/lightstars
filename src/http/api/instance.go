@@ -215,12 +215,12 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	}
 	// cpu and memory
 	if conf.CpuMode != "" {
-		dom.CPUXml = libvirtc.CPUXML{
+		dom.CPU = libvirtc.CPUXML{
 			Mode:  conf.CpuMode,
 			Check: "full",
 		}
 	}
-	dom.VCPUXml = libvirtc.VCPUXML{
+	dom.VCPU = libvirtc.VCPUXML{
 		Placement: "static",
 		Value:     fmt.Sprintf("%d", conf.MaxCpu),
 	}

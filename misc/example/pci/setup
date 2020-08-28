@@ -1,0 +1,47 @@
+CentOS7
+=======
+
+1. Bios
+--------
+
+VT-x and VT-d
+
+
+2. iommu
+---------
+
+cat /etc/default/grub | grep iommu
+
+GRUB_CMDLINE_LINUX="crashkernel=auto rd.lvm.lv=centos/root intel_iommu=on rhgb quiet"
+
+grub2-mkconfig --output=/boot/grub2/grub.cfg
+
+reboot
+
+find /sys/kernel/iommu_groups/ -type l
+
+## modprobe vfio_iommu_type1 allow_unsafe_interrupts=1
+
+cat > /etc/modprobe.d/iommu_unsafe_interrupts.conf <<EOF
+options vfio_iommu_type1 allow_unsafe_interrupts=1
+EOF
+
+
+3. interface
+--------------
+
+cat > /sbin/ifup-local <<EOF
+#!/bin/sh
+
+dev="p3p1"
+if [[ "\$1" == "$dev" ]]; then
+    echo 16 > /sys/class/net/$dev/device/sriov_numvfs
+fi
+EOF
+
+chmod +x /sbin/ifup-local
+
+ip link show p3p1
+
+lspci | grep Ethernet
+

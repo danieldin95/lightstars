@@ -4,7 +4,6 @@ import {GuestCtl} from '../../ctl/guest.js';
 import {Api} from "../../api/api.js";
 import {InstanceApi} from "../../api/instance.js";
 
-import {Collapse} from "../collapse.js";
 import {DiskCreate} from '../disk/create.js';
 import {IsoCreate} from "../disk/iso/create.js";
 import {InterfaceCreate} from '../interface/create.js';
@@ -163,7 +162,7 @@ export class Guest extends Container {
                             <dt>{{'arch' | i}}:</dt>
                             <dd>{{arch}} | {{type}}</dd>
                             <dt>{{'processor' | i}}:</dt>
-                            <dd>{{maxCpu}} | {{cpuTime}}ms</dd>
+                            <dd>{{cpuMode ? cpuMode : 'custom'}} | {{maxCpu}} | {{cpuTime}}ms</dd>
                             <dt>{{'memory' | i}}:</dt>
                             <dd>{{maxMem | prettyKiB}} | {{memory | prettyKiB}}</dd>
                         </dl>

@@ -12,8 +12,8 @@ type DomainXML struct {
 	Name     string      `xml:"name" json:"name"`
 	UUID     string      `xml:"uuid" json:"uuid"`
 	OS       OSXML       `xml:"os" json:"os"`
-	CPUXml   CPUXML      `xml:"cpu" json:"cpu"`
-	VCPUXml  VCPUXML     `xml:"vcpu" json:"cpu"`
+	CPU      CPUXML      `xml:"cpu" json:"cpu"`
+	VCPU     VCPUXML     `xml:"vcpu" json:"vcpu"`
 	Memory   MemXML      `xml:"memory" json:"memory"`
 	CurMem   CurMemXML   `xml:"currentMemory" json:"currentMemory"`
 	Devices  DevicesXML  `xml:"devices" json:"devices"`

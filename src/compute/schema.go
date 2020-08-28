@@ -102,27 +102,29 @@ func NewInstance(dom libvirtc.Domain) schema.Instance {
 		obj.CpuTime = info.CpuTime / 1000000
 	}
 	xmlObj := libvirtc.NewDomainXMLFromDom(&dom, true)
-	if xmlObj != nil {
-		obj.Arch = xmlObj.OS.Type.Arch
-		obj.Type = xmlObj.Type
-		for _, x := range xmlObj.Devices.Disks {
-			obj.Disks = append(obj.Disks, NewFromDiskXML(x))
+	if xmlObj == nil {
+		return obj
+	}
+	obj.Arch = xmlObj.OS.Type.Arch
+	obj.CpuMode = xmlObj.CPU.Mode
+	obj.Type = xmlObj.Type
+	for _, x := range xmlObj.Devices.Disks {
+		obj.Disks = append(obj.Disks, NewFromDiskXML(x))
+	}
+	for _, x := range xmlObj.Devices.Interfaces {
+		obj.Interfaces = append(obj.Interfaces, NewFromInterfaceXML(x))
+	}
+	for _, x := range xmlObj.Devices.Controllers {
+		obj.Controllers = append(obj.Controllers, NewFromControllerXML(x))
+	}
+	for _, x := range xmlObj.Devices.Graphics {
+		g := schema.Graphics{
+			Type:     x.Type,
+			Listen:   x.Listen,
+			Password: x.Password,
+			Port:     x.Port,
 		}
-		for _, x := range xmlObj.Devices.Interfaces {
-			obj.Interfaces = append(obj.Interfaces, NewFromInterfaceXML(x))
-		}
-		for _, x := range xmlObj.Devices.Controllers {
-			obj.Controllers = append(obj.Controllers, NewFromControllerXML(x))
-		}
-		for _, x := range xmlObj.Devices.Graphics {
-			g := schema.Graphics{
-				Type:     x.Type,
-				Listen:   x.Listen,
-				Password: x.Password,
-				Port:     x.Port,
-			}
-			obj.Graphics = append(obj.Graphics, g)
-		}
+		obj.Graphics = append(obj.Graphics, g)
 	}
 	return obj
 }
