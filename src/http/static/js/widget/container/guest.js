@@ -162,9 +162,13 @@ export class Guest extends Container {
                             <dt>{{'arch' | i}}:</dt>
                             <dd>{{arch}} | {{type}}</dd>
                             <dt>{{'processor' | i}}:</dt>
-                            <dd>{{cpuMode ? cpuMode : 'custom'}} | {{maxCpu}} | {{cpuTime}}ms</dd>
+                            <dd title="{{'model | number | time' | i}}">
+                              {{cpuMode | prettyCpuMode}} | {{maxCpu}} | {{cpuTime}}ms
+                            </dd>
                             <dt>{{'memory' | i}}:</dt>
-                            <dd>{{maxMem | prettyKiB}} | {{memory | prettyKiB}}</dd>
+                            <dd title="{{'max | current' | i}}">
+                              {{maxMem | prettyKiB}} | {{memory | prettyKiB}}
+                            </dd>
                         </dl>
                     </div>
                 </div>

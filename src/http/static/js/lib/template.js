@@ -114,6 +114,15 @@ export class Template {
             hour = (hour % 24);
             return day + "d" + hour + "h";
         };
+        m.prettyCpuMode = function (mode) {
+          if (mode === "host-passthrough") {
+              return "passthrough";
+          } else if (mode === "host-model") {
+              return "host";
+          } else {
+              return "custom";
+          }
+        };
         return m;
     }
 }
