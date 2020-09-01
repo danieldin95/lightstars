@@ -175,6 +175,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	dom := libvirtc.DomainXML{
 		Type: "kvm",
 		Name: conf.Name,
+		UUID: libstar.GenUUID(),
 		Devices: libvirtc.DevicesXML{
 			Disks:       make([]libvirtc.DiskXML, 0, 2),
 			Graphics:    make([]libvirtc.GraphicsXML, 1), // vnc/spice
@@ -400,6 +401,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	libstar.Info("Instance.POST %s: %s", xmlObj.Name, xmlObj.UUID)
 	xmlData := xmlObj.Encode()
 	if xmlData == "" {
 		// If name already existed, will be clear.

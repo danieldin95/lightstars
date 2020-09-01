@@ -28,12 +28,11 @@ type CPUXML struct {
 }
 
 func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
-	var xmlData string
-	var err error
-
 	if dom == nil {
 		return nil
 	}
+	var err error
+	var xmlData string
 	xmlData, err = dom.GetXMLDesc(secure)
 	if err != nil {
 		return nil

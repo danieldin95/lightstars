@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/satori/go.uuid"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -147,20 +148,20 @@ type jsonUtils struct {
 
 var JSON = jsonUtils{}
 
-func (j jsonUtils) Marshal(v interface{}, pretty bool) (string, error) {
+func (j jsonUtils) Marshal(v interface{}, pretty bool) ([]byte, error) {
 	str, err := json.Marshal(v)
 	if err != nil {
 		Error("Marshal error: %s", err)
-		return "", err
+		return nil, err
 	}
 	if !pretty {
-		return string(str), nil
+		return nil, nil
 	}
 	var out bytes.Buffer
 	if err := json.Indent(&out, str, "", "  "); err != nil {
-		return string(str), nil
+		return nil, nil
 	}
-	return out.String(), nil
+	return out.Bytes(), nil
 }
 
 func (j jsonUtils) MarshalSave(v interface{}, file string, pretty bool) error {
@@ -175,7 +176,7 @@ func (j jsonUtils) MarshalSave(v interface{}, file string, pretty bool) error {
 		Error("MarshalSave error: %s", err)
 		return err
 	}
-	if _, err := f.Write([]byte(str)); err != nil {
+	if _, err := f.Write(str); err != nil {
 		Error("MarshalSave: %s", err)
 		return err
 	}
@@ -190,7 +191,7 @@ func (j jsonUtils) UnmarshalLoad(v interface{}, file string) error {
 	if err != nil {
 		return NewErr("UnmarshalLoad: file:<%s> %s", file, err)
 	}
-	if err := json.Unmarshal([]byte(contents), v); err != nil {
+	if err := json.Unmarshal(contents, v); err != nil {
 		return NewErr("UnmarshalLoad: %s", err)
 	}
 	return nil
@@ -201,22 +202,21 @@ type xmlUtils struct {
 
 var XML = xmlUtils{}
 
-func (x xmlUtils) Marshal(v interface{}, pretty bool) (string, error) {
+func (x xmlUtils) Marshal(v interface{}, pretty bool) ([]byte, error) {
 	if !pretty {
 		str, err := xml.Marshal(v)
 		if err != nil {
 			Error("Marshal error: %s", err)
-			return "", err
+			return nil, err
 		}
-		return string(str), nil
-	} else {
-		str, err := xml.MarshalIndent(v, "", "  ")
-		if err != nil {
-			Error("Marshal error: %s", err)
-			return "", err
-		}
-		return string(str), nil
+		return str, nil
 	}
+	str, err := xml.MarshalIndent(v, "", "  ")
+	if err != nil {
+		Error("Marshal error: %s", err)
+		return nil, err
+	}
+	return str, nil
 }
 
 func (x xmlUtils) MarshalSave(v interface{}, file string, pretty bool) error {
@@ -231,7 +231,7 @@ func (x xmlUtils) MarshalSave(v interface{}, file string, pretty bool) error {
 		Error("MarshalSave error: %s", err)
 		return err
 	}
-	if _, err := f.Write([]byte(str)); err != nil {
+	if _, err := f.Write(str); err != nil {
 		Error("MarshalSave: %s", err)
 		return err
 	}
@@ -246,7 +246,7 @@ func (x xmlUtils) UnmarshalLoad(v interface{}, file string) error {
 	if err != nil {
 		return NewErr("UnmarshalLoad: file:<%s> %s", file, err)
 	}
-	if err := xml.Unmarshal([]byte(contents), v); err != nil {
+	if err := xml.Unmarshal(contents, v); err != nil {
 		return NewErr("UnmarshalLoad: %s", err)
 	}
 	return nil
@@ -344,7 +344,6 @@ func Wait() {
 	signal.Notify(x, os.Interrupt, syscall.SIGKILL)
 	signal.Notify(x, os.Interrupt, syscall.SIGQUIT) //CTL+/
 	signal.Notify(x, os.Interrupt, syscall.SIGINT)  //CTL+C
-
 	<-x
 	fmt.Println("done")
 }
@@ -356,8 +355,13 @@ func GetJSON(r io.ReadCloser, v interface{}) error {
 		return err
 	}
 	Debug("GetJSON %s", body)
-	if err := json.Unmarshal([]byte(body), v); err != nil {
+	if err := json.Unmarshal(body, v); err != nil {
 		return err
 	}
 	return nil
+}
+
+func GenUUID() string {
+	v := uuid.NewV4()
+	return v.String()
 }
