@@ -6,17 +6,16 @@
 	<title>SSHy.us</title>
 
 	<script type="text/javascript">
-		var wsproxyURL = "192.168.209.141"
-		var wsproxyPorts = {"ws":10080, "wss":6001}
-		//var wsproxyPorts = {"ws":5999, "wss":6001}
-		var wsproxyProto = "ws"
-		
+		var wsproxyURL = window.location.hostname
+		var wsproxyPorts = {"ws": window.location.port, "wss": window.location.port}
+		var wsproxyProto = window.location.protocol === "https:" ? "wss" : "ws"
+
 		var ws, transport, settings, term = null;
 
 		// Test IE 11
 		if (window.msCrypto){
 			// Redirect window.crypto.getRandomValues() -> window.msCrypto.getRandomValues()
-			window.crypto = {} 
+			window.crypto = {}
 			window.crypto.getRandomValues = function(a) { return window.msCrypto.getRandomValues(a); }
 
 			// PolyFill Uint8Array.slice() for IE 11 for sjcl AES
@@ -64,6 +63,16 @@
 			resizeInterval = setTimeout(resize, 400);
 		}
 
+		function readQueryVariable(name, defaultValue) {
+			const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+					match = document.location.href.match(re);
+			if (typeof defaultValue === 'undefined') { defaultValue = null; }
+			if (match) {
+				return decodeURIComponent(match[1]);
+			}
+			return defaultValue;
+		}
+
 		// Recalculates the terminal Columns / Rows and sends new size to SSH server + xtermjs
 		function resize() {
 			if (term) {
@@ -86,8 +95,7 @@
 			}
 
 			// Build the wsproxyURL up
-			wsproxyURL = wsproxyProto + '://' + wsproxyURL + port + '/ext/wsproxy/'
-			//wsproxyURL = wsproxyProto + '://' + wsproxyURL + port + '/'
+			wsproxyURL = wsproxyProto + '://' + wsproxyURL + port + '/ext/ws/proxy/'
 
 			document.getElementById("websockURL").value = wsproxyURL
 		}
@@ -101,7 +109,7 @@
 				if (newURL.match(":")) {
 					port = ":"+matches[matches.length-1]
 				}
-				
+
 				wsproxyURL = matches[1] + port;
 				buildWSProxyURL(port)
 			}
@@ -191,7 +199,7 @@
 		}
 		// Starts the SSH client in scripts/transport.js
 		function startSSHy() {
-			var html_ipaddress = document.getElementById('ipaddress').value
+			var html_ipaddress = readQueryVariable("target", "localhost:22")
 			var termUsername = document.getElementById('username').value
 			var termPassword = document.getElementById('password').value
 
@@ -239,8 +247,8 @@
 			// Whenever the websocket is closed make sure to display an error if appropriate
 			ws.onclose = function(e) {
 				// Set the sidenav websocket proxy color to yellow
-				document.getElementById('websockURL').classList.remove('brightgreen')	
-				document.getElementById('websockURL').classList.add('brightyellow')	
+				document.getElementById('websockURL').classList.remove('brightgreen')
+				document.getElementById('websockURL').classList.add('brightyellow')
 				if (term) {
 					// Don't display an error if SSH transport has already detected a graceful exit
 					if (transport.closing) {
@@ -276,7 +284,7 @@
 				cols: 80,
 				rows: 24
 			});
-			
+
 			// start xterm.js
 			term.open(document.getElementById('terminal'), true);
 			term.fit()
@@ -290,7 +298,7 @@
 					break
 				}
 			}
-			
+
 			// clear the modal elements on screen
 			document.getElementById('load-container').style.display = "none";
 			document.getElementById('login_cred').style.display = "none";
@@ -314,12 +322,12 @@
 				// We've already authenticated so now any keypress is a command for the SSH server
 				var command, pressedKey;
 
-				/** IE isn't very good so it displays one character keys as full names in .key 
-			 	EG - e.key = " " to e.key = "Spacebar"	
+				/** IE isn't very good so it displays one character keys as full names in .key
+			 	EG - e.key = " " to e.key = "Spacebar"
 			 	so assuming .char is one character we'll use that instead **/
 				if (e.char && e.char.length == 1) {
 					pressedKey = e.char;
-				} else { 
+				} else {
 					pressedKey = e.key
 				}
 
@@ -349,7 +357,7 @@
 			};
 
 			term.textarea.onpaste = function(ev) {
-				var text 
+				var text
 
 				// Yay IE11 stuff!
 				if ( window.clipboardData && window.clipboardData.getData ) {
@@ -357,7 +365,7 @@
 				} else if ( ev.clipboardData && ev.clipboardData.getData ) {
 					text = ev.clipboardData.getData('text/plain');
 				}
-						
+
 		        if (text) {
 					// Just don't allow more than 1 million characters to be pasted.
 					if(text.length < 1000000){
@@ -439,21 +447,17 @@
 
 	<div id="login_cred" class="modal">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h2><span class="icon-lock"></span> SSHv2 Login</h2>
-			</div>
+            <div class="modal-header">
+                  <h4>SSH Login</h4>
+            </div>
 			<div class="modal-body">
 				<table style="width: 100%">
 					<tr>
-						<td><span class="icon-address-book"></span> IP Address:</td>
-						<td><input type="text" id="ipaddress" placeholder="sshy.us(:22)" style="width: 90%" onblur="validate(this.id, this.value)" autofocus></td>
+						<td>Username:</td>
+						<td><input type="text" id="username" value="root" style="width: 90%" onblur="validate(this.id, this.value)" autofocus></td>
 					</tr>
 					<tr>
-						<td><span class="icon-user-circle-o"></span> Username:</td>
-						<td><input type="text" id="username" placeholder="username" style="width: 90%" onblur="validate(this.id, this.value)"></td>
-					</tr>
-					<tr>
-						<td><span class="icon-eye"></span> Password:</td>
+						<td>Password:</td>
 						<td><input type="password" id="password" style="width: 90%" onblur="validate(this.id, this.value)"></td>
 					</tr>
 				</table>

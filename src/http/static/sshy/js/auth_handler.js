@@ -91,14 +91,14 @@ SSHyClient.auth.prototype = {
         // pixel data, which is overwritten by the above height and width
         m.add_int(0);
         m.add_int(0);
-        
+
         if (term) {
             // Don't sent any special terminal modes
             m.add_string('');
         }
 
         this.parceler.send(m);
-       
+
         if (term) {
             // invokes the shell session right after sending the packet
             this.invoke_shell();
@@ -131,7 +131,7 @@ SSHyClient.auth.prototype = {
 		        transport.disconnect();
 		        return;
 		    }
-		    term.write(this.termUsername + '@' + this.hostname + '\'s password:');
+		    term.write(this.termUsername + '@' + this.hostname + '\'s password: ');
 		    this.termPassword = '';
 		} else {
 			display_error('Invalid Username or Password');

@@ -10,7 +10,7 @@ var ws, transport, term = null;
 // Test IE 11
 if (window.msCrypto){
 	// Redirect window.crypto.getRandomValues() -> window.msCrypto.getRandomValues()
-	window.crypto = {} 
+	window.crypto = {}
 	window.crypto.getRandomValues = function(a) { return window.msCrypto.getRandomValues(a); }
 
 	// PolyFill Uint8Array.slice() for IE 11 for sjcl AES
@@ -162,9 +162,9 @@ function startSSHy() {
 // Initialises xtermjs
 function termInit() {
     // Define the terminal rows/cols
-    term = new Terminal({ 
-        cols: 80, 
-        rows: 24 
+    term = new Terminal({
+        cols: 80,
+        rows: 24
     });
 
     // start xterm.js
@@ -195,12 +195,12 @@ function startxtermjs() {
         }
 
         var pressedKey
-        /** IE isn't very good so it displays one character keys as full names in .key 
-	 	EG - e.key = " " to e.key = "Spacebar"	
+        /** IE isn't very good so it displays one character keys as full names in .key
+	 	EG - e.key = " " to e.key = "Spacebar"
 	 	so assuming .char is one character we'll use that instead **/
 		if (e.char && e.char.length == 1) {
 			pressedKey = e.char;
-		} else { 
+		} else {
 			pressedKey = e.key
 		}
 
@@ -234,12 +234,20 @@ function startxtermjs() {
                     break;
                 case 13: // enter
                     if (transport.auth.termPassword === undefined) {
-                        term.write("\n\r" + transport.auth.termUsername + '@' + transport.auth.hostname + '\'s password:');
-                        transport.auth.termPassword = '';
+                        if (transport.auth.termUsername.length > 0) {
+                            term.write("\n\r" + transport.auth.termUsername + '@' + transport.auth.hostname + '\'s password: ');
+                            transport.auth.termPassword = '';
+                        } else {
+                            term.write("\n\rLogin as: ");
+                        }
                     } else {
-                        term.write('\n\r');
-                        transport.auth.ssh_connection();
-                        return;
+                        if (transport.auth.termPassword.length > 0) {
+                            term.write('\n\r');
+                            transport.auth.ssh_connection();
+                            return;
+                        } else {
+                            term.write("\n\r" + transport.auth.termUsername + '@' + transport.auth.hostname + '\'s password: ');
+                        }
                     }
                     break;
                 default:
@@ -282,7 +290,7 @@ function startxtermjs() {
     };
 
     term.textarea.onpaste = function(ev) {
-		var text 
+		var text
 
 		// Yay IE11 stuff!
 		if ( window.clipboardData && window.clipboardData.getData ) {
@@ -290,7 +298,7 @@ function startxtermjs() {
 		} else if ( ev.clipboardData && ev.clipboardData.getData ) {
 			text = ev.clipboardData.getData('text/plain');
 		}
-				
+
         if (text) {
 			// Just don't allow more than 1 million characters to be pasted.
 			if(text.length < 1000000){
