@@ -184,7 +184,7 @@ function startxtermjs() {
 
     // if we haven't authenticated yet we're doing an interactive login
     if (!transport.auth.authenticated) {
-        term.write('Login as: ');
+        term.write(transport.auth.hostname + ' login: ');
     }
 
     // sets up some listeners for the terminal (keydown, paste)
@@ -235,10 +235,10 @@ function startxtermjs() {
                 case 13: // enter
                     if (transport.auth.termPassword === undefined) {
                         if (transport.auth.termUsername.length > 0) {
-                            term.write("\n\r" + transport.auth.termUsername + '@' + transport.auth.hostname + '\'s password: ');
+                            term.write("\n\rpassword: ");
                             transport.auth.termPassword = '';
                         } else {
-                            term.write("\n\rLogin as: ");
+                            term.write("\n\r" + transport.auth.hostname + " login: ");
                         }
                     } else {
                         if (transport.auth.termPassword.length > 0) {
@@ -246,7 +246,7 @@ function startxtermjs() {
                             transport.auth.ssh_connection();
                             return;
                         } else {
-                            term.write("\n\r" + transport.auth.termUsername + '@' + transport.auth.hostname + '\'s password: ');
+                            term.write("\n\rpassword: ");
                         }
                     }
                     break;

@@ -131,7 +131,7 @@ SSHyClient.auth.prototype = {
 		        transport.disconnect();
 		        return;
 		    }
-		    term.write(this.termUsername + '@' + this.hostname + '\'s password: ');
+		    term.write('password: ');
 		    this.termPassword = '';
 		} else {
 			display_error('Invalid Username or Password');
