@@ -71,7 +71,7 @@ export class Api {
     delete() {
         this.uuids.forEach((uuid, index, err) => {
             $.DELETE(this.url(uuid), (resp, success) => {
-                $(this.tasks).append(Alert.success(`remove ${uuid} ${resp.message}`));
+                //$(this.tasks).append(Alert.success(`remove ${uuid} ${resp.message}`));
             }).fail((e) => {
                 $(this.tasks).append(Alert.danger(`DELETE ${this.url(uuid)}: ${e.responseText}`));
             });
@@ -82,7 +82,7 @@ export class Api {
         let uuid = this.uuids[0]
         let url = this.url(uuid);
         $.PUT(url, JSON.stringify(data), (resp, success) => {
-            $(this.tasks).append(Alert.success(`edit ${uuid} ${resp.message}`));
+            //$(this.tasks).append(Alert.success(`edit ${uuid} ${resp.message}`));
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
         });
