@@ -62,7 +62,7 @@ export class Api {
 
     create(data) {
         $.POST(this.url(), JSON.stringify(data), (resp, status) => {
-            $(this.tasks).append(Alert.success(`create ${resp.message}`));
+            //$(this.tasks).append(Alert.success(`create ${resp.message}`));
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
         });
