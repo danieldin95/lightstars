@@ -43,7 +43,7 @@ export class Login extends Widget {
                     </div>
                     <div class="col-sm-7">
                         <span style="color: #ffffff;">
-                            <strong><a href="https://github.com/danieldin95/lightstar">{{'lightstar' | i}}</a></strong>
+                            <strong><a href="https://github.com/danieldin95/lightstar">{{'lightstars' | i}}</a></strong>
                         </span>
                         <br/>
                         <span style="color: #ced4da">
