@@ -22,7 +22,7 @@ This software makes it easier for you to control virtual compute, network and st
 
 ## Install epel and qemu-ev release
 
-    yum install -y epel centos-release-qemu-ev
+    yum install -y epel-release centos-release-qemu-ev
 
 ## Install by RPM packaging
 

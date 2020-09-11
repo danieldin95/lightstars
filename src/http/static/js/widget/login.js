@@ -22,6 +22,7 @@ export class Login extends Widget {
     refresh() {
         this.title(I18N.i('login'));
         $(this.parent).html(this.render({}));
+        $(this.parent).find('#autofocus').focus();
     }
 
     next() {
@@ -56,7 +57,7 @@ export class Login extends Widget {
                     <label for="name" class="col-sm-3 col-form-label-sm">{{'username' | i}}</label>
                     <div class="col-sm-7">
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" name="name" value="" autofocus/>
+                            <input type="text" class="form-control form-control-sm" name="name" value="" id="autofocus"/>
                         </div>
                     </div>
                 </div>
