@@ -11,7 +11,7 @@ This software makes it easier for you to control virtual compute, network and st
 
     lscpu | egrep '(vmx|svm)'
 
-## Disable SElinux firstly
+## Disable SELinux firstly
 
     cat > /etc/sysconfig/selinux <<EOF
     SELINUX=disabled
@@ -32,14 +32,10 @@ This software makes it easier for you to control virtual compute, network and st
     yum install -y ./lightstar-0.2.23-1.el7.x86_64.rpm
 
 
-## Start Libvirtd service.
+## Enable and Start service.
 
     systemctl enable libvirtd
     systemctl start libvirtd
-    
-
-## Start LightStar service.
-
 
     systemctl enable lightstar
     systemctl start lightstar
@@ -51,12 +47,12 @@ This software makes it easier for you to control virtual compute, network and st
     wget http://mirrors.aliyun.com/centos/7.7.1908/isos/x86_64/CentOS-7-x86_64-Minimal-1908.iso
 
 
-# Open UI on browser
+# Open WebUI in browser
 
     https://your-machine-address:10080
 
 
-## Get admin's password
+## Get Username and Password
 
     cat /etc/lightstar.auth
 
