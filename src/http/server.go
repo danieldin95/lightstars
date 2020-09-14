@@ -104,11 +104,14 @@ func (h *Server) Initialize() {
 
 func (h *Server) Filter(r *http.Request) bool {
 	path := r.URL.Path
-	if path == "/" || strings.HasPrefix(path, "/ext/webs") ||
-		(strings.HasPrefix(path, "/static") && !strings.HasPrefix(path, "/static/sshy")) ||
+	if strings.HasPrefix(path, "/static/sshy") {
+		return false
+	}
+	if path == "/" || strings.HasPrefix(path, "/static") ||
 		strings.HasPrefix(path, "/favicon.ico") ||
 		strings.HasPrefix(path, "/ui/login") ||
-		strings.HasPrefix(path, "/ui/console") {
+		strings.HasPrefix(path, "/ui/console") ||
+		strings.HasPrefix(path, "/ext/ws/graphics") {
 		return true
 	}
 	return false
