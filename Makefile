@@ -19,16 +19,15 @@ LDFLAGS += -X $(MOD).Version=$(VER)
 SD = $(shell pwd)
 BD = $(SD)/build
 LD = lightstar-$(LSB)-$(VER)
-WD = lightpix-Windows-$(VER)
 
 help: ## show make targets
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);\
 		printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 ## all light software
-bin: lightstar lightpix windows-lightpix ## build all binary
+bin: lightstar ## build all binary
 
-pkg: rpm windows-zip ## build all packages
+pkg: rpm ## build all packages
 
 rpm: rpm-lightstar rpm-lightsim ## build rpm packages
 
@@ -41,11 +40,6 @@ env:
 .PHONY: lightstar
 lightstar: env
 	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightstar ./src/cli/lightstar
-
-## light pix to proxy tcp
-.PHONY: lightpix
-lightpix: env
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightpix ./src/cli/lightpix
 
 ### linux packaging
 rpm-env:
@@ -60,7 +54,7 @@ rpm-lightsim: rpm-env
 	cp -rf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm $(BD)
 
 
-linux-zip: env lightstar lightpix ## build linux zip packages
+linux-zip: env lightstar ## build linux zip packages
 	@pushd $(BD)
 	@rm -rf $(LD) && mkdir -p $(LD)
 
@@ -79,7 +73,6 @@ linux-zip: env lightstar lightpix ## build linux zip packages
 
 	@mkdir -p $(LD)/usr/bin
 	@cp -rvf $(BD)/lightstar $(LD)/usr/bin
-	@cp -rvf $(BD)/lightpix $(LD)/usr/bin
 
 	@mkdir -p $(LD)/usr/lib/systemd/system
 	@cp $(SD)/packaging/lightstar.service $(LD)/usr/lib/systemd/system
@@ -94,25 +87,9 @@ centos-devel:
 ubuntu-devel:
 	apt-get install libvirt-dev
 
-## cross build for windows
-windows-lightpix: env
-	GOOS=windows GOARCH=amd64 go build -mod=vendor -o $(BD)/lightpix.windows.x86_64.exe ./src/cli/lightpix
-
-## packaging light pix for windows
-windows-zip: env ## build windows packages
-	@pushd $(BD)
-	@rm -rf $(WD) && mkdir -p $(WD)
-
-	@cp -rvf $(SD)/packaging/resource/lightpix.json.example $(WD)/lightpix.json
-	@cp -rvf $(BD)/lightpix.windows.x86_64.exe $(WD)
-
-	zip -r $(WD).zip $(WD) > /dev/null
-	@rm -rf $(WD)
-	@popd
-
 ## upgrade
 upgrade:
-	ansible-playbook ./misc/playbook/upgrade.yaml -e "version=$(VER)" 
+	ansible-playbook ./misc/playbook/upgrade.yaml -e "version=$(VER)"
 
 ## unit test
 .PHONY: test
