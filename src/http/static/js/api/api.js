@@ -44,8 +44,9 @@ export class Api {
         });
     }
 
-    get(data, func) {
+    get(data, func, fail) {
         if (typeof data == "function") {
+            fail = func;
             func = data;
             data = {};
         }
@@ -56,6 +57,9 @@ export class Api {
         $.GET(url, {format: 'schema'}, (resp, status) => {
             func({data, resp});
         }).fail((e) => {
+            if (fail) {
+                fail(e)
+            }
             $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
         });
     }

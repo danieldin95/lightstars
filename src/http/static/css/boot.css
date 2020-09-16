@@ -1,7 +1,7 @@
 body {
     font-family: arial,sans-serif;
     font-size: small;
-    background-color: #f8f9fa;
+    background-color: whitesmoke;
 }
 
 th, td {
@@ -72,7 +72,7 @@ a:hover, a:focus {
 .card-header {
     padding: .35rem 1.25rem;
     margin-bottom: -1px;
-    background: #dee2e6 linear-gradient(180deg, #dee2e6, #f8f9fa);
+    background: #dee2e6;
     border-bottom-color: #dee2e6;
     border-radius: calc(0.25rem - 1px);
 }

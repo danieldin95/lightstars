@@ -13,12 +13,13 @@ import {Preferences} from "./user/preferences.js";
 export class Navigation extends Widget {
     // {
     //   parent: '#xx'.
-    //   home: '.'
+    //   hyper: {}
     // }
     constructor(props) {
         super(props);
         this.parent = props.parent;
-        this.home = props.home;
+        this.user = props.hyper.attr('user');
+        this.home = props.hyper.attr('name');
         this.active = "";
         this.refresh();
     }
@@ -68,6 +69,13 @@ export class Navigation extends Widget {
                 .onsubmit((e) => {
                     console.log(Utils.toJSON(e.form));
                 });
+        }, (e) => {
+            this.view = $(this.render({
+                user: { name: this.user },
+                hyper: { host: 'default' },
+            }));
+            this.node();
+            $(this.parent).html(this.view);
         });
     }
 
@@ -188,7 +196,7 @@ export class Navigation extends Widget {
                 <li class="nav-item dropdown">
                     <a id="userMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" 
                         aria-haspopup="true" aria-expanded="false">
-                        {{user.name}}@{{hyper.host}}
+                        ${this.user}@{{hyper.host}}
                     </a>
                     <div class="dropdown-menu dropdown-left" aria-labelledby="userMore">
                         <a id="fullscreen" class="dropdown-item">{{'full screen' | i}}</a>

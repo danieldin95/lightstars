@@ -25,7 +25,7 @@ $(function() {
             parent: "#navigation",
             home: ".",
             container: "#container",
-            name: hyper.attr('name'),
+            hyper: hyper,
         });
         let rte = new Routes({
             hyper: hyper,
