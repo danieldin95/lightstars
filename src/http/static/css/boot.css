@@ -54,10 +54,6 @@ a:hover, a:focus {
     border-radius: .5rem;
 }
 
-.bg-dark {
-    background: #1d2124 linear-gradient(360deg, #1d2124, #495057);
-}
-
 .context {
     width: 100%;
     height: 100%;
@@ -76,10 +72,10 @@ a:hover, a:focus {
 .card-header {
     padding: .35rem 1.25rem;
     margin-bottom: -1px;
-    background: #dee2e6 linear-gradient(90deg, #dee2e6, #f8f9fa);
+    background: #dee2e6 linear-gradient(180deg, #dee2e6, #f8f9fa);
+    border-bottom-color: #dee2e6;
     border-radius: calc(0.25rem - 1px);
 }
-
 
 .card-header div {
     margin-left: .25rem;
