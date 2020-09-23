@@ -1,0 +1,3 @@
+[submodule "packaging/resource/cert"]
+	path = packaging/resource/cert
+	url = https://github.com/danieldin95/cert

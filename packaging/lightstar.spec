@@ -20,18 +20,12 @@ cd %_source_dir && make bin
 %install
 mkdir -p %{buildroot}/usr/bin
 cp %_source_dir/build/lightstar %{buildroot}/usr/bin/lightstar
-cp %_source_dir/build/lightpix %{buildroot}/usr/bin/lightpix
-
-mkdir -p %{buildroot}/etc/sysconfig
-cat > %{buildroot}/etc/sysconfig/lightstar.cfg << EOF
-OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/ca -conf /etc/lightstar"
-EOF
 
 mkdir -p %{buildroot}/usr/lib/systemd/system
 cp %_source_dir/packaging/lightstar.service %{buildroot}/usr/lib/systemd/system
 
 mkdir -p %{buildroot}/var/lightstar
-cp -R %_source_dir/packaging/resource/ca %{buildroot}/var/lightstar
+cp -R %_source_dir/packaging/resource/cert/lightstar/cert %{buildroot}/var/lightstar
 cp -R %_source_dir/packaging/script %{buildroot}/var/lightstar
 cp -R %_source_dir/src/http/static %{buildroot}/var/lightstar
 
@@ -70,12 +64,16 @@ cat > /etc/lightstar/auth.json <<EOF
 }
 EOF
 }
+[ -e '/etc/sysconfig/lightstar.cfg' ] || {
+cat > /etc/sysconfig/lightstar.cfg << EOF
+OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/cert -conf /etc/lightstar"
+EOF
+}
 
 
 %files
 %defattr(-,root,root)
 /etc/lightstar
-/etc/sysconfig
 /usr/bin/*
 /usr/lib/systemd/system/*
 /var/lightstar

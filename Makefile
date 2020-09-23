@@ -65,7 +65,7 @@ linux-zip: env lightstar ## build linux zip packages
 	@cp -rvf $(SD)/packaging/resource/permission.json.example $(LD)/etc/lightstar
 
 	@mkdir -p $(LD)/etc/sysconfig
-	@echo OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/ca -conf /etc/lightstar" > $(LD)/etc/sysconfig/lightstar.cfg
+	@echo OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/cert -conf /etc/lightstar" > $(LD)/etc/sysconfig/lightstar.cfg
 
 	@mkdir -p $(LD)/var/lightstar
 	@cp -R $(SD)/packaging/resource/ca $(LD)/var/lightstar

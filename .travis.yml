@@ -1,7 +1,10 @@
+git:
+  submodules: false
+
 language: go
 os: linux
 dist: xenial
-sudo: require
+sudo: enabled
 
 go:
   - 1.12.9
@@ -26,6 +29,5 @@ install:
     popd
 
 script:
-  - |
-    make
-    make test
+  - make
+  - make test
