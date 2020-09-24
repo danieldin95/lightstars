@@ -133,5 +133,6 @@
 	"add graphics": "新增图形设备",
 	"uptime": "运行时间",
 	"instances": "实例",
-	"language and region": "语言与区域"
+	"language and region": "语言与区域",
+	"console by remote viewer": "在本地终端打开"
 }

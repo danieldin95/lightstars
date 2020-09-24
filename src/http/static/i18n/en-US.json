@@ -49,7 +49,7 @@
 	"create isolated network": "Create isolated network",
 	"create existing bridge": "Create existing bridge",
 	"remove": "Remove",
-	"console in self": "Console in self",
+	"console in self": "Console in same page",
 	"console in new blank": "Console in new blank",
 	"console in new window": "Console in new window",
 	"dump xml": "Dump XML",
@@ -133,5 +133,6 @@
 	"add graphics": "Add graphics",
 	"uptime": "UpTime",
 	"instances": "Instances",
-	"language and region": "Language and region"
+	"language and region": "Language and region",
+	"console by remote viewer": "Console by remote viewer"
 }

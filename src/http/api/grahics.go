@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"sort"
+	"strings"
 )
 
 type Graphics struct {
@@ -21,26 +22,51 @@ func (gra Graphics) Router(router *mux.Router) {
 
 func (gra Graphics) GET(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 	defer dom.Free()
-	instance := compute.NewInstance(*dom)
-	list := schema.ListGraphics{
-		Items: make([]schema.Graphics, 0, 32),
+	format := GetQueryOne(r, "format")
+	if format == "vv" {
+		instance := compute.NewInstance(*dom)
+		var spice schema.Graphics
+		for _, gra := range instance.Graphics {
+			if gra.Type == "vnc" || gra.Type == "spice" {
+				spice = gra
+			}
+			if spice.Type == "spice" {
+				break
+			}
+		}
+		libstar.Debug("Graphics.Get %s, %s", r.URL.Hostname(), r.Host)
+		if spice.Type == "vnc" || spice.Type == "spice" {
+			vv := "[virt-viewer]"
+			vv += "\ntype=" + spice.Type
+			vv += "\nhost=" + strings.SplitN(r.Host, ":", 2)[0]
+			vv += "\nport=" + spice.Port
+			vv += "\npassword=" + spice.Password
+			vv += "\nfullscreen=1"
+			w.Header().Set("Content-Type", "application/x-msdownload")
+			w.Header().Set("Content-Disposition", "attachment; filename="+instance.Name+".vv")
+			_, _ = w.Write([]byte(vv))
+		}
+	} else {
+		instance := compute.NewInstance(*dom)
+		list := schema.ListGraphics{
+			Items: make([]schema.Graphics, 0, 32),
+		}
+		for _, gra := range instance.Graphics {
+			list.Items = append(list.Items, gra)
+		}
+		sort.SliceStable(list.Items, func(i, j int) bool {
+			return list.Items[i].Type > list.Items[j].Type
+		})
+		list.Metadata.Size = len(list.Items)
+		list.Metadata.Total = len(list.Items)
+		ResponseJson(w, list)
 	}
-	for _, gra := range instance.Graphics {
-		list.Items = append(list.Items, gra)
-	}
-	sort.SliceStable(list.Items, func(i, j int) bool {
-		return list.Items[i].Type > list.Items[j].Type
-	})
-	list.Metadata.Size = len(list.Items)
-	list.Metadata.Total = len(list.Items)
-	ResponseJson(w, list)
 }
 
 func (gra Graphics) POST(w http.ResponseWriter, r *http.Request) {
