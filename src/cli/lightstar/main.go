@@ -70,7 +70,7 @@ func main() {
 	authFile := cfg.ConfDir + "/auth.json"
 	h := http.NewServer(cfg.Listen, cfg.StaticDir, authFile)
 	if _, err := os.Stat(cfg.CrtDir); !os.IsNotExist(err) {
-		h.SetCert(cfg.CrtDir+"/private.key", cfg.CrtDir+"/crt.pem")
+		h.SetCert(cfg.CrtDir+"/key", cfg.CrtDir+"/crt")
 	}
 	// Start
 	go h.Start()

@@ -178,7 +178,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		UUID: libstar.GenUUID(),
 		Devices: libvirtc.DevicesXML{
 			Disks:       make([]libvirtc.DiskXML, 0, 2),
-			Graphics:    make([]libvirtc.GraphicsXML, 1), // vnc/spice
+			Graphics:    make([]libvirtc.GraphicsXML, 2), // vnc/spice
 			Interfaces:  make([]libvirtc.InterfaceXML, 0, 1),
 			Controllers: make([]libvirtc.ControllerXML, 4),
 			Inputs:      make([]libvirtc.InputXML, 1), // <input type="tablet" bus="usb"/>
@@ -234,12 +234,20 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		Type:  "KiB",
 	}
 	// vnc
+	pass := libstar.GenToken(32)
 	dom.Devices.Graphics[0] = libvirtc.GraphicsXML{
 		Type:     "vnc",
 		Listen:   "0.0.0.0",
 		Port:     "-1",
 		AutoPort: "yes",
-		Password: libstar.GenToken(32),
+		Password: pass,
+	}
+	dom.Devices.Graphics[1] = libvirtc.GraphicsXML{
+		Type:     "spice",
+		Listen:   "0.0.0.0",
+		Port:     "-1",
+		AutoPort: "yes",
+		Password: pass,
 	}
 	// controllers
 	dom.Devices.Controllers[0] = libvirtc.ControllerXML{
@@ -302,6 +310,12 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	// sound
 	dom.Devices.Sound = libvirtc.SoundXML{
 		Model: "ich6",
+	}
+	// video
+	dom.Devices.Video = libvirtc.VideoXML{
+		Model: libvirtc.VideoModelXML{
+			Type: "qxl",
+		},
 	}
 	return dom, nil
 }

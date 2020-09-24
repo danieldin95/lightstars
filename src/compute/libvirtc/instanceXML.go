@@ -12,12 +12,12 @@ type DomainXML struct {
 	Name     string      `xml:"name" json:"name"`
 	UUID     string      `xml:"uuid" json:"uuid"`
 	OS       OSXML       `xml:"os" json:"os"`
+	Features FeaturesXML `xml:"features" json:"features"`
 	CPU      CPUXML      `xml:"cpu" json:"cpu"`
 	VCPU     VCPUXML     `xml:"vcpu" json:"vcpu"`
 	Memory   MemXML      `xml:"memory" json:"memory"`
 	CurMem   CurMemXML   `xml:"currentMemory" json:"currentMemory"`
 	Devices  DevicesXML  `xml:"devices" json:"devices"`
-	Features FeaturesXML `xml:"features" json:"features"`
 }
 
 type CPUXML struct {
@@ -185,6 +185,7 @@ type DevicesXML struct {
 	Controllers []ControllerXML `xml:"controller" json:"controller"`
 	Inputs      []InputXML      `xml:"input" json:"input"`
 	Sound       SoundXML        `xml:"sound" json:"sound"`
+	Video       VideoXML        `xml:"video" json:"video"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -369,4 +370,14 @@ type InputXML struct {
 type SoundXML struct {
 	XMLName xml.Name `xml:"sound" json:"-"`
 	Model   string   `xml:"model,attr" json:"model"` // ac97, ich6
+}
+
+type VideoXML struct {
+	XMLName xml.Name      `xml:"video" json:"-"`
+	Model   VideoModelXML `xml:"model" json:"model"`
+}
+
+type VideoModelXML struct {
+	XMLName xml.Name `xml:"model" json:"-"`
+	Type    string   `xml:"type,attr" json:"type"` // qxl, cirrus
 }
