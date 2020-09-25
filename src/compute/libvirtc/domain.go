@@ -16,13 +16,6 @@ var (
 	DomainMemConfig              = libvirt.DOMAIN_MEM_CONFIG
 )
 
-var (
-	PciDomain       = "0x00"
-	PciDiskBus      = "0x01"
-	PciInterfaceBus = "0x02"
-	PciFunc         = "0x00"
-)
-
 type Domain struct {
 	libvirt.Domain
 }

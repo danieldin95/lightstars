@@ -181,7 +181,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 			Graphics:    make([]libvirtc.GraphicsXML, 2), // vnc/spice
 			Interfaces:  make([]libvirtc.InterfaceXML, 0, 1),
 			Controllers: make([]libvirtc.ControllerXML, 4),
-			Inputs:      make([]libvirtc.InputXML, 1), // <input type="tablet" bus="usb"/>
+			Inputs:      make([]libvirtc.InputDeviceXML, 1), // <input type="tablet" bus="usb"/>
 		},
 		OS: libvirtc.OSXML{
 			Type: libvirtc.OSTypeXML{
@@ -234,7 +234,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		Type:  "KiB",
 	}
 	// vnc
-	pass := libstar.GenToken(32)
+	pass := libstar.GenToken(8)
 	dom.Devices.Graphics[0] = libvirtc.GraphicsXML{
 		Type:     "vnc",
 		Listen:   "0.0.0.0",
@@ -262,6 +262,11 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 			Model: "pci-bridge",
 		}
 	}
+	//
+	dom.Devices.Controllers = append(dom.Devices.Controllers, libvirtc.ControllerXML{
+		Type:  "virtio-serial",
+		Index: "0",
+	})
 	// disks
 	seq := &diskSeq{}
 	for _, disk := range conf.Disks {
@@ -303,20 +308,38 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		dom.Devices.Interfaces = append(dom.Devices.Interfaces, obj)
 	}
 	// inputs
-	dom.Devices.Inputs[0] = libvirtc.InputXML{
+	dom.Devices.Inputs[0] = libvirtc.InputDeviceXML{
 		Type: "tablet",
 		Bus:  "usb",
 	}
 	// sound
-	dom.Devices.Sound = libvirtc.SoundXML{
+	dom.Devices.Sound = libvirtc.SoundDeviceXML{
 		Model: "ich6",
 	}
 	// video
-	dom.Devices.Video = libvirtc.VideoXML{
+	dom.Devices.Video = libvirtc.VideoDeviceXML{
 		Model: libvirtc.VideoModelXML{
 			Type: "qxl",
 		},
 	}
+	// channel
+	dom.Devices.Channels = append(dom.Devices.Channels, libvirtc.ChannelDeviceXML{
+		Type: "spicevmc",
+		Target: libvirtc.ChannelTargetXML{
+			Type: "virtio",
+			Name: "com.redhat.spice.0",
+		},
+	})
+	dom.Devices.Channels = append(dom.Devices.Channels, libvirtc.ChannelDeviceXML{
+		Type: "spiceport",
+		Source: libvirtc.ChannelSourceXML{
+			Channel: "org.spice-space.webdav.0",
+		},
+		Target: libvirtc.ChannelTargetXML{
+			Type: "virtio",
+			Name: "org.spice-space.webdav.0",
+		},
+	})
 	return dom, nil
 }
 

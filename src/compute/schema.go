@@ -87,11 +87,7 @@ func NewFromControllerXML(xml libvirtc.ControllerXML) (ctl schema.Controller) {
 }
 
 func NewInstance(dom libvirtc.Domain) schema.Instance {
-	obj := schema.Instance{
-		Disks:       make([]schema.Disk, 0, 32),
-		Interfaces:  make([]schema.Interface, 0, 32),
-		Controllers: make([]schema.Controller, 0, 32),
-	}
+	obj := schema.Instance{}
 	obj.UUID, _ = dom.GetUUIDString()
 	obj.Name, _ = dom.GetName()
 	if info, err := dom.GetInfo(); err == nil {
@@ -118,13 +114,20 @@ func NewInstance(dom libvirtc.Domain) schema.Instance {
 		obj.Controllers = append(obj.Controllers, NewFromControllerXML(x))
 	}
 	for _, x := range xmlObj.Devices.Graphics {
-		g := schema.Graphics{
+		obj.Graphics = append(obj.Graphics, schema.Graphics{
 			Type:     x.Type,
 			Listen:   x.Listen,
 			Password: x.Password,
 			Port:     x.Port,
-		}
-		obj.Graphics = append(obj.Graphics, g)
+		})
+	}
+	for _, x := range xmlObj.Devices.Channels {
+		obj.Channels = append(obj.Channels, schema.Channel{
+			Type:          x.Type,
+			TargetName:    x.Target.Name,
+			TargetType:    x.Target.Type,
+			SourceChannel: x.Source.Channel,
+		})
 	}
 	return obj
 }

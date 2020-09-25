@@ -26,7 +26,7 @@ func Interface2XML(source, model, seq, typ string) libvirtc.InterfaceXML {
 		},
 	}
 	if typ == "openvswitch" {
-		xmlObj.VirtualPort = &libvirtc.InterfaceVirtualPortXML{
+		xmlObj.VirtualPort = &libvirtc.InterfaceVirPortXML{
 			Type: typ,
 		}
 	}

@@ -5,6 +5,13 @@ import (
 	"github.com/danieldin95/lightstar/src/libstar"
 )
 
+var (
+	PciDomain       = "0x00"
+	PciDiskBus      = "0x01"
+	PciInterfaceBus = "0x02"
+	PciFunc         = "0x00"
+)
+
 type DomainXML struct {
 	XMLName  xml.Name    `xml:"domain" json:"-"`
 	Id       string      `xml:"id,attr" json:"id"`
@@ -89,9 +96,9 @@ func (cpu *VCPUXML) Decode(xmlData string) error {
 
 type FeaturesXML struct {
 	XMLName xml.Name `xml:"features" json:"-"`
-	Acpi    *AcpiXML `xml:"acpi,omitempty" json:"acpi,omitempty"`
-	Apic    *ApicXML `xml:"apic,omitempty" json:"apic,omitempty"`
-	Pae     *PaeXML  `xml:"pae,omitempty" json:"pae,omitempty"`
+	Acpi    *AcpiXML `xml:"acpi,omitempty" json:"acpi"`
+	Apic    *ApicXML `xml:"apic,omitempty" json:"apic"`
+	Pae     *PaeXML  `xml:"pae,omitempty" json:"pae"`
 }
 
 func (feat *FeaturesXML) Decode(xmlData string) error {
@@ -178,14 +185,15 @@ type OSBootMenuXML struct {
 }
 
 type DevicesXML struct {
-	XMLName     xml.Name        `xml:"devices" json:"-"`
-	Graphics    []GraphicsXML   `xml:"graphics" json:"graphics"`
-	Disks       []DiskXML       `xml:"disk" json:"disk"`
-	Interfaces  []InterfaceXML  `xml:"interface" json:"interface"`
-	Controllers []ControllerXML `xml:"controller" json:"controller"`
-	Inputs      []InputXML      `xml:"input" json:"input"`
-	Sound       SoundXML        `xml:"sound" json:"sound"`
-	Video       VideoXML        `xml:"video" json:"video"`
+	XMLName     xml.Name           `xml:"devices" json:"-"`
+	Graphics    []GraphicsXML      `xml:"graphics" json:"graphics"`
+	Disks       []DiskXML          `xml:"disk" json:"disk"`
+	Interfaces  []InterfaceXML     `xml:"interface" json:"interface"`
+	Controllers []ControllerXML    `xml:"controller" json:"controller"`
+	Inputs      []InputDeviceXML   `xml:"input" json:"input"`
+	Sound       SoundDeviceXML     `xml:"sound" json:"sound"`
+	Video       VideoDeviceXML     `xml:"video" json:"video"`
+	Channels    []ChannelDeviceXML `xml:"channel" json:"channel"`
 }
 
 func (devices *DevicesXML) Decode(xmlData string) error {
@@ -204,8 +212,8 @@ type ControllerXML struct {
 	XMLName xml.Name    `xml:"controller" json:"-"`
 	Type    string      `xml:"type,attr" json:"type"`
 	Index   string      `xml:"index,attr" json:"port"`
-	Model   string      `xml:"model,attr" json:"model"` // pci-root, pci-bridge.
-	Address *AddressXML `xml:"address,omitempty" json:"address,omitempty"`
+	Model   string      `xml:"model,attr,omitempty" json:"model"` // pci-root, pci-bridge.
+	Address *AddressXML `xml:"address,omitempty" json:"address"`
 }
 
 func (ctl *ControllerXML) Decode(xmlData string) error {
@@ -218,14 +226,14 @@ func (ctl *ControllerXML) Decode(xmlData string) error {
 
 type AddressXML struct {
 	XMLName    xml.Name `xml:"address" json:"-"`
-	Type       string   `xml:"type,attr,omitempty" json:"type,omitempty"` // pci and drive.
-	Domain     string   `xml:"domain,attr,omitempty" json:"domain,omitempty"`
-	Bus        string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
-	Slot       string   `xml:"slot,attr,omitempty" json:"slot,omitempty"`
-	Function   string   `xml:"function,attr,omitempty" json:"function,omitempty"`
-	Target     string   `xml:"target,attr,omitempty" json:"target,omitempty"`
-	Unit       string   `xml:"unit,attr,omitempty" json:"unit,omitempty"`
-	Controller string   `xml:"controller,attr,omitempty" json:"controller,omitempty"`
+	Type       string   `xml:"type,attr,omitempty" json:"type"` // pci and drive.
+	Domain     string   `xml:"domain,attr,omitempty" json:"domain"`
+	Bus        string   `xml:"bus,attr,omitempty" json:"bus"`
+	Slot       string   `xml:"slot,attr,omitempty" json:"slot"`
+	Function   string   `xml:"function,attr,omitempty" json:"function"`
+	Target     string   `xml:"target,attr,omitempty" json:"target"`
+	Unit       string   `xml:"unit,attr,omitempty" json:"unit"`
+	Controller string   `xml:"controller,attr,omitempty" json:"controller"`
 }
 
 type GraphicsXML struct {
@@ -234,7 +242,7 @@ type GraphicsXML struct {
 	Port     string   `xml:"port,attr" json:"port"`
 	AutoPort string   `xml:"autoport,attr,omitempty" json:"autoport"`
 	Listen   string   `xml:"listen,attr" json:"listen"`
-	Password string   `xml:"passwd,attr,omitempty" json:"password,omitempty"`
+	Password string   `xml:"passwd,attr,omitempty" json:"password"`
 }
 
 func (graphics *GraphicsXML) Decode(xmlData string) error {
@@ -261,7 +269,7 @@ type DiskXML struct {
 	Driver  DiskDriverXML `xml:"driver" json:"driver"`
 	Source  DiskSourceXML `xml:"source" json:"source"`
 	Target  DiskTargetXML `xml:"target" json:"target"`
-	Address *AddressXML   `xml:"address,omitempty" json:"address,omitempty"`
+	Address *AddressXML   `xml:"address,omitempty" json:"address"`
 }
 
 func (disk *DiskXML) Decode(xmlData string) error {
@@ -289,26 +297,26 @@ type DiskDriverXML struct {
 
 type DiskSourceXML struct {
 	XMLName xml.Name `xml:"source" json:"-"`
-	File    string   `xml:"file,attr,omitempty" json:"file,omitempty"`
-	Device  string   `xml:"dev,attr,omitempty" json:"device,omitempty"`
+	File    string   `xml:"file,attr,omitempty" json:"file"`
+	Device  string   `xml:"dev,attr,omitempty" json:"device"`
 }
 
 type DiskTargetXML struct {
 	XMLName xml.Name `xml:"target" json:"-"`
-	Bus     string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
-	Dev     string   `xml:"dev,attr,omitempty" json:"dev,omitempty"`
+	Bus     string   `xml:"bus,attr,omitempty" json:"bus"`
+	Dev     string   `xml:"dev,attr,omitempty" json:"dev"`
 }
 
 type InterfaceXML struct {
-	XMLName     xml.Name                 `xml:"interface" json:"-"`
-	Type        string                   `xml:"type,attr" json:"type"`
-	Mac         InterfaceMacXML          `xml:"mac" json:"mac"`
-	Source      InterfaceSourceXML       `xml:"source" json:"source"`
-	Model       InterfaceModelXML        `xml:"model" json:"model"`
-	Driver      *InterfaceDriverXML      `xml:"driver" json:"driver"`
-	Target      InterfaceTargetXML       `xml:"target" json:"target"`
-	VirtualPort *InterfaceVirtualPortXML `xml:"virtualport,omitempty" json:"virtualport,omitempty"`
-	Address     *AddressXML              `xml:"address,omitempty" json:"address,omitempty"`
+	XMLName     xml.Name             `xml:"interface" json:"-"`
+	Type        string               `xml:"type,attr" json:"type"`
+	Mac         InterfaceMacXML      `xml:"mac" json:"mac"`
+	Source      InterfaceSourceXML   `xml:"source" json:"source"`
+	Model       InterfaceModelXML    `xml:"model" json:"model"`
+	Driver      *InterfaceDriverXML  `xml:"driver" json:"driver"`
+	Target      InterfaceTargetXML   `xml:"target" json:"target"`
+	VirtualPort *InterfaceVirPortXML `xml:"virtualport,omitempty" json:"virtualport"`
+	Address     *AddressXML          `xml:"address,omitempty" json:"address"`
 }
 
 func (int *InterfaceXML) Decode(xmlData string) error {
@@ -330,14 +338,14 @@ func (int *InterfaceXML) Encode() string {
 
 type InterfaceMacXML struct {
 	XMLName xml.Name `xml:"mac" json:"-"`
-	Address string   `xml:"address,attr,omitempty" json:"address,omitempty"`
+	Address string   `xml:"address,attr,omitempty" json:"address"`
 }
 
 type InterfaceSourceXML struct {
 	XMLName xml.Name    `xml:"source" json:"-"`
-	Bridge  string      `xml:"bridge,attr,omitempty" json:"bridge,omitempty"`
-	Network string      `xml:"network,attr,omitempty" json:"network,omitempty"`
-	Address *AddressXML `xml:"address,omitempty" json:"address,omitempty"`
+	Bridge  string      `xml:"bridge,attr,omitempty" json:"bridge"`
+	Network string      `xml:"network,attr,omitempty" json:"network"`
+	Address *AddressXML `xml:"address,omitempty" json:"address"`
 }
 
 type InterfaceModelXML struct {
@@ -352,27 +360,27 @@ type InterfaceDriverXML struct {
 
 type InterfaceTargetXML struct {
 	XMLName xml.Name `xml:"target" json:"-"`
-	Bus     string   `xml:"bus,attr,omitempty" json:"bus,omitempty"`
-	Dev     string   `xml:"dev,attr,omitempty" json:"dev,omitempty"`
+	Bus     string   `xml:"bus,attr,omitempty" json:"bus"`
+	Dev     string   `xml:"dev,attr,omitempty" json:"dev"`
 }
 
-type InterfaceVirtualPortXML struct {
+type InterfaceVirPortXML struct {
 	XMLName xml.Name `xml:"virtualport" json:"-"`
-	Type    string   `xml:"type,attr,omitempty" json:"type,omitempty"` //openvswitch
+	Type    string   `xml:"type,attr,omitempty" json:"type"` //openvswitch
 }
 
-type InputXML struct {
+type InputDeviceXML struct {
 	XMLName xml.Name `xml:"input" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"`
 	Bus     string   `xml:"bus,attr" json:"bus"`
 }
 
-type SoundXML struct {
+type SoundDeviceXML struct {
 	XMLName xml.Name `xml:"sound" json:"-"`
 	Model   string   `xml:"model,attr" json:"model"` // ac97, ich6
 }
 
-type VideoXML struct {
+type VideoDeviceXML struct {
 	XMLName xml.Name      `xml:"video" json:"-"`
 	Model   VideoModelXML `xml:"model" json:"model"`
 }
@@ -380,4 +388,22 @@ type VideoXML struct {
 type VideoModelXML struct {
 	XMLName xml.Name `xml:"model" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"` // qxl, cirrus
+}
+
+type ChannelDeviceXML struct {
+	XMLName xml.Name         `xml:"channel" json:"-"`
+	Type    string           `xml:"type,attr" json:"type"`
+	Source  ChannelSourceXML `xml:"source" json:"source"`
+	Target  ChannelTargetXML `xml:"target" json:"target"`
+}
+
+type ChannelTargetXML struct {
+	XMLName xml.Name `xml:"target" json:"-"`
+	Type    string   `xml:"type,attr" json:"type"`
+	Name    string   `xml:"name,attr" json:"name"`
+}
+
+type ChannelSourceXML struct {
+	XMLName xml.Name `xml:"source" json:"-"`
+	Channel string   `xml:"channel,attr" json:"channel"`
 }

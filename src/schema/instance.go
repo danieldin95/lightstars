@@ -1,5 +1,12 @@
 package schema
 
+type Channel struct {
+	Type          string `json:"type"`
+	TargetType    string `json:"targetType"`
+	TargetName    string `json:"targetName"`
+	SourceChannel string `json:"sourceChannel"`
+}
+
 type Graphics struct {
 	Type     string `json:"type"`
 	Password string `json:"password"`
@@ -44,6 +51,7 @@ type Instance struct {
 	Interfaces  []Interface  `json:"interfaces,omitempty"`
 	Controllers []Controller `json:"controllers,omitempty"`
 	Graphics    []Graphics   `json:"graphics"`
+	Channels    []Channel    `json:"channels"`
 }
 
 type ListInstance struct {
