@@ -104,6 +104,7 @@ func (h *Server) Initialize() {
 
 func (h *Server) Filter(r *http.Request) bool {
 	path := r.URL.Path
+	libstar.Debug("Server.Filter %v", r.Header)
 	if strings.HasPrefix(path, "/static/sshy") {
 		return false
 	}

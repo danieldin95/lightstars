@@ -41,17 +41,40 @@ func (gra Graphics) GET(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		libstar.Debug("Graphics.Get %s, %s", r.URL.Hostname(), r.Host)
-		if spice.Type == "vnc" || spice.Type == "spice" {
-			vv := "[virt-viewer]"
-			vv += "\ntype=" + spice.Type
-			vv += "\nhost=" + strings.SplitN(r.Host, ":", 2)[0]
-			vv += "\nport=" + spice.Port
-			vv += "\npassword=" + spice.Password
-			vv += "\nfullscreen=1"
-			w.Header().Set("Content-Type", "application/x-msdownload")
-			w.Header().Set("Content-Disposition", "attachment; filename="+instance.Name+".vv")
-			_, _ = w.Write([]byte(vv))
+		if spice.Type != "vnc" && spice.Type != "spice" {
+			return
 		}
+		context := ""
+		filename := ""
+		os := GetQueryOne(r, "os")
+		if os == "linux" {
+			if spice.Type == "spice" {
+				context += "[connection]"
+				context += "\nhost=" + strings.SplitN(r.Host, ":", 2)[0]
+				context += "\nport=" + spice.Port
+				context += "\npassword=" + spice.Password
+				context += "\nfullscreen=1"
+			} else {
+				context += "[Connection]"
+				context += "\nHost=" + strings.SplitN(r.Host, ":", 2)[0]
+				context += "\nPort=" + spice.Port
+				context += "\nPassword=" + spice.Password
+				context += "\nFullscreen=1"
+			}
+			filename = instance.Name + "." + spice.Type
+		} else {
+			context += "[virt-viewer]"
+			context += "\ntype=" + spice.Type
+			context += "\nhost=" + strings.SplitN(r.Host, ":", 2)[0]
+			context += "\nport=" + spice.Port
+			context += "\npassword=" + spice.Password
+			context += "\nfullscreen=1"
+			filename = instance.Name + ".vv"
+		}
+		w.Header().Set("Content-Type", "application/x-download")
+		w.Header().Set("Content-Disposition", "attachment;filename="+filename)
+		_, _ = w.Write([]byte(context))
+
 	} else {
 		instance := compute.NewInstance(*dom)
 		list := schema.ListGraphics{

@@ -84,7 +84,8 @@ export class Guest extends Container {
         let pass = Utils.graphic(v, 'vnc', 'password');
         let vncUrl = `/ui/console?id=${v.uuid}&password=${pass}&node=${host}&title=${v.name}`;
         let dumpUrl = Api.path(`/api/instance/${v.uuid}?format=xml`);
-        let localUrl = Api.path(`/api/instance/${v.uuid}/graphics?format=vv`);
+        let os = Utils.os();
+        let localUrl = Api.path(`/api/instance/${v.uuid}/graphics?format=vv&os=${os}`);
 
         return this.compile(`
         <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">
