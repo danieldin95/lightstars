@@ -5,7 +5,6 @@ import (
 	"github.com/danieldin95/lightstar/src/schema"
 	"github.com/gorilla/mux"
 	"net/http"
-	"strconv"
 )
 
 type Processor struct {
@@ -32,22 +31,12 @@ func (proc Processor) PUT(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer dom.Free()
-
 	conf := &schema.Processor{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	cpu, err := strconv.Atoi(conf.Cpu)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DomainCpuMaximum); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if err := dom.SetVcpusFlags(uint(cpu), libvirtc.DomainCpuConfig); err != nil {
+	if err := dom.SetCpu(conf.Cpu, conf.Mode); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

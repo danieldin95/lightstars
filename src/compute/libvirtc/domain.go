@@ -1,6 +1,8 @@
 package libvirtc
 
 import (
+	"github.com/beevik/etree"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"github.com/libvirt/libvirt-go"
 )
 
@@ -18,10 +20,129 @@ var (
 
 type Domain struct {
 	libvirt.Domain
+	hyper *HyperVisor
 }
 
-func NewDomainFromVir(dom *libvirt.Domain) *Domain {
-	return &Domain{*dom}
+func NewDomainFromVir(dom *libvirt.Domain, hyper *HyperVisor) *Domain {
+	return &Domain{*dom, hyper}
+}
+
+func (d *Domain) document() (*etree.Document, error) {
+	xml, err := d.GetXMLDesc(true)
+	if err != nil {
+		return nil, err
+	}
+	doc := etree.NewDocument()
+	if err := doc.ReadFromString(xml); err != nil {
+		return nil, err
+	}
+	return doc, nil
+}
+
+func (d *Domain) SetCpu(max, mode string) error {
+	if d.hyper == nil {
+		return libstar.NewErr("hyper is nil")
+	}
+
+	d.hyper.Lock.Lock()
+	defer d.hyper.Lock.Unlock()
+
+	doc, err := d.document()
+	if err != nil {
+		return err
+	}
+	domEle := doc.FindElement("/domain")
+	if domEle == nil {
+		return libstar.NewErr("domain tag not found")
+	}
+	// edit vCpu
+	vCpuEle := domEle.FindElement("./vcpu")
+	if vCpuEle == nil {
+		vCpuEle = domEle.CreateElement("vcpu")
+	}
+	vCpuEle.SetText(max)
+	// edit cpu mode
+	cpuEle := domEle.FindElement("./cpu")
+	if cpuEle == nil {
+		cpuEle = domEle.CreateElement("cpu")
+	}
+	if mode == "" {
+		domEle.RemoveChild(cpuEle)
+	} else {
+		cpuEle.CreateAttr("mode", mode)
+	}
+	libstar.Debug("Domain.SetCpu %v", cpuEle)
+	newXml, err := doc.WriteToString()
+	if err != nil {
+		return err
+	}
+	libstar.Debug("Domain.SetCpu %s", newXml)
+	if err := d.reDefine(newXml); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *Domain) SetMemory(size, unit string) error {
+	if d.hyper == nil {
+		return libstar.NewErr("hyper is nil")
+	}
+
+	d.hyper.Lock.Lock()
+	defer d.hyper.Lock.Unlock()
+
+	doc, err := d.document()
+	if err != nil {
+		return err
+	}
+	domEle := doc.FindElement("/domain")
+	if domEle == nil {
+		return libstar.NewErr("domain tag not found")
+	}
+	// edit memory
+	memEle := domEle.FindElement("./memory")
+	if memEle == nil {
+		memEle = domEle.CreateElement("memory")
+	}
+	memEle.CreateAttr("unit", unit)
+	memEle.SetText(size)
+
+	// edit current memory
+	curMemEle := domEle.FindElement("./currentMemory")
+	if curMemEle == nil {
+		curMemEle = domEle.CreateElement("currentMemory")
+	}
+	curMemEle.CreateAttr("unit", unit)
+	curMemEle.SetText(size)
+
+	newXml, err := doc.WriteToString()
+	if err != nil {
+		return err
+	}
+	libstar.Debug("Domain.SetMemory %s", newXml)
+	if err := d.reDefine(newXml); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *Domain) reDefine(newXml string) error {
+	if d.hyper == nil {
+		return libstar.NewErr("hyper is nil")
+	}
+	oldXml, err := d.GetXMLDesc(true)
+	if err != nil {
+		return err
+	}
+	if err := d.Undefine(); err != nil {
+		return err
+	}
+	_, err = d.hyper.Conn.DomainDefineXML(newXml)
+	if err != nil {
+		_, _ = d.hyper.Conn.DomainDefineXML(oldXml) // define by old xml.
+		return err
+	}
+	return nil
 }
 
 func (d *Domain) GetXMLDesc(secure bool) (string, error) {

@@ -7,8 +7,9 @@ export class InstanceSet extends FormModal {
     constructor (props) {
         super(props);
 
-        this.cpu = props.cpu ? props.cpu : 1;
-        this.mem = props.mem ? props.mem / 1024 : 1;
+        this.cpu = props.data.maxCpu || 0;
+        this.mem = props.data.maxMem ?  props.data.maxMem / 1024 : 0;
+        this.cpuMode = props.data.cpuMode || '';
         this.render();
         this.loading();
     }
@@ -21,6 +22,8 @@ export class InstanceSet extends FormModal {
             cpu.append(new Option(i, i));
         }
         cpu.val(this.cpu).change();
+        let cpuMode = this.view.find("select[name='cpuMode']");
+        cpuMode.val(this.cpuMode).change();
     }
 
     template() {
@@ -36,9 +39,9 @@ export class InstanceSet extends FormModal {
                     <div class="form-group">
                         <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
-                           <select class="form-control form-control-sm" name="cpuMode">
-                                <option value="" selected>Default</option>
-                                <option value="host-passthrough">Intel VT-x or AMD-V</option>
+                           <select class="form-control form-control-sm" name="cpuMode" value="${this.cpuMode}">
+                                <option value="" selected>Custom</option>
+                                <option value="host-passthrough">Host passthrough</option>
                             </select>
                             <select class="select-twice-md" name="cpu" value="${this.cpu}">
                                 <option value="1">1</option>

@@ -167,8 +167,8 @@ export class InstanceCreate extends FormModal {
                         <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
                             <select class="form-control form-control-sm" name="cpuMode">
-                                <option value="" selected>Default</option>
-                                <option value="host-passthrough">Intel VT-x or AMD-V</option>
+                                <option value="" selected>Custom</option>
+                                <option value="host-passthrough">Host passthrough</option>
                             </select>
                             <select class="select-twice-md" name="cpu">
                                 <option value="1">1</option>

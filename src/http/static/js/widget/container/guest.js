@@ -35,19 +35,22 @@ export class Guest extends Container {
                 this.render();
             });
             $(this.parent).html(this.view);
-            this.loading();
+            this.loading(e.resp);
         });
     }
 
-    loading() {
+    loading(data) {
         let ctl = new GuestCtl({
             id: this.id(),
+            name: data.name,
+            uuid: data.uuid,
             header: {id: this.id("#header")},
             disks: {id: this.id("#disk")},
             interfaces: {id: this.id("#interface")},
             graphics: {id: this.id("#graphics")},
+            data: data,
         });
-        new InstanceSet({id: this.id('#settingModal'), cpu: ctl.cpu, mem: ctl.mem })
+        new InstanceSet({id: this.id('#settingModal'), data: data })
             .onsubmit((e) => {
                 ctl.edit(Utils.toJSON(e.form));
             });
@@ -88,7 +91,7 @@ export class Guest extends Container {
         let localUrl = Api.path(`/api/instance/${v.uuid}/graphics?format=vv&os=${os}`);
 
         return this.compile(`
-        <div id="instance" data="{{uuid}}" name="{{name}}" cpu="{{maxCpu}}" memory="{{maxMem}}">
+        <div id="instance" data="{{uuid}}" name="{{name}}">
         <div id="header" class="card header">
             <div class="card-header">
                 <div class="card-just-left">

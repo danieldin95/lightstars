@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/src/compute/libvirtc"
-	"github.com/danieldin95/lightstar/src/libstar"
 	"github.com/danieldin95/lightstar/src/schema"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -38,12 +37,7 @@ func (mem Memory) PUT(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	size := libstar.ToKiB(conf.Size, conf.Unit)
-	if err := dom.SetMemoryFlags(size, libvirtc.DomainMemMaximum); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if err := dom.SetMemoryFlags(size, libvirtc.DomainMemConfig); err != nil {
+	if err := dom.SetMemory(conf.Size, conf.Unit); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

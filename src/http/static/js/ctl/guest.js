@@ -72,15 +72,17 @@ export class GuestCtl extends Ctl {
     //   interfaces: {
     //     id: "#interfaces"
     //   },
+    //   data: {
+    //   }
     // }
     constructor(props) {
         super(props);
-        let name = $(this.id).attr("name");
-        let uuid = $(this.id).attr("data");
-        this.cpu = $(this.id).attr("cpu");
-        this.mem = $(this.id).attr("memory");
+        let name = props.name;
+        let uuid = props.uuid;
         this.uuid = uuid;
         this.name = name;
+        this.cpu = props.data.maxCpu || 0;
+        this.mem = props.data.maxMem || 0;
         this.tasks = props.tasks || "tasks";
         this.api = new InstanceApi({uuids: uuid});
         this.header = new HeaderCtl({id: props.header.id, uuid, name});

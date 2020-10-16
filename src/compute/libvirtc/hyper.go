@@ -219,7 +219,7 @@ func (h *HyperVisor) ListAllDomains() ([]Domain, error) {
 	}
 	newDomains := make([]Domain, 0, 32)
 	for _, m := range domains {
-		newDomains = append(newDomains, *NewDomainFromVir(&m))
+		newDomains = append(newDomains, *NewDomainFromVir(&m, h))
 	}
 	return newDomains, nil
 }
@@ -232,7 +232,7 @@ func (h *HyperVisor) LookupDomainByUUIDString(id string) (*Domain, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewDomainFromVir(domain), nil
+	return NewDomainFromVir(domain, h), nil
 }
 
 func (h *HyperVisor) LookupDomainByUUIDName(id string) (*Domain, error) {
@@ -245,9 +245,9 @@ func (h *HyperVisor) LookupDomainByUUIDName(id string) (*Domain, error) {
 		if err != nil {
 			return nil, err
 		}
-		return NewDomainFromVir(domain), nil
+		return NewDomainFromVir(domain, h), nil
 	}
-	return NewDomainFromVir(domain), nil
+	return NewDomainFromVir(domain, h), nil
 }
 
 func (h *HyperVisor) LookupDomainByName(id string) (*Domain, error) {
@@ -258,7 +258,7 @@ func (h *HyperVisor) LookupDomainByName(id string) (*Domain, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Domain{*domain}, nil
+	return &Domain{*domain, h}, nil
 }
 
 func (h *HyperVisor) DomainDefineXML(xmlConfig string) (*Domain, error) {
@@ -269,7 +269,7 @@ func (h *HyperVisor) DomainDefineXML(xmlConfig string) (*Domain, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Domain{*domain}, nil
+	return &Domain{*domain, h}, nil
 }
 
 func (h *HyperVisor) Close() {

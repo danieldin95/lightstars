@@ -115,7 +115,7 @@ export class InstanceApi extends Api {
 
         if (data.cpu !== "") {
             let api = url+"/processor";
-            let cpu = {cpu: data.cpu};
+            let cpu = {cpu: data.cpu, mode: data.cpuMode};
 
             $.PUT(api, JSON.stringify(cpu), (resp, status) => {
                 //$(this.tasks).append(Alert.success(`set processor for '${uuid}' success`));
