@@ -66,11 +66,7 @@ func (d *Domain) SetCpu(max, mode string) error {
 	if cpuEle == nil {
 		cpuEle = domEle.CreateElement("cpu")
 	}
-	if mode == "" {
-		domEle.RemoveChild(cpuEle)
-	} else {
-		cpuEle.CreateAttr("mode", mode)
-	}
+	cpuEle.CreateAttr("mode", mode)
 	libstar.Debug("Domain.SetCpu %v", cpuEle)
 	newXml, err := doc.WriteToString()
 	if err != nil {

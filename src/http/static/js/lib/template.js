@@ -115,12 +115,12 @@ export class Template {
             return day + "d" + hour + "h";
         };
         m.prettyCpuMode = function (mode) {
-          if (mode === "host-passthrough") {
-              return "passthrough";
-          } else if (mode === "host-model") {
-              return "host";
-          } else {
+          if (mode === "custom") {
               return "custom";
+          } else if (mode === "host-passthrough") {
+              return "passthrough";
+          } else {
+              return "default";
           }
         };
         return m;
