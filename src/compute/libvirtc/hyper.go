@@ -28,25 +28,16 @@ type HyperVisor struct {
 	Done       chan bool
 	IdleUtil   uint64
 	DomUtil    map[string]uint64
+
+	// TODO support domains cache
 }
 
-func parseQemuTCP(name string) (address, path string) {
-	if strings.Contains(name, "://") {
-		addrs := strings.SplitN(name, "://", 2)[1]
-		address = strings.SplitN(addrs, "/", 2)[0]
-		if strings.Contains(addrs, "/") {
-			path = strings.SplitN(addrs, "/", 2)[1]
-		}
-	}
-	return address, path
-}
-
-func parseQemuSSH(name string) (address, path string) {
-	if strings.Contains(name, "://") {
-		addrs := strings.SplitN(name, "://", 2)[1]
-		address = strings.SplitN(addrs, "/", 2)[0]
-		if strings.Contains(addrs, "/") {
-			path = strings.SplitN(addrs, "/", 2)[1]
+func parseUrl(url string) (address, path string) {
+	if strings.Contains(url, "://") {
+		shortUrl := strings.SplitN(url, "://", 2)[1]
+		address = strings.SplitN(shortUrl, "/", 2)[0]
+		if strings.Contains(shortUrl, "/") {
+			path = strings.SplitN(shortUrl, "/", 2)[1]
 		}
 		if strings.Contains(address, "@") {
 			address = strings.SplitN(address, "@", 2)[1]
@@ -102,12 +93,10 @@ func (h *HyperVisor) AddListener(listen HyperListener) {
 func (h *HyperVisor) SetUrl(name string) {
 	hyper.Url = name
 
-	h.Schema = strings.SplitN(h.Url, ":", 2)[0]
+	h.Schema = strings.SplitN(h.Url, "://", 2)[0]
 	switch h.Schema {
-	case "qemu+ssh":
-		h.Address, h.Path = parseQemuSSH(h.Url)
-	case "qemu+tcp", "qemu+tls":
-		h.Address, h.Path = parseQemuTCP(h.Url)
+	case "qemu+ssh", "qemu+tcp", "qemu+tls":
+		h.Address, h.Path = parseUrl(h.Url)
 	default:
 		h.Address = "localhost"
 		h.Path = "system"

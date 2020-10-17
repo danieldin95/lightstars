@@ -2,6 +2,10 @@
 # github.com/danieldin95/lightstar
 #
 
+#
+# git clone https://github.com/danieldin95/freecert packaging/resource/cert
+#
+
 SHELL := /bin/bash
 .ONESHELL:
 
@@ -44,6 +48,7 @@ lightstar: env
 ### linux packaging
 rpm-env:
 	@./packaging/spec.sh
+	@[ -e "$(BD)"/cert ] || ln -s $(SD)/../freecert $(BD)/cert
 
 rpm-lightstar: rpm-env
 	rpmbuild -ba packaging/lightstar.spec

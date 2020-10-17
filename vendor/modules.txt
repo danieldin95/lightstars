@@ -1,3 +1,5 @@
+# github.com/beevik/etree v1.1.0
+github.com/beevik/etree
 # github.com/coreos/go-systemd/v22 v22.0.0
 github.com/coreos/go-systemd/v22/daemon
 # github.com/davecgh/go-spew v1.1.0

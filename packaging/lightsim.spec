@@ -1,5 +1,5 @@
 Name: lightsim
-Version: 0.8.35
+Version: 0.8.36
 Release: 1%{?dist}
 Summary: LightStar's Project Software
 Group: Applications/Communications
@@ -24,7 +24,7 @@ mkdir -p %{buildroot}/usr/lib/systemd/system
 cp %_source_dir/packaging/lightsim.service %{buildroot}/usr/lib/systemd/system
 
 mkdir -p %{buildroot}/var/lightstar
-cp -R %_source_dir/packaging/resource/cert/lightstar/cert %{buildroot}/var/lightstar
+cp -R %_source_dir/build/cert/lightstar/cert %{buildroot}/var/lightstar
 cp -R %_source_dir/src/http/static %{buildroot}/var/lightstar
 
 mkdir -p %{buildroot}/etc/lightstar
