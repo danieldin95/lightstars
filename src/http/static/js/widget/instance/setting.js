@@ -9,7 +9,7 @@ export class InstanceSet extends FormModal {
 
         this.cpu = props.data.maxCpu || 0;
         this.mem = props.data.maxMem ?  props.data.maxMem / 1024 : 0;
-        this.cpuMode = props.data.cpuMode || '';
+        this.cpuMode = props.data.cpuMode || 'host-model';
         this.render();
         this.loading();
     }
@@ -40,7 +40,7 @@ export class InstanceSet extends FormModal {
                         <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
                            <select class="form-control form-control-sm" name="cpuMode" value="${this.cpuMode}">
-                                <option value="" selected>Default</option>
+                                <option value="host-model" selected>Default</option>
                                 <option value="host-passthrough">Host passthrough</option>
                             </select>
                             <select class="select-twice-md" name="cpu" value="${this.cpu}">
