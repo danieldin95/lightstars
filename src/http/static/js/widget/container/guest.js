@@ -132,7 +132,7 @@ export class Guest extends Container {
                         </button>
                         <button id="power" type="button"
                                 class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-expanded="false" ${disabled}>
+                                data-toggle="dropdown" aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div id="power-more" class="dropdown-menu" aria-labelledby="power">
