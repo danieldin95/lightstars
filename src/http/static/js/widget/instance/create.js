@@ -26,15 +26,18 @@ export class InstanceCreate extends FormModal {
     fetch() {
         let iso = {
             selector: this.view.find("select[name='disk0File']"),
-            fresh: function (datastore) {
+            refresh: function (datastore) {
                 let selector = this.selector;
-
                 new IsoApi().list(datastore, (data) => {
+                    let older = selector.val();
                     selector.find("option").remove();
                     for (let ele of data.resp) {
                         selector.append(Option(ele['path'], ele['path']));
                     }
                     selector.append(Option('CDROM device:/sr0', '/dev/sr0'));
+                    if (older) {
+                        selector.val(older);
+                    }
                 });
             },
         };
@@ -44,35 +47,42 @@ export class InstanceCreate extends FormModal {
             refresh: function () {
                 let selector = this.selector;
                 new DataStoreApi().list(this,  (data) => {
-                    let resp = data.resp;
+                    let older = selector.val();
                     selector.find("option").remove();
-                    for (let ele of resp.items) {
+                    for (let ele of data.resp.items) {
                         selector.append(Option(ele['name'], ele['name']));
                     }
-                    if (resp.items.length > 0) {
-                        iso.fresh(resp.items[0]['name']);
+                    if (data.resp.items.length > 0) {
+                        iso.refresh(data.resp.items[0]['name']);
+                    }
+                    if (older) {
+                        selector.val(older);
                     }
                 });
             },
         };
 
         let iface = {
-            fresh: function (){
+            refresh: function (){
                 let selector = this.selector;
                 new BridgeApi().list(this, (data) => {
+                    let older = selector.val();
                     selector.find("option").remove();
                     for (let ele of data.resp) {
                         selector.append(Option(`${ele['network']} #${ele['name']}`, ele['name']));
+                    }
+                    if (older) {
+                        selector.val(older);
                     }
                 });
             },
             selector: this.view.find("select[name='interface0Source']"),
         };
 
-        iface.fresh();
+        iface.refresh();
         store.refresh();
         store.selector.on("change", this, function (e) {
-            iso.fresh($(this).val());
+            iso.refresh($(this).val());
         });
     }
 
@@ -156,8 +166,8 @@ export class InstanceCreate extends FormModal {
                         <label for="datastore" class="col-form-label-sm">{{'datastore location' | i}}</label>
                         <div class="input-group">
                             <select class="select-lg" name="datastore">
-                                <option value="datastore/01" selected>datastore01</option>
-                                <option value="datastore/02">datastore02</option>
+                                <option value="datastore@01" selected>datastore01</option>
+                                <option value="datastore@02">datastore02</option>
                             </select>
                         </div>
                     </div>
