@@ -64,25 +64,28 @@ export class Pool extends Container {
                 </div>
             </div>
             <!-- Overview -->
-            <div id="collapseOver" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
             <div class="card-body">
                 <!-- Header buttons -->
-                <div class="card-body-hdl">
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
-                    <button id="upload" type="button" class="btn btn-outline-dark btn-sm" 
-                             data-toggle="modal" data-target="#uploadStoreModal">{{'upload' | i}}</button>
-                    <div id="btns-more" class="btn-group btn-group-sm" role="group">
-                        <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
-                                data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
-                            {{'actions' | i}}
-                        </button>
-                        <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                            <a id="edit" class="dropdown-item" href="javascript:void(0)">{{'edit' | i}}</a>
-                            <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
-                            <a id="remove" class="dropdown-item" href="javascript:void(0)">{{'remove' | i}}</a>
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
+                        <button id="upload" type="button" class="btn btn-outline-dark btn-sm" 
+                                 data-toggle="modal" data-target="#uploadStoreModal">{{'upload' | i}}</button>
+                        <div id="btns-more" class="btn-group btn-group-sm" role="group">
+                            <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
+                                    data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
+                                {{'actions' | i}}
+                            </button>
+                            <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
+                                <a id="edit" class="dropdown-item" href="javascript:void(0)">{{'edit' | i}}</a>
+                                <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
+                                <div class="dropdown-divider"></div>
+                                <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
+                                <a id="remove" class="dropdown-item" href="javascript:void(0)">{{'remove' | i}}</a>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>                    
                     </div>
                 </div>
                 <div class="card-body-hdl">
@@ -102,9 +105,7 @@ export class Pool extends Container {
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-        <div id="collapse">
         <!-- Volume list-->
         <div id="volumes" class="card device">
             <div class="card-header">
@@ -114,11 +115,10 @@ export class Pool extends Container {
                     {{'file browser' | i}}
                 </button>
             </div>
-            <div id="collapseVol" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <!-- volume actions button-->
             <div class="card-body">
-                <div class="card-body-hdl row">
-                    <div class="col-6">
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
                                 data-toggle="modal" data-target="#createVolumeModal">
                             {{'new a volume' | i}}
@@ -126,11 +126,13 @@ export class Pool extends Container {
                         <button id="upload" type="button" class="btn btn-outline-dark btn-sm" 
                                 data-toggle="modal" data-target="#uploadPoolModal">{{'upload' | i}}</button>
                         <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
-                    <div class="d-flex col-6 justify-content-end">
+                    <div class="col-auto">
                         <button id="datastore" class="btn btn-link btn-sm p-0" data="{{uuid}}">{{name}}:/</button>
                         <button id="current"  class="btn btn-link btn-sm p-0 pr-2" data=""></button>
+                    </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
                 </div>
                 <div class="card-body-tbl">
@@ -149,7 +151,6 @@ export class Pool extends Container {
                         </tbody>
                     </table>
                 </div>
-            </div>
             </div>
         </div>
         <div id="modals">

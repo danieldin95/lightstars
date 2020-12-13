@@ -50,14 +50,18 @@ export class Home extends Container {
             </div>
             <div id="overview" class="card-body">
                 <!-- Overview buttons -->
-                <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                            data-toggle="modal" data-target="#createGuestModal">
-                        {{'create new instance' | i}}
-                    </button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
-                    <button id="console" type="button" class="btn btn-outline-dark btn-sm">{{'power off' | i}}</button>
-                    <button id="start" type="button" class="btn btn-outline-dark btn-sm">{{'reboot' | i}}</button>
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
+                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                data-toggle="modal" data-target="#createGuestModal">
+                            {{'create new instance' | i}}
+                        </button>
+                        <button id="console" type="button" class="btn btn-outline-dark btn-sm">{{'power off' | i}}</button>
+                        <button id="start" type="button" class="btn btn-outline-dark btn-sm">{{'reboot' | i}}</button>
+                    </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                    </div>
                 </div>
                 <div class="card-body-tbl">
                     <!-- Loading -->

@@ -56,10 +56,10 @@ export class DataStores extends Container {
                     {{'local datastores' | i}}
                 </button>
             </div>
-            <div id="collapseStore">
-                <div class="card-body">
-                    <!-- DataStore buttons -->
-                    <div class="card-body-hdl">
+            <div class="card-body">
+                <!-- DataStore buttons -->
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                     data-toggle="modal" data-target="#createDirModal">
@@ -85,34 +85,34 @@ export class DataStores extends Container {
                         </button>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
                         <button id="delete" type="button" class="btn btn-outline-dark btn-sm">{{'delete' | i}}</button>
+                    </div>
+                    <div class="col-auto">
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
-    
-                    <!-- DataStore display -->
-                    <div class="card-body-tbl">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th><input id="on-all" type="checkbox"></th>
-                                <th>{{'id' | i}}</th>
-                                <th>{{'uuid' | i}}</th>
-                                <th>{{'name' | i}}</th>
-                                <th>{{'source' | i}}</th>
-                                <th>{{'capacity' | i}}</th>
-                                <th>{{'allocation' | i}}</th>
-                                <th>{{'state' | i}}</th>
-                            </tr>
-                            </thead>
-                            <tbody id="display-table">
-                            <!-- Loading... -->
-                            </tbody>
-                        </table>
-                    </div>
+                </div>
+
+                <!-- DataStore display -->
+                <div class="card-body-tbl">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th><input id="on-all" type="checkbox"></th>
+                            <th>{{'id' | i}}</th>
+                            <th>{{'uuid' | i}}</th>
+                            <th>{{'name' | i}}</th>
+                            <th>{{'source' | i}}</th>
+                            <th>{{'capacity' | i}}</th>
+                            <th>{{'allocation' | i}}</th>
+                            <th>{{'state' | i}}</th>
+                        </tr>
+                        </thead>
+                        <tbody id="display-table">
+                        <!-- Loading... -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    
-        
         <!-- Modal -->
         <div id="modals">
             <!-- Create datastore modal -->

@@ -102,62 +102,66 @@ export class Guest extends Container {
             <div id="collapseOver">
             <div class="card-body">
                 <!-- Header buttons -->
-                <div class="card-body-hdl">
-                    <div id="console-btns" class="btn-group btn-group-sm" role="group">
-                        <button id="console" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#consoleModal" data="${vncUrl}" ${disabled}>{{'console' | i}}</button>
-                        <button id="consoles" type="button"
-                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-expanded="false" ${disabled}>
-                            <span class="sr-only">Toggle Dropdown</span></button>
-                        <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
-                            <a id="console-self" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
-                                {{'console in self' | i}}
-                            </a>
-                            <a id="console-blank" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
-                                {{'console in new blank' | i}}
-                            </a>
-                            <a id="console-window" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
-                                {{'console in new window' | i}}
-                            </a>
-                            <a id="console-local" class="dropdown-item" href="${localUrl}">
-                                {{'console by remote viewer' | i}}
-                            </a>
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
+                        <div id="console-btns" class="btn-group btn-group-sm" role="group">
+                            <button id="console" type="button" class="btn btn-outline-dark btn-sm"
+                                    data-toggle="modal" data-target="#consoleModal" data="${vncUrl}" ${disabled}>{{'console' | i}}</button>
+                            <button id="consoles" type="button"
+                                    class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                    data-toggle="dropdown" aria-expanded="false" ${disabled}>
+                                <span class="sr-only">Toggle Dropdown</span></button>
+                            <div id="console-more" class="dropdown-menu" aria-labelledby="consoles">
+                                <a id="console-self" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
+                                    {{'console in self' | i}}
+                                </a>
+                                <a id="console-blank" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
+                                    {{'console in new blank' | i}}
+                                </a>
+                                <a id="console-window" class="dropdown-item" href="javascript:void(0)" data="${vncUrl}">
+                                    {{'console in new window' | i}}
+                                </a>
+                                <a id="console-local" class="dropdown-item" href="${localUrl}">
+                                    {{'console by remote viewer' | i}}
+                                </a>
+                            </div>
+                        </div>
+                        <div id="power-btns" class="btn-group btn-group-sm" role="group">
+                            <button id="start" type="button" class="btn btn-outline-dark btn-sm">
+                                {{'power on' | i}}
+                            </button>
+                            <button id="power" type="button"
+                                    class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                    data-toggle="dropdown" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div id="power-more" class="dropdown-menu" aria-labelledby="power">
+                                <a id="start" class="dropdown-item" href="javascript:void(0)">{{'power on' | i}}</a>
+                                <a id="shutdown" class="dropdown-item" href="javascript:void(0)">{{'power off' | i}}</a>
+                                <div class="dropdown-divider"></div>
+                                <a id="reset" class="dropdown-item" href="javascript:void(0)">{{'reset' | i}}</a>
+                                <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
+                            </div>
+                        </div>
+                        <div id="btns-more" class="btn-group btn-group-sm" role="group">
+                            <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle btn-sm"
+                                    data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
+                                {{'actions' | i}}
+                            </button>
+                            <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
+                                <a id="suspend" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'suspend' | i}}</a>
+                                <a id="resume" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'resume' | i}}</a>
+                                <a id="setting" class="dropdown-item" href="javascript:void(0)" 
+                                    data-toggle="modal" data-target="#settingModal">{{'setting' | i}}</a>
+                                <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
+                                <div class="dropdown-divider"></div>
+                                <a id="remove" class="dropdown-item" href="javascript:void(0)" 
+                                    data-toggle="modal" data-target="#removeModal">{{'remove' | i}}</a>
+                            </div>
                         </div>
                     </div>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
-                    <div id="power-btns" class="btn-group btn-group-sm" role="group">
-                        <button id="start" type="button" class="btn btn-outline-dark btn-sm">
-                            {{'power on' | i}}
-                        </button>
-                        <button id="power" type="button"
-                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div id="power-more" class="dropdown-menu" aria-labelledby="power">
-                            <a id="start" class="dropdown-item" href="javascript:void(0)">{{'power on' | i}}</a>
-                            <a id="shutdown" class="dropdown-item" href="javascript:void(0)">{{'power off' | i}}</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="reset" class="dropdown-item" href="javascript:void(0)">{{'reset' | i}}</a>
-                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
-                        </div>
-                    </div>
-                    <div id="btns-more" class="btn-group btn-group-sm" role="group">
-                        <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle btn-sm"
-                                data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
-                            {{'actions' | i}}
-                        </button>
-                        <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                            <a id="suspend" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'suspend' | i}}</a>
-                            <a id="resume" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'resume' | i}}</a>
-                            <a id="setting" class="dropdown-item" href="javascript:void(0)" 
-                                data-toggle="modal" data-target="#settingModal">{{'setting' | i}}</a>
-                            <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="remove" class="dropdown-item" href="javascript:void(0)" 
-                                data-toggle="modal" data-target="#removeModal">{{'remove' | i}}</a>
-                        </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     </div>
                 </div>
                 <div class="card-body-tbl">
@@ -192,28 +196,31 @@ export class Guest extends Container {
                     {{'virtual disk' | i}}
                 </button>
             </div>
-            <div id="collapseDis">
             <div class="card-body">
-                <div class="card-body-hdl">
-                    <div id="create-btns" class="btn-group btn-group-sm" role="group">
-                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                                data-toggle="modal" data-target="#createDiskModal">
-                            {{'attach disk' | i}}
-                        </button>
-                        <button id="creates" type="button"
-                            class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                            data-toggle="dropdown" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                            <a id="create-iso" class="dropdown-item" data-toggle="modal" data-target="#createIsoModal">
-                                {{'attach cdrom' | i}}
-                            </a>
-                        </div>
-                    </div>  
-                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                    <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
+                        <div id="create-btns" class="btn-group btn-group-sm" role="group">
+                            <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                    data-toggle="modal" data-target="#createDiskModal">
+                                {{'attach disk' | i}}
+                            </button>
+                            <button id="creates" type="button"
+                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
+                                <a id="create-iso" class="dropdown-item" data-toggle="modal" data-target="#createIsoModal">
+                                    {{'attach cdrom' | i}}
+                                </a>
+                            </div>
+                        </div>  
+                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                    </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                    </div>
                 </div>
                 <div class="card-body-tbl">
                     <table class="table table-striped">
@@ -235,7 +242,6 @@ export class Guest extends Container {
                     </table>
                 </div>
             </div>
-            </div>
         </div>
         <!-- Interface -->
         <div id="interface" class="card device">
@@ -244,16 +250,19 @@ export class Guest extends Container {
                     {{'network interface' | i}}
                 </button>
             </div>
-            <div id="collapseInt">
             <div class="card-body">
-                <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                            data-toggle="modal" data-target="#createInterfaceModal">
-                        {{'attach interface' | i}}
-                    </button>
-                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                    <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
+                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                data-toggle="modal" data-target="#createInterfaceModal">
+                            {{'attach interface' | i}}
+                        </button>
+                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                    </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                    </div>
                 </div>
                 <div class="card-body-tbl">
                     <table class="table table-striped">
@@ -273,7 +282,6 @@ export class Guest extends Container {
                         </tbody>
                     </table>
                 </div>
-            </div>
             </div>
         </div>
         <!-- Graphics -->

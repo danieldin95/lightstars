@@ -68,24 +68,27 @@ export class Network extends Container {
                 </div>
             </div>
             <!-- Overview -->
-            <div id="collapseOver" class="collapse" aria-labelledby="headingOne" data-parent="#instance">
             <div class="card-body">
                 <!-- Header buttons -->
-                <div class="card-body-hdl">
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
-                    <button id="autostart" type="button" class="btn btn-outline-dark btn-sm">{{'autostart' | i}}</button>
-                    <div id="btns-more" class="btn-group btn-group-sm" role="group">
-                        <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
-                                data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
-                            {{'actions' | i}}
-                        </button>
-                        <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
-                            <a id="edit" class="dropdown-item" href="javascript:void(0)">{{'edit' | i}}</a>
-                            <a id="dumpxml" class="dropdown-item" href="javascript:void(0)">{{'dump xml' | i}}</a>
-                            <div class="dropdown-divider"></div>
-                            <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
-                            <a id="remove" class="dropdown-item" href="javascript:void(0)">{{'remove' | i}}</a>
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
+                        <button id="autostart" type="button" class="btn btn-outline-dark btn-sm">{{'autostart' | i}}</button>
+                        <div id="btns-more" class="btn-group btn-group-sm" role="group">
+                            <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
+                                    data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
+                                {{'actions' | i}}
+                            </button>
+                            <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
+                                <a id="edit" class="dropdown-item" href="javascript:void(0)">{{'edit' | i}}</a>
+                                <a id="dumpxml" class="dropdown-item" href="javascript:void(0)">{{'dump xml' | i}}</a>
+                                <div class="dropdown-divider"></div>
+                                <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
+                                <a id="remove" class="dropdown-item" href="javascript:void(0)">{{'remove' | i}}</a>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>                        
                     </div>
                 </div>
                 <div class="card-body-hdl">
@@ -107,9 +110,7 @@ export class Network extends Container {
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-        <div id="collapse">
         <!-- DHCP Lease -->
         <div id="leases" class="card device">
             <div class="card-header">
@@ -119,16 +120,19 @@ export class Network extends Container {
                     {{'dhcp lease' | i}}
                 </button>
             </div>
-            <div id="collapseLea" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
-                <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                            data-toggle="modal" data-target="#LeaseCreateModal">
-                        {{'new a lease' | i}}
-                    </button>
-                    <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                    <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                    <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
+                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                data-toggle="modal" data-target="#LeaseCreateModal">
+                            {{'new a lease' | i}}
+                        </button>
+                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                    </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                    </div>
                 </div>
                 <div class="card-body-tbl">
                     <table class="table table-striped">
@@ -145,7 +149,6 @@ export class Network extends Container {
                         </tbody>
                     </table>
                 </div>
-            </div>
             </div>
         </div>
         </div>`, v);

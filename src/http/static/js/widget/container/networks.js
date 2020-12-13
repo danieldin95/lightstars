@@ -49,7 +49,6 @@ export class Networks extends Container {
     template(v) {
         return this.compile(`
         <div id="index">
-    
         <!-- Network -->
         <div id="networks" class="card card-main">
             <div class="card-header">
@@ -57,10 +56,10 @@ export class Networks extends Container {
                     {{'virtual networks' | i}}
                 </button>
             </div>
-            <div id="collapseNet">
-                <div class="card-body">
-                    <!-- Network buttons -->
-                    <div class="card-body-hdl">
+            <div class="card-body">
+                <!-- Network buttons -->
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                     data-toggle="modal" data-target="#createNatModal">
@@ -82,31 +81,32 @@ export class Networks extends Container {
                         </div>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
                         <button id="delete" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                    </div>
+                    <div class="col-auto">
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
-    
-                    <!-- Network display -->
-                    <div class="card-body-tbl">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th><input id="on-all" type="checkbox"></th>
-                                <th>{{'id' | i}}</th>
-                                <th>{{'uuid' | i}}</th>
-                                <th>{{'name' | i}}</th>
-                                <th>{{'bridge' | i}}</th>
-                                <th>{{'state' | i}}</th>
-                            </tr>
-                            </thead>
-                            <tbody id="display-table">
-                            <!-- Loading -->
-                            </tbody>
-                        </table>
-                    </div>
+                </div>
+
+                <!-- Network display -->
+                <div class="card-body-tbl">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th><input id="on-all" type="checkbox"></th>
+                            <th>{{'id' | i}}</th>
+                            <th>{{'uuid' | i}}</th>
+                            <th>{{'name' | i}}</th>
+                            <th>{{'bridge' | i}}</th>
+                            <th>{{'state' | i}}</th>
+                        </tr>
+                        </thead>
+                        <tbody id="display-table">
+                        <!-- Loading -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        
         <!-- Modal -->
         <div id="modals">
             <!-- Create network modal -->
