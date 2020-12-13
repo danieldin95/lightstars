@@ -225,6 +225,4 @@ ol, ul, dl {
 .badge-outline {
     color: inherit;
     border: solid 1px #343a40;
-    border-radius: .2rem;
-    padding: .6em;
 }
