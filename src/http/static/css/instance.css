@@ -5,7 +5,7 @@
 
 .device {
     border-radius: .25rem;
-    border-color: darkgray;
+    /*border-color: darkgray;*/
 }
 
 .device .card-header .btn {

@@ -66,7 +66,7 @@ a:hover, a:focus {
 
 .card {
     margin: 1.25rem -1px 1.25rem 0;
-    border-color: darkgray;
+    /*border-color: darkgray;*/
 }
 
 .card-header {
