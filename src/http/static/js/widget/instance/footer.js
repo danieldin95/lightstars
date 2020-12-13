@@ -29,7 +29,8 @@ export class InstanceFooter extends Widget {
 
     render(data) {
         return this.compile(`
-            <div class="center">
+        <div class="row">
+            <div class="col-auto mr-auto ml-auto">
                 <span class="badge badge-pill badge-outline" title="running | shutoff | others">
                     Total {{running}} | {{shutdown}} | {{others}}
                 </span>
@@ -43,6 +44,6 @@ export class InstanceFooter extends Widget {
                     Storage {{allocStorage | prettyByte}}
                 </span>
             </div>
-        `, data);
+        </div>`, data);
     }
 }

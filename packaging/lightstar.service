@@ -7,7 +7,6 @@ Type=notify
 RemainAfterExit=yes
 EnvironmentFile=/etc/sysconfig/lightstar.cfg
 ExecStart=/usr/bin/lightstar $OPTIONS
-ExecStop=/usr/bin/kill `/usr/sbin/pidof lightstar`
 
 [Install]
 WantedBy=multi-user.target
