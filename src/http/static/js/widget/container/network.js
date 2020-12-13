@@ -122,7 +122,7 @@ export class Network extends Container {
             <div id="collapseLea" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
             <div class="card-body">
                 <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#LeaseCreateModal">
                         {{'new a lease' | i}}
                     </button>

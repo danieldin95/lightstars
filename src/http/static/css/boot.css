@@ -72,8 +72,8 @@ a:hover, a:focus {
 .card-header {
     padding: .35rem 1.25rem;
     margin-bottom: -1px;
-    background: #dee2e6;
-    border-bottom-color: #dee2e6;
+    /*background: white;*/
+    /*border-bottom-color: #dee2e6;*/
     border-radius: calc(0.25rem - 1px);
 }
 
@@ -90,6 +90,10 @@ a:hover, a:focus {
 .card-body {
     margin-top: .25rem;
     max-height: 600px;
+}
+
+.card-footer {
+    /*background: white;*/
 }
 
 .dropdown-menu {
@@ -155,7 +159,7 @@ a:hover, a:focus {
 }
 
 .card-body-hdl .btn {
-    border: none;
+    /*border: none;*/
 }
 
 .form-control-sm {
@@ -216,4 +220,11 @@ ol, ul, dl {
 
 .progress:last-child {
     margin-bottom: 0;
+}
+
+.badge-outline {
+    color: inherit;
+    border: solid 1px #343a40;
+    border-radius: .2rem;
+    padding: .6em;
 }

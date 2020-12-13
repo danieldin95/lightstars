@@ -51,7 +51,7 @@ export class Home extends Container {
             <div id="overview" class="card-body">
                 <!-- Overview buttons -->
                 <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createGuestModal">
                         {{'create new instance' | i}}
                     </button>

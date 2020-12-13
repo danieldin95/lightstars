@@ -346,6 +346,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 func (ins Instance) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance", ins.GET).Methods("GET")
 	router.HandleFunc("/api/instance", ins.POST).Methods("POST")
+	router.HandleFunc("/api/instance/stats", ins.Stats).Methods("GET")
 	router.HandleFunc("/api/instance/{id}", ins.GET).Methods("GET")
 	router.HandleFunc("/api/instance/{id}", ins.PUT).Methods("PUT")
 	router.HandleFunc("/api/instance/{id}", ins.DELETE).Methods("DELETE")
@@ -379,6 +380,37 @@ func (ins Instance) GetByUser(user *schema.User, list *schema.ListInstance) {
 			_ = d.Free()
 		}
 	}
+}
+
+func (ins Instance) Stats(w http.ResponseWriter, r *http.Request) {
+	user, _ := GetUser(r)
+	// list all instances.
+	list := schema.ListInstance{
+		Items: make([]schema.Instance, 0, 32),
+	}
+	ins.GetByUser(&user, &list)
+
+	// calculator stats.
+	stats := schema.InstancesStats{}
+	for _, obj := range list.Items {
+		stats.AllocMem += obj.MaxMem
+		stats.AllocCpu += obj.MaxCpu
+		switch obj.State {
+		case "running":
+			stats.Running += 1
+			stats.OccupiedMem += obj.MaxMem
+			stats.OccupiedCpu += obj.MaxCpu
+		case "shutoff":
+			stats.Shutdown += 1
+		default:
+			stats.Others += 1
+		}
+		for _, disk := range obj.Disks {
+			stats.AllocStorage += disk.Volume.Capacity
+		}
+	}
+	ResponseJson(w, stats)
+	return
 }
 
 func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {

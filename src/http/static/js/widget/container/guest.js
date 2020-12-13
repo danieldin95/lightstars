@@ -196,7 +196,7 @@ export class Guest extends Container {
             <div class="card-body">
                 <div class="card-body-hdl">
                     <div id="create-btns" class="btn-group btn-group-sm" role="group">
-                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                 data-toggle="modal" data-target="#createDiskModal">
                             {{'attach disk' | i}}
                         </button>
@@ -247,7 +247,7 @@ export class Guest extends Container {
             <div id="collapseInt">
             <div class="card-body">
                 <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createInterfaceModal">
                         {{'attach interface' | i}}
                     </button>

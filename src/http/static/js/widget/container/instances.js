@@ -48,11 +48,10 @@ export class Instances extends Container {
                     {{'guest instances' | i}}
                 </button>
             </div>
-            <div id="collapseIns">
             <div class="card-body">
                 <!-- Instances buttons -->
                 <div class="card-body-hdl">
-                    <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
                             data-toggle="modal" data-target="#createGuestModal">
                         {{'create new instance' | i}}
                     </button>
@@ -97,6 +96,7 @@ export class Instances extends Container {
                     </table>
                 </div>
             </div>
+            <div class="card-footer" id="footer">
             </div>
         </div>
         

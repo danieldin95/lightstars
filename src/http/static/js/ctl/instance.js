@@ -2,6 +2,7 @@ import {Ctl} from './ctl.js';
 import {InstanceApi} from "../api/instance.js";
 import {InstanceTable} from "../widget/instance/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
+import {InstanceFooter} from "../widget/instance/footer.js";
 
 
 class CheckboxCtl extends CheckBox {
@@ -32,6 +33,7 @@ export class InstanceCtl extends Ctl {
         this.checkbox = new CheckboxCtl(props);
         this.uuids = this.checkbox.uuids;
         this.table = new InstanceTable({id: `${this.id} #display-body`});
+        this.footer = new InstanceFooter({id: `${this.id} #footer`});
 
         // register buttons's click.
         $(this.child('#console')).on("click", this.uuids, function (e) {
@@ -83,6 +85,9 @@ export class InstanceCtl extends Ctl {
                 });
             }
         });
+        this.footer.refresh((e) => {
+            //TODO
+        })
     }
 
     create(data) {

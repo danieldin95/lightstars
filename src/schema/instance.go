@@ -125,3 +125,14 @@ type Address struct {
 	Slot     string `json:"slot"`
 	Function string `json:"function"`
 }
+
+type InstancesStats struct {
+	Running      uint   `json:"running"`
+	Shutdown     uint   `json:"shutdown"`
+	Others       uint   `json:"others"`
+	AllocMem     uint64 `json:"allocMem"`
+	OccupiedMem  uint64 `json:"occupiedMem"`
+	AllocCpu     uint   `json:"allocCpu"`
+	OccupiedCpu  uint   `json:"occupiedCpu"`
+	AllocStorage uint64 `json:"allocStorage"`
+}

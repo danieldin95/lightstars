@@ -19,6 +19,7 @@ export class InstanceApi extends Api {
         }
         return super.url(`/instance`);
     }
+
     start() {
         this.uuids.forEach((uuid) => {
             let url = this.url(uuid);
@@ -183,6 +184,23 @@ export class InstanceApi extends Api {
             //$(this.tasks).append(Alert.success(`create ${resp.name} success`));
         }).fail((e) => {
             $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
+        });
+    }
+
+    stats(data, func, fail) {
+        if (typeof data == 'function') {
+            func = data;
+            data = {};
+        }
+        let url = this.url('stats');
+
+        $.GET(url, {format: 'schema'}, (resp, status) => {
+            func({data, resp});
+        }).fail((e) => {
+            if (fail) {
+                fail(e);
+            }
+            $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
         });
     }
 }
