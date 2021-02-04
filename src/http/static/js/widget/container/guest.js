@@ -86,6 +86,7 @@ export class Guest extends Container {
         let host = Api.host();
         let pass = Utils.graphic(v, 'vnc', 'password');
         let vncUrl = `/ui/console?id=${v.uuid}&password=${pass}&node=${host}&title=${v.name}`;
+        let liteUrl = `/ui/lite?id=${v.uuid}&password=${pass}&node=${host}&title=${v.name}`;
         let dumpUrl = Api.path(`/api/instance/${v.uuid}?format=xml`);
         let os = Utils.os();
         let localUrl = Api.path(`/api/instance/${v.uuid}/graphics?format=vv&os=${os}`);
@@ -164,8 +165,14 @@ export class Guest extends Container {
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     </div>
                 </div>
-                <div class="card-body-tbl">
-                    <div class="overview">
+                <div class="card-body-tbl overview row">
+                    <div class="col-sm-12 col-md-5 col-lg-4 mt-2">
+                        <div style="width: 328px; height: 188px; background-color: rgb(40 40 40); border-radius: 4px; padding: 4px;">
+                            <iframe width="320px" height="180px" src="${liteUrl}" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-7 col-lg-8 mt-3">
                         <dl class="dl-horizontal">
                             <dt>{{'state' | i}}:</dt>
                             <dd><span class="{{state}}">{{state}}</span></dd>
