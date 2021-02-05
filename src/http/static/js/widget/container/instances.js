@@ -89,6 +89,7 @@ export class Instances extends Container {
                             <th>{{'id' | i}}</th>
                             <th>{{'uuid' | i}}</th>
                             <th>{{'name' | i}}</th>
+                            <th>{{'title' | i}}</th>
                             <th>{{'processor' | i}}</th>
                             <th>{{'memory' | i}}</th>
                             <th>{{'state' | i}}</th>

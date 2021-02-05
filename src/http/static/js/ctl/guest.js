@@ -98,4 +98,8 @@ export class GuestCtl extends Ctl {
     remove() {
         this.api.remove();
     }
+
+    title(data) {
+        this.api.title(data);
+    }
 }

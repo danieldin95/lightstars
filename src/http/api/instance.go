@@ -565,6 +565,11 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+	case "title":
+		if err := dom.SetMetadataTitle(conf.Title, true); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 	ResponseMsg(w, 0, "success")
 }

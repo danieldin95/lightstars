@@ -134,5 +134,9 @@
 	"uptime": "运行时间",
 	"instances": "实例",
 	"language and region": "语言与区域",
-	"console by remote viewer": "在本地终端打开"
+	"console by remote viewer": "在本地终端打开",
+	"title": "标题",
+	"setting spec": "设置规格",
+	"setting title": "设置标题",
+	"comments": "备注"
 }

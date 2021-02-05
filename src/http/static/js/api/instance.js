@@ -136,6 +136,18 @@ export class InstanceApi extends Api {
         }
     }
 
+    title(data) {
+        let uuid = this.uuids[0];
+        let url = this.url(uuid);
+        let params = JSON.stringify({action: 'title', title: data.title});
+
+        $.PUT(url, params, (resp, status) => {
+            //$(this.tasks).append(Alert.success(`destroy '${uuid}' success`));
+        }).fail((e) => {
+            $(this.tasks).append(Alert.danger((`PUT ${url}: ${e.responseText}`)));
+        });
+    }
+
     console() {
         this.uuids.forEach((uuid, index, err) => {
             let password = '', name = '';

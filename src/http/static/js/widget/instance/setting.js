@@ -31,7 +31,7 @@ export class InstanceSet extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h7 class="modal-title" id="">{{'instance setting' | i}}</h7>
+                <h7 class="modal-title" id="">{{'setting' | i}}</h7>
             </div>
             <div id="" class="modal-body">
                 <form>

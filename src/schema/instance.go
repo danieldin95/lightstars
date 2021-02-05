@@ -35,6 +35,8 @@ type Instance struct {
 	Action      string       `json:"action,omitempty"` // If is "", means not action.
 	UUID        string       `json:"uuid"`
 	Name        string       `json:"name"`
+	Title       string       `json:"title"`
+	Description string       `json:"description"`
 	Family      string       `json:"family"` // linux, windows or others
 	State       string       `json:"state"`
 	Arch        string       `json:"arch"` // x86_64 or i386

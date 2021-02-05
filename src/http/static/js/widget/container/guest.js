@@ -10,6 +10,7 @@ import {InterfaceCreate} from '../interface/create.js';
 import {InstanceSet} from "../instance/setting.js";
 import {InstanceRemove} from "../instance/remove.js";
 import {GraphicsCreate} from "../graphics/create.js";
+import {TitleSet} from "../instance/title.js";
 
 export class Guest extends Container {
     // {
@@ -53,6 +54,10 @@ export class Guest extends Container {
         new InstanceSet({id: this.id('#settingModal'), data: data })
             .onsubmit((e) => {
                 ctl.edit(Utils.toJSON(e.form));
+            });
+        new TitleSet({id: this.id('#settingTitleModal'), data: data })
+            .onsubmit((e) => {
+                ctl.title(Utils.toJSON(e.form));
             });
         new InstanceRemove({id: this.id('#removeModal'), name: this.name, uuid: this.uuid })
             .onsubmit((e) => {
@@ -153,7 +158,9 @@ export class Guest extends Container {
                                 <a id="suspend" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'suspend' | i}}</a>
                                 <a id="resume" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'resume' | i}}</a>
                                 <a id="setting" class="dropdown-item" href="javascript:void(0)" 
-                                    data-toggle="modal" data-target="#settingModal">{{'setting' | i}}</a>
+                                    data-toggle="modal" data-target="#settingModal">{{'setting spec' | i}}</a>
+                                <a id="title" class="dropdown-item" href="javascript:void(0)" 
+                                    data-toggle="modal" data-target="#settingTitleModal">{{'setting title' | i}}</a>                                    
                                 <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
                                 <div class="dropdown-divider"></div>
                                 <a id="remove" class="dropdown-item" href="javascript:void(0)" 
@@ -166,27 +173,28 @@ export class Guest extends Container {
                     </div>
                 </div>
                 <div class="card-body-tbl overview row">
-                    <div class="col-sm-12 col-md-5 col-lg-4 mt-2">
+                    <div class="col-sm-12 col-md-5 col-lg-4 mt-3">
                         <div style="width: 328px; height: 188px; background-color: rgb(40 40 40); border-radius: 4px; padding: 4px;">
                             <iframe width="320px" height="180px" src="${liteUrl}" frameborder="0"></iframe>
                         </div>
                     </div>
-                    
-                    <div class="col-sm-12 col-md-7 col-lg-8 mt-3">
+                    <div class="col-sm-12 col-md-7 col-lg-8 mt-1">
                         <dl class="dl-horizontal">
                             <dt>{{'state' | i}}:</dt>
-                            <dd><span class="{{state}}">{{state}}</span></dd>
+                            <dd>&nbsp;<span class="{{state}}">{{state}}</span></dd>
                             <dt>{{'uuid' | i}}:</dt>
-                            <dd>{{uuid}}</dd>
+                            <dd>&nbsp;{{uuid}}</dd>
+                            <dt>{{'title' | i}}:</dt>
+                            <dd>&nbsp;{{title}}</dd>                            
                             <dt>{{'arch' | i}}:</dt>
-                            <dd>{{arch}} | {{type}}</dd>
+                            <dd>&nbsp;{{arch}} | {{type}}</dd>
                             <dt>{{'processor' | i}}:</dt>
                             <dd title="{{'model | number | time' | i}}">
-                              {{cpuMode | prettyCpuMode}} | {{maxCpu}} | {{cpuTime}}ms
+                              &nbsp;{{cpuMode | prettyCpuMode}} | {{maxCpu}} | {{cpuTime}}ms
                             </dd>
                             <dt>{{'memory' | i}}:</dt>
                             <dd title="{{'max | current' | i}}">
-                              {{maxMem | prettyKiB}} | {{memory | prettyKiB}}
+                              &nbsp;{{maxMem | prettyKiB}} | {{memory | prettyKiB}}
                             </dd>
                         </dl>
                     </div>
@@ -353,6 +361,8 @@ export class Guest extends Container {
             <div id="createInterfaceModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create graphics modal -->
             <div id="createGraphicModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Setting title modal -->
+            <div id="settingTitleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         </div>`, v);
     }

@@ -66,13 +66,13 @@ a:hover, a:focus {
 
 .card {
     margin: 1.25rem -1px 1.25rem 0;
-    /*border-color: darkgray;*/
+    box-shadow: 0 2px 6px 0 #dae0e5;
 }
 
 .card-header {
     padding: .35rem 1.25rem;
     margin-bottom: -1px;
-    /*background: white;*/
+    background: white;
     /*border-bottom-color: #dee2e6;*/
     border-radius: calc(0.25rem - 1px);
 }
@@ -93,7 +93,7 @@ a:hover, a:focus {
 }
 
 .card-footer {
-    /*background: white;*/
+    background: white;
 }
 
 .dropdown-menu {

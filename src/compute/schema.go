@@ -97,6 +97,8 @@ func NewInstance(dom libvirtc.Domain) schema.Instance {
 		obj.MaxCpu = info.NrVirtCpu
 		obj.CpuTime = info.CpuTime / 1000000
 	}
+	obj.Title, _ = dom.GetMetadataTitle(true)
+	obj.Description, _ = dom.GetMetadataTitle(false)
 	xmlObj := libvirtc.NewDomainXMLFromDom(&dom, true)
 	if xmlObj == nil {
 		return obj

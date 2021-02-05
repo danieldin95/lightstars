@@ -134,5 +134,9 @@
 	"uptime": "UpTime",
 	"instances": "Instances",
 	"language and region": "Language and region",
-	"console by remote viewer": "Console by remote viewer"
+	"console by remote viewer": "Console by remote viewer",
+	"title": "Title",
+	"setting spec": "Setting spec",
+	"setting title": "Setting title",
+	"comments": "Comments"
 }

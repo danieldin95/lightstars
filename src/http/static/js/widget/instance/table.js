@@ -12,7 +12,7 @@ export class InstanceTable extends Widget {
     }
 
     loading() {
-        return `<tr><td colspan="9" style="text-align:center">Loading...</td></tr>`;
+        return `<tr><td colspan="10" style="text-align:center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -36,6 +36,7 @@ export class InstanceTable extends Widget {
                 <td>{{i+1}}</td>
                 <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/guest/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
                 <td>{{v.name}}</td>
+                <td>{{v.title}}</td>
                 <td>{{v.maxCpu}}</td>
                 <td>{{v.maxMem | prettyKiB}}</td>
                 <td><span class="{{v.state}}">{{v.state}}</span></td>

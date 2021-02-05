@@ -149,6 +149,28 @@ func (d *Domain) GetXMLDesc(secure bool) (string, error) {
 	}
 }
 
+func (d *Domain) GetMetadataTitle(title bool) (string, error) {
+	tipus := libvirt.DOMAIN_METADATA_DESCRIPTION
+	if title {
+		tipus = libvirt.DOMAIN_METADATA_TITLE
+	}
+	return d.Domain.GetMetadata(tipus, "", libvirt.DOMAIN_AFFECT_CURRENT)
+}
+
+// virsh desc 3 --config --live --title your_title
+func (d *Domain) SetMetadataTitle(value string, title bool) error {
+	tipus := libvirt.DOMAIN_METADATA_DESCRIPTION
+	if title {
+		tipus = libvirt.DOMAIN_METADATA_TITLE
+	}
+	if active, _ := d.Domain.IsActive(); active {
+		if err := d.Domain.SetMetadata(tipus, value, "", "", libvirt.DOMAIN_AFFECT_LIVE); err != nil {
+			return err
+		}
+	}
+	return d.Domain.SetMetadata(tipus, value, "", "", libvirt.DOMAIN_AFFECT_CONFIG)
+}
+
 func ListDomains() ([]Domain, error) {
 	hyper, err := GetHyper()
 	if err != nil {
