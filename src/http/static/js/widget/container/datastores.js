@@ -98,7 +98,6 @@ export class DataStores extends Container {
                         <tr>
                             <th><input id="on-all" type="checkbox"></th>
                             <th>{{'id' | i}}</th>
-                            <th>{{'uuid' | i}}</th>
                             <th>{{'name' | i}}</th>
                             <th>{{'source' | i}}</th>
                             <th>{{'capacity' | i}}</th>

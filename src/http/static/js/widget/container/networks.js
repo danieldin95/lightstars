@@ -94,7 +94,6 @@ export class Networks extends Container {
                         <tr>
                             <th><input id="on-all" type="checkbox"></th>
                             <th>{{'id' | i}}</th>
-                            <th>{{'uuid' | i}}</th>
                             <th>{{'name' | i}}</th>
                             <th>{{'bridge' | i}}</th>
                             <th>{{'state' | i}}</th>

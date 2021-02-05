@@ -34,8 +34,7 @@ export class InstanceTable extends Widget {
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}" passwd="{{v | vncPassword}}" name="{{v.name}}"></td>
                 <td>{{i+1}}</td>
-                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/guest/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
-                <td>{{v.name}}</td>
+                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/guest/{{v.uuid}}?${query}">{{v.name}}</a></td>
                 <td>{{v.title}}</td>
                 <td>{{v.maxCpu}}</td>
                 <td>{{v.maxMem | prettyKiB}}</td>

@@ -35,8 +35,7 @@ export class DataStoreTable extends Widget {
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>
                 <td>{{i+1}}</td>
-                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/datastore/{{v.uuid}}?${query}">{{v.uuid}}</a></td>
-                <td>{{v.name}}</td>
+                <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/datastore/{{v.uuid}}?${query}">{{v.name}}</a></td>
                 <td>{{v.source}}</td>
                 <td>{{v.capacity | prettyByte}}</td>
                 <td>{{v.allocation | prettyByte}}</td>

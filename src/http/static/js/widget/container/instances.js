@@ -87,7 +87,6 @@ export class Instances extends Container {
                                 <input id="on-all" type="checkbox" aria-label="select all instances">
                             </th>
                             <th>{{'id' | i}}</th>
-                            <th>{{'uuid' | i}}</th>
                             <th>{{'name' | i}}</th>
                             <th>{{'title' | i}}</th>
                             <th>{{'processor' | i}}</th>
