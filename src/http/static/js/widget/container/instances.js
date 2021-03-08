@@ -88,10 +88,10 @@ export class Instances extends Container {
                             </th>
                             <th>{{'id' | i}}</th>
                             <th>{{'name' | i}}</th>
-                            <th>{{'title' | i}}</th>
                             <th>{{'processor' | i}}</th>
                             <th>{{'memory' | i}}</th>
                             <th>{{'state' | i}}</th>
+                            <th>{{'title' | i}}</th>
                         </tr>
                         </thead>
                         <tbody id="display-body">
