@@ -1,16 +1,24 @@
 import {Ctl} from "./ctl.js";
-import {GraphicsApi} from "../api/graphics.js";
-import {GraphicsTable} from "../widget/graphics/table.js";
+import {SnapshotApi} from "../api/snapshot.js";
+import {SnapshotTable} from "../widget/snapshot/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
 
 
 class CheckBoxCtl extends CheckBox {
+    change(from) {
+        super.change(from);
+        if (from.store.length === 1) {
+            $(this.child('#revert')).removeAttr('disabled');
+        } else {
+            $(this.child('#revert')).attr("disabled","disabled");
+        }
+    }
 }
 
 
-export class GraphicsCtl extends Ctl {
+export class SnapshotCtl extends Ctl {
     // {
-    //   id: '#instance #graphics',
+    //   id: '#instance #snapshot',
     //   uuid: uuid of instance,
     //   name: name of instance,
     // }
@@ -21,19 +29,25 @@ export class GraphicsCtl extends Ctl {
 
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
-        this.table = new GraphicsTable({
+        this.table = new SnapshotTable({
             id: this.child('#display-table'),
             inst: this.inst,
         });
 
         // register button's click.
         $(this.child('#remove')).on("click", this, function (e) {
-            new GraphicsApi({
+            new SnapshotApi({
                 inst: e.data.inst,
                 uuids: e.data.uuids.store,
                 name: e.data.name}).delete();
         });
 
+        $(this.child('#revert')).on("click", this, function (e) {
+            new SnapshotApi({
+                inst: e.data.inst,
+                uuids: e.data.uuids.store,
+                name: e.data.name}).revert();
+        });
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
@@ -46,10 +60,6 @@ export class GraphicsCtl extends Ctl {
     }
 
     create(data) {
-        new GraphicsApi({inst: this.inst, name: this.name}).create(data);
-    }
-
-    edit(data) {
-        new GraphicsApi({inst: this.inst, name: this.name}).edit(data);
+        new SnapshotApi({inst: this.inst, name: this.name}).create(data);
     }
 }

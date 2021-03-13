@@ -19,6 +19,36 @@
       "action": "permit"
     },
     {
+      "path": "/api/instance/{id}/title",
+      "method": "put",
+      "type": "path",
+      "action": "permit"
+    },
+    {
+      "path": "/api/instance/{id}/shutdown",
+      "method": "put",
+      "type": "path",
+      "action": "permit"
+    },
+    {
+      "path": "/api/instance/{id}/start",
+      "method": "put",
+      "type": "path",
+      "action": "permit"
+    },
+    {
+      "path": "/api/instance/{id}/reset",
+      "method": "put",
+      "type": "path",
+      "action": "permit"
+    },
+    {
+      "path": "/api/instance/{id}/destroy",
+      "method": "put",
+      "type": "path",
+      "action": "permit"
+    },
+    {
       "path": "/host/{host}/api/instance/{id}",
       "method": "put",
       "type": "path",

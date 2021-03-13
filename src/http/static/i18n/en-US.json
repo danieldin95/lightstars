@@ -138,5 +138,9 @@
 	"title": "Title",
 	"setting spec": "Setting spec",
 	"setting title": "Setting title",
-	"comments": "Comments"
+	"comments": "Comments",
+	"snapshot": "Snapshot",
+	"instance snapshot": "Instance snapshot",
+	"create snapshort": "Create snapshot",
+	"revert": "Revert"
 }

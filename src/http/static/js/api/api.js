@@ -11,8 +11,8 @@ export class Api {
             props = {};
         }
 
-        this.name = props.name;
         this.props = props;
+        this.name = props.name;
         this.tasks = props.tasks || "tasks";
         if (typeof props.uuids === "string") {
             this.uuids = [props.uuids];
@@ -83,7 +83,7 @@ export class Api {
     }
 
     edit(data) {
-        let uuid = this.uuids[0]
+        let uuid = this.uuids[0];
         let url = this.url(uuid);
         $.PUT(url, JSON.stringify(data), (resp, success) => {
             //$(this.tasks).append(Alert.success(`edit ${uuid} ${resp.message}`));

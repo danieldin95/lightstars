@@ -11,6 +11,7 @@ import {InstanceSet} from "../instance/setting.js";
 import {InstanceRemove} from "../instance/remove.js";
 import {GraphicsCreate} from "../graphics/create.js";
 import {TitleSet} from "../instance/title.js";
+import {SnapshotCreate} from "../snapshot/create.js";
 
 export class Guest extends Container {
     // {
@@ -49,6 +50,7 @@ export class Guest extends Container {
             disks: {id: this.id("#disk")},
             interfaces: {id: this.id("#interface")},
             graphics: {id: this.id("#graphics")},
+            snapshot: {id: this.id('#snapshot')},
             data: data,
         });
         new InstanceSet({id: this.id('#settingModal'), data: data })
@@ -79,6 +81,10 @@ export class Guest extends Container {
         new GraphicsCreate({id: this.id('#createGraphicModal')})
             .onsubmit((e) => {
                 ctl.graphics.create(Utils.toJSON(e.form));
+            });
+        new SnapshotCreate({id: this.id('#createSnapshotModal')})
+            .onsubmit((e) => {
+                ctl.snapshot.create(Utils.toJSON(e.form));
             });
         // register console draggable.
         $((e) => {
@@ -299,45 +305,44 @@ export class Guest extends Container {
                 </div>
             </div>
         </div>
-        <!-- Graphics -->
-        <!--
-        <div id="graphics" class="card device">
+        <!-- Snapshots -->
+        <div id="snapshot" class="card device">
             <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm"
-                        type="button" data-toggle="collapse"
-                        data-target="#collapseGra" aria-expanded="true" aria-controls="collapseGra">
-                    {{'graphics device' | i}}
+                <button class="btn btn-link btn-block text-left btn-sm" type="button">
+                    {{'instance snapshot' | i}}
                 </button>
             </div>
-            <div id="collapseGra" class="collapse" aria-labelledby="headingOne" data-parent="#collapse">
-                <div class="card-body">
-                    <div class="card-body-hdl">
+            <div class="card-body">
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
                         <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#createGraphicModal">
-                            {{'attach graphic' | i}}
+                                data-toggle="modal" data-target="#createSnapshotModal">
+                            {{'create snapshot' | i}}
                         </button>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                        <button id="revert" type="button" class="btn btn-outline-dark btn-sm">{{'revert' | i}}</button>
+                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                    </div>
+                    <div class="col-auto">
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
-                    <div class="card-body-tbl">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th><input id="on-all" type="checkbox" aria-label="select all graphics"></th>
-                                <th>{{'id' | i}}</th>
-                                <th>{{'type' | i}}</th>
-                                <th>{{'password' | i}}</th>
-                                <th>{{'listen' | i}}</th>
-                            </tr>
-                            </thead>
-                            <tbody id="display-table">
-                            </tbody>
-                        </table>
-                    </div>
+                </div>
+                <div class="card-body-tbl">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th><input id="on-all" type="checkbox" aria-label="select all"></th>
+                            <th>{{'id' | i}}</th>
+                            <th>{{'name' | i}}</th>
+                            <th>{{'uptime' | i}}</th>
+                            <th>{{'state' | i}}</th>
+                        </tr>
+                        </thead>
+                        <tbody id="display-table">
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        -->
         </div>
         <!-- Modals -->
         <div id="modals">
@@ -359,8 +364,8 @@ export class Guest extends Container {
             <div id="createIsoModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create interface modal -->
             <div id="createInterfaceModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <!-- Create graphics modal -->
-            <div id="createGraphicModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Create snapshot modal -->
+            <div id="createSnapshotModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Setting title modal -->
             <div id="settingTitleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>

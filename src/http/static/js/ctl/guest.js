@@ -3,6 +3,7 @@ import {InstanceApi} from "../api/instance.js";
 import {DiskCtl} from "./disk.js";
 import {InterfaceCtl} from "./interface.js"
 import {GraphicsCtl} from "./graphics.js";
+import {SnapshotCtl} from "./snapshot.js";
 
 
 class HeaderCtl extends Ctl {
@@ -89,6 +90,7 @@ export class GuestCtl extends Ctl {
         this.disk = new DiskCtl({id: props.disks.id, uuid, name});
         this.interface = new InterfaceCtl({id: props.interfaces.id, uuid, name});
         this.graphics = new GraphicsCtl({id: props.graphics.id, uuid, name});
+        this.snapshot = new SnapshotCtl({id: props.snapshot.id, uuid, name})
     }
 
     edit(data) {

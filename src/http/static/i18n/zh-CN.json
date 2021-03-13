@@ -138,5 +138,9 @@
 	"title": "标题",
 	"setting spec": "设置规格",
 	"setting title": "设置标题",
-	"comments": "备注"
+	"comments": "备注",
+	"snapshot": "快照",
+	"instance snapshot": "实例快照",
+	"create snapshot": "新建快照",
+	"revert": "回滚"
 }

@@ -32,7 +32,6 @@ func (in Snapshot) Get(w http.ResponseWriter, r *http.Request) {
 	list := schema.ListSnapshot{
 		Items: make([]schema.Snapshot, 0, 32),
 	}
-
 	name, ok := GetArg(r, "name")
 	if !ok {
 		sns, err := dom.ListAllSnapshots(0)
@@ -41,8 +40,7 @@ func (in Snapshot) Get(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		for _, obj := range sns {
-			snx := libvirtc.NewSnapshotXMLFromDom(&obj)
-			if snx != nil {
+			if snx := libvirtc.NewSnapshotXMLFromDom(&obj); snx != nil {
 				list.Items = append(list.Items, schema.Snapshot{
 					Name:   snx.Name,
 					State:  snx.State,
@@ -51,25 +49,21 @@ func (in Snapshot) Get(w http.ResponseWriter, r *http.Request) {
 			}
 			_ = obj.Free()
 		}
-		return
 	} else {
 		if obj, err := dom.SnapshotLookupByName(name, 0); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
-		} else {
-			snx := libvirtc.NewSnapshotXMLFromDom(obj)
-			if snx != nil {
-				list.Items = append(list.Items, schema.Snapshot{
-					Name:   snx.Name,
-					State:  snx.State,
-					Uptime: time.Now().Unix() - snx.CreateAt,
-				})
-			}
+		} else if snx := libvirtc.NewSnapshotXMLFromDom(obj); snx != nil {
+			list.Items = append(list.Items, schema.Snapshot{
+				Name:   snx.Name,
+				State:  snx.State,
+				Uptime: time.Now().Unix() - snx.CreateAt,
+			})
 			_ = obj.Free()
 		}
 	}
 	sort.SliceStable(list.Items, func(i, j int) bool {
-		return list.Items[i].Name < list.Items[j].Name
+		return list.Items[i].Uptime < list.Items[j].Uptime
 	})
 	list.Metadata.Size = len(list.Items)
 	list.Metadata.Total = len(list.Items)
