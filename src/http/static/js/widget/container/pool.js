@@ -59,7 +59,7 @@ export class Pool extends Container {
         <div id="datastores" data="{{uuid}}" name="{{name}}">
         <div id="header" class="card">
             <div class="card-header">
-                <div class="card-just-left">
+                <div class="text-left">
                     <a id="refresh" class="none" href="javascript:void(0)">{{name}}</a>
                 </div>
             </div>

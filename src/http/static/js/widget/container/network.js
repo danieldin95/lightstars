@@ -63,7 +63,7 @@ export class Network extends Container {
         <div id="network" data="{{uuid}}" name="{{name}}">
         <div id="header" class="card">
             <div class="card-header">
-                <div class="card-just-left">
+                <div class="text-left">
                     <a id="refresh" class="none" href="javascript:void(0)">{{name}}</a>
                 </div>
             </div>

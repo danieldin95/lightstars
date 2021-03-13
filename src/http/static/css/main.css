@@ -227,7 +227,7 @@ select {
     border-bottom: solid 1px black;
 }
 .card-tab a {
-    color: inherit;
+    color: #545b62;
 }
 
 .card-tab .nav-pills .nav-link {

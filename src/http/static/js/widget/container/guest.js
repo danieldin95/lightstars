@@ -210,7 +210,7 @@ export class Guest extends Container {
         </div>
         
         <div class="card-tab">
-            <ul class="nav nav-pills justify-content-left" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills justify-content-start" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" 
                     role="tab" aria-controls="pills-home" aria-selected="true">{{'virtual disk' | i}}</a>
