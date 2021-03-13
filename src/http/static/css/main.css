@@ -53,31 +53,31 @@ div::-webkit-scrollbar-track {
     padding: 1rem .5rem;
 }
 
-.running,
-.active {
+.st-running,
+.st-active {
     color: darkgreen;
 }
 
-.paused,
-.blocked,
-.pm-suspended {
+.st-paused,
+.st-blocked,
+.st-pm-suspended {
     color: chocolate;
 }
 
-.no-state,
-.crashed,
-.unknown {
+.st-no-state,
+.st-crashed,
+.st-unknown {
     color: black;
 }
 
-.building {
+.st-building {
     color: chocolate;
 }
 
-.degraded,
-.inactive,
-.inaccessible,
-.unknown {
+.st-degraded,
+.st-inactive,
+.st-inaccessible,
+.st-unknown {
     color: black;
 }
 
@@ -216,3 +216,21 @@ select {
 .overview {
     border-top: 1px solid #dee2e6;
 }
+
+.card-tab {
+}
+
+.card-tab .nav-pills .nav-link.active,
+.card-tab .nav-pills .show > .nav-link {
+     color: inherit;
+     background-color: inherit;
+    border-bottom: solid 1px black;
+}
+.card-tab a {
+    color: inherit;
+}
+
+.card-tab .nav-pills .nav-link {
+    border-radius: 0;
+}
+

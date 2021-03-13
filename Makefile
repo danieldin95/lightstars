@@ -33,7 +33,7 @@ bin: lightstar ## build all binary
 
 pkg: rpm ## build all packages
 
-rpm: rpm-lightstar rpm-lightsim ## build rpm packages
+rpm: rpm-lightstar ## build rpm packages
 
 # prepare environment
 env:
@@ -53,10 +53,6 @@ rpm-env:
 rpm-lightstar: rpm-env
 	rpmbuild -ba packaging/lightstar.spec
 	cp -rf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm $(BD)
-
-rpm-lightsim: rpm-env
-	rpmbuild -ba packaging/lightsim.spec
-	cp -rf ~/rpmbuild/RPMS/x86_64/lightsim-*.rpm $(BD)
 
 
 linux-zip: env lightstar ## build linux zip packages

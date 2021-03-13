@@ -37,7 +37,7 @@ export class InstanceTable extends Widget {
                 <td><a id="on-this" class="text-decoration-none" data="{{v.uuid}}" href="#/guest/{{v.uuid}}?${query}">{{v.name}}</a></td>
                 <td>{{v.maxCpu}}</td>
                 <td>{{v.maxMem | prettyKiB}}</td>
-                <td><span class="{{v.state}}">{{v.state}}</span></td>
+                <td><span class="st-{{v.state}}">{{v.state}}</span></td>
                 <td style="width: 13rem;">{{v.title}}</td>
             </tr>
         {{/each}}

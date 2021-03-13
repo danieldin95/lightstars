@@ -106,7 +106,7 @@ export class Guest extends Container {
         <div id="instance" data="{{uuid}}" name="{{name}}">
         <div id="header" class="card header">
             <div class="card-header">
-                <div class="card-just-left">
+                <div class="text-left">
                     <a id="refresh" class="none" href="javascript:void(0)">{{name}}</a>
                 </div>
             </div>
@@ -209,141 +209,149 @@ export class Guest extends Container {
             </div>
         </div>
         
-        <div id="collapse">
-        <!-- Virtual Disk -->
-        <div id="disk" class="card device">
-            <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm" type="button">
-                    {{'virtual disk' | i}}
-                </button>
-            </div>
-            <div class="card-body">
-                <div class="row card-body-hdl">
-                    <div class="col-auto mr-auto">
-                        <div id="create-btns" class="btn-group btn-group-sm" role="group">
-                            <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                                    data-toggle="modal" data-target="#createDiskModal">
-                                {{'attach disk' | i}}
-                            </button>
-                            <button id="creates" type="button"
-                                class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-iso" class="dropdown-item" data-toggle="modal" data-target="#createIsoModal">
-                                    {{'attach cdrom' | i}}
-                                </a>
+        <div class="card-tab">
+            <ul class="nav nav-pills justify-content-left" id="pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" 
+                    role="tab" aria-controls="pills-home" aria-selected="true">{{'virtual disk' | i}}</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" 
+                    role="tab" aria-controls="pills-profile" aria-selected="false">{{'network interface' | i}}</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" 
+                    role="tab" aria-controls="pills-contact" aria-selected="false">{{'instance snapshot' | i}}</a>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <!-- Virtual Disk -->
+                <div id="disk" class="card device">
+                    <div class="card-body">
+                        <div class="row card-body-hdl">
+                            <div class="col-auto mr-auto">
+                                <div id="create-btns" class="btn-group btn-group-sm" role="group">
+                                    <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                            data-toggle="modal" data-target="#createDiskModal">
+                                        {{'attach disk' | i}}
+                                    </button>
+                                    <button id="creates" type="button"
+                                        class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                        data-toggle="dropdown" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
+                                        <a id="create-iso" class="dropdown-item" data-toggle="modal" data-target="#createIsoModal">
+                                            {{'attach cdrom' | i}}
+                                        </a>
+                                    </div>
+                                </div>  
+                                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                             </div>
-                        </div>  
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                    </div>
-                    <div class="col-auto">
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                            <div class="col-auto">
+                                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                            </div>
+                        </div>
+                        <div class="card-body-tbl">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th><input id="on-all" type="checkbox"></th>
+                                    <th>{{'id' | i}}</th>
+                                    <th>{{'bus' | i}}</th>
+                                    <th>{{'device' | i}}</th>
+                                    <th>{{'source' | i}}</th>
+                                    <th>{{'capacity' | i}}</th>
+                                    <th>{{'allocation' | i}}</th>
+                                    <th>{{'address' | i}}</th>
+                                </tr>
+                                </thead>
+                                <tbody id="display-table">
+                                <!-- Loading... -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div class="card-body-tbl">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th><input id="on-all" type="checkbox"></th>
-                            <th>{{'id' | i}}</th>
-                            <th>{{'bus' | i}}</th>
-                            <th>{{'device' | i}}</th>
-                            <th>{{'source' | i}}</th>
-                            <th>{{'capacity' | i}}</th>
-                            <th>{{'allocation' | i}}</th>
-                            <th>{{'address' | i}}</th>
-                        </tr>
-                        </thead>
-                        <tbody id="display-table">
-                        <!-- Loading... -->
-                        </tbody>
-                    </table>
+              </div>
+              <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <!-- Interface -->
+                <div id="interface" class="card device">
+                    <div class="card-body">
+                        <div class="row card-body-hdl">
+                            <div class="col-auto mr-auto">
+                                <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                        data-toggle="modal" data-target="#createInterfaceModal">
+                                    {{'attach interface' | i}}
+                                </button>
+                                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                            </div>
+                            <div class="col-auto">
+                                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                            </div>
+                        </div>
+                        <div class="card-body-tbl">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th><input id="on-all" type="checkbox" aria-label="select all interfaces"></th>
+                                    <th>{{'id' | i}}</th>
+                                    <th>{{'model' | i}}</th>
+                                    <th>{{'device' | i}}</th>
+                                    <th>{{'mac' | i}}</th>
+                                    <th>{{'address' | i}}</th>
+                                    <th>{{'source' | i}}</th>
+                                </tr>
+                                </thead>
+                                <tbody id="display-table">
+                                <!-- Loading -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+              </div>
+              <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                <!-- Snapshots -->
+                <div id="snapshot" class="card device">
+                    <div class="card-body">
+                        <div class="row card-body-hdl">
+                            <div class="col-auto mr-auto">
+                                <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                                        data-toggle="modal" data-target="#createSnapshotModal">
+                                    {{'create snapshot' | i}}
+                                </button>
+                                <button id="revert" type="button" class="btn btn-outline-dark btn-sm">{{'revert' | i}}</button>
+                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                            </div>
+                            <div class="col-auto">
+                                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                            </div>
+                        </div>
+                        <div class="card-body-tbl">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th><input id="on-all" type="checkbox" aria-label="select all"></th>
+                                    <th>{{'id' | i}}</th>
+                                    <th>{{'name' | i}}</th>
+                                    <th>{{'uptime' | i}}</th>
+                                    <th>{{'state' | i}}</th>
+                                </tr>
+                                </thead>
+                                <tbody id="display-table">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+              </div>
             </div>
         </div>
-        <!-- Interface -->
-        <div id="interface" class="card device">
-            <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm" type="button">
-                    {{'network interface' | i}}
-                </button>
-            </div>
-            <div class="card-body">
-                <div class="row card-body-hdl">
-                    <div class="col-auto mr-auto">
-                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                                data-toggle="modal" data-target="#createInterfaceModal">
-                            {{'attach interface' | i}}
-                        </button>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                    </div>
-                    <div class="col-auto">
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
-                    </div>
-                </div>
-                <div class="card-body-tbl">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th><input id="on-all" type="checkbox" aria-label="select all interfaces"></th>
-                            <th>{{'id' | i}}</th>
-                            <th>{{'model' | i}}</th>
-                            <th>{{'device' | i}}</th>
-                            <th>{{'mac' | i}}</th>
-                            <th>{{'address' | i}}</th>
-                            <th>{{'source' | i}}</th>
-                        </tr>
-                        </thead>
-                        <tbody id="display-table">
-                        <!-- Loading -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <!-- Snapshots -->
-        <div id="snapshot" class="card device">
-            <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm" type="button">
-                    {{'instance snapshot' | i}}
-                </button>
-            </div>
-            <div class="card-body">
-                <div class="row card-body-hdl">
-                    <div class="col-auto mr-auto">
-                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
-                                data-toggle="modal" data-target="#createSnapshotModal">
-                            {{'create snapshot' | i}}
-                        </button>
-                        <button id="revert" type="button" class="btn btn-outline-dark btn-sm">{{'revert' | i}}</button>
-                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
-                    </div>
-                    <div class="col-auto">
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
-                    </div>
-                </div>
-                <div class="card-body-tbl">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th><input id="on-all" type="checkbox" aria-label="select all"></th>
-                            <th>{{'id' | i}}</th>
-                            <th>{{'name' | i}}</th>
-                            <th>{{'uptime' | i}}</th>
-                            <th>{{'state' | i}}</th>
-                        </tr>
-                        </thead>
-                        <tbody id="display-table">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        </div>
+        
         <!-- Modals -->
         <div id="modals">
             <!-- Console modal -->
