@@ -11,10 +11,10 @@ type Hyper struct {
 }
 
 func (h Hyper) Router(router *mux.Router) {
-	router.HandleFunc("/api/hyper", h.GET).Methods("GET")
+	router.HandleFunc("/api/hyper", h.Get).Methods("GET")
 }
 
-func (h Hyper) GET(w http.ResponseWriter, r *http.Request) {
+func (h Hyper) Get(w http.ResponseWriter, r *http.Request) {
 	index := schema.Index{}
 	index.Version = schema.NewVersion()
 	index.Hyper = compute.NewHyper()

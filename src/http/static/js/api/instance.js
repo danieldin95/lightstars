@@ -13,8 +13,11 @@ export class InstanceApi extends Api {
         super(props);
     }
 
-    url(uuid) {
+    url(uuid, action) {
         if (uuid) {
+            if (action) {
+                return super.url(`/instance/${uuid}/${action}`);
+            }
             return super.url(`/instance/${uuid}`);
         }
         return super.url(`/instance`);
@@ -22,10 +25,9 @@ export class InstanceApi extends Api {
 
     start() {
         this.uuids.forEach((uuid) => {
-            let url = this.url(uuid);
-            let data = JSON.stringify({action: 'start'});
+            let url = this.url(uuid, 'start');
 
-            $.PUT(url, data, (resp, status) => {
+            $.PUT(url, (resp, status) => {
                 //$(this.tasks).append(Alert.success(`start '${uuid}' success`));
             }).fail((e) => {
                 $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
@@ -35,10 +37,9 @@ export class InstanceApi extends Api {
 
     shutdown() {
         this.uuids.forEach((uuid) => {
-            let url = this.url(uuid);
-            let data = JSON.stringify({action: 'shutdown'});
+            let url = this.url(uuid, 'shutdown');
 
-            $.PUT(url, data, (resp, status) => {
+            $.PUT(url, (resp, status) => {
                 //$(this.tasks).append(Alert.success(`shutdown '${uuid}' success`));
             }).fail((e) => {
                 $(this.tasks).append(Alert.warn(`PUT ${url}: ${e.responseText}`));
@@ -48,10 +49,9 @@ export class InstanceApi extends Api {
 
     reset() {
         this.uuids.forEach((uuid, index, err) => {
-            let url = this.url(uuid);
-            let data = JSON.stringify({action: 'reset'});
+            let url = this.url(uuid, 'reset');
 
-            $.PUT(url, data, (resp, status) => {
+            $.PUT(url, (resp, status) => {
                 //$(this.tasks).append(Alert.success(`reset '${uuid}' success`));
             }).fail((e) => {
                 $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
@@ -61,10 +61,9 @@ export class InstanceApi extends Api {
 
     suspend() {
         this.uuids.forEach((uuid, index, err) => {
-            let url = this.url(uuid);
-            let data = JSON.stringify({action: 'suspend'});
+            let url = this.url(uuid, 'suspend');
 
-            $.PUT(this.url(uuid), data, (resp, status) => {
+            $.PUT(url, (resp, status) => {
                 //$(this.tasks).append(Alert.success(`suspend '${uuid}' success`));
             }).fail((e) => {
                 $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
@@ -74,10 +73,9 @@ export class InstanceApi extends Api {
 
     resume() {
         this.uuids.forEach((uuid, index, err) => {
-            let url = this.url(uuid);
-            let data = JSON.stringify({action: 'resume'});
+            let url = this.url(uuid, 'resume');
 
-            $.PUT(url, data, (resp, status) => {
+            $.PUT(url, (resp, status) => {
                 //$(this.tasks).append(Alert.success(`resume '${uuid}' success`));
             }).fail((e) => {
                 $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
@@ -87,10 +85,9 @@ export class InstanceApi extends Api {
 
     destroy() {
         this.uuids.forEach((uuid, index, err) => {
-            let url = this.url(uuid);
-            let data = JSON.stringify({action: 'destroy'});
+            let url = this.url(uuid, 'destroy');
 
-            $.PUT(url, data, (resp, status) => {
+            $.PUT(url, (resp, status) => {
                 //$(this.tasks).append(Alert.success(`destroy '${uuid}' success`));
             }).fail((e) => {
                 $(this.tasks).append(Alert.danger((`PUT ${url}: ${e.responseText}`)));
@@ -112,34 +109,33 @@ export class InstanceApi extends Api {
 
     edit(data) {
         let uuid = this.uuids[0];
-        let url = this.url(uuid);
 
         if (data.cpu !== "") {
-            let api = url+"/processor";
+            let url = this.url(uuid, 'processor');
             let cpu = {cpu: data.cpu, mode: data.cpuMode};
 
-            $.PUT(api, JSON.stringify(cpu), (resp, status) => {
+            $.PUT(url, JSON.stringify(cpu), (resp, status) => {
                 //$(this.tasks).append(Alert.success(`set processor for '${uuid}' success`));
             }).fail((e) => {
-                $(this.tasks).append(Alert.warn((`PUT ${api}: ${e.responseText}`)));
+                $(this.tasks).append(Alert.warn((`PUT ${url}: ${e.responseText}`)));
             });
         }
         if (data.memSize !== "") {
-            let api = url+"/memory";
+            let url = this.url(uuid, 'memory');
             let mem = {size: data.memSize, unit: data.memUnit};
 
-            $.PUT(api, JSON.stringify(mem), (resp, status) => {
+            $.PUT(url, JSON.stringify(mem), (resp, status) => {
                 //$(this.tasks).append(Alert.success(`set memory for '${uuid}' success`));
             }).fail((e) => {
-                $(this.tasks).append(Alert.warn((`PUT ${api}: ${e.responseText}`)));
+                $(this.tasks).append(Alert.warn((`PUT ${url}: ${e.responseText}`)));
             });
         }
     }
 
     title(data) {
         let uuid = this.uuids[0];
-        let url = this.url(uuid);
-        let params = JSON.stringify({action: 'title', title: data.title});
+        let url = this.url(uuid, 'title');
+        let params = JSON.stringify({title: data.title});
 
         $.PUT(url, params, (resp, status) => {
             //$(this.tasks).append(Alert.success(`destroy '${uuid}' success`));

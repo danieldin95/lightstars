@@ -13,11 +13,11 @@ type Upload struct {
 }
 
 func (up Upload) Router(router *mux.Router) {
-	router.HandleFunc("/api/upload/{id}", up.POST).Methods("POST")
-	router.HandleFunc("/api/upload/{id}/volume/{name}", up.GET).Methods("GET")
+	router.HandleFunc("/api/upload/{id}", up.Post).Methods("POST")
+	router.HandleFunc("/api/upload/{id}/volume/{name}", up.Get).Methods("GET")
 }
 
-func (up Upload) GET(w http.ResponseWriter, r *http.Request) {
+func (up Upload) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	pool, err := libvirts.LookupPoolByUUIDOrName(uuid)
 	if err != nil {
@@ -44,7 +44,7 @@ func (up Upload) GET(w http.ResponseWriter, r *http.Request) {
 	_, _ = io.Copy(w, file)
 }
 
-func (up Upload) POST(w http.ResponseWriter, r *http.Request) {
+func (up Upload) Post(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	pol, err := libvirts.LookupPoolByUUIDOrName(uuid)
 	if err != nil {
@@ -68,7 +68,7 @@ func (up Upload) POST(w http.ResponseWriter, r *http.Request) {
 	file, handler, err := r.FormFile("file")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		libstar.Error("Upload.POST %v", err)
+		libstar.Error("Upload.Post %v", err)
 		return
 	}
 	defer file.Close()
@@ -76,12 +76,12 @@ func (up Upload) POST(w http.ResponseWriter, r *http.Request) {
 	tempFile, err := os.OpenFile(path+"/"+handler.Filename, modes, 0660)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		libstar.Error("Upload.POST: %v", err)
+		libstar.Error("Upload.Post: %v", err)
 		return
 	}
 	defer tempFile.Close()
 	_, _ = io.Copy(tempFile, file)
 
-	libstar.Info("Upload.POST saved to %s", path)
+	libstar.Info("Upload.Post saved to %s", path)
 	ResponseMsg(w, 0, handler.Filename+" success")
 }

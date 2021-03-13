@@ -42,12 +42,12 @@ func FileServer(root http.FileSystem) http.Handler {
 }
 
 func (f *fileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	upath := r.URL.Path
-	if !strings.HasPrefix(upath, "/") {
-		upath = "/" + upath
-		r.URL.Path = upath
+	url := r.URL.Path
+	if !strings.HasPrefix(url, "/") {
+		url = "/" + url
+		r.URL.Path = url
 	}
-	serveFile(w, r, f.root, path.Clean(upath), true)
+	serveFile(w, r, f.root, path.Clean(url), true)
 }
 
 func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name string, redirect bool) {

@@ -15,12 +15,11 @@ type Graphics struct {
 }
 
 func (gra Graphics) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance/{id}/graphics", gra.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/graphics", gra.POST).Methods("POST")
-	router.HandleFunc("/api/instance/{id}/graphics/{dev}", gra.DELETE).Methods("DELETE")
+	router.HandleFunc("/api/instance/{id}/graphics", gra.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/graphics", gra.Post).Methods("POST")
 }
 
-func (gra Graphics) GET(w http.ResponseWriter, r *http.Request) {
+func (gra Graphics) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
@@ -92,7 +91,7 @@ func (gra Graphics) GET(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (gra Graphics) POST(w http.ResponseWriter, r *http.Request) {
+func (gra Graphics) Post(w http.ResponseWriter, r *http.Request) {
 	conf := &schema.Graphics{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -127,13 +126,5 @@ func (gra Graphics) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	ResponseMsg(w, 0, "success")
-}
-
-func (gra Graphics) PUT(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
-}
-
-func (gra Graphics) DELETE(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "success")
 }

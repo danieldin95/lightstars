@@ -156,7 +156,7 @@ export class Guest extends Container {
                             </button>
                             <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
                                 <a id="suspend" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'suspend' | i}}</a>
-                                <a id="resume" class="dropdown-item ${disabled}" href="javascript:void(0)">{{'resume' | i}}</a>
+                                <a id="resume" class="dropdown-item" href="javascript:void(0)">{{'resume' | i}}</a>
                                 <a id="setting" class="dropdown-item" href="javascript:void(0)" 
                                     data-toggle="modal" data-target="#settingModal">{{'setting spec' | i}}</a>
                                 <a id="title" class="dropdown-item" href="javascript:void(0)" 

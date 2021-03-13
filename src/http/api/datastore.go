@@ -49,13 +49,13 @@ func DataStore2XML(conf schema.DataStore) libvirts.Pool {
 }
 
 func (store DataStore) Router(router *mux.Router) {
-	router.HandleFunc("/api/datastore", store.GET).Methods("GET")
-	router.HandleFunc("/api/datastore", store.POST).Methods("POST")
-	router.HandleFunc("/api/datastore/{id}", store.GET).Methods("GET")
-	router.HandleFunc("/api/datastore/{id}", store.DELETE).Methods("DELETE")
+	router.HandleFunc("/api/datastore", store.Get).Methods("GET")
+	router.HandleFunc("/api/datastore", store.Post).Methods("POST")
+	router.HandleFunc("/api/datastore/{id}", store.Get).Methods("GET")
+	router.HandleFunc("/api/datastore/{id}", store.Delete).Methods("DELETE")
 }
 
-func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
+func (store DataStore) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
 	if !ok {
 		// list all instances.
@@ -98,7 +98,7 @@ func (store DataStore) GET(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (store DataStore) POST(w http.ResponseWriter, r *http.Request) {
+func (store DataStore) Post(w http.ResponseWriter, r *http.Request) {
 	data := schema.DataStore{}
 	if err := GetData(r, &data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -106,7 +106,7 @@ func (store DataStore) POST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pol := DataStore2XML(data)
-	libstar.Debug("DataStore.POST %s", pol.XML)
+	libstar.Debug("DataStore.Post %s", pol.XML)
 	if err := pol.Create(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -114,11 +114,11 @@ func (store DataStore) POST(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "success")
 }
 
-func (store DataStore) PUT(w http.ResponseWriter, r *http.Request) {
+func (store DataStore) Put(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, nil)
 }
 
-func (store DataStore) DELETE(w http.ResponseWriter, r *http.Request) {
+func (store DataStore) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	if err := RemovePool(uuid); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

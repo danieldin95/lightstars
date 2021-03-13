@@ -32,7 +32,6 @@ type Memory struct {
 }
 
 type Instance struct {
-	Action      string       `json:"action,omitempty"` // If is "", means not action.
 	UUID        string       `json:"uuid"`
 	Name        string       `json:"name"`
 	Title       string       `json:"title"`

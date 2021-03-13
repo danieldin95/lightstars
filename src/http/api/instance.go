@@ -20,6 +20,22 @@ import (
 type Instance struct {
 }
 
+func (ins Instance) Router(router *mux.Router) {
+	router.HandleFunc("/api/instance", ins.Get).Methods("GET")
+	router.HandleFunc("/api/instance", ins.Post).Methods("POST")
+	router.HandleFunc("/api/instance/stats", ins.Stats).Methods("GET")
+	router.HandleFunc("/api/instance/{id}", ins.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/shutdown", ins.Shutdown).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/start", ins.Start).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/reset", ins.Reset).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/undefine", ins.Undefine).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/resume", ins.Resume).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/suspend", ins.Suspend).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/title", ins.Title).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/destroy", ins.Destroy).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}", ins.Delete).Methods("DELETE")
+}
+
 func GetTypeByVolume(file string) (string, string) {
 	if file == "" {
 		return "", ""
@@ -343,15 +359,6 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	return dom, nil
 }
 
-func (ins Instance) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance", ins.GET).Methods("GET")
-	router.HandleFunc("/api/instance", ins.POST).Methods("POST")
-	router.HandleFunc("/api/instance/stats", ins.Stats).Methods("GET")
-	router.HandleFunc("/api/instance/{id}", ins.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}", ins.PUT).Methods("PUT")
-	router.HandleFunc("/api/instance/{id}", ins.DELETE).Methods("DELETE")
-}
-
 func (ins Instance) HasPermission(user *schema.User, instance string) bool {
 	has := false
 	if user.Type == "admin" {
@@ -413,7 +420,7 @@ func (ins Instance) Stats(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
+func (ins Instance) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
 	if !ok {
 		user, _ := GetUser(r)
@@ -450,7 +457,7 @@ func (ins Instance) GET(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
+func (ins Instance) Post(w http.ResponseWriter, r *http.Request) {
 	hyper, err := libvirtc.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -470,7 +477,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	libstar.Info("Instance.POST %s: %s", xmlObj.Name, xmlObj.UUID)
+	libstar.Info("Instance.Post %s: %s", xmlObj.Name, xmlObj.UUID)
 	xmlData := xmlObj.Encode()
 	if xmlData == "" {
 		// If name already existed, will be clear.
@@ -502,9 +509,7 @@ func (ins Instance) POST(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
-	uuid, _ := GetArg(r, "id")
-
+func (ins Instance) Execute(w http.ResponseWriter, uuid, action string) {
 	hyper, err := libvirtc.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -517,20 +522,14 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 
-	conf := &schema.Instance{}
-	if err := GetData(r, conf); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	switch conf.Action {
+	switch action {
 	case "start":
 		if err := dom.Create(); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		if err := dom.SetAutostart(true); err != nil {
-			libstar.Warn("Instance.PUT: start %s", err)
+			libstar.Warn("Instance.Put: start %s", err)
 		}
 	case "shutdown":
 		if err := dom.ShutdownFlags(libvirtc.DomainShutdownAcpi); err != nil {
@@ -538,7 +537,7 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if err := dom.SetAutostart(false); err != nil {
-			libstar.Warn("Instance.PUT: shutdown %s", err)
+			libstar.Warn("Instance.Put: shutdown %s", err)
 		}
 	case "suspend":
 		if err := dom.Suspend(); err != nil {
@@ -565,16 +564,73 @@ func (ins Instance) PUT(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	case "title":
-		if err := dom.SetMetadataTitle(conf.Title, true); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
 	}
 	ResponseMsg(w, 0, "success")
 }
 
-func (ins Instance) DELETE(w http.ResponseWriter, r *http.Request) {
+func (ins Instance) Shutdown(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	ins.Execute(w, uuid, "shutdown")
+}
+
+func (ins Instance) Start(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	ins.Execute(w, uuid, "start")
+}
+
+func (ins Instance) Suspend(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	ins.Execute(w, uuid, "suspend")
+}
+
+func (ins Instance) Resume(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	ins.Execute(w, uuid, "resume")
+}
+
+func (ins Instance) Destroy(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	ins.Execute(w, uuid, "destroy")
+}
+
+func (ins Instance) Reset(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	ins.Execute(w, uuid, "reset")
+}
+
+func (ins Instance) Undefine(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	ins.Execute(w, uuid, "undefine")
+}
+
+func (ins Instance) Title(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+
+	conf := &schema.Instance{}
+	if err := GetData(r, conf); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	hyper, err := libvirtc.GetHyper()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	dom, err := hyper.LookupDomainByUUIDName(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer dom.Free()
+
+	if err := dom.SetMetadataTitle(conf.Title, true); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ResponseMsg(w, 0, "success")
+}
+
+func (ins Instance) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 
 	hyper, err := libvirtc.GetHyper()

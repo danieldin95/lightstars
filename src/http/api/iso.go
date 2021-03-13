@@ -10,26 +10,14 @@ type ISO struct {
 }
 
 func (iso ISO) Router(router *mux.Router) {
-	router.HandleFunc("/api/iso", iso.GET).Methods("GET")
+	router.HandleFunc("/api/iso", iso.Get).Methods("GET")
 }
 
-func (iso ISO) GET(w http.ResponseWriter, r *http.Request) {
+func (iso ISO) Get(w http.ResponseWriter, r *http.Request) {
 	store := GetQueryOne(r, "datastore")
 	if store == "" {
 		store = "datastore@01"
 	}
 	path := storage.PATH.Unix(store)
 	ResponseJson(w, storage.ISO.ListFiles(path))
-}
-
-func (iso ISO) POST(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
-}
-
-func (iso ISO) PUT(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
-}
-
-func (iso ISO) DELETE(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
 }

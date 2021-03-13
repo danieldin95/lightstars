@@ -15,7 +15,7 @@ type ProxyTcp struct {
 }
 
 func (pro ProxyTcp) Router(router *mux.Router) {
-	router.HandleFunc("/api/proxy/tcp", pro.GET).Methods("GET")
+	router.HandleFunc("/api/proxy/tcp", pro.Get).Methods("GET")
 }
 
 func (pro ProxyTcp) Graphics(inst *schema.Instance) []schema.Target {
@@ -42,7 +42,7 @@ func (pro ProxyTcp) Graphics(inst *schema.Instance) []schema.Target {
 func (pro ProxyTcp) GetTarget(host string, inst *schema.Instance, leases schema.DHCPLeases) []schema.Target {
 	dst := make([]schema.Target, 0, 32)
 	for _, inf := range inst.Interfaces {
-		libstar.Debug("ProxyTcp.GET %s", inf.Address)
+		libstar.Debug("ProxyTcp.Get %s", inf.Address)
 		if le, ok := leases[inf.Address]; ok {
 			dst = append(dst, schema.Target{
 				Name:   inst.Name,
@@ -62,7 +62,7 @@ func (pro ProxyTcp) GetTarget(host string, inst *schema.Instance, leases schema.
 
 func (pro ProxyTcp) Local(user *schema.User) []schema.Target {
 	leases := make(map[string]schema.DHCPLease, 128)
-	err := DHCPLease{}.Get(leases)
+	err := DHCPLease{}.Getx(leases)
 	if err != nil {
 		return nil
 	}
@@ -117,7 +117,7 @@ func (pro ProxyTcp) Remote(user *schema.User) []schema.Target {
 	return dst
 }
 
-func (pro ProxyTcp) GET(w http.ResponseWriter, r *http.Request) {
+func (pro ProxyTcp) Get(w http.ResponseWriter, r *http.Request) {
 	user, _ := GetUser(r)
 	tgt := make([]schema.Target, 0, 32)
 	tgt = append(tgt, pro.Local(&user)...)
@@ -126,16 +126,4 @@ func (pro ProxyTcp) GET(w http.ResponseWriter, r *http.Request) {
 		return (tgt[i].Host + ":" + tgt[i].Name) < (tgt[j].Host + ":" + tgt[j].Name)
 	})
 	ResponseJson(w, tgt)
-}
-
-func (pro ProxyTcp) POST(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
-}
-
-func (pro ProxyTcp) PUT(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
-}
-
-func (pro ProxyTcp) DELETE(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
 }

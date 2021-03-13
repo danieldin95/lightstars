@@ -19,10 +19,10 @@ type Disk struct {
 }
 
 func (disk Disk) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance/{id}/disk", disk.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/disk", disk.POST).Methods("POST")
-	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.DELETE).Methods("DELETE")
+	router.HandleFunc("/api/instance/{id}/disk", disk.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/disk", disk.Post).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.Delete).Methods("DELETE")
 }
 
 func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo {
@@ -77,7 +77,7 @@ func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo
 	return vols
 }
 
-func (disk Disk) GET(w http.ResponseWriter, r *http.Request) {
+func (disk Disk) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dev, ok := GetArg(r, "dev")
 	if !ok {
@@ -185,7 +185,7 @@ func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 	return &xml, nil
 }
 
-func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
+func (disk Disk) Post(w http.ResponseWriter, r *http.Request) {
 	conf := &schema.Disk{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -208,7 +208,7 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	libstar.Debug("Disk.POST: %s", xmlObj.Encode())
+	libstar.Debug("Disk.Post: %s", xmlObj.Encode())
 	flags := libvirtc.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
 		flags = libvirtc.DomainDeviceModifyConfig
@@ -225,10 +225,6 @@ func (disk Disk) POST(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, xmlObj.Target.Dev)
 }
 
-func (disk Disk) PUT(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
-}
-
 func (disk Disk) FindByDev(devices *libvirtc.DevicesXML, dev string) *libvirtc.DiskXML {
 	if devices == nil || devices.Disks == nil {
 		return nil
@@ -243,7 +239,7 @@ func (disk Disk) FindByDev(devices *libvirtc.DevicesXML, dev string) *libvirtc.D
 	return nil
 }
 
-func (disk Disk) DELETE(w http.ResponseWriter, r *http.Request) {
+func (disk Disk) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {

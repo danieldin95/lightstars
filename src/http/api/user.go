@@ -17,13 +17,13 @@ type Password struct {
 }
 
 func (u User) Router(router *mux.Router) {
-	router.HandleFunc("/api/user", u.GET).Methods("GET")
-	router.HandleFunc("/api/user", u.POST).Methods("POST")
-	router.HandleFunc("/api/user/{name}/password", u.PUT).Methods("PUT")
-	router.HandleFunc("/api/user/{name}", u.DELETE).Methods("DELETE")
+	router.HandleFunc("/api/user", u.Get).Methods("GET")
+	router.HandleFunc("/api/user", u.Post).Methods("POST")
+	router.HandleFunc("/api/user/{name}/password", u.Put).Methods("PUT")
+	router.HandleFunc("/api/user/{name}", u.Delete).Methods("DELETE")
 }
 
-func (u User) GET(writer http.ResponseWriter, request *http.Request) {
+func (u User) Get(writer http.ResponseWriter, request *http.Request) {
 	users := schema.ListUser{
 		Items: make([]schema.User, 0, 32),
 	}
@@ -39,7 +39,7 @@ func (u User) GET(writer http.ResponseWriter, request *http.Request) {
 	ResponseJson(writer, users)
 }
 
-func (u User) POST(writer http.ResponseWriter, request *http.Request) {
+func (u User) Post(writer http.ResponseWriter, request *http.Request) {
 	data := &schema.User{}
 	if err := GetData(request, data); err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
@@ -54,7 +54,7 @@ func (u User) POST(writer http.ResponseWriter, request *http.Request) {
 	ResponseMsg(writer, 0, "success")
 }
 
-func (u User) PUT(writer http.ResponseWriter, request *http.Request) {
+func (u User) Put(writer http.ResponseWriter, request *http.Request) {
 	data := &Password{}
 	if err := GetData(request, data); err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
@@ -70,7 +70,7 @@ func (u User) PUT(writer http.ResponseWriter, request *http.Request) {
 	ResponseMsg(writer, 0, "success")
 }
 
-func (u User) DELETE(writer http.ResponseWriter, request *http.Request) {
+func (u User) Delete(writer http.ResponseWriter, request *http.Request) {
 	name, _ := GetArg(request, "name")
 	err := service.SERVICE.Users.Del(name)
 	if err != nil {

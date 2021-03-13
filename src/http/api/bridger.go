@@ -10,21 +10,21 @@ type Bridger struct {
 }
 
 func (br Bridger) Router(router *mux.Router) {
-	router.HandleFunc("/api/bridge", br.GET).Methods("GET")
+	router.HandleFunc("/api/bridge", br.Get).Methods("GET")
 }
 
-func (br Bridger) GET(w http.ResponseWriter, r *http.Request) {
+func (br Bridger) Get(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, libvirtn.BRIDGE.List())
 }
 
-func (br Bridger) POST(w http.ResponseWriter, r *http.Request) {
+func (br Bridger) Post(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, nil)
 }
 
-func (br Bridger) PUT(w http.ResponseWriter, r *http.Request) {
+func (br Bridger) Put(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, nil)
 }
 
-func (br Bridger) DELETE(w http.ResponseWriter, r *http.Request) {
+func (br Bridger) Delete(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, nil)
 }

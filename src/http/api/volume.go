@@ -12,11 +12,11 @@ type Volume struct {
 }
 
 func (v Volume) Router(router *mux.Router) {
-	router.HandleFunc("/api/datastore/{id}/volume", v.GET).Methods("GET")
-	router.HandleFunc("/api/datastore/{id}/volume/{name}", v.DELETE).Methods("DELETE")
+	router.HandleFunc("/api/datastore/{id}/volume", v.Get).Methods("GET")
+	router.HandleFunc("/api/datastore/{id}/volume/{name}", v.Delete).Methods("DELETE")
 }
 
-func (v Volume) GET(w http.ResponseWriter, r *http.Request) {
+func (v Volume) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	data := schema.Volumes{
 		Items: make([]schema.Volume, 0, 32),
@@ -45,15 +45,15 @@ func (v Volume) GET(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, data)
 }
 
-func (v Volume) POST(w http.ResponseWriter, r *http.Request) {
+func (v Volume) Post(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (v Volume) PUT(w http.ResponseWriter, r *http.Request) {
+func (v Volume) Put(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (v Volume) DELETE(w http.ResponseWriter, r *http.Request) {
+func (v Volume) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	pool, err := libvirts.LookupPoolByUUIDOrName(uuid)
 	if err != nil {

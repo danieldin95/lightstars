@@ -13,14 +13,14 @@ type Snapshot struct {
 }
 
 func (in Snapshot) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance/{id}/snapshot", in.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/snapshot", in.POST).Methods("POST")
-	router.HandleFunc("/api/instance/{id}/snapshot/{name}", in.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/snapshot/{name}/revert", in.REVERT).Methods("PUT")
-	router.HandleFunc("/api/instance/{id}/snapshot/{name}", in.DELETE).Methods("DELETE")
+	router.HandleFunc("/api/instance/{id}/snapshot", in.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/snapshot", in.Post).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/snapshot/{name}", in.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/snapshot/{name}/revert", in.Revert).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/snapshot/{name}", in.Delete).Methods("DELETE")
 }
 
-func (in Snapshot) GET(w http.ResponseWriter, r *http.Request) {
+func (in Snapshot) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
@@ -76,7 +76,7 @@ func (in Snapshot) GET(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, list)
 }
 
-func (in Snapshot) POST(w http.ResponseWriter, r *http.Request) {
+func (in Snapshot) Post(w http.ResponseWriter, r *http.Request) {
 	conf := &schema.Snapshot{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -103,7 +103,7 @@ func (in Snapshot) POST(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "success")
 }
 
-func (in Snapshot) REVERT(w http.ResponseWriter, r *http.Request) {
+func (in Snapshot) Revert(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
@@ -129,7 +129,7 @@ func (in Snapshot) REVERT(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "success")
 }
 
-func (in Snapshot) DELETE(w http.ResponseWriter, r *http.Request) {
+func (in Snapshot) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {

@@ -11,19 +11,19 @@ type Memory struct {
 }
 
 func (mem Memory) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance/{id}/memory", mem.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/memory", mem.PUT).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/memory", mem.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/memory", mem.Put).Methods("PUT")
 }
 
-func (mem Memory) GET(w http.ResponseWriter, r *http.Request) {
+func (mem Memory) Get(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, nil)
 }
 
-func (mem Memory) POST(w http.ResponseWriter, r *http.Request) {
+func (mem Memory) Post(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (mem Memory) PUT(w http.ResponseWriter, r *http.Request) {
+func (mem Memory) Put(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
@@ -44,6 +44,6 @@ func (mem Memory) PUT(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (mem Memory) DELETE(w http.ResponseWriter, r *http.Request) {
+func (mem Memory) Delete(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }

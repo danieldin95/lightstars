@@ -11,11 +11,11 @@ type DHCPLease struct {
 }
 
 func (l DHCPLease) Router(router *mux.Router) {
-	router.HandleFunc("/api/network/all/lease", l.GET).Methods("GET")
-	router.HandleFunc("/api/network/{id}/lease", l.GET).Methods("GET")
+	router.HandleFunc("/api/network/all/lease", l.Get).Methods("GET")
+	router.HandleFunc("/api/network/{id}/lease", l.Get).Methods("GET")
 }
 
-func (l DHCPLease) Get(data schema.DHCPLeases) error {
+func (l DHCPLease) Getx(data schema.DHCPLeases) error {
 	leases, err := libvirtn.ListLeases()
 	if err != nil {
 		return err
@@ -32,11 +32,11 @@ func (l DHCPLease) Get(data schema.DHCPLeases) error {
 	return nil
 }
 
-func (l DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
+func (l DHCPLease) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
 	if !ok || uuid == "all" {
 		data := make(schema.DHCPLeases, 128)
-		if err := l.Get(data); err != nil {
+		if err := l.Getx(data); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -61,16 +61,4 @@ func (l DHCPLease) GET(w http.ResponseWriter, r *http.Request) {
 		}
 		ResponseJson(w, list)
 	}
-}
-
-func (l DHCPLease) POST(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
-}
-
-func (l DHCPLease) PUT(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
-}
-
-func (l DHCPLease) DELETE(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
 }

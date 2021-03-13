@@ -7,8 +7,8 @@ import (
 
 type Api interface {
 	Router(router *mux.Router)
-	GET(w http.ResponseWriter, r *http.Request)
-	POST(w http.ResponseWriter, r *http.Request)
-	DELETE(w http.ResponseWriter, r *http.Request)
-	PUT(w http.ResponseWriter, r *http.Request)
+	Get(w http.ResponseWriter, r *http.Request)
+	Post(w http.ResponseWriter, r *http.Request)
+	Delete(w http.ResponseWriter, r *http.Request)
+	Put(w http.ResponseWriter, r *http.Request)
 }

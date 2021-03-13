@@ -11,19 +11,19 @@ type Processor struct {
 }
 
 func (proc Processor) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance/{id}/processor", proc.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/processor", proc.PUT).Methods("PUT")
+	router.HandleFunc("/api/instance/{id}/processor", proc.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/processor", proc.Put).Methods("PUT")
 }
 
-func (proc Processor) GET(w http.ResponseWriter, r *http.Request) {
+func (proc Processor) Get(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, nil)
 }
 
-func (proc Processor) POST(w http.ResponseWriter, r *http.Request) {
+func (proc Processor) Post(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (proc Processor) PUT(w http.ResponseWriter, r *http.Request) {
+func (proc Processor) Put(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {
@@ -43,6 +43,6 @@ func (proc Processor) PUT(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (proc Processor) DELETE(w http.ResponseWriter, r *http.Request) {
+func (proc Processor) Delete(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }

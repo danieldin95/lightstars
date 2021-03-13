@@ -14,13 +14,13 @@ type Interface struct {
 }
 
 func (in Interface) Router(router *mux.Router) {
-	router.HandleFunc("/api/instance/{id}/interface", in.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/interface", in.POST).Methods("POST")
-	router.HandleFunc("/api/instance/{id}/interface/{dev}", in.GET).Methods("GET")
-	router.HandleFunc("/api/instance/{id}/interface/{dev}", in.DELETE).Methods("DELETE")
+	router.HandleFunc("/api/instance/{id}/interface", in.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/interface", in.Post).Methods("POST")
+	router.HandleFunc("/api/instance/{id}/interface/{dev}", in.Get).Methods("GET")
+	router.HandleFunc("/api/instance/{id}/interface/{dev}", in.Delete).Methods("DELETE")
 }
 
-func (in Interface) GET(w http.ResponseWriter, r *http.Request) {
+func (in Interface) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dev, ok := GetArg(r, "dev")
 	if !ok {
@@ -48,7 +48,7 @@ func (in Interface) GET(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, dev)
 }
 
-func (in Interface) POST(w http.ResponseWriter, r *http.Request) {
+func (in Interface) Post(w http.ResponseWriter, r *http.Request) {
 	conf := &schema.Interface{}
 	if err := GetData(r, conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -64,7 +64,7 @@ func (in Interface) POST(w http.ResponseWriter, r *http.Request) {
 	defer dom.Free()
 
 	xmlObj := Interface2XML(conf.Source, conf.Model, conf.Seq, conf.Type)
-	libstar.Debug("Interface.POST: %s", xmlObj.Encode())
+	libstar.Debug("Interface.Post: %s", xmlObj.Encode())
 
 	flags := libvirtc.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
@@ -77,11 +77,11 @@ func (in Interface) POST(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "success")
 }
 
-func (in Interface) PUT(w http.ResponseWriter, r *http.Request) {
+func (in Interface) Put(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (in Interface) DELETE(w http.ResponseWriter, r *http.Request) {
+func (in Interface) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
 	if err != nil {

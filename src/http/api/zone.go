@@ -12,10 +12,10 @@ type Zone struct {
 }
 
 func (z Zone) Router(router *mux.Router) {
-	router.HandleFunc("/api/zone", z.GET).Methods("GET")
+	router.HandleFunc("/api/zone", z.Get).Methods("GET")
 }
 
-func (z Zone) GET(w http.ResponseWriter, r *http.Request) {
+func (z Zone) Get(w http.ResponseWriter, r *http.Request) {
 	hosts := make([]schema.Host, 0, 32)
 	for h := range service.SERVICE.Zone.List() {
 		if h == nil {
@@ -29,14 +29,14 @@ func (z Zone) GET(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, hosts)
 }
 
-func (z Zone) POST(w http.ResponseWriter, r *http.Request) {
+func (z Zone) Post(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (z Zone) PUT(w http.ResponseWriter, r *http.Request) {
+func (z Zone) Put(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (z Zone) DELETE(w http.ResponseWriter, r *http.Request) {
+func (z Zone) Delete(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }

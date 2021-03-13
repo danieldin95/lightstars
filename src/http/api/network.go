@@ -68,13 +68,13 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 }
 
 func (net Network) Router(router *mux.Router) {
-	router.HandleFunc("/api/network", net.GET).Methods("GET")
-	router.HandleFunc("/api/network/{id}", net.GET).Methods("GET")
-	router.HandleFunc("/api/network", net.POST).Methods("POST")
-	router.HandleFunc("/api/network/{id}", net.DELETE).Methods("DELETE")
+	router.HandleFunc("/api/network", net.Get).Methods("GET")
+	router.HandleFunc("/api/network/{id}", net.Get).Methods("GET")
+	router.HandleFunc("/api/network", net.Post).Methods("POST")
+	router.HandleFunc("/api/network/{id}", net.Delete).Methods("DELETE")
 }
 
-func (net Network) GET(w http.ResponseWriter, r *http.Request) {
+func (net Network) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, ok := GetArg(r, "id")
 	if !ok {
 		// list all instances.
@@ -105,14 +105,14 @@ func (net Network) GET(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (net Network) POST(w http.ResponseWriter, r *http.Request) {
+func (net Network) Post(w http.ResponseWriter, r *http.Request) {
 	conf := schema.Network{}
 	if err := GetData(r, &conf); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	xmlObj := Network2XML(conf)
-	libstar.Debug("Network.POST %s", xmlObj.Encode())
+	libstar.Debug("Network.Post %s", xmlObj.Encode())
 	hyper, err := libvirtn.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -135,11 +135,11 @@ func (net Network) POST(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, conf.Name+" success")
 }
 
-func (net Network) PUT(w http.ResponseWriter, r *http.Request) {
+func (net Network) Put(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, "")
 }
 
-func (net Network) DELETE(w http.ResponseWriter, r *http.Request) {
+func (net Network) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	hyper, err := libvirtn.GetHyper()
 	if err != nil {
@@ -153,7 +153,7 @@ func (net Network) DELETE(w http.ResponseWriter, r *http.Request) {
 	}
 	defer netvir.Free()
 	if err := netvir.Destroy(); err != nil {
-		libstar.Warn("Network.DELETE %s", err)
+		libstar.Warn("Network.Delete %s", err)
 	}
 	if err := netvir.Undefine(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
