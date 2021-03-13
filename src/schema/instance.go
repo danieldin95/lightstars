@@ -138,3 +138,15 @@ type InstancesStats struct {
 	OccupiedCpu  uint   `json:"occupiedCpu"`
 	AllocStorage uint64 `json:"allocStorage"`
 }
+
+type Snapshot struct {
+	Name   string `json:"name"`
+	Domain string `json:"domain"`
+	Uptime int64  `json:"uptime"`
+	State  string `json:"state"`
+}
+
+type ListSnapshot struct {
+	List
+	Items []Snapshot `json:"items"`
+}

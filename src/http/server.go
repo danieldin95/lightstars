@@ -78,6 +78,7 @@ func (h *Server) LoadRouter() {
 	api.DHCPLease{}.Router(router)
 	api.Volume{}.Router(router)
 	api.User{}.Router(router)
+	api.Snapshot{}.Router(router)
 }
 
 func (h *Server) SetCert(keyFile, crtFile string) {
