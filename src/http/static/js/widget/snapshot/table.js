@@ -39,7 +39,7 @@ export class SnapshotTable extends Widget {
                 <td>{{i+1}}</td>
                 <td>{{v.name}}</td>
                 <td>{{v.uptime | prettyTime}}</td>
-                <td><span class="st-{{v.state}}">{{v.state}}</span>&nbsp;{{v.isCurrent ? "| current": ""}}</td>
+                <td><span class="st-{{v.state}}">{{v.isCurrent ? "current": v.state}}</td>
             </tr>
         {{/each}}
         `, data);
