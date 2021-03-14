@@ -72,10 +72,10 @@ export class DataStores extends Container {
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
                                 <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#createNfsModal">
-                                    {{'new nfs datastore' | i}}
+                                    {{'nfs based' | i}}
                                 </a>
                                 <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#createIscsiModal">
-                                    {{'new iscsi datastore' | i}}
+                                    {{'iscsi based' | i}}
                                 </a>
                             </div>
                         </div>

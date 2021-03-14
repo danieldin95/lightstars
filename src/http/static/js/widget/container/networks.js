@@ -3,6 +3,7 @@ import {Network} from "./network.js";
 import {Utils} from "../../lib/utils.js";
 import {NetworksCtl} from "../../ctl/networks.js";
 import {NATCreate} from "../network/create.js";
+import {OVSCreate} from "../network/ovs/create.js";
 import {BridgeCreate} from "../network/bridge/create.js";
 import {IsolatedCreate} from "../network/isolated/create.js";
 import {I18N} from "../../lib/i18n.js";
@@ -44,6 +45,10 @@ export class Networks extends Container {
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });
+        new OVSCreate({id: '#createOvsModal'})
+            .onsubmit((e) => {
+                nCtl.create(Utils.toJSON(e.form));
+            });
     }
 
     template(v) {
@@ -71,11 +76,11 @@ export class Networks extends Container {
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-isolated" class="dropdown-item" data-toggle="modal" data-target="#createIsolatedModal">
-                                    {{'create isolated network' | i}}
-                                </a>
                                 <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#createBridgeModal">
-                                    {{'create existing bridge' | i}}
+                                    {{'linux bridge based' | i}}
+                                </a>                            
+                                <a id="create-ovs" class="dropdown-item" data-toggle="modal" data-target="#createOvsModal">
+                                    {{'open vswitch based' | i}}
                                 </a>
                             </div>
                         </div>
@@ -111,7 +116,8 @@ export class Networks extends Container {
             <!-- Create network modal -->
             <div id="createNatModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="createBridgeModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createIsolatedModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>        
+            <div id="createIsolatedModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="createOvsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>          
         </div>
         </div>`)
     }

@@ -97,7 +97,7 @@
 	"network name": "Network name",
 	"interface address for bridge": "Interface address for bridge",
 	"address range for dhcp": "address range for DHCP",
-	"existing bridge on host": "Existing bridge on host",
+	"existing bridge on host": "An existing bridge on host",
 	"instance setting": "Instance setting",
 	"add interface": "Create interface",
 	"sequence number": "Sequence number",
@@ -142,5 +142,12 @@
 	"snapshot": "Snapshot",
 	"instance snapshot": "Instance snapshot",
 	"create snapshort": "Create snapshot",
-	"revert": "Revert"
+	"revert": "Revert",
+	"open vswitch based": "OpenvSwitch based",
+	"linux bridge based": "Linux bridge based",
+	"create open vswitch network": "Create Open vSwitch network",
+	"create linux bridge network": "Create linux bridge network",
+	"nfs based": "NFS based",
+	"iscsi": "iSCSI based",
+	"existing ovs bridge": "An existing OVS bridge"
 }

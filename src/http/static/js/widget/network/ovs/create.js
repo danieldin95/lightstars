@@ -1,7 +1,7 @@
 import {FormModal} from "../../form/modal.js";
 
 
-export class BridgeCreate extends FormModal {
+export class OVSCreate extends FormModal {
     //
     constructor (props) {
         super(props);
@@ -15,12 +15,13 @@ export class BridgeCreate extends FormModal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h7 class="modal-title" id="">{{'create linux bridge network' | i}}</h7>
+                <h7 class="modal-title" id="">{{'create open vswitch network' | i}}</h7>
             </div>
             <div id="" class="modal-body">
                 <form>
                     <input type="text" class="d-none" name="mode" value="bridge"/>
                     <input type="text" class="d-none" name="dhcp" value="no"/>
+                    <input type="text" class="d-none" name="type" value="openvswitch"/>
                     <div class="form-group">
                         <label for="name" class="col-form-label-sm ">{{'network name' | i}}</label>
                         <div class="input-group">
@@ -28,9 +29,9 @@ export class BridgeCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="name" class="col-form-label-sm ">{{'existing bridge on host' | i}}</label>
+                        <label for="name" class="col-form-label-sm ">{{'existing ovs bridge' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm input-lg" name="bridge" value="br0"/>                                    
+                            <input type="text" class="form-control form-control-sm input-lg" name="bridge" value="br-int"/>                                    
                         </div>
                     </div>
                 </form>    

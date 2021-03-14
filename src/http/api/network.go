@@ -64,6 +64,12 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 				})
 		}
 	}
+
+	if conf.Type == "openvswitch" {
+		xmlObj.VirtualPort = &libvirtn.VirtualPortXML{
+			Type: conf.Type,
+		}
+	}
 	return xmlObj
 }
 

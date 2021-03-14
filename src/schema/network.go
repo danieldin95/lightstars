@@ -14,7 +14,8 @@ type Network struct {
 	Netmask string  `json:"netmask,omitempty"`
 	Prefix  string  `json:"prefix,omitempty"`
 	Range   []Range `json:"range"`
-	Mode    string  `json:"mode"` // nat, router.
+	Mode    string  `json:"mode"`           // nat, router.
+	Type    string  `json:"type,omitempty"` // linux bridge or openvswitch
 }
 
 type ListNetwork struct {
