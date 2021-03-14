@@ -1,7 +1,8 @@
+<!--ovs-vsctl add-br vlan100 br-int 100 -->
 <network>
-    <name>br-mgt</name>
+    <name>br-int</name>
     <forward mode='bridge'/>
-    <bridge name='br-mgt'/>
+    <bridge name='br-int'/>
     <virtualport type='openvswitch'>
     </virtualport>
 </network>

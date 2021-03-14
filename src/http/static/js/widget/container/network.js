@@ -59,6 +59,8 @@ export class Network extends Container {
     }
 
     template(v) {
+        let dumpUrl = Api.path(`/api/network/${v.uuid}?format=xml`);
+
         return this.compile(`
         <div id="network" data="{{uuid}}" name="{{name}}">
         <div id="header" class="card">
@@ -80,7 +82,7 @@ export class Network extends Container {
                             </button>
                             <div name="btn-more" class="dropdown-menu" aria-labelledby="btns-more">
                                 <a id="edit" class="dropdown-item" href="javascript:void(0)">{{'edit' | i}}</a>
-                                <a id="dumpxml" class="dropdown-item" href="javascript:void(0)">{{'dump xml' | i}}</a>
+                                <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
                                 <div class="dropdown-divider"></div>
                                 <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
                                 <a id="remove" class="dropdown-item" href="javascript:void(0)">{{'remove' | i}}</a>

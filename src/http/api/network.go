@@ -87,8 +87,8 @@ func (net Network) Get(w http.ResponseWriter, r *http.Request) {
 		list := schema.ListNetwork{
 			Items: make([]schema.Network, 0, 32),
 		}
-		if ns, err := libvirtn.ListNetworks(); err == nil {
-			for _, n := range ns {
+		if obj, err := libvirtn.ListNetworks(); err == nil {
+			for _, n := range obj {
 				sn := network.NewNetwork(n)
 				list.Items = append(list.Items, sn)
 				_ = n.Free()
@@ -102,9 +102,16 @@ func (net Network) Get(w http.ResponseWriter, r *http.Request) {
 		ResponseJson(w, list)
 	} else {
 		if n, err := libvirtn.LookupNetwork(uuid); err == nil {
-			sn := network.NewNetwork(*n)
+
+			format := GetQueryOne(r, "format")
+			if format == "xml" {
+				obj := libvirtn.NewNetworkXMLFromNet(n)
+				ResponseXML(w, obj.Encode())
+			} else {
+				obj := network.NewNetwork(*n)
+				ResponseJson(w, obj)
+			}
 			_ = n.Free()
-			ResponseJson(w, sn)
 		} else {
 			http.Error(w, err.Error(), http.StatusNotFound)
 		}
