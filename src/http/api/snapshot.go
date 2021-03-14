@@ -34,17 +34,18 @@ func (in Snapshot) Get(w http.ResponseWriter, r *http.Request) {
 	}
 	name, ok := GetArg(r, "name")
 	if !ok {
-		sns, err := dom.ListAllSnapshots(0)
+		objs, err := dom.ListAllSnapshots(0)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		for _, obj := range sns {
-			if snx := libvirtc.NewSnapshotXMLFromDom(&obj); snx != nil {
+		for _, obj := range objs {
+			if sn := libvirtc.NewSnapshotXMLFromDom(&obj); sn != nil {
 				list.Items = append(list.Items, schema.Snapshot{
-					Name:   snx.Name,
-					State:  snx.State,
-					Uptime: time.Now().Unix() - snx.CreateAt,
+					Name:      sn.Name,
+					State:     sn.State,
+					IsCurrent: sn.IsCurrent,
+					Uptime:    time.Now().Unix() - sn.CreateAt,
 				})
 			}
 			_ = obj.Free()

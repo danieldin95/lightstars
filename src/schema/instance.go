@@ -139,10 +139,11 @@ type InstancesStats struct {
 }
 
 type Snapshot struct {
-	Name   string `json:"name"`
-	Domain string `json:"domain"`
-	Uptime int64  `json:"uptime"`
-	State  string `json:"state"`
+	Name      string `json:"name"`
+	Domain    string `json:"domain"`
+	Uptime    int64  `json:"uptime"`
+	State     string `json:"state"`
+	IsCurrent bool   `json:"isCurrent"`
 }
 
 type ListSnapshot struct {

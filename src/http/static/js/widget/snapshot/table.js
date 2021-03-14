@@ -37,9 +37,9 @@ export class SnapshotTable extends Widget {
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.name}}"></td>
                 <td>{{i+1}}</td>
-                <td>{{v.name}}</td>
+                <td>{{v.name}}&nbsp;{{v.isCurrent ? "| current": ""}}</td>
                 <td>{{v.uptime | prettyTime}}</td>
-                <td>{{v.state}}</td>
+                <td><span class="st-{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}
         `, data);
