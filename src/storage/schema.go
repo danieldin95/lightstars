@@ -27,6 +27,8 @@ func NewDataStore(pol libvirts.Pool) schema.DataStore {
 		if xmlObj.Source.Format.Type == "auto" {
 			obj.Source = "auto://" + xmlObj.Source.Host.Name + xmlObj.Source.Dir.Path
 		}
+	case "dir":
+		obj.Source = obj.Type + "://" + xmlObj.Target.Path
 	default:
 		obj.Source = obj.Type + "://" + obj.Name
 	}

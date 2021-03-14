@@ -5,7 +5,6 @@ import (
 	"github.com/danieldin95/lightstar/src/compute/libvirtc"
 	"github.com/danieldin95/lightstar/src/libstar"
 	"github.com/danieldin95/lightstar/src/schema"
-	"github.com/danieldin95/lightstar/src/storage"
 )
 
 func NewHyper() (hs schema.Hyper) {
@@ -51,10 +50,10 @@ func NewFromDiskXML(xml libvirtc.DiskXML) (disk schema.Disk) {
 	disk.Device = xml.Target.Dev
 	disk.Bus = xml.Target.Bus
 	if xml.Source.File != "" {
-		disk.Source = storage.PATH.Fmt(xml.Source.File)
+		disk.Source = xml.Source.File
 		disk.Name = xml.Source.File
 	} else if xml.Source.Device != "" {
-		disk.Source = storage.PATH.Fmt(xml.Source.Device)
+		disk.Source = xml.Source.Device
 		disk.Name = xml.Source.Device
 	}
 	disk.Format = xml.Driver.Type

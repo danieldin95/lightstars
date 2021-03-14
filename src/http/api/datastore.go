@@ -66,7 +66,7 @@ func (store DataStore) Get(w http.ResponseWriter, r *http.Request) {
 			for _, p := range pools {
 				store := storage.NewDataStore(p)
 				list.Items = append(list.Items, store)
-				p.Free()
+				_ = p.Free()
 			}
 			sort.SliceStable(list.Items, func(i, j int) bool {
 				return list.Items[i].Name < list.Items[j].Name
