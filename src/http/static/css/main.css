@@ -222,12 +222,22 @@ select {
 
 .card-tab .nav-pills .nav-link.active,
 .card-tab .nav-pills .show > .nav-link {
-     color: inherit;
-     background-color: inherit;
-    border-bottom: solid 1px black;
+    color: inherit;
+    background-color: inherit;
+    text-decoration-line: underline;
 }
+
+.card-tab ul li {
+    border-right: solid 1px black;
+}
+
+.card-tab ul li:last-child {
+    border-right: none;
+}
+
 .card-tab a {
-    color: #545b62;
+    color: #428bca;
+    padding: 0 1rem;
 }
 
 .card-tab .nav-pills .nav-link {

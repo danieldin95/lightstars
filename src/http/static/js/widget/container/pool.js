@@ -91,8 +91,10 @@ export class Pool extends Container {
                 <div class="card-body-hdl">
                     <div class="overview">
                         <dl class="dl-horizontal">
+                            <dt>{{'name' | i}}:</dt>
+                            <dd>{{name}}</dd>                        
                             <dt>{{'state' | i}}:</dt>
-                            <dd><span class="{{state}}">{{state}}</span></dd>
+                            <dd><span class="st-{{state}}">{{state}}</span></dd>
                             <dt>{{'uuid' | i}}:</dt>
                             <dd>{{uuid}}</dd>
                             <dt>{{'source' | i}}:</dt>
