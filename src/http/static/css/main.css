@@ -1,6 +1,19 @@
 @media (min-width: 768px) {
     .dl-horizontal dt {
         float: left;
+        width: 180px;
+        overflow: hidden;
+        clear: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: normal;
+    }
+    .dl-horizontal dd {
+        margin-left: 180px;
+        padding-left: 15px;
+    }
+    .dl-horizontal-center dt {
+        float: left;
         width: 20%;
         overflow: hidden;
         clear: left;
@@ -9,7 +22,7 @@
         font-weight: normal;
         text-align: right;
     }
-    .dl-horizontal dd {
+    .dl-horizontal-center dd {
         margin-left: 20%;
         padding-left: 15px;
     }

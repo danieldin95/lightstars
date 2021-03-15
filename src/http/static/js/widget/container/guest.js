@@ -185,7 +185,7 @@ export class Guest extends Container {
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-7 col-lg-8 mt-1">
-                        <dl class="dl-horizontal">
+                        <dl class="dl-horizontal dl-horizontal-center">
                             <dt>{{'name' | i}}:</dt>
                             <dd>&nbsp;{{name}}</dd>
                             <dt>{{'state' | i}}:</dt>
