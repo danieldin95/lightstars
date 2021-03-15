@@ -12,17 +12,11 @@
         margin-left: 180px;
         padding-left: 15px;
     }
-    .dl-horizontal-center dt {
-        float: left;
+    .dl-horizontal-r dt {
         width: 20%;
-        overflow: hidden;
-        clear: left;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-weight: normal;
         text-align: right;
     }
-    .dl-horizontal-center dd {
+    .dl-horizontal-r dd {
         margin-left: 20%;
         padding-left: 15px;
     }
