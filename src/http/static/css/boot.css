@@ -155,7 +155,7 @@ a:hover, a:focus {
 
 .card-body-tbl {
     overflow: auto;
-    min-height: 200px;
+    min-height: 300px;
     max-height: 500px;
 }
 

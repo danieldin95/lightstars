@@ -39,7 +39,7 @@ export class DataStoreTable extends Widget {
                 <td>{{v.source}}</td>
                 <td>{{v.capacity | prettyByte}}</td>
                 <td>{{v.allocation | prettyByte}}</td>
-                <td><span class="{{v.state}}">{{v.state}}</span></td>
+                <td><span class="st-{{v.state}}">{{v.state}}</span></td>
             </tr>
         {{/each}}
         `, data);

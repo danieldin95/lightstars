@@ -80,7 +80,7 @@ export class Instances extends Container {
     
                 <!-- Instances display -->
                 <div class="card-body-tbl">
-                    <table class="table table-striped">
+                    <table class="table table-striped text-center">
                         <thead>
                         <tr>
                             <th>
