@@ -24,38 +24,38 @@ This software makes it easier for you to control virtual compute, network and st
 
     yum install -y epel-release centos-release-qemu-ev
 
+## Options: Install Open vSwitch
+
+    yum install -y centos-release-openstack-train
+    yum install -y openvswitch
+
+    systemctl enable openvswitch
+    systemctl start libvirtd
+
 ## Install by RPM packaging
 
-    yum install -y wget
-    wget https://github.com/danieldin95/lightstars/releases/download/v0.2.23/lightstar-0.2.23-1.el7.x86_64.rpm
-    
-    yum install -y ./lightstar-0.2.23-1.el7.x86_64.rpm
-
+    yum install -y https://github.com/danieldin95/lightstars/releases/download/v0.8.40/lightstar-0.8.40-1.el7.x86_64.rpm
 
 ## Enable and Start service.
 
     systemctl enable libvirtd
-    systemctl start libvirtd
-
     systemctl enable lightstar
-    systemctl start lightstar
 
+    systemctl start libvirtd
+    systemctl start lightstar
 
 ## Upload a Linux ISO file
 
     cd /lightstar/datastore/01
     wget http://mirrors.aliyun.com/centos/7.7.1908/isos/x86_64/CentOS-7-x86_64-Minimal-1908.iso
 
-
 # Open WebUI in browser
 
     https://your-machine-address:10080
 
-
 ## Get Username and Password
 
     cat /etc/lightstar.auth
-
 
 # Welcome to attention
 

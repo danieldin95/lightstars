@@ -104,6 +104,8 @@ export class Network extends Container {
                             <dd>{{uuid}}</dd>
                             <dt>{{'mode' | i}}:</dt>
                             <dd>{{mode == '' ? 'isolated' : mode}}</dd>
+                            <dt>{{'bridge' | i}}:</dt>
+                            <dd>{{bridge}}</dd>                            
                             <dt>{{'address' | i}}:</dt>
                             <dd>{{if address == ''}} 
                               - 
