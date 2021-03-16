@@ -12,6 +12,10 @@
     color: black;
 }
 
+.device .card-body-tbl {
+    min-height: 300px;
+}
+
 .modal-console {
     min-width: 802px;
     min-height: 660px;

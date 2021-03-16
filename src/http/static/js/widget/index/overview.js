@@ -43,7 +43,7 @@ export class Overview extends Widget {
                 <dd title="{{'total|free|vendor' | i}}">
                     {{hyper.cpuNum}} | {{hyper.cpuUtils | figureCpuFree hyper.cpuNum}} | {{hyper.cpuVendor}}
                 </dd>
-                <dt>{{'memory' | i}}</dt>
+                <dt>{{'memory' | i}}:</dt>
                 <dd title="{{'total|free|cache' | i}}">
                     {{hyper.memTotal | prettyByte}} | {{hyper.memFree | prettyByte}} | {{hyper.memCached | prettyByte}}
                 </dd>
