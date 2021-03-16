@@ -24,7 +24,7 @@ This software makes it easier for you to control virtual compute, network and st
 
     yum install -y epel-release centos-release-qemu-ev
 
-## Options: Install Open vSwitch
+## Install Open vSwitch
 
     yum install -y centos-release-openstack-train
     yum install -y openvswitch
