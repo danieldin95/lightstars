@@ -51,7 +51,7 @@ rpm-env:
 	@[ -e "$(BD)"/cert ] || ln -s $(SD)/../freecert $(BD)/cert
 
 rpm-lightstar: rpm-env
-	rpmbuild -ba packaging/lightstar.spec
+	rpmbuild -ba ./build/lightstar.spec
 	cp -rf ~/rpmbuild/RPMS/x86_64/lightstar-*.rpm $(BD)
 
 

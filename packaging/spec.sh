@@ -2,11 +2,13 @@
 
 set -e
 
+mkdir -p build
+
 version=$(cat VERSION)
 mkdir -p ~/rpmbuild/SOURCES
 
 # update version
-sed -i  -e "s/Version:.*/Version:\ ${version}/" ./packaging/light*.spec
+sed -e "s/Version:.*/Version:\ ${version}/" ./packaging/lightstar.spec.in > ./build/lightstar.spec
 
 # link source
 # shellcheck disable=SC2086
