@@ -13,6 +13,7 @@ var (
 )
 
 type DomainXML struct {
+	libstar.XMLBase
 	XMLName  xml.Name    `xml:"domain" json:"-"`
 	Id       string      `xml:"id,attr" json:"id"`
 	Type     string      `xml:"type,attr" json:"type"` // kvm
@@ -28,6 +29,7 @@ type DomainXML struct {
 }
 
 type CPUXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"cpu" json:"-"`
 	Mode    string   `xml:"mode,attr,omitempty" json:"mode"`   // host-model, host-passthrough
 	Check   string   `xml:"check,attr,omitempty" json:"check"` // partial, full
@@ -51,23 +53,6 @@ func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
 	return instXml
 }
 
-func (domain *DomainXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), domain); err != nil {
-		libstar.Error("DomainXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
-func (domain *DomainXML) Encode() string {
-	data, err := xml.Marshal(domain)
-	if err != nil {
-		libstar.Error("DomainXML.Encode %s", err)
-		return ""
-	}
-	return string(data)
-}
-
 func (domain *DomainXML) GraphicsAddr(format string) (string, string) {
 	if len(domain.Devices.Graphics) == 0 {
 		return "", ""
@@ -81,93 +66,62 @@ func (domain *DomainXML) GraphicsAddr(format string) (string, string) {
 }
 
 type VCPUXML struct {
+	libstar.XMLBase
 	XMLName   xml.Name `xml:"vcpu" json:"-"`
 	Placement string   `xml:"placement,attr" json:"placement"` // static
 	Value     string   `xml:",chardata" json:"Value"`
 }
 
-func (cpu *VCPUXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), cpu); err != nil {
-		libstar.Error("VCPUXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type FeaturesXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"features" json:"-"`
-	Acpi    *AcpiXML `xml:"acpi,omitempty" json:"acpi"`
-	Apic    *ApicXML `xml:"apic,omitempty" json:"apic"`
+	Acpi    *ACPIXML `xml:"acpi,omitempty" json:"acpi"`
+	Apic    *APICXML `xml:"apic,omitempty" json:"apic"`
 	Pae     *PaeXML  `xml:"pae,omitempty" json:"pae"`
 }
 
-func (feat *FeaturesXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), feat); err != nil {
-		libstar.Error("FeaturesXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
-type AcpiXML struct {
+type ACPIXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"acpi" json:"-"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
-type ApicXML struct {
+type APICXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"apic" json:"-"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type PaeXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"pae" json:"-"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type MemXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"memory" json:"-"`
 	Type    string   `xml:"unit,attr" json:"unit"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
-func (mem *MemXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), mem); err != nil {
-		libstar.Error("MemXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type CurMemXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"currentMemory" json:"-"`
 	Type    string   `xml:"unit,attr" json:"unit"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
-func (cmem *CurMemXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), cmem); err != nil {
-		libstar.Error("CurMemXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type OSXML struct {
+	libstar.XMLBase
 	XMLName  xml.Name      `xml:"os" json:"-"`
 	Type     OSTypeXML     `xml:"type" json:"type"`
 	Boot     []OSBootXML   `xml:"boot" json:"boot"` //<bootmenu enable='yes'/>
 	BootMenu OSBootMenuXML `xml:"bootmenu" json:"bootmenu"`
 }
 
-func (osx *OSXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), osx); err != nil {
-		libstar.Error("OSXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type OSTypeXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"type" json:"-"`
 	Arch    string   `xml:"arch,attr" json:"arch"` // x86_64
 	Machine string   `xml:"machine,attr" json:"machine"`
@@ -175,16 +129,19 @@ type OSTypeXML struct {
 }
 
 type OSBootXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"boot" json:"-"`
 	Dev     string   `xml:"dev,attr" json:"dev"` // hd, cdrom, network
 }
 
 type OSBootMenuXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"bootmenu" json:"-"`
 	Enable  string   `xml:"enable,attr" json:"enable"` // yes
 }
 
 type DevicesXML struct {
+	libstar.XMLBase
 	XMLName     xml.Name           `xml:"devices" json:"-"`
 	Graphics    []GraphicsXML      `xml:"graphics" json:"graphics"`
 	Disks       []DiskXML          `xml:"disk" json:"disk"`
@@ -196,19 +153,12 @@ type DevicesXML struct {
 	Channels    []ChannelDeviceXML `xml:"channel" json:"channel"`
 }
 
-func (devices *DevicesXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), devices); err != nil {
-		libstar.Error("DevicesXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 // Bus 0: root
 // Bus 1: disk, ide
 // Bus 2: interface
 // Bus 3: reverse
 type ControllerXML struct {
+	libstar.XMLBase
 	XMLName xml.Name    `xml:"controller" json:"-"`
 	Type    string      `xml:"type,attr" json:"type"`
 	Index   string      `xml:"index,attr" json:"port"`
@@ -216,15 +166,8 @@ type ControllerXML struct {
 	Address *AddressXML `xml:"address,omitempty" json:"address"`
 }
 
-func (ctl *ControllerXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), ctl); err != nil {
-		libstar.Error("ControllerXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
 type AddressXML struct {
+	libstar.XMLBase
 	XMLName    xml.Name `xml:"address" json:"-"`
 	Type       string   `xml:"type,attr,omitempty" json:"type"` // pci and drive.
 	Domain     string   `xml:"domain,attr,omitempty" json:"domain"`
@@ -237,6 +180,7 @@ type AddressXML struct {
 }
 
 type GraphicsXML struct {
+	libstar.XMLBase
 	XMLName  xml.Name `xml:"graphics" json:"-"`
 	Type     string   `xml:"type,attr" json:"type"` // vnc, spice
 	Port     string   `xml:"port,attr" json:"port"`
@@ -245,24 +189,8 @@ type GraphicsXML struct {
 	Password string   `xml:"passwd,attr,omitempty" json:"password"`
 }
 
-func (graphics *GraphicsXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), graphics); err != nil {
-		libstar.Error("GraphicsXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
-func (graphics *GraphicsXML) Encode() string {
-	data, err := xml.Marshal(graphics)
-	if err != nil {
-		libstar.Error("GraphicsXML.Encode %s", err)
-		return ""
-	}
-	return string(data)
-}
-
 type DiskXML struct {
+	libstar.XMLBase
 	XMLName xml.Name      `xml:"disk" json:"-"`
 	Type    string        `xml:"type,attr" json:"type"`
 	Device  string        `xml:"device,attr" json:"device"`
@@ -272,42 +200,29 @@ type DiskXML struct {
 	Address *AddressXML   `xml:"address,omitempty" json:"address"`
 }
 
-func (disk *DiskXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), disk); err != nil {
-		libstar.Error("DiskXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
-func (disk *DiskXML) Encode() string {
-	data, err := xml.Marshal(disk)
-	if err != nil {
-		libstar.Error("DiskXML.Encode %s", err)
-		return ""
-	}
-	return string(data)
-}
-
 type DiskDriverXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"driver" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"`
 	Name    string   `xml:"name,attr" json:"name"`
 }
 
 type DiskSourceXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"source" json:"-"`
 	File    string   `xml:"file,attr,omitempty" json:"file"`
 	Device  string   `xml:"dev,attr,omitempty" json:"device"`
 }
 
 type DiskTargetXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"target" json:"-"`
 	Bus     string   `xml:"bus,attr,omitempty" json:"bus"`
 	Dev     string   `xml:"dev,attr,omitempty" json:"dev"`
 }
 
 type InterfaceXML struct {
+	libstar.XMLBase
 	XMLName     xml.Name             `xml:"interface" json:"-"`
 	Type        string               `xml:"type,attr" json:"type"`
 	Mac         InterfaceMacXML      `xml:"mac" json:"mac"`
@@ -319,29 +234,14 @@ type InterfaceXML struct {
 	Address     *AddressXML          `xml:"address,omitempty" json:"address"`
 }
 
-func (int *InterfaceXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), int); err != nil {
-		libstar.Error("InterfaceXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
-func (int *InterfaceXML) Encode() string {
-	data, err := xml.Marshal(int)
-	if err != nil {
-		libstar.Error("InterfaceXML.Encode %s", err)
-		return ""
-	}
-	return string(data)
-}
-
 type InterfaceMacXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"mac" json:"-"`
 	Address string   `xml:"address,attr,omitempty" json:"address"`
 }
 
 type InterfaceSourceXML struct {
+	libstar.XMLBase
 	XMLName xml.Name    `xml:"source" json:"-"`
 	Bridge  string      `xml:"bridge,attr,omitempty" json:"bridge"`
 	Network string      `xml:"network,attr,omitempty" json:"network"`
@@ -349,48 +249,58 @@ type InterfaceSourceXML struct {
 }
 
 type InterfaceModelXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"model" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"` //rtl8139, virtio, e1000
 }
 
 type InterfaceDriverXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"driver" json:"-"`
-	Name    string   `xml:"name,attr" json:"name"` //vfio
+	Name    string   `xml:"name,attr,omitempty" json:"name"` //vfio or vhost
+	Queues  string   `xml:"queues,attr,omitempty" json:"queues"`
 }
 
 type InterfaceTargetXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"target" json:"-"`
 	Bus     string   `xml:"bus,attr,omitempty" json:"bus"`
 	Dev     string   `xml:"dev,attr,omitempty" json:"dev"`
 }
 
 type InterfaceVirPortXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"virtualport" json:"-"`
 	Type    string   `xml:"type,attr,omitempty" json:"type"` //openvswitch
 }
 
 type InputDeviceXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"input" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"`
 	Bus     string   `xml:"bus,attr" json:"bus"`
 }
 
 type SoundDeviceXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"sound" json:"-"`
 	Model   string   `xml:"model,attr" json:"model"` // ac97, ich6
 }
 
 type VideoDeviceXML struct {
+	libstar.XMLBase
 	XMLName xml.Name      `xml:"video" json:"-"`
 	Model   VideoModelXML `xml:"model" json:"model"`
 }
 
 type VideoModelXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"model" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"` // qxl, cirrus
 }
 
 type ChannelDeviceXML struct {
+	libstar.XMLBase
 	XMLName xml.Name         `xml:"channel" json:"-"`
 	Type    string           `xml:"type,attr" json:"type"`
 	Source  ChannelSourceXML `xml:"source" json:"source"`
@@ -398,12 +308,14 @@ type ChannelDeviceXML struct {
 }
 
 type ChannelTargetXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"target" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"`
 	Name    string   `xml:"name,attr" json:"name"`
 }
 
 type ChannelSourceXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"source" json:"-"`
 	Channel string   `xml:"channel,attr" json:"channel"`
 }

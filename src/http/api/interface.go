@@ -63,7 +63,7 @@ func (in Interface) Post(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 
-	xmlObj := Interface2XML(conf.Source, conf.Model, conf.Seq, conf.Type)
+	xmlObj := Interface2XML(conf.Source, conf.Model, conf.Seq, conf.Type, "", "")
 	libstar.Debug("Interface.Post: %s", xmlObj.Encode())
 
 	flags := libvirtc.DomainDeviceModifyPersistent
@@ -100,8 +100,8 @@ func (in Interface) Delete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Cannot get domain's interface", http.StatusNotFound)
 		return
 	}
-	for _, inf := range xml.Devices.Interfaces {
-		if inf.Mac.Address != address {
+	for _, port := range xml.Devices.Interfaces {
+		if port.Mac.Address != address {
 			continue
 		}
 		// found device
@@ -109,7 +109,7 @@ func (in Interface) Delete(w http.ResponseWriter, r *http.Request) {
 		if active, _ := dom.IsActive(); !active {
 			flags = libvirtc.DomainDeviceModifyConfig
 		}
-		if err := dom.DetachDeviceFlags(inf.Encode(), flags); err != nil {
+		if err := dom.DetachDeviceFlags(port.Encode(), flags); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

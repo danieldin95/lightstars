@@ -226,8 +226,8 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	}
 	// features
 	dom.Features = libvirtc.FeaturesXML{
-		Apic: &libvirtc.ApicXML{},
-		Acpi: &libvirtc.AcpiXML{},
+		Apic: &libvirtc.APICXML{},
+		Acpi: &libvirtc.ACPIXML{},
 		Pae:  &libvirtc.PaeXML{},
 	}
 	// cpu and memory
@@ -306,7 +306,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		seq := fmt.Sprintf("0x%x", i+1)
 		source := inf.Source
 		br, _ := libvirtn.BRIDGE.Get(source)
-		obj := Interface2XML(source, "virtio", seq, br.Type)
+		obj := Interface2XML(source, "virtio", seq, br.Type, "", "")
 		switch conf.Family {
 		case "linux":
 			obj.Model = libvirtc.InterfaceModelXML{

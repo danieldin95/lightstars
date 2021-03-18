@@ -5,9 +5,15 @@ import (
 	"github.com/danieldin95/lightstar/src/network/libvirtn"
 )
 
-func Interface2XML(source, model, seq, typ string) libvirtc.InterfaceXML {
+func Interface2XML(source, model, seq, typ, drv, que string) libvirtc.InterfaceXML {
 	if br, err := libvirtn.BRIDGE.Get(source); err == nil {
 		typ = br.Type
+	}
+	if drv == "" {
+		drv = "vhost"
+		if que == "" {
+			que = "2"
+		}
 	}
 	xmlObj := libvirtc.InterfaceXML{
 		Type: "bridge",
@@ -23,6 +29,10 @@ func Interface2XML(source, model, seq, typ string) libvirtc.InterfaceXML {
 			Bus:      libvirtc.PciInterfaceBus,
 			Slot:     seq,
 			Function: libvirtc.PciFunc,
+		},
+		Driver: &libvirtc.InterfaceDriverXML{
+			Name:   drv,
+			Queues: que,
 		},
 	}
 	if typ == "openvswitch" {

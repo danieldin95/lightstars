@@ -7,6 +7,7 @@ import (
 )
 
 type SnapshotXML struct {
+	libstar.XMLBase
 	XMLName   xml.Name `xml:"domainsnapshot" json:"-"`
 	Name      string   `xml:"name,omitempty" json:"name"`
 	State     string   `xml:"state,omitempty" json:"state"`
@@ -31,21 +32,4 @@ func NewSnapshotXMLFromDom(ds *libvirt.DomainSnapshot) *SnapshotXML {
 	}
 	obj.IsCurrent, _ = ds.IsCurrent(0)
 	return obj
-}
-
-func (dom *SnapshotXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), dom); err != nil {
-		libstar.Error("SnapshotXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
-func (dom *SnapshotXML) Encode() string {
-	data, err := xml.Marshal(dom)
-	if err != nil {
-		libstar.Error("SnapshotXML.Encode %s", err)
-		return ""
-	}
-	return string(data)
 }

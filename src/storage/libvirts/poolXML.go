@@ -6,6 +6,7 @@ import (
 )
 
 type PoolXML struct {
+	libstar.XMLBase
 	XMLName    xml.Name      `xml:"pool" json:"-"`
 	Type       string        `xml:"type,attr" json:"type"`
 	Name       string        `xml:"name" json:"name"`
@@ -17,30 +18,15 @@ type PoolXML struct {
 	Target     TargetXML     `xml:"target" json:"target"`
 }
 
-func (pol *PoolXML) Decode(xmlData string) error {
-	if err := xml.Unmarshal([]byte(xmlData), pol); err != nil {
-		libstar.Error("PoolXML.Decode %s", err)
-		return err
-	}
-	return nil
-}
-
-func (pol *PoolXML) Encode() string {
-	data, err := xml.Marshal(pol)
-	if err != nil {
-		libstar.Error("PoolXML.Encode %s", err)
-		return ""
-	}
-	return string(data)
-}
-
 type AvailableXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"available" json:"-"`
 	Unit    string   `xml:"unit,attr" json:"unit"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type SourceXML struct {
+	libstar.XMLBase
 	XMLName xml.Name  `xml:"source" json:"-"`
 	Host    HostXML   `xml:"host" json:"host"`
 	Dir     DirXML    `xml:"dir" json:"dir"`
@@ -48,11 +34,13 @@ type SourceXML struct {
 }
 
 type HostXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"host" json:"-"`
 	Name    string   `xml:"name,attr" json:"name"`
 }
 
 type DirXML struct {
+	libstar.XMLBase
 	XMLName xml.Name `xml:"dir" json:"-"`
 	Path    string   `xml:"path,attr" json:"path"`
 }
