@@ -12,6 +12,8 @@ import {InstanceRemove} from "../instance/remove.js";
 import {GraphicsCreate} from "../graphics/create.js";
 import {TitleSet} from "../instance/title.js";
 import {SnapshotCreate} from "../snapshot/create.js";
+import {DiskRemove} from "../disk/remove.js";
+import {DiskApi} from "../../api/disk.js";
 
 export class Guest extends Container {
     // {
@@ -47,7 +49,17 @@ export class Guest extends Container {
             name: data.name,
             uuid: data.uuid,
             header: {id: this.id("#header")},
-            disks: {id: this.id("#disk")},
+            disks: {
+                id: this.id("#disk"),
+                onRemove: (objs) => {
+                    new DiskRemove({
+                        id: this.id('#removeDiskModal'),
+                        name: objs.uuids,
+                    }).onsubmit((e) => {
+                        new DiskApi(objs).delete();
+                    });
+                }
+            },
             interfaces: {id: this.id("#interface")},
             graphics: {id: this.id("#graphics")},
             snapshot: {id: this.id('#snapshot')},
@@ -250,7 +262,8 @@ export class Guest extends Container {
                                     </div>
                                 </div>  
                                 <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm"
+                                    data-toggle="modal" data-target="#removeDiskModal">{{'remove' | i}}</button>
                             </div>
                             <div class="col-auto">
                                 <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
@@ -370,6 +383,7 @@ export class Guest extends Container {
             <div id="settingModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create disk modal -->
             <div id="createDiskModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="removeDiskModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create ISO/CDROM modal -->
             <div id="createIsoModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create interface modal -->

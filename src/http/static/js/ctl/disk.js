@@ -13,11 +13,13 @@ export class DiskCtl extends Ctl {
     //   id: '#instance #disk',
     //   uuid: uuid of instance,
     //   name: name of instance,
+    //   onRemove: function {},
     // }
     constructor(props) {
         super(props);
         this.name = props.name;
         this.inst = props.uuid;
+        this.onRemove = props.onRemove;
 
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
@@ -28,10 +30,12 @@ export class DiskCtl extends Ctl {
 
         // register button's click.
         $(this.child('#remove')).on("click", (e) => {
-            new DiskApi({
-                inst: this.inst,
-                uuids: this.uuids.store,
-            }).delete();
+            let data = {inst: this.inst, uuids: this.uuids.store};
+            if (this.onRemove) {
+                this.onRemove(data);
+            } else {
+                new DiskApi(data).delete();
+            }
         });
 
         // refresh table and register refresh click.

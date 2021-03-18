@@ -86,11 +86,11 @@ export class GuestCtl extends Ctl {
         this.mem = props.data.maxMem || 0;
         this.tasks = props.tasks || "tasks";
         this.api = new InstanceApi({uuids: uuid});
-        this.header = new HeaderCtl({id: props.header.id, uuid, name});
-        this.disk = new DiskCtl({id: props.disks.id, uuid, name});
-        this.interface = new InterfaceCtl({id: props.interfaces.id, uuid, name});
-        this.graphics = new GraphicsCtl({id: props.graphics.id, uuid, name});
-        this.snapshot = new SnapshotCtl({id: props.snapshot.id, uuid, name})
+        this.header = new HeaderCtl({...props.header, uuid, name});
+        this.disk = new DiskCtl({...props.disks, uuid, name});
+        this.interface = new InterfaceCtl({...props.interfaces, uuid, name});
+        this.graphics = new GraphicsCtl({...props.graphics, uuid, name});
+        this.snapshot = new SnapshotCtl({...props.snapshot, uuid, name})
     }
 
     edit(data) {
