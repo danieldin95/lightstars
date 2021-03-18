@@ -381,8 +381,12 @@ func (ins Instance) GetByUser(user *schema.User, list *schema.ListInstance) {
 	if domains, err := libvirtc.ListDomains(); err == nil {
 		for _, d := range domains {
 			inst := compute.NewInstance(d)
-			if ins.HasPermission(user, inst.Name) {
+			if user == nil {
 				list.Items = append(list.Items, inst)
+			} else {
+				if ins.HasPermission(user, inst.Name) {
+					list.Items = append(list.Items, inst)
+				}
 			}
 			_ = d.Free()
 		}

@@ -14,10 +14,33 @@ type Interface struct {
 }
 
 func (in Interface) Router(router *mux.Router) {
+	router.HandleFunc("/api/network/{id}/interface", in.List).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/interface", in.Get).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/interface", in.Post).Methods("POST")
 	router.HandleFunc("/api/instance/{id}/interface/{dev}", in.Get).Methods("GET")
 	router.HandleFunc("/api/instance/{id}/interface/{dev}", in.Delete).Methods("DELETE")
+}
+
+func (in Interface) List(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	user, _ := GetUser(r)
+	list := schema.ListInterface{
+		Items: make([]schema.Interface, 0, 32),
+	}
+	domains := schema.ListInstance{
+		Items: make([]schema.Instance, 0, 32),
+	}
+	// domains all instances.
+	Instance{}.GetByUser(&user, &domains)
+	for _, dom := range domains.Items {
+		for _, port := range dom.Interfaces {
+			if port.Source != uuid {
+				continue
+			}
+			list.Items = append(list.Items, port)
+		}
+	}
+	ResponseJson(w, list)
 }
 
 func (in Interface) Get(w http.ResponseWriter, r *http.Request) {

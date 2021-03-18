@@ -17,7 +17,8 @@ func NewHyper() (hs schema.Hyper) {
 	return hs
 }
 
-func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int schema.Interface) {
+func NewFromInterfaceXML(xml libvirtc.InterfaceXML, domain string) (int schema.Interface) {
+	int.Domain = domain
 	int.Source = xml.Source.Bridge
 	int.Network = xml.Source.Network
 	addr := xml.Source.Address
@@ -46,7 +47,8 @@ func NewFromInterfaceXML(xml libvirtc.InterfaceXML) (int schema.Interface) {
 	return int
 }
 
-func NewFromDiskXML(xml libvirtc.DiskXML) (disk schema.Disk) {
+func NewFromDiskXML(xml libvirtc.DiskXML, domain string) (disk schema.Disk) {
+	disk.Domain = domain
 	disk.Device = xml.Target.Dev
 	disk.Bus = xml.Target.Bus
 	if xml.Source.File != "" {
@@ -60,12 +62,13 @@ func NewFromDiskXML(xml libvirtc.DiskXML) (disk schema.Disk) {
 	addr := xml.Address
 	if addr != nil {
 		disk.AddrType = addr.Type
-		if disk.AddrType == "pci" {
+		switch disk.AddrType {
+		case "pci":
 			disk.AddrDomain = fmt.Sprintf("%04x", libstar.H2D16(addr.Domain))
 			disk.AddrBus = fmt.Sprintf("%02x", libstar.H2D16(addr.Bus))
 			disk.AddrSlot = fmt.Sprintf("%02x", libstar.H2D16(addr.Slot))
 			disk.AddrFunc = fmt.Sprintf("%x", libstar.H2D16(addr.Function))
-		} else if xml.Address.Type == "drive" {
+		case "drive":
 			disk.AddrCtl = fmt.Sprintf("%04x", libstar.H2D16(addr.Controller))
 			disk.AddrBus = fmt.Sprintf("%02x", libstar.H2D16(xml.Address.Bus))
 			disk.AddrTgt = fmt.Sprintf("%02x", libstar.H2D16(xml.Address.Target))
@@ -106,10 +109,10 @@ func NewInstance(dom libvirtc.Domain) schema.Instance {
 	obj.CpuMode = xmlObj.CPU.Mode
 	obj.Type = xmlObj.Type
 	for _, x := range xmlObj.Devices.Disks {
-		obj.Disks = append(obj.Disks, NewFromDiskXML(x))
+		obj.Disks = append(obj.Disks, NewFromDiskXML(x, obj.Name))
 	}
 	for _, x := range xmlObj.Devices.Interfaces {
-		obj.Interfaces = append(obj.Interfaces, NewFromInterfaceXML(x))
+		obj.Interfaces = append(obj.Interfaces, NewFromInterfaceXML(x, obj.Name))
 	}
 	for _, x := range xmlObj.Devices.Controllers {
 		obj.Controllers = append(obj.Controllers, NewFromControllerXML(x))

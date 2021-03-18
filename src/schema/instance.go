@@ -61,7 +61,7 @@ type ListInstance struct {
 }
 
 type Disk struct {
-	Action     string `json:"action,omitempty"`
+	Domain     string `json:"domain"`
 	Seq        string `json:"seq,omitempty"`       // configure
 	Name       string `json:"name,omitempty"`      // disk name
 	UUID       string `json:"uuid,omitempty"`      // disk UUID
@@ -89,8 +89,8 @@ type ListDisk struct {
 }
 
 type Interface struct {
-	Action     string `json:"action,omitempty"` // If is "", means not action.
-	Seq        string `json:"seq,omitempty"`    //configure
+	Domain     string `json:"domain"`
+	Seq        string `json:"seq,omitempty"` //configure
 	Name       string `json:"name,omitempty"`
 	UUID       string `json:"uuid,omitempty"`
 	Type       string `json:"type,omitempty"` //bridge or openvswitch
