@@ -36,23 +36,23 @@ type Instance struct {
 	Name        string       `json:"name"`
 	Title       string       `json:"title"`
 	Description string       `json:"description"`
-	Family      string       `json:"family"` // linux, windows or others
-	State       string       `json:"state"`
-	Arch        string       `json:"arch"` // x86_64 or i386
-	Type        string       `json:"type"`
+	Family      string       `json:"family,omitempty"` // linux, windows or others
+	State       string       `json:"state,omitempty"`
+	Arch        string       `json:"arch,omitempty"` // x86_64 or i386
+	Type        string       `json:"type,omitempty"`
 	Boots       string       `json:"boots,omitempty"`
 	DataStore   string       `json:"datastore,omitempty"`
 	Start       string       `json:"start,omitempty"` // whether booting with created
-	CpuMode     string       `json:"cpuMode"`
-	MaxCpu      uint         `json:"maxCpu"`
-	MaxMem      uint64       `json:"maxMem"`  // KiB
-	Memory      uint64       `json:"memory"`  // KiB
-	CpuTime     uint64       `json:"cpuTime"` // micro seconds
+	CpuMode     string       `json:"cpuMode,omitempty"`
+	MaxCpu      uint         `json:"maxCpu,omitempty"`
+	MaxMem      uint64       `json:"maxMem,omitempty"`  // KiB
+	Memory      uint64       `json:"memory,omitempty"`  // KiB
+	CpuTime     uint64       `json:"cpuTime,omitempty"` // micro seconds
 	Disks       []Disk       `json:"disks,omitempty"`
 	Interfaces  []Interface  `json:"interfaces,omitempty"`
 	Controllers []Controller `json:"controllers,omitempty"`
-	Graphics    []Graphics   `json:"graphics"`
-	Channels    []Channel    `json:"channels"`
+	Graphics    []Graphics   `json:"graphics,omitempty"`
+	Channels    []Channel    `json:"channels,omitempty"`
 }
 
 type ListInstance struct {
@@ -61,26 +61,26 @@ type ListInstance struct {
 }
 
 type Disk struct {
-	Domain     string `json:"domain"`
-	Seq        string `json:"seq,omitempty"`       // configure
-	Name       string `json:"name,omitempty"`      // disk name
-	UUID       string `json:"uuid,omitempty"`      // disk UUID
-	Store      string `json:"datastore,omitempty"` // disk saved to datastore
-	Size       string `json:"size"`                // configure
-	SizeUnit   string `json:"sizeUnit,omitempty"`  //configure
-	Format     string `json:"format"`
-	Source     string `json:"source"`
-	Device     string `json:"device"`
-	Bus        string `json:"bus"`      //configre
-	AddrType   string `json:"addrType"` // pci, and drive
-	AddrSlot   string `json:"addrSlot"`
-	AddrDomain string `json:"addrDomain"`
-	AddrBus    string `json:"addrBus"`
-	AddrFunc   string `json:"addrFunc"`
-	AddrCtl    string `json:"addrCtl"`
-	AddrTgt    string `json:"addrTgt"`
-	AddrUnit   string `json:"addrUnit"`
-	Volume     Volume `json:"volume"`
+	Domain     Instance `json:"domain"`
+	Seq        string   `json:"seq,omitempty"`       // configure
+	Name       string   `json:"name,omitempty"`      // disk name
+	UUID       string   `json:"uuid,omitempty"`      // disk UUID
+	Store      string   `json:"datastore,omitempty"` // disk saved to datastore
+	Size       string   `json:"size"`                // configure
+	SizeUnit   string   `json:"sizeUnit,omitempty"`  //configure
+	Format     string   `json:"format"`
+	Source     string   `json:"source"`
+	Device     string   `json:"device"`
+	Bus        string   `json:"bus"`      //configre
+	AddrType   string   `json:"addrType"` // pci, and drive
+	AddrSlot   string   `json:"addrSlot"`
+	AddrDomain string   `json:"addrDomain"`
+	AddrBus    string   `json:"addrBus"`
+	AddrFunc   string   `json:"addrFunc"`
+	AddrCtl    string   `json:"addrCtl"`
+	AddrTgt    string   `json:"addrTgt"`
+	AddrUnit   string   `json:"addrUnit"`
+	Volume     Volume   `json:"volume"`
 }
 
 type ListDisk struct {
@@ -89,22 +89,22 @@ type ListDisk struct {
 }
 
 type Interface struct {
-	Domain     string `json:"domain"`
-	Seq        string `json:"seq,omitempty"` //configure
-	Name       string `json:"name,omitempty"`
-	UUID       string `json:"uuid,omitempty"`
-	Type       string `json:"type,omitempty"` //bridge or openvswitch
-	Address    string `json:"address"`
-	Network    string `json:"network"`
-	Source     string `json:"source"`
-	HostDev    string `json:"hostDev"`
-	Model      string `json:"model"` // configure
-	Device     string `json:"device"`
-	AddrType   string `json:"addrType"` // now only pci.
-	AddrSlot   string `json:"addrSlot"`
-	AddrDomain string `json:"addrDomain"`
-	AddrBus    string `json:"addrBus"`
-	AddrFunc   string `json:"addrFunc"`
+	Domain     Instance `json:"domain"`
+	Seq        string   `json:"seq,omitempty"` //configure
+	Name       string   `json:"name,omitempty"`
+	UUID       string   `json:"uuid,omitempty"`
+	Type       string   `json:"type,omitempty"` //bridge or openvswitch
+	Address    string   `json:"address"`
+	Network    string   `json:"network"`
+	Source     string   `json:"source"`
+	HostDev    string   `json:"hostDev"`
+	Model      string   `json:"model"` // configure
+	Device     string   `json:"device"`
+	AddrType   string   `json:"addrType"` // now only pci.
+	AddrSlot   string   `json:"addrSlot"`
+	AddrDomain string   `json:"addrDomain"`
+	AddrBus    string   `json:"addrBus"`
+	AddrFunc   string   `json:"addrFunc"`
 }
 
 type ListInterface struct {

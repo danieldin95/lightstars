@@ -1,5 +1,4 @@
 import {Container} from "./container.js"
-import {Utils} from "../../lib/utils.js";
 import {Api} from "../../api/api.js";
 import {NetworkApi} from "../../api/network.js";
 import {Collapse} from "../collapse.js";
@@ -30,11 +29,11 @@ export class Network extends Container {
                 this.render();
             });
             $(this.parent).html(this.view);
-            this.loading();
+            this.loading(e.resp);
         });
     }
 
-    loading() {
+    loading(data) {
         // collapse
         $(this.id('#collapseOver')).fadeIn('slow');
         $(this.id('#collapseOver')).collapse();
@@ -46,16 +45,15 @@ export class Network extends Container {
             update: false,
         });
 
-        let net = new NetworkCtl({
+        new NetworkCtl({
             id: this.id(),
             header: {id: this.id("#header")},
             leases: {id: this.id("#leases")},
-            subnets: {id: this.id("#subnets")},
+            ports: {
+                id: this.id("#ports"),
+                uuid: data.bridge,
+            }
         });
-        // new InstanceSet({id: '#InstanceSetModal', cpu: instance.cpu, mem: instance.mem })
-        //     .onsubmit((e) => {
-        //         instance.edit(Utils.toJSON(e.form));
-        //     });
     }
 
     template(v) {
@@ -117,44 +115,91 @@ export class Network extends Container {
                 </div>
             </div>
         </div>
-        <!-- DHCP Lease -->
-        <div id="leases" class="card device">
-            <div class="card-header">
-                <button class="btn btn-link btn-block text-left btn-sm"
-                        type="button" data-toggle="collapse"
-                        data-target="#collapseLea" aria-expanded="true" aria-controls="collapseLea">
-                    {{'dhcp lease' | i}}
-                </button>
-            </div>
-            <div class="card-body">
-                <div class="row card-body-hdl">
-                    <div class="col-auto mr-auto">
-                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                                data-toggle="modal" data-target="#LeaseCreateModal">
-                            {{'new a lease' | i}}
-                        </button>
-                        <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+        
+        <div class="card-tab">
+            <ul class="nav nav-pills justify-content-start" id="pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="pills-0-tab" data-toggle="pill" href="#pills-0" 
+                    role="tab" aria-controls="pills-0" aria-selected="true">{{'virtual ports' | i}}</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-1-tab" data-toggle="pill" href="#pills-1" 
+                    role="tab" aria-controls="pills-1" aria-selected="false">{{'dhcp lease' | i}}</a>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-0" role="tabpanel" aria-labelledby="pills-0-tab">
+                <!-- virtual Ports -->
+                <div id="ports" class="card device">
+                    <div class="card-body">
+                        <div class="row card-body-hdl">
+                            <div class="col-auto mr-auto">
+                                <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                        data-toggle="modal" data-target="#PortCreateModal">
+                                    {{'create' | i}}
+                                </button>
+                                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                            </div>
+                            <div class="col-auto">
+                                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                            </div>
+                        </div>
+                        <div class="card-body-tbl">
+                            <table class="table table-striped text-center">
+                                <thead>
+                                <tr>
+                                    <th><input id="on-all" type="checkbox"></th>
+                                    <th>{{'id' | i}}</th>
+                                    <th>{{'instance' | i}}</th>
+                                    <th>{{'device' | i}}</th>
+                                    <th>{{'mac' | i}}</th>
+                                    <th>{{'model' | i}}</th>
+                                </tr>
+                                </thead>
+                                <tbody id="display-table">
+                                <!-- Loading... -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                </div>             
+              </div>
+              <div class="tab-pane fade" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
+                <!-- DHCP Lease -->
+                <div id="leases" class="card device">
+                    <div class="card-body">
+                        <div class="row card-body-hdl">
+                            <div class="col-auto mr-auto">
+                                <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                        data-toggle="modal" data-target="#LeaseCreateModal">
+                                    {{'new a lease' | i}}
+                                </button>
+                                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
+                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                            </div>
+                            <div class="col-auto">
+                                <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                            </div>
+                        </div>
+                        <div class="card-body-tbl">
+                            <table class="table table-striped text-center">
+                                <thead>
+                                <tr>
+                                    <th><input id="on-all" type="checkbox"></th>
+                                    <th>{{'id' | i}}</th>
+                                    <th>{{'mac' | i}}</th>
+                                    <th>{{'ip address' | i}}</th>
+                                </tr>
+                                </thead>
+                                <tbody id="display-table">
+                                <!-- Loading... -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div class="card-body-tbl">
-                    <table class="table table-striped text-center">
-                        <thead>
-                        <tr>
-                            <th><input id="on-all" type="checkbox"></th>
-                            <th>{{'id' | i}}</th>
-                            <th>{{'mac' | i}}</th>
-                            <th>{{'ip address' | i}}</th>
-                        </tr>
-                        </thead>
-                        <tbody id="display-table">
-                        <!-- Loading... -->
-                        </tbody>
-                    </table>
-                </div>
+              </div>
             </div>
         </div>
         </div>`, v);

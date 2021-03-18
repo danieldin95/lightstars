@@ -151,5 +151,8 @@
 	"iscsi based": "基于iSCSI",
 	"existing ovs bridge": "存在的OVS网桥名称",
 	"if you confirm to remove it, all data of these disks will be clear.": "如果你确认删除，这些磁盘的所有数据将被删除。",
-	"no data to display": "没有数据可显示"
+	"no data to display": "没有数据可显示",
+	"virtual ports": "虚拟网口",
+	"instance": "实例",
+	"create": "新建"
 }

@@ -1,6 +1,6 @@
 import {Ctl} from "./ctl.js"
-import {NetworkApi} from "../api/network.js";
 import {LeasesCtl} from "./leases.js";
+import {PortCtl} from "./port.js";
 
 export class NetworkCtl extends Ctl {
     // {
@@ -11,9 +11,6 @@ export class NetworkCtl extends Ctl {
     //   leases: {
     //     id: '#leases'
     //   },
-    //   subnets: {
-    //     id: "#subnets"
-    //   },
     // }
     constructor(props) {
         super(props);
@@ -23,7 +20,7 @@ export class NetworkCtl extends Ctl {
         this.name = name;
         this.tasks = props.tasks || "tasks";
 
-        console.log("NetworkCtl", this.props, $(this.id));
-        this.leases = new LeasesCtl({id: props.leases.id, uuid, name});
+        this.leases = new LeasesCtl({...props.leases, uuid, name});
+        this.ports = new PortCtl({...props.ports, name});
     }
 }

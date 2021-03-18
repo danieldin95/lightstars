@@ -151,5 +151,8 @@
 	"iscsi": "iSCSI based",
 	"existing ovs bridge": "An existing OVS bridge",
 	"if you confirm to remove it, all data of these disks will be clear.": "If you confirm to remove it, all data of these disks will be clear.",
-	"no data to display": "No data to display"
+	"no data to display": "No data to display",
+	"virtual ports": "Virtual ports",
+	"instance": "Instance",
+	"create": "create"
 }

@@ -15,7 +15,7 @@ export class PoolCtl extends Ctl {
         this.name = name;
         this.tasks = props.tasks || "tasks";
         this.volumes = new VolumeCtl({
-            id: props.volumes.id, uuid, name,
+            ...props.volumes, uuid, name,
             upload: props.volumes.upload,
         });
         this.upload = new FileUpload({

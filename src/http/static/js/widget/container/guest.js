@@ -226,20 +226,20 @@ export class Guest extends Container {
         <div class="card-tab">
             <ul class="nav nav-pills justify-content-start" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" 
-                    role="tab" aria-controls="pills-home" aria-selected="true">{{'virtual disk' | i}}</a>
+                <a class="nav-link active" id="pills-0-tab" data-toggle="pill" href="#pills-0" 
+                    role="tab" aria-controls="pills-0" aria-selected="true">{{'virtual disk' | i}}</a>
               </li>
               <li class="nav-item" role="presentation">
-                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" 
-                    role="tab" aria-controls="pills-profile" aria-selected="false">{{'network interface' | i}}</a>
+                <a class="nav-link" id="pills-1-tab" data-toggle="pill" href="#pills-1" 
+                    role="tab" aria-controls="pills-1" aria-selected="false">{{'network interface' | i}}</a>
               </li>
               <li class="nav-item" role="presentation">
-                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" 
-                    role="tab" aria-controls="pills-contact" aria-selected="false">{{'instance snapshot' | i}}</a>
+                <a class="nav-link" id="pills-2-tab" data-toggle="pill" href="#pills-2" 
+                    role="tab" aria-controls="pills-2" aria-selected="false">{{'instance snapshot' | i}}</a>
               </li>
             </ul>
             <div class="tab-content" id="pills-tabContent">
-              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div class="tab-pane fade show active" id="pills-0" role="tabpanel" aria-labelledby="pills-0-tab">
                 <!-- Virtual Disk -->
                 <div id="disk" class="card device">
                     <div class="card-body">
@@ -291,7 +291,7 @@ export class Guest extends Container {
                     </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+              <div class="tab-pane fade" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
                 <!-- Interface -->
                 <div id="interface" class="card device">
                     <div class="card-body">
@@ -329,7 +329,7 @@ export class Guest extends Container {
                     </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+              <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">
                 <!-- Snapshots -->
                 <div id="snapshot" class="card device">
                     <div class="card-body">

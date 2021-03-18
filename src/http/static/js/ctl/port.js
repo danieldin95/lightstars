@@ -1,5 +1,5 @@
 import {Ctl} from "./ctl.js";
-import {LeaseTable} from "../widget/lease/table.js";
+import {PortTable} from "../widget/port/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
 
 
@@ -7,10 +7,10 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class LeasesCtl extends Ctl {
+export class PortCtl extends Ctl {
     // {
-    //   id: '#network #leases',
-    //   uuid: uuid of network,
+    //   id: '#network #port',
+    //   bridge: bridge of network,
     //   name: name of network,
     // }
     constructor(props) {
@@ -20,7 +20,7 @@ export class LeasesCtl extends Ctl {
 
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
-        this.table = new LeaseTable({
+        this.table = new PortTable({
             id: this.child('#display-table'),
             uuid: this.uuid,
         });

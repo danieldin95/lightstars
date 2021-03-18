@@ -17,8 +17,11 @@ func NewHyper() (hs schema.Hyper) {
 	return hs
 }
 
-func NewFromInterfaceXML(xml libvirtc.InterfaceXML, domain string) (int schema.Interface) {
-	int.Domain = domain
+func NewFromInterfaceXML(xml libvirtc.InterfaceXML, domain schema.Instance) (int schema.Interface) {
+	int.Domain = schema.Instance{
+		UUID: domain.UUID,
+		Name: domain.Name,
+	}
 	int.Source = xml.Source.Bridge
 	int.Network = xml.Source.Network
 	addr := xml.Source.Address
@@ -47,8 +50,11 @@ func NewFromInterfaceXML(xml libvirtc.InterfaceXML, domain string) (int schema.I
 	return int
 }
 
-func NewFromDiskXML(xml libvirtc.DiskXML, domain string) (disk schema.Disk) {
-	disk.Domain = domain
+func NewFromDiskXML(xml libvirtc.DiskXML, domain schema.Instance) (disk schema.Disk) {
+	disk.Domain = schema.Instance{
+		UUID: domain.UUID,
+		Name: domain.Name,
+	}
 	disk.Device = xml.Target.Dev
 	disk.Bus = xml.Target.Bus
 	if xml.Source.File != "" {
@@ -109,10 +115,10 @@ func NewInstance(dom libvirtc.Domain) schema.Instance {
 	obj.CpuMode = xmlObj.CPU.Mode
 	obj.Type = xmlObj.Type
 	for _, x := range xmlObj.Devices.Disks {
-		obj.Disks = append(obj.Disks, NewFromDiskXML(x, obj.Name))
+		obj.Disks = append(obj.Disks, NewFromDiskXML(x, obj))
 	}
 	for _, x := range xmlObj.Devices.Interfaces {
-		obj.Interfaces = append(obj.Interfaces, NewFromInterfaceXML(x, obj.Name))
+		obj.Interfaces = append(obj.Interfaces, NewFromInterfaceXML(x, obj))
 	}
 	for _, x := range xmlObj.Devices.Controllers {
 		obj.Controllers = append(obj.Controllers, NewFromControllerXML(x))
