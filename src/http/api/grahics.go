@@ -113,7 +113,7 @@ func (gra Graphics) Post(w http.ResponseWriter, r *http.Request) {
 	if conf.AutoPort == "yes" {
 		conf.Port = "-1"
 	}
-	xmlObj := libvirtc.GraphicsXML{
+	xmlObj := &libvirtc.GraphicsXML{
 		Type:     conf.Type,
 		Listen:   conf.Listen,
 		Port:     conf.Port,
@@ -122,7 +122,7 @@ func (gra Graphics) Post(w http.ResponseWriter, r *http.Request) {
 	}
 
 	flags := libvirtc.DomainDeviceModifyConfig
-	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
+	if err := dom.AttachDeviceFlags(libstar.XML.Encode(xmlObj), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

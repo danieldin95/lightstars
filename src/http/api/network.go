@@ -25,8 +25,8 @@ func IsUniCast(address string) bool {
 	return true
 }
 
-func Network2XML(conf schema.Network) libvirtn.NetworkXML {
-	xmlObj := libvirtn.NetworkXML{
+func Network2XML(conf schema.Network) *libvirtn.NetworkXML {
+	xmlObj := &libvirtn.NetworkXML{
 		Name: conf.Name,
 		Bridge: libvirtn.BridgeXML{
 			Name: conf.Bridge,
@@ -41,7 +41,6 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 		xmlObj.Bridge.Stp = "on"
 		xmlObj.Bridge.Delay = "0"
 	}
-
 	if conf.Address != "" {
 		xmlObj.IPv4 = &libvirtn.IPv4XML{
 			Address: conf.Address,
@@ -64,7 +63,6 @@ func Network2XML(conf schema.Network) libvirtn.NetworkXML {
 				})
 		}
 	}
-
 	if conf.Type == "openvswitch" {
 		xmlObj.VirtualPort = &libvirtn.VirtualPortXML{
 			Type: conf.Type,
@@ -106,7 +104,7 @@ func (net Network) Get(w http.ResponseWriter, r *http.Request) {
 			format := GetQueryOne(r, "format")
 			if format == "xml" {
 				obj := libvirtn.NewNetworkXMLFromNet(n)
-				ResponseXML(w, obj.Encode())
+				ResponseXML(w, libstar.XML.Encode(obj))
 			} else {
 				obj := network.NewNetwork(*n)
 				ResponseJson(w, obj)
@@ -125,13 +123,13 @@ func (net Network) Post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	xmlObj := Network2XML(conf)
-	libstar.Debug("Network.Post %s", xmlObj.Encode())
+	libstar.Debug("Network.Post %s", libstar.XML.Encode(xmlObj))
 	hyper, err := libvirtn.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	netVir, err := hyper.NetworkDefineXML(xmlObj.Encode())
+	netVir, err := hyper.NetworkDefineXML(libstar.XML.Encode(xmlObj))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

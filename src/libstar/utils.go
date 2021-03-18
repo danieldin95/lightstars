@@ -252,6 +252,23 @@ func (x xmlUtils) UnmarshalLoad(v interface{}, file string) error {
 	return nil
 }
 
+func (x xmlUtils) Decode(obj interface{}, data string) error {
+	if err := xml.Unmarshal([]byte(data), obj); err != nil {
+		Error("XML.Decode %s", err)
+		return err
+	}
+	return nil
+}
+
+func (x xmlUtils) Encode(obj interface{}) string {
+	data, err := xml.Marshal(obj)
+	if err != nil {
+		Error("XML.Encode %s", err)
+		return ""
+	}
+	return string(data)
+}
+
 type Dir struct {
 }
 

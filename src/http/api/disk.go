@@ -127,7 +127,7 @@ func IsVolume(file string) bool {
 }
 
 func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
-	xml := libvirtc.DiskXML{}
+	xml := &libvirtc.DiskXML{}
 	if conf.Source == "" { // create new disk firstly.
 		size := libstar.ToBytes(conf.Size, conf.SizeUnit)
 		slot := libstar.H2D8(conf.Seq)
@@ -136,7 +136,7 @@ func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 		if err != nil {
 			return nil, err
 		}
-		xml = libvirtc.DiskXML{
+		xml = &libvirtc.DiskXML{
 			Type:   "file",
 			Device: "disk",
 			Driver: libvirtc.DiskDriverXML{
@@ -156,7 +156,7 @@ func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 		// attach cdrom.
 		file := storage.PATH.Unix(conf.Source)
 		seq, _ := strconv.Atoi(conf.Seq)
-		xml = libvirtc.DiskXML{
+		xml = &libvirtc.DiskXML{
 			Type:   "file",
 			Device: "cdrom",
 			Driver: libvirtc.DiskDriverXML{
@@ -182,7 +182,7 @@ func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 			Function: libvirtc.PciFunc,
 		}
 	}
-	return &xml, nil
+	return xml, nil
 }
 
 func (disk Disk) Post(w http.ResponseWriter, r *http.Request) {
@@ -208,12 +208,12 @@ func (disk Disk) Post(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	libstar.Debug("Disk.Post: %s", xmlObj.Encode())
+	libstar.Debug("Disk.Post: %s", libstar.XML.Encode(xmlObj))
 	flags := libvirtc.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
 		flags = libvirtc.DomainDeviceModifyConfig
 	}
-	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
+	if err := dom.AttachDeviceFlags(libstar.XML.Encode(xmlObj), flags); err != nil {
 		file := xmlObj.Source.File
 		if IsVolume(file) {
 			volume := path.Base(file)
@@ -260,7 +260,7 @@ func (disk Disk) Delete(w http.ResponseWriter, r *http.Request) {
 		if active, _ := dom.IsActive(); !active {
 			flags = libvirtc.DomainDeviceModifyConfig
 		}
-		if err := dom.DetachDeviceFlags(d.Encode(), flags); err != nil {
+		if err := dom.DetachDeviceFlags(libstar.XML.Encode(d), flags); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

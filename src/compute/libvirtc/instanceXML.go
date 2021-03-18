@@ -13,7 +13,6 @@ var (
 )
 
 type DomainXML struct {
-	libstar.XMLBase
 	XMLName  xml.Name    `xml:"domain" json:"-"`
 	Id       string      `xml:"id,attr" json:"id"`
 	Type     string      `xml:"type,attr" json:"type"` // kvm
@@ -29,7 +28,6 @@ type DomainXML struct {
 }
 
 type CPUXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"cpu" json:"-"`
 	Mode    string   `xml:"mode,attr,omitempty" json:"mode"`   // host-model, host-passthrough
 	Check   string   `xml:"check,attr,omitempty" json:"check"` // partial, full
@@ -46,11 +44,11 @@ func NewDomainXMLFromDom(dom *Domain, secure bool) *DomainXML {
 	if err != nil {
 		return nil
 	}
-	instXml := &DomainXML{}
-	if err := instXml.Decode(xmlData); err != nil {
+	obj := &DomainXML{}
+	if err := libstar.XML.Decode(obj, xmlData); err != nil {
 		return nil
 	}
-	return instXml
+	return obj
 }
 
 func (domain *DomainXML) GraphicsAddr(format string) (string, string) {
@@ -66,14 +64,12 @@ func (domain *DomainXML) GraphicsAddr(format string) (string, string) {
 }
 
 type VCPUXML struct {
-	libstar.XMLBase
 	XMLName   xml.Name `xml:"vcpu" json:"-"`
 	Placement string   `xml:"placement,attr" json:"placement"` // static
 	Value     string   `xml:",chardata" json:"Value"`
 }
 
 type FeaturesXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"features" json:"-"`
 	Acpi    *ACPIXML `xml:"acpi,omitempty" json:"acpi"`
 	Apic    *APICXML `xml:"apic,omitempty" json:"apic"`
@@ -81,39 +77,33 @@ type FeaturesXML struct {
 }
 
 type ACPIXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"acpi" json:"-"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type APICXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"apic" json:"-"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type PaeXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"pae" json:"-"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type MemXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"memory" json:"-"`
 	Type    string   `xml:"unit,attr" json:"unit"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type CurMemXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"currentMemory" json:"-"`
 	Type    string   `xml:"unit,attr" json:"unit"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type OSXML struct {
-	libstar.XMLBase
 	XMLName  xml.Name      `xml:"os" json:"-"`
 	Type     OSTypeXML     `xml:"type" json:"type"`
 	Boot     []OSBootXML   `xml:"boot" json:"boot"` //<bootmenu enable='yes'/>
@@ -121,7 +111,6 @@ type OSXML struct {
 }
 
 type OSTypeXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"type" json:"-"`
 	Arch    string   `xml:"arch,attr" json:"arch"` // x86_64
 	Machine string   `xml:"machine,attr" json:"machine"`
@@ -129,19 +118,16 @@ type OSTypeXML struct {
 }
 
 type OSBootXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"boot" json:"-"`
 	Dev     string   `xml:"dev,attr" json:"dev"` // hd, cdrom, network
 }
 
 type OSBootMenuXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"bootmenu" json:"-"`
 	Enable  string   `xml:"enable,attr" json:"enable"` // yes
 }
 
 type DevicesXML struct {
-	libstar.XMLBase
 	XMLName     xml.Name           `xml:"devices" json:"-"`
 	Graphics    []GraphicsXML      `xml:"graphics" json:"graphics"`
 	Disks       []DiskXML          `xml:"disk" json:"disk"`
@@ -158,7 +144,6 @@ type DevicesXML struct {
 // Bus 2: interface
 // Bus 3: reverse
 type ControllerXML struct {
-	libstar.XMLBase
 	XMLName xml.Name    `xml:"controller" json:"-"`
 	Type    string      `xml:"type,attr" json:"type"`
 	Index   string      `xml:"index,attr" json:"port"`
@@ -167,7 +152,6 @@ type ControllerXML struct {
 }
 
 type AddressXML struct {
-	libstar.XMLBase
 	XMLName    xml.Name `xml:"address" json:"-"`
 	Type       string   `xml:"type,attr,omitempty" json:"type"` // pci and drive.
 	Domain     string   `xml:"domain,attr,omitempty" json:"domain"`
@@ -180,7 +164,6 @@ type AddressXML struct {
 }
 
 type GraphicsXML struct {
-	libstar.XMLBase
 	XMLName  xml.Name `xml:"graphics" json:"-"`
 	Type     string   `xml:"type,attr" json:"type"` // vnc, spice
 	Port     string   `xml:"port,attr" json:"port"`
@@ -190,7 +173,6 @@ type GraphicsXML struct {
 }
 
 type DiskXML struct {
-	libstar.XMLBase
 	XMLName xml.Name      `xml:"disk" json:"-"`
 	Type    string        `xml:"type,attr" json:"type"`
 	Device  string        `xml:"device,attr" json:"device"`
@@ -201,28 +183,24 @@ type DiskXML struct {
 }
 
 type DiskDriverXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"driver" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"`
 	Name    string   `xml:"name,attr" json:"name"`
 }
 
 type DiskSourceXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"source" json:"-"`
 	File    string   `xml:"file,attr,omitempty" json:"file"`
 	Device  string   `xml:"dev,attr,omitempty" json:"device"`
 }
 
 type DiskTargetXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"target" json:"-"`
 	Bus     string   `xml:"bus,attr,omitempty" json:"bus"`
 	Dev     string   `xml:"dev,attr,omitempty" json:"dev"`
 }
 
 type InterfaceXML struct {
-	libstar.XMLBase
 	XMLName     xml.Name             `xml:"interface" json:"-"`
 	Type        string               `xml:"type,attr" json:"type"`
 	Mac         InterfaceMacXML      `xml:"mac" json:"mac"`
@@ -235,13 +213,11 @@ type InterfaceXML struct {
 }
 
 type InterfaceMacXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"mac" json:"-"`
 	Address string   `xml:"address,attr,omitempty" json:"address"`
 }
 
 type InterfaceSourceXML struct {
-	libstar.XMLBase
 	XMLName xml.Name    `xml:"source" json:"-"`
 	Bridge  string      `xml:"bridge,attr,omitempty" json:"bridge"`
 	Network string      `xml:"network,attr,omitempty" json:"network"`
@@ -249,58 +225,49 @@ type InterfaceSourceXML struct {
 }
 
 type InterfaceModelXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"model" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"` //rtl8139, virtio, e1000
 }
 
 type InterfaceDriverXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"driver" json:"-"`
 	Name    string   `xml:"name,attr,omitempty" json:"name"` //vfio or vhost
 	Queues  string   `xml:"queues,attr,omitempty" json:"queues"`
 }
 
 type InterfaceTargetXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"target" json:"-"`
 	Bus     string   `xml:"bus,attr,omitempty" json:"bus"`
 	Dev     string   `xml:"dev,attr,omitempty" json:"dev"`
 }
 
 type InterfaceVirPortXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"virtualport" json:"-"`
 	Type    string   `xml:"type,attr,omitempty" json:"type"` //openvswitch
 }
 
 type InputDeviceXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"input" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"`
 	Bus     string   `xml:"bus,attr" json:"bus"`
 }
 
 type SoundDeviceXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"sound" json:"-"`
 	Model   string   `xml:"model,attr" json:"model"` // ac97, ich6
 }
 
 type VideoDeviceXML struct {
-	libstar.XMLBase
 	XMLName xml.Name      `xml:"video" json:"-"`
 	Model   VideoModelXML `xml:"model" json:"model"`
 }
 
 type VideoModelXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"model" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"` // qxl, cirrus
 }
 
 type ChannelDeviceXML struct {
-	libstar.XMLBase
 	XMLName xml.Name         `xml:"channel" json:"-"`
 	Type    string           `xml:"type,attr" json:"type"`
 	Source  ChannelSourceXML `xml:"source" json:"source"`
@@ -308,14 +275,12 @@ type ChannelDeviceXML struct {
 }
 
 type ChannelTargetXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"target" json:"-"`
 	Type    string   `xml:"type,attr" json:"type"`
 	Name    string   `xml:"name,attr" json:"name"`
 }
 
 type ChannelSourceXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"source" json:"-"`
 	Channel string   `xml:"channel,attr" json:"channel"`
 }

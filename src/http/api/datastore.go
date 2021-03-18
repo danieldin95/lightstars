@@ -20,7 +20,7 @@ func DataStore2XML(conf schema.DataStore) libvirts.Pool {
 	name := storage.PATH.GetStoreID(conf.Name)
 	path := storage.PATH.Unix(conf.Name)
 
-	xmlObj := libvirts.PoolXML{
+	xmlObj := &libvirts.PoolXML{
 		Type: conf.Type,
 		Name: name,
 		Target: libvirts.TargetXML{
@@ -44,7 +44,7 @@ func DataStore2XML(conf schema.DataStore) libvirts.Pool {
 		Type: conf.Type,
 		Name: name,
 		Path: path,
-		XML:  xmlObj.Encode(),
+		XML:  libstar.XML.Encode(xmlObj),
 	}
 }
 

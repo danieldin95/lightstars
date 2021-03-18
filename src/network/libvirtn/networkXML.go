@@ -6,7 +6,6 @@ import (
 )
 
 type NetworkXML struct {
-	libstar.XMLBase
 	XMLName     xml.Name        `xml:"network" json:"-"`
 	Name        string          `xml:"name" json:"name"`
 	UUID        string          `xml:"uuid" json:"uuid"`
@@ -22,7 +21,7 @@ func NewNetworkXMLFromNet(net *Network) *NetworkXML {
 		return nil
 	}
 	if desc, err := net.GetXMLDesc(0); err == nil {
-		if err := obj.Decode(desc); err != nil {
+		if err := libstar.XML.Decode(obj, desc); err != nil {
 			return obj
 		}
 	}
@@ -30,13 +29,11 @@ func NewNetworkXMLFromNet(net *Network) *NetworkXML {
 }
 
 type ForwardXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"forward" json:"-"`
 	Mode    string   `xml:"mode,attr" json:"mode"`
 }
 
 type IPv4XML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"ip" json:"-"`
 	Address string   `xml:"address,attr" json:"address"`
 	Prefix  string   `xml:"prefix,attr" json:"prefix"`
@@ -45,7 +42,6 @@ type IPv4XML struct {
 }
 
 type BridgeXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"bridge" json:"-"`
 	Name    string   `xml:"name,attr" json:"name"`
 	Stp     string   `xml:"stp,attr,omitempty" json:"stp,omitempty"`     // on,off
@@ -53,20 +49,17 @@ type BridgeXML struct {
 }
 
 type DHCPXML struct {
-	libstar.XMLBase
 	XMLName xml.Name       `xml:"dhcp" json:"-"`
 	Range   []DHCPRangeXML `xml:"range" json:"range"`
 }
 
 type DHCPRangeXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"range" json:"-"`
 	Start   string   `xml:"start,attr,omitempty" json:"start,omitempty"`
 	End     string   `xml:"end,attr,omitempty" json:"end,omitempty"`
 }
 
 type VirtualPortXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"virtualport" json:"-"`
 	Type    string   `xml:"type,attr,omitempty" json:"type,omitempty"` //openvswitch
 }

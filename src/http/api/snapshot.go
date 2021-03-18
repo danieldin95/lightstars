@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/src/compute/libvirtc"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"github.com/danieldin95/lightstar/src/schema"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -86,10 +87,10 @@ func (in Snapshot) Post(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dom.Free()
 
-	xml := libvirtc.SnapshotXML{
+	xml := &libvirtc.SnapshotXML{
 		Name: conf.Name,
 	}
-	if snx, err := dom.CreateSnapshotXML(xml.Encode(), 0); err != nil {
+	if snx, err := dom.CreateSnapshotXML(libstar.XML.Encode(xml), 0); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {

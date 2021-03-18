@@ -58,7 +58,7 @@ func (up Upload) Post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	pool := &libvirts.PoolXML{}
-	if err := pool.Decode(desc); err != nil {
+	if err := libstar.XML.Decode(pool, desc); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

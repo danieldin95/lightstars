@@ -5,7 +5,7 @@ import (
 	"github.com/danieldin95/lightstar/src/network/libvirtn"
 )
 
-func Interface2XML(source, model, seq, typ, drv, que string) libvirtc.InterfaceXML {
+func Interface2XML(source, model, seq, typ, drv, que string) *libvirtc.InterfaceXML {
 	if br, err := libvirtn.BRIDGE.Get(source); err == nil {
 		typ = br.Type
 	}
@@ -15,7 +15,7 @@ func Interface2XML(source, model, seq, typ, drv, que string) libvirtc.InterfaceX
 			que = "2"
 		}
 	}
-	xmlObj := libvirtc.InterfaceXML{
+	xmlObj := &libvirtc.InterfaceXML{
 		Type: "bridge",
 		Source: libvirtc.InterfaceSourceXML{
 			Bridge: source,

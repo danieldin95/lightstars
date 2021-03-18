@@ -2,6 +2,7 @@ package libvirts
 
 import (
 	"fmt"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"testing"
 )
 
@@ -25,8 +26,8 @@ func TestPoolXML(t *testing.T) {
   </target>
 </pool>
 `
-	polXml := PoolXML{}
-	polXml.Decode(xmlData)
+	polXml := &PoolXML{}
+	_ = libstar.XML.Decode(polXml, xmlData)
 
 	fmt.Println(polXml)
 }

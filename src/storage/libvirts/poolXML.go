@@ -2,11 +2,9 @@ package libvirts
 
 import (
 	"encoding/xml"
-	"github.com/danieldin95/lightstar/src/libstar"
 )
 
 type PoolXML struct {
-	libstar.XMLBase
 	XMLName    xml.Name      `xml:"pool" json:"-"`
 	Type       string        `xml:"type,attr" json:"type"`
 	Name       string        `xml:"name" json:"name"`
@@ -19,14 +17,12 @@ type PoolXML struct {
 }
 
 type AvailableXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"available" json:"-"`
 	Unit    string   `xml:"unit,attr" json:"unit"`
 	Value   string   `xml:",chardata" json:"value"`
 }
 
 type SourceXML struct {
-	libstar.XMLBase
 	XMLName xml.Name  `xml:"source" json:"-"`
 	Host    HostXML   `xml:"host" json:"host"`
 	Dir     DirXML    `xml:"dir" json:"dir"`
@@ -34,13 +30,11 @@ type SourceXML struct {
 }
 
 type HostXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"host" json:"-"`
 	Name    string   `xml:"name,attr" json:"name"`
 }
 
 type DirXML struct {
-	libstar.XMLBase
 	XMLName xml.Name `xml:"dir" json:"-"`
 	Path    string   `xml:"path,attr" json:"path"`
 }

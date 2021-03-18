@@ -73,14 +73,14 @@ func CreatePool(name, target string) (*Pool, error) {
 		Name: name,
 		Path: target,
 	}
-	xmlObj := PoolXML{
+	xmlObj := &PoolXML{
 		Type: pol.Type,
 		Name: pol.Name,
 		Target: TargetXML{
 			Path: pol.Path,
 		},
 	}
-	pol.XML = xmlObj.Encode()
+	pol.XML = libstar.XML.Encode(xmlObj)
 	return pol, pol.Create()
 }
 
@@ -182,7 +182,7 @@ func (pol *Pool) list(pool *libvirt.StoragePool) (map[string]VolumeInfo, error) 
 		}
 		info, err := vol.GetInfo()
 		if err != nil {
-			vol.Free()
+			_ = vol.Free()
 			continue
 		}
 		path, _ := vol.GetPath()

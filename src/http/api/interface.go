@@ -64,13 +64,13 @@ func (in Interface) Post(w http.ResponseWriter, r *http.Request) {
 	defer dom.Free()
 
 	xmlObj := Interface2XML(conf.Source, conf.Model, conf.Seq, conf.Type, "", "")
-	libstar.Debug("Interface.Post: %s", xmlObj.Encode())
+	libstar.Debug("Interface.Post: %s", libstar.XML.Encode(xmlObj))
 
 	flags := libvirtc.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
 		flags = libvirtc.DomainDeviceModifyConfig
 	}
-	if err := dom.AttachDeviceFlags(xmlObj.Encode(), flags); err != nil {
+	if err := dom.AttachDeviceFlags(libstar.XML.Encode(xmlObj), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -109,7 +109,7 @@ func (in Interface) Delete(w http.ResponseWriter, r *http.Request) {
 		if active, _ := dom.IsActive(); !active {
 			flags = libvirtc.DomainDeviceModifyConfig
 		}
-		if err := dom.DetachDeviceFlags(port.Encode(), flags); err != nil {
+		if err := dom.DetachDeviceFlags(libstar.XML.Encode(&port), flags); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

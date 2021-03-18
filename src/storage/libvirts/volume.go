@@ -1,6 +1,7 @@
 package libvirts
 
 import (
+	"github.com/danieldin95/lightstar/src/libstar"
 	"github.com/libvirt/libvirt-go"
 	"strconv"
 )
@@ -49,7 +50,7 @@ func (vol *Volume) Create() error {
 	if err != nil {
 		return err
 	}
-	volXml := VolumeXML{
+	volXml := &VolumeXML{
 		Name: vol.Name,
 		Capacity: CapacityXML{
 			Unit:  "bytes",
@@ -75,7 +76,7 @@ func (vol *Volume) Create() error {
 		}
 	}
 	defer pool.Free()
-	volume, err := pool.StorageVolCreateXML(volXml.Encode(), 0)
+	volume, err := pool.StorageVolCreateXML(libstar.XML.Encode(volXml), 0)
 	if err != nil {
 		return err
 	}
@@ -109,7 +110,7 @@ func (vol *Volume) GetXMLObj() (*VolumeXML, error) {
 		return nil, err
 	}
 	xmlObj := &VolumeXML{}
-	return xmlObj, xmlObj.Decode(xmlData)
+	return xmlObj, libstar.XML.Decode(xmlObj, xmlData)
 }
 
 func (vol *Volume) Remove() error {

@@ -321,7 +321,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 				Type: "rtl8139",
 			}
 		}
-		dom.Devices.Interfaces = append(dom.Devices.Interfaces, obj)
+		dom.Devices.Interfaces = append(dom.Devices.Interfaces, *obj)
 	}
 	// inputs
 	dom.Devices.Inputs[0] = libvirtc.InputDeviceXML{
@@ -478,7 +478,7 @@ func (ins Instance) Post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	libstar.Info("Instance.Post %s: %s", xmlObj.Name, xmlObj.UUID)
-	xmlData := xmlObj.Encode()
+	xmlData := libstar.XML.Encode(xmlObj)
 	if xmlData == "" {
 		// If name already existed, will be clear.
 		//RemovePool(conf.Name)

@@ -2,6 +2,7 @@ package libvirts
 
 import (
 	"fmt"
+	"github.com/danieldin95/lightstar/src/libstar"
 	"testing"
 )
 
@@ -31,8 +32,8 @@ func TestVolumeXML(t *testing.T) {
   </target>
 </volume>
 `
-	volXml := VolumeXML{}
-	volXml.Decode(xmlData)
+	volXml := &VolumeXML{}
+	_ = libstar.XML.Decode(volXml, xmlData)
 
 	fmt.Println(volXml)
 }
