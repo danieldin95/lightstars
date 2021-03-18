@@ -12,7 +12,7 @@ export class DataStoreTable extends Widget {
     }
 
     loading() {
-        return `<tr><td colspan="8" style="text-align: center">Loading...</td></tr>`;
+        return `<tr><td colspan="7" class="text-center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -31,6 +31,11 @@ export class DataStoreTable extends Widget {
         let query = Location.query();
 
         return this.compile(`
+        {{if (items.length === 0)}}
+            <tr>
+                <td colspan="7" class="text-center">{{'no data to display' | i}}</td>
+            </tr>
+        {{/if}}
         {{each items v i}}
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.uuid}}"></td>

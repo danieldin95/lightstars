@@ -54,6 +54,11 @@ a:hover, a:focus {
     border-radius: .5rem;
 }
 
+.navbar-dark .navbar-nav .show > .nav-link,
+.navbar-dark .navbar-nav .active > .nav-link {
+    text-decoration: underline;
+}
+
 .context {
     width: 100%;
     height: 100%;

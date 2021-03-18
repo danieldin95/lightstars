@@ -14,7 +14,7 @@ export default class VolumeTable extends Widget {
     }
 
     loading() {
-        return `<tr><td colspan="5" style="text-align: center">Loading...</td></tr>`;
+        return `<tr><td colspan="5" class="text-center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -45,6 +45,11 @@ export default class VolumeTable extends Widget {
         let prefix = Api.path('/api/upload/'+this.pool+'/volume');
 
         return this.compile(`
+            {{if (items.length === 0)}}
+                <tr>
+                    <td colspan="5" class="text-center">{{'no data to display' | i}}</td>
+                </tr>
+            {{/if}}
             {{each items v i}}
                 <tr class="sortable">
                     <td><input id="on-one" type="checkbox" data="{{v.name}}"></td>

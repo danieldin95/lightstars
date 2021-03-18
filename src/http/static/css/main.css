@@ -245,7 +245,7 @@ select {
 }
 
 .card-tab a {
-    color: #428bca;
+    color: inherit;
     padding: 0 1rem;
 }
 

@@ -40,7 +40,7 @@
 }
 
 .modal-body .nav-pills .nav-link.active {
-    color: #1e7e34;
+    color: inherit;
     background-color: inherit;
     text-decoration: underline;
 }
