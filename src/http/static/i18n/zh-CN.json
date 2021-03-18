@@ -149,5 +149,6 @@
 	"create linux bridge network": "新建一个网桥网络",
 	"nfs based": "基于NFS",
 	"iscsi based": "基于iSCSI",
-	"existing ovs bridge": "存在的OVS网桥名称"
+	"existing ovs bridge": "存在的OVS网桥名称",
+	"if you confirm to remove it, all data of these disks will be clear.": "如果你确认删除，这些磁盘的所有数据将被删除。"
 }

@@ -149,5 +149,6 @@
 	"create linux bridge network": "Create linux bridge network",
 	"nfs based": "NFS based",
 	"iscsi": "iSCSI based",
-	"existing ovs bridge": "An existing OVS bridge"
+	"existing ovs bridge": "An existing OVS bridge",
+	"if you confirm to remove it, all data of these disks will be clear.": "If you confirm to remove it, all data of these disks will be clear."
 }
