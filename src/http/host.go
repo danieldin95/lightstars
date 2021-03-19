@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"sort"
+	"strings"
 )
 
 type Host struct {
@@ -21,39 +22,71 @@ func (h Host) Router(router *mux.Router) {
 	router.PathPrefix("/host/{name}/ext/").HandlerFunc(h.Handle).Methods("GET")
 }
 
-func (h Host) Filter(w http.ResponseWriter, r *http.Response, data interface{}) bool {
+func (h Host) filterInstance(r *http.Response, w http.ResponseWriter, user *schema.User) {
+	all := schema.ListInstance{
+		Items: make([]schema.Instance, 0, 32),
+	}
+	if err := libstar.GetJSON(r.Body, &all); err != nil {
+		libstar.Warn("Host.Filter %s", r.Request.URL)
+		return
+	}
+	list := schema.ListInstance{
+		Items: make([]schema.Instance, 0, 32),
+	}
+	obj := api.Instance{}
+	for _, item := range all.Items {
+		if obj.HasPermission(user, item.Name) {
+			list.Items = append(list.Items, item)
+		}
+	}
+	sort.SliceStable(list.Items, func(i, j int) bool {
+		return list.Items[i].Name < list.Items[j].Name
+	})
+	list.Metadata.Size = len(list.Items)
+	list.Metadata.Total = len(list.Items)
+	api.ResponseJson(w, list)
+}
+
+func (h Host) filterPort(r *http.Response, w http.ResponseWriter, user *schema.User) {
+	all := schema.ListInterface{
+		Items: make([]schema.Interface, 0, 32),
+	}
+	if err := libstar.GetJSON(r.Body, &all); err != nil {
+		libstar.Warn("Host.Filter %s", r.Request.URL)
+		return
+	}
+	list := schema.ListInterface{
+		Items: make([]schema.Interface, 0, 32),
+	}
+	obj := api.Instance{}
+	for _, item := range all.Items {
+		if obj.HasPermission(user, item.Domain.Name) {
+			list.Items = append(list.Items, item)
+		}
+	}
+	list.Metadata.Size = len(list.Items)
+	list.Metadata.Total = len(list.Items)
+	api.ResponseJson(w, list)
+}
+
+func (h Host) Filter(r *http.Response, w http.ResponseWriter, data interface{}) bool {
 	req := r.Request
 	if data == nil || req == nil || req.Method != "GET" {
 		return false
 	}
 	user := data.(*schema.User)
 	libstar.Info("Host.Filter %s %s %s", user.Name, req.Method, req.URL.Path)
-	if req.URL.Path == "/api/instance" {
-		all := schema.ListInstance{
-			Items: make([]schema.Instance, 0, 32),
-		}
-		if err := libstar.GetJSON(r.Body, &all); err != nil {
-			libstar.Warn("Host.Filter %s %s", req.Method, req.URL.Path)
-			return false
-		}
-		list := schema.ListInstance{
-			Items: make([]schema.Instance, 0, 32),
-		}
-		obj := api.Instance{}
-		for _, item := range all.Items {
-			if obj.HasPermission(user, item.Name) {
-				list.Items = append(list.Items, item)
-			}
-		}
-		sort.SliceStable(list.Items, func(i, j int) bool {
-			return list.Items[i].Name < list.Items[j].Name
-		})
-		list.Metadata.Size = len(list.Items)
-		list.Metadata.Total = len(list.Items)
-		api.ResponseJson(w, list)
-		return true
+
+	u := strings.Split(req.URL.Path, "/")
+	if len(u) == 3 && u[1] == "api" && u[2] == "instance" {
+		h.filterInstance(r, w, user)
 	}
-	return false
+	if len(u) == 5 && u[1] == "api" && u[2] == "network" && u[4] == "interface" {
+		h.filterPort(r, w, user)
+	} else {
+		return false
+	}
+	return true
 }
 
 func (h Host) Handle(w http.ResponseWriter, r *http.Request) {

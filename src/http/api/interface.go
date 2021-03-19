@@ -40,6 +40,11 @@ func (in Interface) List(w http.ResponseWriter, r *http.Request) {
 			list.Items = append(list.Items, port)
 		}
 	}
+	sort.SliceStable(list.Items, func(i, j int) bool {
+		return list.Items[i].Address < list.Items[j].Address
+	})
+	list.Metadata.Size = len(list.Items)
+	list.Metadata.Total = len(list.Items)
 	ResponseJson(w, list)
 }
 
@@ -61,7 +66,7 @@ func (in Interface) Get(w http.ResponseWriter, r *http.Request) {
 			list.Items = append(list.Items, inf)
 		}
 		sort.SliceStable(list.Items, func(i, j int) bool {
-			return list.Items[i].Device < list.Items[j].Device
+			return list.Items[i].HostDev < list.Items[j].HostDev
 		})
 		list.Metadata.Size = len(list.Items)
 		list.Metadata.Total = len(list.Items)

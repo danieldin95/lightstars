@@ -39,7 +39,7 @@ func (pri *Proxy) GetPath(req *http.Request) string {
 type ProxyUrl struct {
 	Proxy
 	Transport *http.Transport
-	Filter    func(http.ResponseWriter, *http.Response, interface{}) bool
+	Filter    func(*http.Response, http.ResponseWriter, interface{}) bool
 	Data      interface{}
 }
 
@@ -67,10 +67,10 @@ func (pri *ProxyUrl) ServeHttp(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(status)
 	filtered := false
 	if pri.Filter != nil {
-		filtered = pri.Filter(w, p, pri.Data)
+		filtered = pri.Filter(p, w, pri.Data)
 	}
 	if !filtered {
-		io.Copy(w, p.Body)
+		_, _ = io.Copy(w, p.Body)
 	}
 }
 
