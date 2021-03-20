@@ -43,10 +43,15 @@ export class VolumeCtl extends Ctl {
             console.log("todo");
         });
         $(this.child('#remove')).on("click", (e) => {
-            new VolumeApi({
+            let data = {
                 pool: this.table.pool,
                 uuids: this.uuids.store,
-            }).delete();
+            };
+            if (this.props.onRemove) {
+                this.props.onRemove(data);
+            } else {
+                new VolumeApi(data).delete();
+            }
         });
         $(this.child('#refresh')).on("click", (e) => {
             this.refresh();

@@ -1,8 +1,10 @@
 import {Container} from "./container.js"
-import {Collapse} from "../collapse.js";
-import {DataStoreApi} from "../../api/datastores.js";
-import {PoolCtl} from "../../ctl/pool.js";
-import {Api} from "../../api/api.js";
+import {Collapse} from "../widget/collapse.js";
+import {DataStoreApi} from "../api/datastores.js";
+import {PoolCtl} from "../ctl/pool.js";
+import {Api} from "../api/api.js";
+import {VolumeRemove} from "../widget/volume/remove.js";
+import {VolumeApi} from "../api/volume.js";
 
 
 export class Pool extends Container {
@@ -46,6 +48,14 @@ export class Pool extends Container {
             volumes: {
                 id: this.id("#volumes"),
                 upload: "#uploadPoolModal",
+                onRemove: (objs) => {
+                    new VolumeRemove({
+                        id: this.id('#removeVolModal'),
+                        name: objs.uuids,
+                    }).onsubmit((e) => {
+                        new VolumeApi(objs).delete();
+                    });
+                }
             },
             upload: '#uploadStoreModal',
         });
@@ -127,7 +137,8 @@ export class Pool extends Container {
                         </button>
                         <button id="upload" type="button" class="btn btn-outline-dark btn-sm" 
                                 data-toggle="modal" data-target="#uploadPoolModal">{{'upload' | i}}</button>
-                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                        <button id="remove" type="button" class="btn btn-outline-dark btn-sm"
+                            data-toggle="modal" data-target="#removeVolModal">{{'remove' | i}}</button>
                     </div>
                     <div class="col-auto">
                         <button id="datastore" class="btn btn-link btn-sm p-0" data="{{uuid}}">{{name}}:/</button>
@@ -156,6 +167,7 @@ export class Pool extends Container {
             </div>
         </div>
         <div id="modals">
+            <div id="removeVolModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="uploadStoreModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="uploadPoolModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>

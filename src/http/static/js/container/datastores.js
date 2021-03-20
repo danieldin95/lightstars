@@ -1,14 +1,13 @@
 import {Container} from "./container.js"
-import {Network} from "./network.js";
-import {Utils} from "../../lib/utils.js";
-import {NetworksCtl} from "../../ctl/networks.js";
-import {NATCreate} from "../network/create.js";
-import {OVSCreate} from "../network/ovs/create.js";
-import {BridgeCreate} from "../network/bridge/create.js";
-import {IsolatedCreate} from "../network/isolated/create.js";
-import {I18N} from "../../lib/i18n.js";
+import {Utils} from "../lib/utils.js";
+import {DataStoresCtl} from "../ctl/datastores.js";
+import {DirCreate} from "../widget/datastore/create.js";
+import {NFSCreate} from "../widget/datastore/nfs/create.js";
+import {iSCSICreate} from "../widget/datastore/iscsi/create.js";
+import {Pool} from "./pool.js";
+import {I18N} from "../lib/i18n.js";
 
-export class Networks extends Container {
+export class DataStores extends Container {
     // {
     //    parent: "#container",
     // }
@@ -21,54 +20,50 @@ export class Networks extends Container {
     }
 
     loading() {
-        this.title(I18N.i('network'));
-        // loading network.
-        let nCtl = new NetworksCtl({
-            id: this.id('#networks'),
+        this.title(I18N.i('datastore'));
+        // loading data storage.
+        let sCtl = new DataStoresCtl({
+            id: this.id('#datastores'),
             onthis: (e) => {
-                console.log("network.loading", e);
-                new Network({
+                new Pool({
                     parent: this.parent,
                     uuid: e.uuid,
                 });
             },
+            upload: '#uploadFileModal',
         });
-        new NATCreate({id: '#createNatModal'})
+        new DirCreate({id: '#createDirModal'})
             .onsubmit((e) => {
-                nCtl.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
-        new BridgeCreate({id: '#createBridgeModal'})
+        new NFSCreate({id: '#createNfsModal'})
             .onsubmit((e) => {
-                nCtl.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
-        new IsolatedCreate({id: '#createIsolatedModal'})
+        new iSCSICreate({id: '#createIscsiModal'})
             .onsubmit((e) => {
-                nCtl.create(Utils.toJSON(e.form));
-            });
-        new OVSCreate({id: '#createOvsModal'})
-            .onsubmit((e) => {
-                nCtl.create(Utils.toJSON(e.form));
+                sCtl.create(Utils.toJSON(e.form));
             });
     }
 
     template(v) {
         return this.compile(`
         <div id="index">
-        <!-- Network -->
-        <div id="networks" class="card card-main">
+        <!-- DataStore -->
+        <div id="datastores" class="card card-main">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm" type="button">
-                    {{'virtual networks' | i}}
+                    {{'local datastores' | i}}
                 </button>
             </div>
             <div class="card-body">
-                <!-- Network buttons -->
+                <!-- DataStore buttons -->
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
                             <button id="create" type="button" class="btn btn-outline-success btn-sm"
-                                    data-toggle="modal" data-target="#createNatModal">
-                                {{'create network' | i}}
+                                    data-toggle="modal" data-target="#createDirModal">
+                                {{'new a datastore' | i}}
                             </button>
                             <button id="creates" type="button"
                                     class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
@@ -76,23 +71,27 @@ export class Networks extends Container {
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div id="create-more" class="dropdown-menu" aria-labelledby="creates">
-                                <a id="create-bridge" class="dropdown-item" data-toggle="modal" data-target="#createBridgeModal">
-                                    {{'linux bridge based' | i}}
-                                </a>                            
-                                <a id="create-ovs" class="dropdown-item" data-toggle="modal" data-target="#createOvsModal">
-                                    {{'open vswitch based' | i}}
+                                <a id="create-nfs" class="dropdown-item" data-toggle="modal" data-target="#createNfsModal">
+                                    {{'nfs based' | i}}
+                                </a>
+                                <a id="create-iscsi" class="dropdown-item" data-toggle="modal" data-target="#createIscsiModal">
+                                    {{'iscsi based' | i}}
                                 </a>
                             </div>
                         </div>
+                        <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
+                                data-toggle="modal" data-target="#uploadFileModal">
+                            {{'upload' | i}}
+                        </button>
                         <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
+                        <button id="delete" type="button" class="btn btn-outline-dark btn-sm">{{'delete' | i}}</button>
                     </div>
                     <div class="col-auto">
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
                 </div>
 
-                <!-- Network display -->
+                <!-- DataStore display -->
                 <div class="card-body-tbl">
                     <table class="table table-striped text-center">
                         <thead>
@@ -100,12 +99,14 @@ export class Networks extends Container {
                             <th><input id="on-all" type="checkbox"></th>
                             <th>{{'id' | i}}</th>
                             <th>{{'name' | i}}</th>
-                            <th>{{'bridge' | i}}</th>
+                            <th>{{'source' | i}}</th>
+                            <th>{{'capacity' | i}}</th>
+                            <th>{{'allocation' | i}}</th>
                             <th>{{'state' | i}}</th>
                         </tr>
                         </thead>
                         <tbody id="display-table">
-                        <!-- Loading -->
+                        <!-- Loading... -->
                         </tbody>
                     </table>
                 </div>
@@ -113,11 +114,12 @@ export class Networks extends Container {
         </div>
         <!-- Modal -->
         <div id="modals">
-            <!-- Create network modal -->
-            <div id="createNatModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createBridgeModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createIsolatedModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createOvsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>          
+            <!-- Create datastore modal -->
+            <div id="createDirModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!-- Upload file modal -->
+            <div id="uploadFileModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="createNfsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="createIscsiModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>    
         </div>
         </div>`)
     }

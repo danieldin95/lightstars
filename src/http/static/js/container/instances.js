@@ -1,10 +1,10 @@
 import {Container} from "./container.js"
 import {Guest} from "./guest.js"
-import {Utils} from "../../lib/utils.js";
-import {InstanceCtl} from '../../ctl/instance.js';
-import {InstanceCreate} from '../instance/create.js';
-import {I18N} from "../../lib/i18n.js";
-import {InstanceApi} from "../../api/instance.js";
+import {Utils} from "../lib/utils.js";
+import {InstanceCtl} from '../ctl/instance.js';
+import {InstanceCreate} from '../widget/instance/create.js';
+import {I18N} from "../lib/i18n.js";
+import {InstanceApi} from "../api/instance.js";
 
 export class Instances extends Container {
     // {

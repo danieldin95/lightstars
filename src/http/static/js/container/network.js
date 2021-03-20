@@ -1,8 +1,8 @@
 import {Container} from "./container.js"
-import {Api} from "../../api/api.js";
-import {NetworkApi} from "../../api/network.js";
-import {Collapse} from "../collapse.js";
-import {NetworkCtl} from "../../ctl/network.js";
+import {Api} from "../api/api.js";
+import {NetworkApi} from "../api/network.js";
+import {Collapse} from "../widget/collapse.js";
+import {NetworkCtl} from "../ctl/network.js";
 
 
 export class Network extends Container {

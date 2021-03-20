@@ -1,19 +1,19 @@
 import {Container} from "./container.js"
-import {Utils} from "../../lib/utils.js";
-import {GuestCtl} from '../../ctl/guest.js';
-import {Api} from "../../api/api.js";
-import {InstanceApi} from "../../api/instance.js";
+import {Utils} from "../lib/utils.js";
+import {GuestCtl} from '../ctl/guest.js';
+import {Api} from "../api/api.js";
+import {InstanceApi} from "../api/instance.js";
 
-import {DiskCreate} from '../disk/create.js';
-import {IsoCreate} from "../disk/iso/create.js";
-import {InterfaceCreate} from '../interface/create.js';
-import {InstanceSet} from "../instance/setting.js";
-import {InstanceRemove} from "../instance/remove.js";
-import {GraphicsCreate} from "../graphics/create.js";
-import {TitleSet} from "../instance/title.js";
-import {SnapshotCreate} from "../snapshot/create.js";
-import {DiskRemove} from "../disk/remove.js";
-import {DiskApi} from "../../api/disk.js";
+import {DiskCreate} from '../widget/disk/create.js';
+import {IsoCreate} from "../widget/disk/iso/create.js";
+import {InterfaceCreate} from '../widget/interface/create.js';
+import {InstanceSet} from "../widget/instance/setting.js";
+import {InstanceRemove} from "../widget/instance/remove.js";
+import {GraphicsCreate} from "../widget/graphics/create.js";
+import {TitleSet} from "../widget/instance/title.js";
+import {SnapshotCreate} from "../widget/snapshot/create.js";
+import {DiskRemove} from "../widget/disk/remove.js";
+import {DiskApi} from "../api/disk.js";
 
 export class Guest extends Container {
     // {

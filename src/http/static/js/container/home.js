@@ -1,9 +1,9 @@
 import {Container} from "./container.js"
-import {Overview} from "../index/overview.js";
-import {I18N} from "../../lib/i18n.js";
-import {InstanceCreate} from "../instance/create.js";
-import {Utils} from "../../lib/utils.js";
-import {InstanceApi} from "../../api/instance.js";
+import {Overview} from "../widget/index/overview.js";
+import {I18N} from "../lib/i18n.js";
+import {InstanceCreate} from "../widget/instance/create.js";
+import {Utils} from "../lib/utils.js";
+import {InstanceApi} from "../api/instance.js";
 
 export class Home extends Container {
     // {

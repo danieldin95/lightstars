@@ -2,7 +2,7 @@ import {Api} from "./api/api.js";
 import {Location} from "./lib/location.js";
 import {I18N} from "./lib/i18n.js";
 import {Navigation} from "./widget/navigation.js";
-import {Container} from "./widget/container/container.js";
+import {Container} from "./container/container.js";
 import {Routes} from "./routes.js";
 import {Template} from "./lib/template.js";
 

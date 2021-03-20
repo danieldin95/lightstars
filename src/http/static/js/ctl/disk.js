@@ -19,7 +19,6 @@ export class DiskCtl extends Ctl {
         super(props);
         this.name = props.name;
         this.inst = props.uuid;
-        this.onRemove = props.onRemove;
 
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
@@ -31,8 +30,8 @@ export class DiskCtl extends Ctl {
         // register button's click.
         $(this.child('#remove')).on("click", (e) => {
             let data = {inst: this.inst, uuids: this.uuids.store};
-            if (this.onRemove) {
-                this.onRemove(data);
+            if (this.props.onRemove) {
+                this.props.onRemove(data);
             } else {
                 new DiskApi(data).delete();
             }

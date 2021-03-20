@@ -1,4 +1,4 @@
-import {Location} from "../../lib/location.js";
+import {Location} from "../lib/location.js";
 
 
 export class Container {
