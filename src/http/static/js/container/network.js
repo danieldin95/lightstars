@@ -4,7 +4,6 @@ import {NetworkApi} from "../api/network.js";
 import {Collapse} from "../widget/collapse.js";
 import {NetworkCtl} from "../ctl/network.js";
 
-
 export class Network extends Container {
     // {
     //    parent: "#container",
@@ -136,7 +135,7 @@ export class Network extends Container {
                             <div class="col-auto mr-auto">
                                 <button id="create" type="button" class="btn btn-outline-success btn-sm"
                                         data-toggle="modal" data-target="#PortCreateModal">
-                                    {{'create' | i}}
+                                    {{'create port' | i}}
                                 </button>
                                 <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
                                 <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>

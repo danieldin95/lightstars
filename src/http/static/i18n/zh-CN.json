@@ -42,7 +42,7 @@
 	"upload": "上传",
 	"edit": "编辑",
 	"delete": "删除",
-	"source": "源",
+	"source": "来源",
 	"capacity": "容量",
 	"available": "可用",
 	"create network": "新建网络",
@@ -142,7 +142,7 @@
 	"snapshot": "快照",
 	"instance snapshot": "实例快照",
 	"create snapshot": "新建快照",
-	"revert": "回滚",
+	"revert": "还原",
 	"open vswitch based": "基于Open vSwitch",
 	"linux bridge based": "基于Linux bridge",
 	"create open vswitch network": "新建一个OVS网络",
@@ -154,5 +154,5 @@
 	"no data to display": "没有数据可显示",
 	"virtual ports": "虚拟网口",
 	"instance": "实例",
-	"create": "新建"
+	"create port": "新建网口"
 }
