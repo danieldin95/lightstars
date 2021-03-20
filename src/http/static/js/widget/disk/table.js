@@ -11,7 +11,6 @@ export class DiskTable extends Widget {
         super(props);
         this.inst = props.inst;
         this.name = props.name;
-        console.log("DiskTable", $(this.id))
     }
 
     loading() {

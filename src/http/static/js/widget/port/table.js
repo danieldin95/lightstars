@@ -42,7 +42,7 @@ export class PortTable extends Widget {
         {{/if}}
         {{each items v i}}
             <tr>
-                <td><input id="on-one" type="checkbox" data="{{v.address}}"></td>
+                <td><input id="on-one" type="checkbox" data="{{v.domain.uuid}},{{v.address}}"></td>
                 <td>{{i+1}}</td>
                 <td><a id="on-this" class="text-decoration-none" data="{{v.domain.uuid}}" 
                         href="#/guest/{{v.domain.uuid}}?${query}">{{v.domain.name}}</a>

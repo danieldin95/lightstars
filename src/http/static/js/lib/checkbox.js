@@ -28,7 +28,6 @@ export class CheckBox {
                 } else {
                     storage = storage.filter((v) => v !== data);
                 }
-                console.log(storage);
                 your.func({store: storage});
             });
         });
@@ -39,7 +38,6 @@ export class CheckBox {
             storage = []; // empty
             if ($(this).prop('checked')) {
                 $(your.one).each(function (i, e) {
-                    //console.log($(element));
                     storage.push($(e).attr('data'));
                     $(e).prop('checked', true);
                 });
@@ -48,7 +46,6 @@ export class CheckBox {
                     $(e).prop('checked', false);
                 });
             }
-            console.log(storage);
             your.func({store: storage});
         });
     }

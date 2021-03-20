@@ -10,7 +10,6 @@ export class Container {
         this.props = props;
         this.parent  = props.parent ? props.parent : '';
         this.current = props.current ? props.current : '';
-        console.log('Container', props, [this.parent, this.current].join(" "));
         this._alias = Container._alias;
     }
 

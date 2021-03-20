@@ -21,10 +21,9 @@ export class Instances extends Container {
     loading() {
         this.title(I18N.i('instances'));
 
-        let iCtl = new InstanceCtl({
+        new InstanceCtl({
             id: this.id('#instances'),
             onthis: (e) => {
-                console.log("Guest.loading", e);
                 new Guest({
                     parent: this.parent,
                     uuid: e.uuid,

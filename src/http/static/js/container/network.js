@@ -15,7 +15,6 @@ export class Network extends Container {
         this.default = props.default || 'lease';
         this.uuid = props.uuid;
         this.current = "#network";
-        console.log('Instance', props);
 
         this.render();
     }

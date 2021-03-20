@@ -187,7 +187,6 @@ export class InstanceApi extends Api {
                 Modal: data.interface0Model || 'virtio',
             },
         ];
-        console.log('InstanceApi.create', schema, data);
         $.POST(this.url(), JSON.stringify(schema), (resp, status) => {
             //$(this.tasks).append(Alert.success(`create ${resp.name} success`));
         }).fail((e) => {

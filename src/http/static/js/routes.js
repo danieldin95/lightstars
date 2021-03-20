@@ -87,7 +87,6 @@ export class Routes {
         this.render();
         window.onhashchange = (e) => {
             let host = Location.query('node');
-            console.log("onhashchange", e, 'and ', host);
             Api.host(host);
             if (this.props.onchange) {
                 this.props.onchange(e);

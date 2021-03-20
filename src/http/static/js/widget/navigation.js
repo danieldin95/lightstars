@@ -38,7 +38,7 @@ export class Navigation extends Widget {
 
         let forceActive = (cur) => {
             this.active = cur;
-            console.log("foreActive", cur);
+            console.log("Navigation.force", cur);
             this.view.find('li').each((i, e) => {
                 let href = $(e).find('a').attr("href");
                 if (cur && cur === this.page(href)) {
@@ -101,9 +101,7 @@ export class Navigation extends Widget {
                 if (v['url'] === '') {
                     value = '';
                 }
-                let elem = $(`
-                   <a class="dropdown-item" data="${value}">${name}</a>
-                `);
+                let elem = $(`<a class="dropdown-item" data="${value}">${name}</a>`);
                 if (i === 0) {
                     elem = $(`<a class="dropdown-item" data="${value}">${name}</a>`);
                 }

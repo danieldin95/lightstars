@@ -16,7 +16,6 @@ export class Collapse {
         let force = props.force !== undefined ? props.force : false;
         let update = props.update !== undefined ? props.update : true;
         let page = this.default;
-        console.log('Collapse.update', update);
         if (update) {
             if (force) {
                 Location.set(this.default);

@@ -29,7 +29,6 @@ export class FormWizard {
         $(this.default).addClass('active');
         $(this.target(this.default)).removeClass('d-none');
 
-        console.log(this.active, this.pages);
         // register prev and next.
         $(this.prev).on('click', (event) => {
             let pos = this.pages.indexOf(this.active);

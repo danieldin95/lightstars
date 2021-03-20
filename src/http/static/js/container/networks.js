@@ -26,7 +26,6 @@ export class Networks extends Container {
         let nCtl = new NetworksCtl({
             id: this.id('#networks'),
             onthis: (e) => {
-                console.log("network.loading", e);
                 new Network({
                     parent: this.parent,
                     uuid: e.uuid,

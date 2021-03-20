@@ -5,7 +5,6 @@ export class Controller {
     constructor(props) {
         this.id = props.id;
         this.props = props;
-        console.log("props", this.props);
     }
 
     child(id) {
