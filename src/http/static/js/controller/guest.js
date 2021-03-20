@@ -1,4 +1,4 @@
-import {Ctl} from "./ctl.js";
+import {Controller} from "./controller.js";
 import {InstanceApi} from "../api/instance.js";
 import {DiskCtl} from "./disk.js";
 import {InterfaceCtl} from "./interface.js"
@@ -6,7 +6,7 @@ import {GraphicsCtl} from "./graphics.js";
 import {SnapshotCtl} from "./snapshot.js";
 
 
-class HeaderCtl extends Ctl {
+class HeaderCtl extends Controller {
     // {
     //   id: "#xx"
     // }
@@ -61,7 +61,7 @@ class HeaderCtl extends Ctl {
     }
 }
 
-export class GuestCtl extends Ctl {
+export class GuestCtl extends Controller {
     // {
     //   id: '#instance'
     //   header: {

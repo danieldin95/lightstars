@@ -1,4 +1,4 @@
-import {Ctl} from "./ctl.js";
+import {Controller} from "./controller.js";
 import {GraphicsApi} from "../api/graphics.js";
 import {GraphicsTable} from "../widget/graphics/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
@@ -8,7 +8,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class GraphicsCtl extends Ctl {
+export class GraphicsCtl extends Controller {
     // {
     //   id: '#instance #graphics',
     //   uuid: uuid of instance,

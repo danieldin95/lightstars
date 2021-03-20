@@ -1,6 +1,6 @@
 import {Container} from "./container.js"
 import {Utils} from "../lib/utils.js";
-import {DataStoresCtl} from "../ctl/datastores.js";
+import {DataStoresCtl} from "../controller/datastores.js";
 import {DirCreate} from "../widget/datastore/create.js";
 import {NFSCreate} from "../widget/datastore/nfs/create.js";
 import {iSCSICreate} from "../widget/datastore/iscsi/create.js";

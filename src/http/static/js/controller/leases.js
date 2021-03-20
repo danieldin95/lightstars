@@ -1,4 +1,4 @@
-import {Ctl} from "./ctl.js";
+import {Controller} from "./controller.js";
 import {LeaseTable} from "../widget/lease/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
 
@@ -7,7 +7,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class LeasesCtl extends Ctl {
+export class LeasesCtl extends Controller {
     // {
     //   id: '#network #leases',
     //   uuid: uuid of network,

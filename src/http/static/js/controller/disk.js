@@ -1,4 +1,4 @@
-import {Ctl} from "./ctl.js";
+import {Controller} from "./controller.js";
 import {DiskApi} from "../api/disk.js";
 import {DiskTable} from "../widget/disk/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
@@ -8,7 +8,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class DiskCtl extends Ctl {
+export class DiskCtl extends Controller {
     // {
     //   id: '#instance #disk',
     //   uuid: uuid of instance,

@@ -1,8 +1,8 @@
-import {Ctl} from "./ctl.js"
+import {Controller} from "./controller.js"
 import {LeasesCtl} from "./leases.js";
 import {PortCtl} from "./port.js";
 
-export class NetworkCtl extends Ctl {
+export class NetworkCtl extends Controller {
     // {
     //   id: '#network'
     //   header: {

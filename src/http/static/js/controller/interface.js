@@ -1,4 +1,4 @@
-import {Ctl} from './ctl.js'
+import {Controller} from './controller.js'
 import {InterfaceApi} from "../api/interface.js";
 import {InterfaceTable} from "../widget/interface/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
@@ -8,7 +8,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class InterfaceCtl extends Ctl {
+export class InterfaceCtl extends Controller {
     // {
     //   id: '#instance #interface',
     //   uuid: uuid of instance,

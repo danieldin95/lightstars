@@ -1,4 +1,4 @@
-export class Ctl {
+export class Controller {
     // {
     //    id: "#xx"
     // }

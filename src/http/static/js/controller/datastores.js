@@ -1,5 +1,4 @@
-
-import {Ctl} from "./ctl.js"
+import {Controller} from './controller.js'
 import {DataStoreApi} from "../api/datastores.js";
 import {DataStoreTable} from "../widget/datastore/table.js";
 import {FileUpload} from "../widget/common/upload.js";
@@ -19,7 +18,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class DataStoresCtl extends Ctl {
+export class DataStoresCtl extends Controller {
     // {
     //   id: "#datastores"
     // }

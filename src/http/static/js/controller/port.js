@@ -1,4 +1,4 @@
-import {Ctl} from "./ctl.js";
+import {Controller} from "./controller.js";
 import {PortTable} from "../widget/port/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
 
@@ -7,7 +7,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class PortCtl extends Ctl {
+export class PortCtl extends Controller {
     // {
     //   id: '#network #port',
     //   bridge: bridge of network,

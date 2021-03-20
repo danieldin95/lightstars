@@ -1,4 +1,4 @@
-import {Ctl} from "./ctl.js";
+import {Controller} from "./controller.js";
 import {SnapshotApi} from "../api/snapshot.js";
 import {SnapshotTable} from "../widget/snapshot/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
@@ -16,7 +16,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class SnapshotCtl extends Ctl {
+export class SnapshotCtl extends Controller {
     // {
     //   id: '#instance #snapshot',
     //   uuid: uuid of instance,

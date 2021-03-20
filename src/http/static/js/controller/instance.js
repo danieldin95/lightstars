@@ -1,4 +1,4 @@
-import {Ctl} from './ctl.js';
+import {Controller} from './controller.js';
 import {InstanceApi} from "../api/instance.js";
 import {InstanceTable} from "../widget/instance/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
@@ -23,7 +23,7 @@ class CheckboxCtl extends CheckBox {
 }
 
 
-export class InstanceCtl extends Ctl {
+export class InstanceCtl extends Controller {
     // {
     //   id: '#instances'
     //   onthis: function (e) {},

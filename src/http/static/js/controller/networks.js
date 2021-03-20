@@ -1,4 +1,4 @@
-import {Ctl} from "./ctl.js";
+import {Controller} from "./controller.js";
 import {NetworkApi} from "../api/network.js";
 import {NetworkTable} from "../widget/network/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
@@ -8,7 +8,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class NetworksCtl extends Ctl {
+export class NetworksCtl extends Controller {
     // {
     //   id: "#networks",
     //   onthis: function (e) {},

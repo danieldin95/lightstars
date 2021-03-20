@@ -1,4 +1,4 @@
-import {Ctl} from "./ctl.js";
+import {Controller} from "./controller.js";
 import {CheckBox} from "../widget/common/checkbox.js";
 import VolumeTable from "../widget/volume/table.js";
 import {VolumeApi} from "../api/volume.js";
@@ -13,7 +13,7 @@ class CheckBoxCtl extends CheckBox {
 }
 
 
-export class VolumeCtl extends Ctl {
+export class VolumeCtl extends Controller {
     // {
     //   id: '#pool #volume',
     //   uuid: uuid of pool,
