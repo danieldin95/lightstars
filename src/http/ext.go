@@ -31,7 +31,7 @@ func proxy(src, dst net.Conn) {
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(dst, src); err != nil {
-			libstar.Warn("proxy from  %s", err)
+			libstar.Warn("proxy from %s", err)
 		}
 	}()
 	go func() {

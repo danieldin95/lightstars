@@ -75,7 +75,12 @@ func (h Host) Filter(r *http.Response, w http.ResponseWriter, data interface{}) 
 		return false
 	}
 	user := data.(*schema.User)
-	libstar.Info("Host.Filter %s %s %s", user.Name, req.Method, req.URL.Path)
+
+	if req.Method == "GET" {
+		libstar.Debug("Host.Filter %s %s %s", user.Name, req.Method, req.URL.Path)
+	} else {
+		libstar.Info("Host.Filter %s %s %s", user.Name, req.Method, req.URL.Path)
+	}
 
 	u := strings.Split(req.URL.Path, "/")
 	if len(u) == 3 && u[1] == "api" && u[2] == "instance" {

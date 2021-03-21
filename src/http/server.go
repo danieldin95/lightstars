@@ -144,6 +144,8 @@ func (h *Server) LogRequest(r *http.Request) {
 		strings.HasSuffix(r.URL.Path, ".png") ||
 		strings.HasSuffix(r.URL.Path, ".gif") {
 		libstar.Debug("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
+	} else if r.Method == "GET" {
+		libstar.Debug("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
 	} else {
 		libstar.Info("Server.Middleware %s %s %s", r.RemoteAddr, r.Method, path)
 	}
