@@ -67,7 +67,7 @@ export class Pool extends Container {
 
         return this.compile(`
         <div id="datastores" data="{{uuid}}" name="{{name}}">
-        <div id="header" class="card">
+        <div id="header" class="card shadow">
             <div class="card-header">
                 <div class="text-left">
                     <a id="refresh" class="none" href="javascript:void(0)">{{name}}</a>
@@ -119,7 +119,7 @@ export class Pool extends Container {
             </div>
         </div>
         <!-- Volume list-->
-        <div id="volumes" class="card device">
+        <div id="volumes" class="card shadow">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm"
                         type="button" data-toggle="collapse"

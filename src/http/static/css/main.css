@@ -194,6 +194,7 @@ select {
 }
 
 .card-main {
+    box-shadow: 0 2px 6px 0 #dae0e5;
 }
 
 .system .card-body {

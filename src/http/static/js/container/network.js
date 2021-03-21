@@ -59,7 +59,7 @@ export class Network extends Container {
 
         return this.compile(`
         <div id="network" data="{{uuid}}" name="{{name}}">
-        <div id="header" class="card">
+        <div id="header" class="card shadow">
             <div class="card-header">
                 <div class="text-left">
                     <a id="refresh" class="none" href="javascript:void(0)">{{name}}</a>
@@ -128,7 +128,7 @@ export class Network extends Container {
             <div class="tab-content" id="pills-tabContent">
               <div class="tab-pane fade show active" id="pills-0" role="tabpanel" aria-labelledby="pills-0-tab">
                 <!-- virtual Ports -->
-                <div id="ports" class="card device">
+                <div id="ports" class="card shadow">
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">
@@ -165,7 +165,7 @@ export class Network extends Container {
               </div>
               <div class="tab-pane fade" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
                 <!-- DHCP Lease -->
-                <div id="leases" class="card device">
+                <div id="leases" class="card shadow">
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">

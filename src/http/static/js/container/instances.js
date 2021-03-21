@@ -41,7 +41,7 @@ export class Instances extends Container {
         <div id="index">
         
         <!-- Instances -->
-        <div id="instances" class="card instances">
+        <div id="instances" class="card shadow instances">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm" type="button">
                     {{'guest instances' | i}}

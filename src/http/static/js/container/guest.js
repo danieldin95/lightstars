@@ -116,7 +116,7 @@ export class Guest extends Container {
 
         return this.compile(`
         <div id="instance" data="{{uuid}}" name="{{name}}">
-        <div id="header" class="card header">
+        <div id="header" class="card header shadow">
             <div class="card-header">
                 <div class="text-left">
                     <a id="refresh" class="none" href="javascript:void(0)">{{name}}</a>
@@ -241,7 +241,7 @@ export class Guest extends Container {
             <div class="tab-content" id="pills-tabContent">
               <div class="tab-pane fade show active" id="pills-0" role="tabpanel" aria-labelledby="pills-0-tab">
                 <!-- Virtual Disk -->
-                <div id="disk" class="card device">
+                <div id="disk" class="card shadow">
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">
@@ -293,7 +293,7 @@ export class Guest extends Container {
               </div>
               <div class="tab-pane fade" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
                 <!-- Interface -->
-                <div id="interface" class="card device">
+                <div id="interface" class="card shadow">
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">
@@ -331,7 +331,7 @@ export class Guest extends Container {
               </div>
               <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">
                 <!-- Snapshots -->
-                <div id="snapshot" class="card device">
+                <div id="snapshot" class="card shadow">
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">

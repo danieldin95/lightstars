@@ -50,7 +50,7 @@ export class DataStores extends Container {
         return this.compile(`
         <div id="index">
         <!-- DataStore -->
-        <div id="datastores" class="card card-main">
+        <div id="datastores" class="card shadow">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm" type="button">
                     {{'local datastores' | i}}

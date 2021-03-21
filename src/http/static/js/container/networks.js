@@ -54,7 +54,7 @@ export class Networks extends Container {
         return this.compile(`
         <div id="index">
         <!-- Network -->
-        <div id="networks" class="card card-main">
+        <div id="networks" class="card shadow">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm" type="button">
                     {{'virtual networks' | i}}

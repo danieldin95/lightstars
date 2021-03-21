@@ -3,19 +3,6 @@
     min-height: 320px;
 }
 
-.device {
-    /*border-radius: .25rem;*/
-    /*border-color: darkgray;*/
-}
-
-.device .card-header .btn {
-    color: black;
-}
-
-.device .card-body-tbl {
-    min-height: 300px;
-}
-
 .modal-console {
     min-width: 802px;
     min-height: 660px;

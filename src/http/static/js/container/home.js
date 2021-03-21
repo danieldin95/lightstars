@@ -44,7 +44,7 @@ export class Home extends Container {
         return this.compile(`
         <div id="index">
         <!-- System -->
-        <div id="system" class="card card-main system">
+        <div id="system" class="card shadow system">
             <div class="card-header">
                 <button id="refresh-hdl" class="btn btn-link btn-block text-left btn-sm">${this.props.name}</button>
             </div>
