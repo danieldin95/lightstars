@@ -30,11 +30,22 @@ type Hyper struct {
 }
 
 type Index struct {
-	Version    Version     `json:"version"`
-	User       User        `json:"user"`
-	Hyper      Hyper       `json:"hyper"`
-	Instances  []Instance  `json:"instances"`
-	DataStores []DataStore `json:"datastores"`
-	Networks   []Network   `json:"networks"`
-	Default    string      `json:"default"`
+	Version Version `json:"version"`
+	User    User    `json:"user"`
+	Hyper   Hyper   `json:"hyper"`
+	Default string  `json:"default"`
+}
+
+type StaticsInfo struct {
+	Active   int `json:"active"`
+	Inactive int `json:"inactive"`
+	Unknown  int `json:"unknown"`
+	Total    int `json:"total"`
+}
+
+type Statics struct {
+	Instance  StaticsInfo `json:"instance"`
+	DataStore StaticsInfo `json:"datastore"`
+	Network   StaticsInfo `json:"network"`
+	Ports     StaticsInfo `json:"ports"`
 }

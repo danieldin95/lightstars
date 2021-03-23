@@ -2,12 +2,13 @@ import {Widget} from "../widget.js";
 import {HyperApi} from "../../api/hyper.js";
 
 
-export class Overview extends Widget {
+export class System extends Widget {
     // {
     //   id: '#xx'.
     // }
     constructor(props) {
         super(props);
+        console.log(props);
     }
 
     loading() {
@@ -29,8 +30,7 @@ export class Overview extends Widget {
 
     render(data) {
         return this.compile(`
-        <div class="overview">
-            <dl class="dl-horizontal">
+            <dl class="dl-horizontal dl-horizontal-r">
                 <dt>{{'uptime' | i}}:</dt>
                 <dd>{{hyper.uptime | prettyTime}}</dd>
                 <dt>{{'version' | i}}:</dt>
@@ -47,7 +47,6 @@ export class Overview extends Widget {
                 <dd title="{{'total|free|cache' | i}}">
                     {{hyper.memTotal | prettyByte}} | {{hyper.memFree | prettyByte}} | {{hyper.memCached | prettyByte}}
                 </dd>
-            </dl>
-        </div>`, data);
+            </dl>`, data);
     }
 }

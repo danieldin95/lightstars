@@ -1,5 +1,6 @@
 import {Container} from "./container.js"
-import {Overview} from "../widget/index/overview.js";
+import {System} from "../widget/index/system.js";
+import {Statics} from "../widget/index/statics.js";
 import {I18N} from "../lib/i18n.js";
 import {InstanceCreate} from "../widget/instance/create.js";
 import {Utils} from "../lib/utils.js";
@@ -20,19 +21,29 @@ export class Home extends Container {
     loading() {
         this.title(I18N.i('home'));
         // loading overview.
-        let view = new Overview({
-            id: this.id('#overview .card-body-tbl'),
+        let sys = new System({
+            id: this.id('#overview .card-body-tbl #system'),
         });
-        view.refresh((e) => {
+        sys.refresh((e) => {
             this.props.name = e.resp.hyper.name;
             $(this.id('#refresh-hdl')).text(this.props.name);
         });
+
+        let sts = new Statics({
+            id: this.id('#overview .card-body-tbl #statics'),
+        });
+        sts.refresh();
+
+         let refresh = function() {
+             sts.refresh();
+             sys.refresh();
+        };
         // register click on overview.
         $(this.id('#refresh')).on('click', () => {
-            view.refresh();
+            refresh();
         });
         $(this.id('#refresh-hdl')).on('click', () => {
-            view.refresh();
+            refresh();
         });
         new InstanceCreate({id: '#createGuestModal'})
             .onsubmit((e) => {
@@ -63,8 +74,10 @@ export class Home extends Container {
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
                 </div>
-                <div class="card-body-tbl">
+                <div class="card-body-tbl overview row">
                     <!-- Loading -->
+                    <div id="system" class="col-sm-12 col-md-6"></div>
+                    <div id="statics" class="col-sm-12 col-md-6"></div>
                 </div>
             </div>
         </div>
