@@ -191,7 +191,7 @@ export class Guest extends Container {
                     </div>
                 </div>
                 <div class="card-body-tbl row">
-                    <div class="col-sm-12 col-md-5 col-lg-4 mt-4 split-vertical">
+                    <div class="col-sm-12 col-md-5 col-lg-4 mt-1 pt-3 split-vertical">
                         <div style="width: 328px; height: 188px; background-color: rgb(40 40 40); border-radius: 4px; padding: 4px;">
                             <iframe width="320px" height="180px" src="${liteUrl}" frameborder="0"></iframe>
                         </div>
