@@ -190,13 +190,13 @@ export class Guest extends Container {
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     </div>
                 </div>
-                <div class="card-body-tbl overview row">
-                    <div class="col-sm-12 col-md-5 col-lg-4 mt-3">
+                <div class="card-body-tbl row">
+                    <div class="col-sm-12 col-md-5 col-lg-4 mt-4 split-vertical">
                         <div style="width: 328px; height: 188px; background-color: rgb(40 40 40); border-radius: 4px; padding: 4px;">
                             <iframe width="320px" height="180px" src="${liteUrl}" frameborder="0"></iframe>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-7 col-lg-8 mt-1">
+                    <div class="col-sm-12 col-md-7 col-lg-8 mt-1 split-vertical">
                         <dl class="dl-horizontal dl-horizontal-r">
                             <dt>{{'name' | i}}:</dt>
                             <dd>&nbsp;{{name}}</dd>
@@ -270,7 +270,7 @@ export class Guest extends Container {
                             </div>
                         </div>
                         <div class="card-body-tbl">
-                            <table class="table table-striped text-center">
+                            <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th><input id="on-all" type="checkbox"></th>
@@ -309,7 +309,7 @@ export class Guest extends Container {
                             </div>
                         </div>
                         <div class="card-body-tbl">
-                            <table class="table table-striped text-center">
+                            <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th><input id="on-all" type="checkbox" aria-label="select all interfaces"></th>
@@ -347,7 +347,7 @@ export class Guest extends Container {
                             </div>
                         </div>
                         <div class="card-body-tbl">
-                            <table class="table table-striped text-center">
+                            <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th><input id="on-all" type="checkbox" aria-label="select all"></th>

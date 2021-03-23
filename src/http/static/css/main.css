@@ -254,3 +254,10 @@ select {
     border-radius: 0;
 }
 
+.split-vertical {
+    border-right: 1px solid #dee2e6;
+}
+
+.split-vertical:last-child {
+    border-right: none;
+}

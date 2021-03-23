@@ -74,10 +74,10 @@ export class Home extends Container {
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
                     </div>
                 </div>
-                <div class="card-body-tbl overview row">
+                <div class="card-body-tbl row">
                     <!-- Loading -->
-                    <div id="system" class="col-sm-12 col-md-6"></div>
-                    <div id="statics" class="col-sm-12 col-md-6"></div>
+                    <div id="system" class="col-sm-12 col-md-6 split-vertical mt-2"></div>
+                    <div id="statics" class="col-sm-12 col-md-6 split-vertical mt-4"></div>
                 </div>
             </div>
         </div>

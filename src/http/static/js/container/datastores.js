@@ -93,7 +93,7 @@ export class DataStores extends Container {
 
                 <!-- DataStore display -->
                 <div class="card-body-tbl">
-                    <table class="table table-striped text-center">
+                    <table class="table table-striped">
                         <thead>
                         <tr>
                             <th><input id="on-all" type="checkbox"></th>
