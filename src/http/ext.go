@@ -25,23 +25,23 @@ func (down Download) Router(router *mux.Router) {
 }
 
 func proxy(src, dst net.Conn) {
-	libstar.Info("proxy by %s", src.RemoteAddr())
-	libstar.Info("proxy to %s", dst.RemoteAddr())
+	libstar.Debug("proxy by %s", src.RemoteAddr())
+	libstar.Debug("proxy to %s", dst.RemoteAddr())
 	wait := libstar.NewWaitOne(2)
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(dst, src); err != nil {
-			libstar.Warn("proxy from %s", err)
+			libstar.Debug("proxy from %s", err)
 		}
 	}()
 	go func() {
 		defer wait.Done()
 		if _, err := io.Copy(src, dst); err != nil {
-			libstar.Warn("proxy from %s", err)
+			libstar.Debug("proxy from %s", err)
 		}
 	}()
 	wait.Wait()
-	libstar.Warn("proxy %s exit", src.RemoteAddr())
+	libstar.Debug("proxy %s exit", src.RemoteAddr())
 }
 
 type WsGraphics struct {
@@ -84,6 +84,9 @@ func (w WsGraphics) GetRemote(id, name, typ string) string {
 			port = g.Port
 		}
 	}
+	if port == "" || port == "-1" {
+		return ""
+	}
 	return host + ":" + port
 }
 
@@ -103,10 +106,11 @@ func (w WsGraphics) GetLocal(id, typ string) string {
 	if instXml == nil {
 		return ""
 	}
-	if _, port := instXml.GraphicsAddr(typ); port != "" {
+	if _, port := instXml.GraphicsAddr(typ); port == "" || port == "-1" {
+		return ""
+	} else {
 		return hyper.Address + ":" + port
 	}
-	return ""
 }
 
 func (w WsGraphics) GetTarget(r *http.Request) string {
@@ -130,7 +134,7 @@ func (w WsGraphics) Handle(ws *websocket.Conn) {
 	ws.PayloadType = websocket.BinaryFrame
 	target := w.GetTarget(ws.Request())
 	if target == "" {
-		libstar.Error("WsGraphics.Handle target not found.")
+		libstar.Debug("WsGraphics.Handle target not found.")
 		return
 	}
 	conn, err := net.Dial("tcp", target)
@@ -161,7 +165,7 @@ func (t WsTcp) Local(host string, ws *websocket.Conn) {
 	}
 	defer conn.Close()
 	user, _ := api.GetUser(r)
-	libstar.Info("WsTcp.Local with %s", user.Name)
+	libstar.Debug("WsTcp.Local with %s", user.Name)
 	proxy(ws, conn)
 }
 
@@ -208,7 +212,6 @@ func (w WsProxy) Router(router *mux.Router) {
 
 func (w WsProxy) Handle(ws *websocket.Conn) {
 	defer ws.Close()
-	//ws.PayloadType = websocket.BinaryFrame
 	target, _ := api.GetArg(ws.Request(), "target")
 	if target == "" {
 		libstar.Error("WsProxy.Handle target notFound.")
@@ -216,11 +219,11 @@ func (w WsProxy) Handle(ws *websocket.Conn) {
 	}
 	conn, err := net.Dial("tcp", target)
 	if err != nil {
-		libstar.Error("WsTcp.Local %s", err)
+		libstar.Error("WsProxy.Handle %s", err)
 		return
 	}
 	defer conn.Close()
-	libstar.Info("WsProxy.Handle %s", target)
+	libstar.Debug("WsProxy.Handle %s", target)
 	wait := libstar.NewWaitOne(2)
 	go func() {
 		defer wait.Done()
