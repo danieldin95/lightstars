@@ -26,7 +26,7 @@ var cfg = StarConfig{
 	StaticDir: "static",
 	CrtDir:    "ca",
 	ConfDir:   "/etc/lightstar",
-	Listen:    "0.0.0.0:10080",
+	Listen:    "0.0.0.0:10010",
 	Hyper:     "qemu:///system",
 	LogFile:   "/var/log/lightstar.log",
 	Verbose:   2,

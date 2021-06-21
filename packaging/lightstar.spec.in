@@ -5,7 +5,6 @@ Summary: LightStar's Project Software
 Group: Applications/Communications
 License: GPL 3.0
 URL: https://github.com/danieldin95/lightstar
-BuildRequires: go
 Requires: libvirt-daemon libvirt qemu-kvm-ev qemu-img-ev expect
 Conflicts: lightsim
 
@@ -33,8 +32,8 @@ mkdir -p %{buildroot}/etc/lightstar
 cp -R %_source_dir/packaging/resource/*.json.example %{buildroot}/etc/lightstar
 
 %pre
-/usr/bin/firewall-cmd --permanent --zone=public --add-port=10080/tcp --permanent || {
-  echo "YOU NEED ALLOWED TCP PORT:10080."
+/usr/bin/firewall-cmd --permanent --zone=public --add-port=10010/tcp --permanent || {
+  echo "YOU NEED ALLOWED TCP PORT:10010."
 }
 /usr/bin/firewall-cmd --permanent --zone=public --add-port=5900-5999/tcp --permanent || {
   echo "YOU NEED ALLOWED TCP PORT:5900-5999."
