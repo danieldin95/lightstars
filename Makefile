@@ -3,7 +3,7 @@
 #
 
 #
-# git clone https://github.com/danieldin95/freecert packaging/resource/cert
+# git clone https://github.com/danieldin95/freecert dist/resource/cert
 #
 
 SHELL := /bin/bash
@@ -14,7 +14,7 @@ LSB = $(shell lsb_release -i -s)$(shell lsb_release -r -s)
 VER = $(shell cat VERSION)
 
 ## version
-MOD = github.com/danieldin95/lightstar/src/libstar
+MOD = github.com/danieldin95/lightstar/pkg/libstar
 LDFLAGS += -X $(MOD).Commit=$(shell git rev-list -1 HEAD)
 LDFLAGS += -X $(MOD).Date=$(shell date +%FT%T%z)
 LDFLAGS += -X $(MOD).Version=$(VER)
@@ -38,16 +38,16 @@ rpm: rpm-lightstar ## build rpm packages
 # prepare environment
 env:
 	@mkdir -p $(BD)
-	gofmt -w -s ./src
+	gofmt -w -s ./pkg ./cmd
 
 ## light star
 .PHONY: lightstar
 lightstar: env
-	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightstar ./src/cli/lightstar
+	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightstar ./cmd/lightstar
 
 ### linux packaging
 rpm-env:
-	@./packaging/spec.sh
+	@./dist/spec.sh
 	@[ -e "$(BD)"/cert ] || ln -s $(SD)/../freecert $(BD)/cert
 
 rpm-lightstar: rpm-env
@@ -59,24 +59,24 @@ linux-zip: env lightstar ## build linux zip packages
 	@pushd $(BD)
 	@rm -rf $(LD) && mkdir -p $(LD)
 
-	@cp $(SD)/packaging/README.md $(LD)
+	@cp $(SD)/dist/README.md $(LD)
 	@mkdir -p $(LD)/etc/lightstar
-	@cp -rvf $(SD)/packaging/resource/auth.json.example $(LD)/etc/lightstar
-	@cp -rvf $(SD)/packaging/resource/zone.json.example $(LD)/etc/lightstar
-	@cp -rvf $(SD)/packaging/resource/permission.json.example $(LD)/etc/lightstar
+	@cp -rvf $(SD)/dist/resource/auth.json.example $(LD)/etc/lightstar
+	@cp -rvf $(SD)/dist/resource/zone.json.example $(LD)/etc/lightstar
+	@cp -rvf $(SD)/dist/resource/permission.json.example $(LD)/etc/lightstar
 
 	@mkdir -p $(LD)/etc/sysconfig
 	@echo OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/cert -conf /etc/lightstar" > $(LD)/etc/sysconfig/lightstar.cfg
 
 	@mkdir -p $(LD)/var/lightstar
-	@cp -R $(SD)/packaging/resource/ca $(LD)/var/lightstar
-	@cp -R $(SD)/src/http/static $(LD)/var/lightstar
+	@cp -R $(SD)/dist/resource/ca $(LD)/var/lightstar
+	@cp -R $(SD)/pkg/http/static $(LD)/var/lightstar
 
 	@mkdir -p $(LD)/usr/bin
 	@cp -rvf $(BD)/lightstar $(LD)/usr/bin
 
 	@mkdir -p $(LD)/usr/lib/systemd/system
-	@cp $(SD)/packaging/lightstar.service $(LD)/usr/lib/systemd/system
+	@cp $(SD)/dist/lightstar.service $(LD)/usr/lib/systemd/system
 
 	zip -r ./$(LD).zip $(LD) > /dev/null
 	@rm -rf $(LD)
@@ -95,11 +95,11 @@ upgrade:
 ## unit test
 .PHONY: test
 test: ## execute unit test
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/libstar
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/storage
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/compute/libvirtc
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/storage/libvirts
-	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/src/http/client
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/pkg/libstar
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/pkg/storage
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/pkg/compute/libvirtc
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/pkg/storage/libvirts
+	go test -v -mod=vendor -bench=. github.com/danieldin95/lightstar/pkg/http/client
 
 clean: ## clean cache
 	rm -rvf ./build
