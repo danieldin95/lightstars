@@ -1,0 +1,10 @@
+{
+  "admin": {
+    "type": "admin",
+    "password": "2c814f8fd"
+  },
+  "guest": {
+    "type": "guest",
+    "password": "2c814f8fx"
+  }
+}

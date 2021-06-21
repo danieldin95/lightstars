@@ -1,0 +1,12 @@
+[Unit]
+Description=LightStar daemon
+After=libvirtd.target
+
+[Service]
+Type=notify
+RemainAfterExit=yes
+EnvironmentFile=/etc/sysconfig/lightstar.cfg
+ExecStart=/usr/bin/lightstar $OPTIONS
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+{
+  "default": {
+    "url": "https://192.168.40.149:10080",
+    "username": "admin",
+    "password": "2c814f8fd"
+  },
+  "host-249": {
+    "url": "https://192.168.40.249:10080",
+    "username": "admin",
+    "password": "2c814f8fd"
+  }
+}

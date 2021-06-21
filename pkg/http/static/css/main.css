@@ -1,0 +1,263 @@
+@media (min-width: 768px) {
+    .dl-horizontal dt {
+        float: left;
+        width: 180px;
+        overflow: hidden;
+        clear: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: normal;
+    }
+    .dl-horizontal dd {
+        margin-left: 180px;
+        padding-left: 15px;
+    }
+    .dl-horizontal-r dt {
+        width: 20%;
+        text-align: right;
+    }
+    .dl-horizontal-r dd {
+        margin-left: 20%;
+        padding-left: 15px;
+    }
+}
+
+html::-webkit-scrollbar,
+div::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+html::-webkit-scrollbar-thumb,
+div::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.1);
+}
+
+html::-webkit-scrollbar-track,
+div::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 3px;
+    background: rgba(0,0,0,0.1);
+}
+
+.card-body-hdl,
+.card-header-btn {
+    margin-bottom: 10px;
+}
+
+.card-header-dis {
+    padding: 0 1.25rem;
+}
+
+.card-header-dis ol,
+.card-header-dis ul,
+.card-header-dis dl {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dl-horizontal {
+    padding: 1rem .5rem;
+}
+
+.st-running,
+.st-active {
+    color: darkgreen;
+}
+
+.st-paused,
+.st-blocked,
+.st-pm-suspended {
+    color: chocolate;
+}
+
+.st-no-state,
+.st-crashed,
+.st-unknown {
+    color: black;
+}
+
+.st-building {
+    color: chocolate;
+}
+
+.st-degraded,
+.st-inactive,
+.st-inaccessible,
+.st-unknown {
+    color: black;
+}
+
+.card-no-border {
+    margin: 1.25rem -1px 1.25rem 0;
+}
+
+.card-none {
+    padding: .25rem 1.25rem;
+}
+
+.background-light {
+    background-color: #f8f9fa;
+}
+
+.no-top {
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.no-bottom {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.no-left-right {
+    padding-left: 0;
+    margin-left: 0;
+    padding-right: 0;
+    margin-right: 0;
+}
+
+.no-border {
+    border: none;
+}
+
+select {
+    display: block;
+    max-width: 100%;
+    padding: .25rem 1.75rem 0.25rem .75rem;
+    font-size: inherit;
+    line-height: 1.5;
+    color: #495057;
+    border: 1px solid #ced4da;
+    background: #fff
+        url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E")
+    no-repeat right 0.75rem center;
+    background-size: 8px 10px;
+    -webkit-appearance: none;
+    border-radius: 0.2rem;
+}
+
+.select-unit {
+    width: auto;
+    min-width: 4rem;
+}
+
+.select-md,
+.input-md {
+    width: 60%;
+}
+
+.select-lg {
+    width: 100%;
+}
+
+.select-twice-md,
+.select-unit-right {
+    width: auto;
+    max-width: 8rem;
+    min-width: 4rem;
+    margin-left: 1rem;
+}
+
+.input-number {
+    max-width: 30%;
+}
+
+.input-number-lg {
+    max-width: 60%;
+}
+
+.input-string-sm,
+.input-select-sm {
+    width: 60%;
+}
+
+.input-string,
+.input-select {
+    width: 100%;
+}
+
+.btn-spot {
+    border: 1px solid #6c757d;
+    padding: 0;
+    border-radius: .5rem;
+    min-height: 1rem;
+    min-width: 1.25rem;
+}
+
+.btn-spot:hover,
+.btn-spot:focus {
+    text-decoration: none;
+    border-color: #06386a;
+}
+
+.card-main {
+    box-shadow: 0 2px 6px 0 #dae0e5;
+}
+
+.system .card-body {
+    min-height: 200px;
+}
+
+.error {
+    border-color: darkgray;
+}
+
+.error .card-header {
+    color: inherit;
+    background-color: inherit;
+    border-bottom: 1px solid #0b3255;;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    right: auto;
+    left: 100%;
+    margin-top: 0;
+    margin-left: .125rem;
+}
+
+.overview {
+    border-top: 1px solid #dee2e6;
+}
+
+.card-tab {
+}
+
+.card-tab .nav-pills .nav-link.active,
+.card-tab .nav-pills .show > .nav-link {
+    color: inherit;
+    background-color: inherit;
+    text-decoration-line: underline;
+}
+
+.card-tab ul li {
+    border-right: solid 1px black;
+}
+
+.card-tab ul li:last-child {
+    border-right: none;
+}
+
+.card-tab ul li a {
+    color: inherit;
+    padding: 0 1rem;
+}
+
+.card-tab .nav-pills .nav-link {
+    border-radius: 0;
+}
+
+.split-vertical {
+    border-right: 1px solid #dee2e6;
+}
+
+.split-vertical:last-child {
+    border-right: none;
+}
