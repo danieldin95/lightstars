@@ -5,7 +5,6 @@ Summary: LightStar's Project Software
 Group: Applications/Communications
 License: GPL 3.0
 URL: https://github.com/danieldin95/lightstar
-BuildRequires: go
 Requires: libvirt-daemon libvirt qemu-kvm-ev qemu-img-ev expect
 Conflicts: lightsim
 

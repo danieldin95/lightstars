@@ -1,4 +1,4 @@
-package lightstar
+package main
 
 import (
 	"flag"
