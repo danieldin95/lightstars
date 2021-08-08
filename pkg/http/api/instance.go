@@ -168,7 +168,6 @@ func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq *diskSeq) (libvirt
 		file = vol.Target.Path
 		format = vol.Target.Format.Type
 	} else if device == "disk" && (format == "raw" || format == "qcow2" || format == "qcow") {
-		name := path.Base(file)
 		vol, err := NewBackingVolumeAndPool(conf.DataStore, conf.Name, name, file, format)
 		if err != nil {
 			return obj, err

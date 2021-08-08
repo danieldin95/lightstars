@@ -22,7 +22,7 @@ func (d *Disk) Slot2Dev(bus string, slot uint8) string {
 
 func (d *Disk) Slot2Name(slot uint8) string {
 	rand := libstar.GenToken(8)
-	return fmt.Sprintf("disk-%s-%d.img", rand, slot)
+	return fmt.Sprintf("disk-%d-%s.img", slot, rand)
 }
 
 var DISK = &Disk{}
