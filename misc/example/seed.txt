@@ -1,0 +1,19 @@
+mkdir -p seed && cd seed
+
+cat > meta-data <<EOF 
+instance-id: iid-local01
+local-hostname: centos-from-lightstar
+EOF
+
+cat > user-data <<EOF 
+#cloud-config
+password: root@123
+chpasswd: { expire: False }
+ssh_pwauth: True
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI5iz8K9b6n0/UCY0z4Gi1Mb+/X9rdFh6SXyhqTNZhh+curTNlmUMGd1fmtgMbtMG6WMNVxa4iclUWhRWaEePWf9xcQqf9F8OgrufQr5qkioRwEhrPeD58veVBMV/ci/4X7ukLJL+luwv4YnJI7ybW71eZSfrnaI3+ddsyHJvFhoqDb/qy7qplEEmmCmSRigx5qpbatD8WaSS4TDZrarJ8vP5AE6DEgwXpcMGgY8acDekQcT2iguHoVmLIyxfouFZ+s29Xyzsg3Jlh+PS8v4WOpwskEiAheaFeKyZeJTUnxhaSwpainmity07MdPu9UVSe50OmeypC8bZfIXCLsf99 root@daniel.local
+EOF
+
+## change centos's password root.
+
+genisoimage -input-charset utf-8 -output seed.iso -volid cidata -joliet -rock user-data meta-data

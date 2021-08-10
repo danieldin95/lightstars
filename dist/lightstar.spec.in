@@ -5,7 +5,7 @@ Summary: LightStar's Project Software
 Group: Applications/Communications
 License: GPL 3.0
 URL: https://github.com/danieldin95/lightstar
-Requires: libvirt-daemon libvirt qemu-kvm-ev qemu-img-ev expect
+Requires: libvirt-daemon libvirt qemu-kvm-ev qemu-img-ev
 Conflicts: lightsim
 
 %define _source_dir ${RPM_SOURCE_DIR}/lightstar-%{version}
@@ -54,11 +54,11 @@ cat > /etc/lightstar/auth.json <<EOF
 {
   "admin": {
     "type": "admin",
-    "password": "$(/usr/bin/mkpasswd -l 16)"
+    "password": "$(uuidgen | awk -F- '{print $5}')"
   },
   "guest": {
     "type": "guest",
-    "password": "$(/usr/bin/mkpasswd -l 16)"
+    "password": "$(uuidgen | awk -F- '{print $5}')"
   }
 }
 EOF
