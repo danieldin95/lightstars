@@ -51,7 +51,7 @@ This software makes it easier for you to control virtual compute, network and st
 
 # Open WebUI in browser
 
-    https://your-machine-address:10080
+    https://your-machine-address:10010
 
 ## Get Username and Password
 
