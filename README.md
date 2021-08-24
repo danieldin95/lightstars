@@ -56,9 +56,3 @@ This software makes it easier for you to control virtual compute, network and st
 ## Get Username and Password
 
     cat /etc/lightstar.auth
-
-# Welcome to attention
-
-WeChat: DanielDin
-
-Email: danieldin95@163.com
