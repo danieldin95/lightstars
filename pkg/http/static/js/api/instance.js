@@ -28,9 +28,9 @@ export class InstanceApi extends Api {
             let url = this.url(uuid, 'start');
 
             $.PUT(url, (resp, status) => {
-                //$(this.tasks).append(Alert.success(`start '${uuid}' success`));
+                Alert.success(this.tasks, `start '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
+                Alert.danger(this.tasks,`PUT ${url}: ${e.responseText}`);
             });
         });
     }
@@ -40,9 +40,9 @@ export class InstanceApi extends Api {
             let url = this.url(uuid, 'shutdown');
 
             $.PUT(url, (resp, status) => {
-                //$(this.tasks).append(Alert.success(`shutdown '${uuid}' success`));
+                Alert.success(this.tasks, `shutdown '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.warn(`PUT ${url}: ${e.responseText}`));
+                Alert.warn(this.tasks,`PUT ${url}: ${e.responseText}`);
             });
         });
     }
@@ -52,9 +52,9 @@ export class InstanceApi extends Api {
             let url = this.url(uuid, 'reset');
 
             $.PUT(url, (resp, status) => {
-                //$(this.tasks).append(Alert.success(`reset '${uuid}' success`));
+                Alert.success(this.tasks, `reset '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
+                Alert.danger(this.tasks,`PUT ${url}: ${e.responseText}`);
             });
         });
     }
@@ -64,9 +64,9 @@ export class InstanceApi extends Api {
             let url = this.url(uuid, 'suspend');
 
             $.PUT(url, (resp, status) => {
-                //$(this.tasks).append(Alert.success(`suspend '${uuid}' success`));
+                Alert.success(this.tasks, `suspend '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
+                Alert.danger(this.tasks,`PUT ${url}: ${e.responseText}`);
             });
         });
     }
@@ -76,9 +76,9 @@ export class InstanceApi extends Api {
             let url = this.url(uuid, 'resume');
 
             $.PUT(url, (resp, status) => {
-                //$(this.tasks).append(Alert.success(`resume '${uuid}' success`));
+                Alert.success(this.tasks, `resume '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
+                Alert.danger(this.tasks,`PUT ${url}: ${e.responseText}`);
             });
         });
     }
@@ -88,9 +88,9 @@ export class InstanceApi extends Api {
             let url = this.url(uuid, 'destroy');
 
             $.PUT(url, (resp, status) => {
-                //$(this.tasks).append(Alert.success(`destroy '${uuid}' success`));
+                Alert.success(this.tasks, `destroy '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.danger((`PUT ${url}: ${e.responseText}`)));
+                Alert.danger(this.tasks, `PUT ${url}: ${e.responseText}`);
             });
         });
     }
@@ -100,9 +100,9 @@ export class InstanceApi extends Api {
             let url = this.url(uuid);
 
             $.DELETE(url, (resp, status) => {
-                //$(this.tasks).append(Alert.success(`remove '${uuid}' success`));
+                Alert.success(this.tasks, `remove '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.danger((`DELETE ${url}: ${e.responseText}`)));
+                Alert.danger(this.tasks, `DELETE ${url}: ${e.responseText}`);
             });
         });
     }
@@ -115,9 +115,9 @@ export class InstanceApi extends Api {
             let cpu = {cpu: data.cpu, mode: data.cpuMode};
 
             $.PUT(url, JSON.stringify(cpu), (resp, status) => {
-                //$(this.tasks).append(Alert.success(`set processor for '${uuid}' success`));
+                Alert.success(this.tasks, `set processor for '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.warn((`PUT ${url}: ${e.responseText}`)));
+                Alert.warn(this.tasks,`PUT ${url}: ${e.responseText}`);
             });
         }
         if (data.memSize !== "") {
@@ -125,9 +125,9 @@ export class InstanceApi extends Api {
             let mem = {size: data.memSize, unit: data.memUnit};
 
             $.PUT(url, JSON.stringify(mem), (resp, status) => {
-                //$(this.tasks).append(Alert.success(`set memory for '${uuid}' success`));
+                Alert.success(this.tasks, `set memory for '${uuid}' success`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.warn((`PUT ${url}: ${e.responseText}`)));
+                Alert.warn(this.tasks,`PUT ${url}: ${e.responseText}`);
             });
         }
     }
@@ -138,9 +138,9 @@ export class InstanceApi extends Api {
         let params = JSON.stringify({title: data.title});
 
         $.PUT(url, params, (resp, status) => {
-            //$(this.tasks).append(Alert.success(`destroy '${uuid}' success`));
+            Alert.success(this.tasks, `destroy '${uuid}' success`);
         }).fail((e) => {
-            $(this.tasks).append(Alert.danger((`PUT ${url}: ${e.responseText}`)));
+            Alert.danger(this.tasks, `PUT ${url}: ${e.responseText}`);
         });
     }
 
@@ -188,9 +188,9 @@ export class InstanceApi extends Api {
             },
         ];
         $.POST(this.url(), JSON.stringify(schema), (resp, status) => {
-            //$(this.tasks).append(Alert.success(`create ${resp.name} success`));
+            Alert.success(this.tasks, `create ${resp.name} success`);
         }).fail((e) => {
-            $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
+            Alert.danger(this.tasks,`POST ${this.url()}: ${e.responseText}`);
         });
     }
 
@@ -207,7 +207,7 @@ export class InstanceApi extends Api {
             if (fail) {
                 fail(e);
             }
-            $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
+            Alert.danger(this.tasks,`GET ${url}: ${e.responseText}`);
         });
     }
 }

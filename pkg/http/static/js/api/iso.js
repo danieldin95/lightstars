@@ -26,7 +26,7 @@ export class IsoApi extends Api {
         $.GET(this.url(), {datastore}, (resp, status) => {
             func({datastore, resp});
         }).fail((e) => {
-            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
+            Alert.danger(this.tasks,`GET ${this.url()}: ${e.responseText}`);
         });
     }
 }

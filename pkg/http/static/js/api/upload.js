@@ -40,14 +40,14 @@ export class UploadApi extends Api {
             },
             success: function(e) {
                 $(this.id).find(`#${this.bar}`).remove();
-                $(this.tasks).append(Alert.success(`upload ${e.message}`));
+                Alert.success(this.tasks,`upload ${e.message}`);
             },
             start: function(e) {
                 $(this.id).append(ProgressBar(this.bar));
             },
             fail: function(e) {
                 $(this.id).find(`#${this.bar}`).remove();
-                $(this.tasks).append(Alert.danger((`POST ${url}: ${e.responseText}`)));
+                Alert.danger(this.tasks,`POST ${url}: ${e.responseText}`);
             }
         };
         $.ajax({

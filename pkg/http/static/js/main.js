@@ -5,7 +5,7 @@ import {Navigation} from "./widget/navigation.js";
 import {Container} from "./container/container.js";
 import {Routes} from "./routes.js";
 import {Template} from "./lib/template.js";
-
+import {Alert} from "./lib/alert.js";
 
 $(function() {
     let hyper = $('hyper');
@@ -16,6 +16,7 @@ $(function() {
         host = hyper.attr('default');
         Location.query('node', host);
     }
+
     Api.host(host);
     Container.alias(alias);
 

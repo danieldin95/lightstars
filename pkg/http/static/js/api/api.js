@@ -40,7 +40,7 @@ export class Api {
         $.GET(this.url(), {format: 'schema'}, (resp, status) => {
             func({data, resp});
         }).fail((e) => {
-            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
+            Alert.danger(this.tasks, `GET ${this.url()}: ${e.responseText}`);
         });
     }
 
@@ -60,24 +60,24 @@ export class Api {
             if (fail) {
                 fail(e)
             }
-            $(this.tasks).append(Alert.danger(`GET ${this.url()}: ${e.responseText}`));
+            Alert.danger(this.tasks,`GET ${this.url()}: ${e.responseText}`);
         });
     }
 
     create(data) {
         $.POST(this.url(), JSON.stringify(data), (resp, status) => {
-            //$(this.tasks).append(Alert.success(`create ${resp.message}`));
+            Alert.success(this.tasks, `create ${resp.message}`);
         }).fail((e) => {
-            $(this.tasks).append(Alert.danger(`POST ${this.url()}: ${e.responseText}`));
+            Alert.danger(this.tasks,`POST ${this.url()}: ${e.responseText}`);
         });
     }
 
     delete() {
         this.uuids.forEach((uuid, index, err) => {
             $.DELETE(this.url(uuid), (resp, success) => {
-                //$(this.tasks).append(Alert.success(`remove ${uuid} ${resp.message}`));
+                Alert.success(this.tasks, `remove ${uuid} ${resp.message}`);
             }).fail((e) => {
-                $(this.tasks).append(Alert.danger(`DELETE ${this.url(uuid)}: ${e.responseText}`));
+                Alert.danger(this.tasks,`DELETE ${this.url(uuid)}: ${e.responseText}`);
             });
         });
     }
@@ -86,9 +86,9 @@ export class Api {
         let uuid = this.uuids[0];
         let url = this.url(uuid);
         $.PUT(url, JSON.stringify(data), (resp, success) => {
-            //$(this.tasks).append(Alert.success(`edit ${uuid} ${resp.message}`));
+            Alert.success(this.tasks, `edit ${uuid} ${resp.message}`);
         }).fail((e) => {
-            $(this.tasks).append(Alert.danger(`PUT ${url}: ${e.responseText}`));
+            Alert.danger(this.tasks,`PUT ${url}: ${e.responseText}`);
         });
     }
 

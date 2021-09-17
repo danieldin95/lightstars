@@ -30,7 +30,7 @@ export class SnapshotApi extends Api {
         $.PUT(url, (resp, status) => {
             //$(this.tasks).append(Alert.success(`destroy '${uuid}' success`));
         }).fail((e) => {
-            $(this.tasks).append(Alert.danger((`PUT ${url}: ${e.responseText}`)));
+            Alert.danger(this.tasks,`PUT ${url}: ${e.responseText}`);
         });
     }
 }

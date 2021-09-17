@@ -1,32 +1,52 @@
 
 export class Alert {
-    static info (message) {
-        return this.div('info', message);
-    }
 
-    static danger (message) {
-        return this.div('danger', message);
-    }
-
-    static success (message) {
-        return this.div('success', message);
-    }
-
-    static warn (message) {
-        return this.div('warning', message);
-    }
-
-    static primary (message) {
-        return this.div('primary', message);
-    }
-
-    static div (cls, message) {
+    static div (cls, message, uuid) {
+        if (!uuid) {
+            uuid = this.genId(32);
+        }
         return (`
-        <div class="alert alert-${cls} alert-dismissible fade show" role="alert">
+        <div id="${uuid}" class="alert alert-${cls} alert-dismissible fade show" role="alert">
             ${message}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
         </div>`)
+    }
+
+    static genId(length) {
+        const randomChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for ( let i = 0; i < length; i++ ) {
+            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+        }
+        return result;
+    }
+
+    static show(parent, level, message) {
+        let uuid = this.genId(32);
+        $(parent).append(this.div(level, message, uuid));
+        window.setTimeout(function() {
+            $(`#${uuid}`).fadeTo(800, 0).slideUp(800, function() {
+                $(this).remove();
+            });
+        }, 2000);
+    }
+
+    static info (parent, message) {
+        this.show(parent, 'info', message)
+    }
+
+    static danger (parent, message) {
+        this.show(parent, 'danger', message)
+    }
+
+    static success (parent, message) {
+        this.show(parent, 'success', message);
+    }
+
+    static warn (parent, message) {
+        this.show(parent, 'warning', message);
+    }
+
+    static primary (parent, message) {
+        this.show(parent, 'primary', message);
     }
 }
