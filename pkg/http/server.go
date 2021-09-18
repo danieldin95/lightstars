@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 )
 
 type Server struct {
@@ -157,6 +158,9 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 		if h.IsAuth(w, r) {
 			user, _ := api.GetUser(r)
 			if user.Type == "admin" || service.SERVICE.Permission.Has(r) {
+				expired := time.Now().Add(time.Minute * 15)
+				token := user.Name + ":" + user.Password
+				api.UpdateCookie(w, expired, token)
 				next.ServeHTTP(w, r)
 			} else {
 				http.Error(w, "Request not allowed", http.StatusForbidden)

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"encoding/base64"
 	"github.com/danieldin95/lightstar/pkg/compute"
 	"github.com/danieldin95/lightstar/pkg/http/api"
 	"github.com/danieldin95/lightstar/pkg/libstar"
@@ -102,20 +101,8 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 			data.Error = "Invalid username or password."
 		} else {
 			basic := name + ":" + pass
-			expired := time.Now().Add(time.Hour * 8)
-			http.SetCookie(w, &http.Cookie{
-				Name:    "token-id",
-				Value:   base64.StdEncoding.EncodeToString([]byte(basic)),
-				Path:    "/",
-				Expires: expired,
-			})
-			uuid := libstar.GenToken(32)
-			http.SetCookie(w, &http.Cookie{
-				Name:    "session-id",
-				Value:   uuid,
-				Path:    "/",
-				Expires: expired,
-			})
+			expired := time.Now().Add(time.Hour)
+			api.UpdateCookie(w, expired, basic)
 			http.Redirect(w, r, "/ui#"+next, http.StatusMovedPermanently)
 			return
 		}

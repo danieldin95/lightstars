@@ -15,6 +15,7 @@ import (
 	"path"
 	"strings"
 	"text/template"
+	"time"
 )
 
 func GetArg(r *http.Request, name string) (string, bool) {
@@ -196,4 +197,20 @@ func ParseBasicAuth(auth string) (username, password string, ok bool) {
 		return
 	}
 	return cs[:s], cs[s+1:], true
+}
+
+func UpdateCookie(w http.ResponseWriter, expired time.Time, basic string) {
+	http.SetCookie(w, &http.Cookie{
+		Name:    "token-id",
+		Value:   base64.StdEncoding.EncodeToString([]byte(basic)),
+		Path:    "/",
+		Expires: expired,
+	})
+	uuid := libstar.GenToken(32)
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session-id",
+		Value:   uuid,
+		Path:    "/",
+		Expires: expired,
+	})
 }
