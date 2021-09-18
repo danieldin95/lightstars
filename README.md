@@ -5,6 +5,11 @@
 
 This software makes it easier for you to control virtual compute, network and storage resource.
 
+![login](misc/images/login.png "Login LightStars")
+![newvm](misc/images/newvm.png "Create a Virtual Machine")
+![listvms](misc/images/listvms.png "List Virtual Machines")
+![showvm](misc/images/showvm.png "Show Virtual Machine")
+
 # CentOS7
 
 ## Check Intel VT-x or AMD-V
