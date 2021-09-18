@@ -24,7 +24,7 @@ export class Alert {
         let uuid = this.genId(32);
         $(parent).append(this.div(level, message, uuid));
         window.setTimeout(function() {
-            $(`#${uuid}`).fadeTo(800, 0).slideUp(800, function() {
+            $(`#${uuid}`).fadeTo('normal', 0).slideUp('normal', function() {
                 $(this).remove();
             });
         }, 2000);
