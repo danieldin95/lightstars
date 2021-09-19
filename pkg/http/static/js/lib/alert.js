@@ -27,7 +27,7 @@ export class Alert {
             $(`#${uuid}`).fadeTo('normal', 0).slideUp('normal', function() {
                 $(this).remove();
             });
-        }, 2000);
+        }, 5000);
     }
 
     static info (parent, message) {
