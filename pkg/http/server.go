@@ -166,7 +166,7 @@ func (h *Server) History(user schema.User, r *http.Request) {
 			Url:    r.URL.Path,
 			Client: r.RemoteAddr,
 		}
-		service.SERVICE.History.AddAndSave(his)
+		service.SERVICE.History.Add(his)
 	}
 }
 
@@ -177,9 +177,8 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 			user, _ := api.GetUser(r)
 			if user.Type == "admin" || service.SERVICE.Permission.Has(r) {
 				h.History(user, r)
-				expired := time.Now().Add(time.Minute * 15)
 				token := user.Name + ":" + user.Password
-				api.UpdateCookie(w, expired, token)
+				api.UpdateCookie(w, r, token)
 				next.ServeHTTP(w, r)
 			} else {
 				http.Error(w, "Request not allowed", http.StatusForbidden)
@@ -193,22 +192,21 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 	})
 }
 
-func (h *Server) Start() error {
+func (h *Server) Start() {
 	h.Initialize()
 	if h.keyFile == "" || h.crtFile == "" {
 		libstar.Info("Server.Start http://%s", h.listen)
 		if err := h.server.ListenAndServe(); err != nil {
 			libstar.Error("Server.Start on %s: %s", h.listen, err)
-			return err
+			return
 		}
 	} else {
 		libstar.Info("Server.Start https://%s", h.listen)
 		if err := h.server.ListenAndServeTLS(h.crtFile, h.keyFile); err != nil {
 			libstar.Error("Server.Start on %s: %s", h.listen, err)
-			return err
+			return
 		}
 	}
-	return nil
 }
 
 func (h *Server) Shutdown() {

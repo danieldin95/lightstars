@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
+	"time"
 )
 
 type Service struct {
@@ -10,6 +11,9 @@ type Service struct {
 	Users      *Users
 	Permission *Permission
 	History    *History
+	Session    *Session
+	Done       chan bool
+	Ticker     *time.Ticker
 }
 
 var SERVICE = Service{
@@ -27,23 +31,44 @@ var SERVICE = Service{
 	History: &History{
 		History: make([]*schema.History, 0, 128),
 	},
+	Session: &Session{
+		Session: make(map[string]*schema.Session, 12),
+	},
+	Done:   make(chan bool),
+	Ticker: time.NewTicker(2 * time.Second),
 }
 
 func (s *Service) Load(path string) {
 	if err := s.Zone.Load(path + "/zone.json"); err != nil {
 		libstar.Error("Service.Load.Zone %s", err)
 	}
-	libstar.Debug("Service.Load %v", s.Zone)
 	if err := s.Users.Load(path + "/auth.json"); err != nil {
 		libstar.Error("Service.Load.Users %s", err)
 	}
-	libstar.Debug("Service.Load %v", s.Users)
 	if err := s.Permission.Load(path + "/permission.json"); err != nil {
 		libstar.Error("Service.Load.Permission %s", err)
 	}
-	libstar.Debug("Service.Load %v", s.Permission)
 	if err := s.History.Load(path + "/history.json"); err != nil {
 		libstar.Error("Service.Load.History %s", err)
 	}
-	libstar.Debug("Service.Load %v", s.History)
+	if err := s.Session.Load(path + "/session.json"); err != nil {
+		libstar.Error("Service.Load.Session %s", err)
+	}
+	libstar.Debug("Service.Load %v", s)
+}
+
+func (s *Service) Flush() {
+	_ = s.Session.Save()
+	_ = s.History.Save()
+}
+
+func (s *Service) Loop() {
+	for {
+		select {
+		case <-s.Done:
+			return
+		case <-s.Ticker.C:
+			s.Flush()
+		}
+	}
 }

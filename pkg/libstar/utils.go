@@ -382,3 +382,7 @@ func GenUUID() string {
 	v := uuid.NewV4()
 	return v.String()
 }
+
+func GetLocalTime(layout, value string) (time.Time, error) {
+	return time.ParseInLocation(layout, value, time.Local)
+}

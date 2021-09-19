@@ -172,8 +172,14 @@ func ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 }
 
 func GetAuth(req *http.Request) (name, pass string, ok bool) {
-	if t, err := req.Cookie("token-id"); err == nil {
-		name, pass, ok = ParseBasicAuth(t.Value)
+	if t, err := req.Cookie("session-id"); err == nil {
+		if sess := service.SERVICE.Session.Get(t.Value); sess != nil {
+			now := time.Now()
+			expired, _ := libstar.GetLocalTime(time.RFC3339, sess.Expires)
+			if now.Before(expired) {
+				name, pass, ok = ParseBasicAuth(sess.Value)
+			}
+		}
 	} else {
 		name, pass, ok = req.BasicAuth()
 	}
@@ -199,14 +205,21 @@ func ParseBasicAuth(auth string) (username, password string, ok bool) {
 	return cs[:s], cs[s+1:], true
 }
 
-func UpdateCookie(w http.ResponseWriter, expired time.Time, basic string) {
-	http.SetCookie(w, &http.Cookie{
-		Name:    "token-id",
-		Value:   base64.StdEncoding.EncodeToString([]byte(basic)),
-		Path:    "/",
-		Expires: expired,
-	})
-	uuid := libstar.GenToken(32)
+func UpdateCookie(w http.ResponseWriter, req *http.Request, value string) {
+	uuid := ""
+	if obj, err := req.Cookie("session-id"); err == nil {
+		uuid = obj.Value
+	} else {
+		uuid = libstar.GenToken(32)
+	}
+	expired := time.Now().Add(time.Minute * 15)
+	sess := &schema.Session{
+		Uuid:    uuid,
+		Client:  req.RemoteAddr,
+		Value:   base64.StdEncoding.EncodeToString([]byte(value)),
+		Expires: expired.Format(time.RFC3339),
+	}
+	service.SERVICE.Session.Add(sess)
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session-id",
 		Value:   uuid,

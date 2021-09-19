@@ -31,17 +31,10 @@ func (h *History) Load(file string) error {
 	return nil
 }
 
-func (h *History) Append(obj *schema.History) {
+func (h *History) Add(obj *schema.History) {
 	h.Lock.Lock()
 	defer h.Lock.Unlock()
 	h.History = append(h.History, obj)
-}
-
-func (h *History) AddAndSave(obj *schema.History) {
-	h.Append(obj)
-	if err := h.Save(); err != nil {
-		libstar.Warn("History.AddAndSave %s", err)
-	}
 }
 
 func (h *History) List(user string) <-chan *schema.History {

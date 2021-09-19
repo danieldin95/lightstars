@@ -62,6 +62,7 @@ func main() {
 	// Initialize storage
 	storage.DATASTOR.Init()
 	service.SERVICE.Load(cfg.ConfDir)
+	go service.SERVICE.Loop()
 	// Initialize hyper
 	_, _ = libvirtc.SetHyper(cfg.Hyper)
 	_, _ = libvirts.SetHyper(cfg.Hyper)

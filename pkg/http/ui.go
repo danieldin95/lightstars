@@ -101,7 +101,6 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 			data.Error = "Invalid username or password."
 		} else {
 			basic := name + ":" + pass
-			expired := time.Now().Add(time.Hour)
 			his := &schema.History{
 				User:   u.Name,
 				Date:   time.Now().Format(time.RFC3339),
@@ -109,8 +108,8 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 				Url:    r.URL.Path,
 				Client: r.RemoteAddr,
 			}
-			service.SERVICE.History.AddAndSave(his)
-			api.UpdateCookie(w, expired, basic)
+			service.SERVICE.History.Add(his)
+			api.UpdateCookie(w, r, basic)
 			http.Redirect(w, r, "/ui#"+next, http.StatusMovedPermanently)
 			return
 		}
