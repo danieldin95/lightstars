@@ -6,6 +6,7 @@ type User struct {
 	Password  string   `json:"password,omitempty"`
 	Language  string   `json:"language"`
 	Instances []string `json:"instances,omitempty"`
+	Session   string   `json:"session"`
 }
 
 type ListUser struct {

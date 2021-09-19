@@ -177,8 +177,7 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 			user, _ := api.GetUser(r)
 			if user.Type == "admin" || service.SERVICE.Permission.Has(r) {
 				h.History(user, r)
-				token := user.Name + ":" + user.Password
-				api.UpdateCookie(w, r, token)
+				api.UpdateCookie(w, r, user)
 				next.ServeHTTP(w, r)
 			} else {
 				http.Error(w, "Request not allowed", http.StatusForbidden)

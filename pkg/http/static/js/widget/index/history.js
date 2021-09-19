@@ -22,7 +22,9 @@ export class History extends Widget {
         $(this.id).html(this.loading());
         new HistoryApi({tasks: this.tasks}).list(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
-            func({data, resp: e.resp});
+            if (func) {
+                func({data, resp: e.resp});
+            }
         });
     }
 

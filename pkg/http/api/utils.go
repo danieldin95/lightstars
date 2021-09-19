@@ -189,11 +189,21 @@ func GetAuth(req *http.Request) (name, pass string, ok bool) {
 func GetUser(req *http.Request) (schema.User, bool) {
 	name, _, _ := GetAuth(req)
 	libstar.Debug("GetUser %s", name)
-	return service.SERVICE.Users.Get(name)
+	user, ok := service.SERVICE.Users.Get(name)
+	if ok {
+		if obj, err := req.Cookie("session-id"); err == nil {
+			user.Session = obj.Value
+		}
+	}
+	return user, ok
+}
+
+func Base64Decode(value string) ([]byte, error) {
+	return base64.StdEncoding.DecodeString(value)
 }
 
 func ParseBasicAuth(auth string) (username, password string, ok bool) {
-	c, err := base64.StdEncoding.DecodeString(auth)
+	c, err := Base64Decode(auth)
 	if err != nil {
 		return
 	}
@@ -205,24 +215,26 @@ func ParseBasicAuth(auth string) (username, password string, ok bool) {
 	return cs[:s], cs[s+1:], true
 }
 
-func UpdateCookie(w http.ResponseWriter, req *http.Request, value string) {
-	uuid := ""
-	if obj, err := req.Cookie("session-id"); err == nil {
-		uuid = obj.Value
-	} else {
-		uuid = libstar.GenToken(32)
+func Base64Encode(value string) string {
+	return base64.StdEncoding.EncodeToString([]byte(value))
+}
+
+func UpdateCookie(w http.ResponseWriter, req *http.Request, user schema.User) {
+	if user.Session == "" {
+		libstar.Info("UpdateCookie session is empty for %s", req.URL)
+		return
 	}
 	expired := time.Now().Add(time.Minute * 15)
 	sess := &schema.Session{
-		Uuid:    uuid,
+		Uuid:    user.Session,
 		Client:  req.RemoteAddr,
-		Value:   base64.StdEncoding.EncodeToString([]byte(value)),
+		Value:   Base64Encode(user.Name + ":" + user.Password),
 		Expires: expired.Format(time.RFC3339),
 	}
-	service.SERVICE.Session.Add(sess)
+	service.SERVICE.Session.Mod(sess)
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session-id",
-		Value:   uuid,
+		Value:   sess.Uuid,
 		Path:    "/",
 		Expires: expired,
 	})

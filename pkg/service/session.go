@@ -47,6 +47,14 @@ func (s *Session) Add(obj *schema.Session) {
 	s.Session[obj.Uuid] = obj
 }
 
+func (s *Session) Mod(obj *schema.Session) {
+	s.Lock.Lock()
+	defer s.Lock.Unlock()
+	if _, ok := s.Session[obj.Uuid]; ok {
+		s.Session[obj.Uuid] = obj
+	}
+}
+
 func (s *Session) Del(key string) {
 	s.Lock.Lock()
 	defer s.Lock.Unlock()

@@ -75,10 +75,10 @@ func (pri *ProxyUrl) ServeHttp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (pri *ProxyUrl) Handler(w http.ResponseWriter, req *http.Request) {
-	url := pri.Server
-	url += pri.GetPath(req)
-	Debug("ProxyUrl.Handler %s %s to %s", req.Method, req.URL.Path, url)
-	outReq, _ := http.NewRequest(req.Method, url, req.Body)
+	urlPath := pri.Server
+	urlPath += pri.GetPath(req)
+	Debug("ProxyUrl.Handler %s %s to %s", req.Method, req.URL.Path, urlPath)
+	outReq, _ := http.NewRequest(req.Method, urlPath, req.Body)
 	for key, value := range req.Header {
 		for _, v := range value {
 			outReq.Header.Add(key, v)
