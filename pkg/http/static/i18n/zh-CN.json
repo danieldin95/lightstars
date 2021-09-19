@@ -154,5 +154,13 @@
 	"no data to display": "没有数据可显示",
 	"virtual ports": "虚拟网口",
 	"instance": "实例",
-	"create port": "新建网口"
+	"create port": "新建网口",
+	"history": "历史",
+	"search": "查询",
+	"download": "下载",
+	"user": "用户",
+	"date": "日期",
+	"client": "客户地址",
+	"method": "方法",
+	"url": "资源路径"
 }

@@ -11,10 +11,6 @@ export class System extends Widget {
         console.log(props);
     }
 
-    loading() {
-        return (``);
-    }
-
     refresh(data, func) {
         if (typeof data == 'function') {
             func = data;

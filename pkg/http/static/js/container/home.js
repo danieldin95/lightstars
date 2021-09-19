@@ -5,6 +5,7 @@ import {I18N} from "../lib/i18n.js";
 import {InstanceCreate} from "../widget/instance/create.js";
 import {Utils} from "../lib/utils.js";
 import {InstanceApi} from "../api/instance.js";
+import {History} from "../widget/index/history.js";
 
 export class Home extends Container {
     // {
@@ -34,9 +35,15 @@ export class Home extends Container {
         });
         sts.refresh();
 
-         let refresh = function() {
+        let his = new History({
+            id: this.id('#history .card-body-tbl #display-table'),
+        });
+        his.refresh();
+
+        let refresh = function() {
              sts.refresh();
              sys.refresh();
+             his.refresh();
         };
         // register click on overview.
         $(this.id('#refresh')).on('click', () => {
@@ -80,6 +87,42 @@ export class Home extends Container {
                     <div id="statics" class="col-sm-12 col-md-6 split-vertical mt-1 pt-4"></div>
                 </div>
             </div>
+        </div>
+        <!-- History -->
+        <div id="history" class="card shadow history">
+            <div class="card-header">
+                <button id="" class="btn btn-link btn-block text-left btn-sm">{{ 'history' | i}}</button>
+            </div>
+            <div class="card-body">
+                <!-- Overview buttons -->
+                <div class="row card-body-hdl">
+                    <div class="col-auto mr-auto">
+                        <button id="search" type="button" class="btn btn-outline-success btn-sm" 
+                                data-toggle="modal" data-target="#searchModal">{{'search' | i}}</button>
+                        <button id="download" type="button" class="btn btn-outline-dark btn-sm" 
+                                data-toggle="modal" data-target="#downloadModal">{{'download' | i}}</button>                                
+                    </div>
+                    <div class="col-auto">
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
+                    </div>
+                </div>
+                <div class="card-body-tbl">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>{{'user' | i}}</th>
+                            <th>{{'date' | i}}</th>
+                            <th>{{'client' | i}}</th>
+                            <th>{{'method' | i}}</th>
+                            <th>{{'url' | i}}</th>
+                        </tr>
+                        </thead>
+                        <tbody id="display-table">
+                        <!-- Loading... -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>            
         </div>
         
         <!-- Modal -->

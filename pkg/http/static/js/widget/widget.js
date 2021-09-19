@@ -11,6 +11,10 @@ export class Widget {
         return template.compile(tmpl)(data);
     }
 
+    loading() {
+        return 'loading...';
+    }
+
     title(name) {
         if (!this._alias) {
             this._alias = "LightStar"

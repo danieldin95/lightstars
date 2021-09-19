@@ -154,5 +154,13 @@
 	"no data to display": "No data to display",
 	"virtual ports": "Virtual ports",
 	"instance": "Instance",
-	"create port": "Create port"
+	"create port": "Create port",
+	"history": "History",
+	"search": "Search",
+	"download": "Download",
+	"user": "User",
+	"date": "Date",
+	"client": "Client",
+	"method": "Method",
+	"url": "URL"
 }

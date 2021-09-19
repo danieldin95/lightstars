@@ -201,6 +201,10 @@ select {
     min-height: 200px;
 }
 
+.history .card-body {
+    min-height: 360px;
+}
+
 .error {
     border-color: darkgray;
 }
