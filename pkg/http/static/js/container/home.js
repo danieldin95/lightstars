@@ -64,7 +64,7 @@ export class Home extends Container {
         <!-- System -->
         <div id="system" class="card shadow system">
             <div class="card-header">
-                <button id="refresh-hdl" class="btn btn-link btn-block text-left btn-sm">${this.props.name}</button>
+                <button id="" class="btn btn-link btn-block text-left btn-sm">{{ 'system info' | i}}</button>
             </div>
             <div id="overview" class="card-body">
                 <!-- Overview buttons -->
@@ -91,7 +91,7 @@ export class Home extends Container {
         <!-- History -->
         <div id="history" class="card shadow history">
             <div class="card-header">
-                <button id="" class="btn btn-link btn-block text-left btn-sm">{{ 'history' | i}}</button>
+                <button id="" class="btn btn-link btn-block text-left btn-sm">{{ 'operation history' | i}}</button>
             </div>
             <div class="card-body">
                 <!-- Overview buttons -->

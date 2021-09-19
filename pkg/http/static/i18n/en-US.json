@@ -155,12 +155,13 @@
 	"virtual ports": "Virtual ports",
 	"instance": "Instance",
 	"create port": "Create port",
-	"history": "History",
+	"operation history": "Operation history",
 	"search": "Search",
 	"download": "Download",
 	"user": "User",
 	"date": "Date",
 	"client": "Client",
 	"method": "Method",
-	"url": "URL"
+	"url": "URL",
+	"system info": "System information"
 }
