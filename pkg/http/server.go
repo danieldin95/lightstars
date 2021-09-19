@@ -155,6 +155,9 @@ func (h *Server) LogRequest(r *http.Request) {
 }
 
 func (h *Server) History(user schema.User, r *http.Request) {
+	if strings.HasPrefix(r.URL.Path, "/ui") {
+		return
+	}
 	if r.Method == "POST" || r.Method == "PUT" || r.Method == "DELETE" {
 		his := &schema.History{
 			User:   user.Name,

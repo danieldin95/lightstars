@@ -102,6 +102,14 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 		} else {
 			basic := name + ":" + pass
 			expired := time.Now().Add(time.Hour)
+			his := &schema.History{
+				User:   u.Name,
+				Date:   time.Now().Format(time.RFC3339),
+				Method: r.Method,
+				Url:    r.URL.Path,
+				Client: r.RemoteAddr,
+			}
+			service.SERVICE.History.AddAndSave(his)
 			api.UpdateCookie(w, expired, basic)
 			http.Redirect(w, r, "/ui#"+next, http.StatusMovedPermanently)
 			return
