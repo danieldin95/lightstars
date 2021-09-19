@@ -9,6 +9,7 @@ export class HistoryApi extends Api {
     // }
     constructor(props) {
         super(props);
+        this._host = ""
     }
 
     url(action) {
