@@ -155,7 +155,7 @@ func (j jsonUtils) Marshal(v interface{}, pretty bool) ([]byte, error) {
 		return nil, err
 	}
 	if !pretty {
-		return nil, nil
+		return str, nil
 	}
 	var out bytes.Buffer
 	if err := json.Indent(&out, str, "", "  "); err != nil {
@@ -171,7 +171,7 @@ func (j jsonUtils) MarshalSave(v interface{}, file string, pretty bool) error {
 		Error("MarshalSave: %s", err)
 		return err
 	}
-	str, err := j.Marshal(v, true)
+	str, err := j.Marshal(v, pretty)
 	if err != nil {
 		Error("MarshalSave error: %s", err)
 		return err

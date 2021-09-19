@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/danieldin95/lightstar/pkg/http/api"
 	"github.com/danieldin95/lightstar/pkg/libstar"
+	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/danieldin95/lightstar/pkg/service"
 	"github.com/danieldin95/lightstar/pkg/storage"
 	"github.com/gorilla/mux"
@@ -80,6 +81,7 @@ func (h *Server) LoadRouter() {
 	api.Volume{}.Router(router)
 	api.User{}.Router(router)
 	api.Snapshot{}.Router(router)
+	api.History{}.Router(router)
 }
 
 func (h *Server) SetCert(keyFile, crtFile string) {
@@ -152,12 +154,26 @@ func (h *Server) LogRequest(r *http.Request) {
 	}
 }
 
+func (h *Server) History(user schema.User, r *http.Request) {
+	if r.Method == "POST" || r.Method == "PUT" || r.Method == "DELETE" {
+		his := &schema.History{
+			User:   user.Name,
+			Date:   time.Now().Format(time.RFC3339),
+			Method: r.Method,
+			Url:    r.URL.Path,
+			Client: r.RemoteAddr,
+		}
+		service.SERVICE.History.AddAndSave(his)
+	}
+}
+
 func (h *Server) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h.LogRequest(r)
 		if h.IsAuth(w, r) {
 			user, _ := api.GetUser(r)
 			if user.Type == "admin" || service.SERVICE.Permission.Has(r) {
+				h.History(user, r)
 				expired := time.Now().Add(time.Minute * 15)
 				token := user.Name + ":" + user.Password
 				api.UpdateCookie(w, expired, token)
