@@ -23,7 +23,7 @@ export class PasswordApi extends Api {
         if (data.new === data.repeat) {
             super.edit(data);
         } else {
-            Alert.danger(this.tasks, `SET ${this.url()}: The passwords are inconsistent`);
+            Alert.danger(this.tasks, `SET ${this.url()}: The new passwords are inconsistent`);
         }
     }
 }
