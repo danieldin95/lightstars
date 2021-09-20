@@ -1,4 +1,5 @@
 import {Api} from "./api.js"
+import {Alert} from "../lib/alert.js";
 
 
 export class PasswordApi extends Api {
@@ -19,6 +20,10 @@ export class PasswordApi extends Api {
     }
 
     set(data) {
-        super.edit(data);
+        if (data.new === data.repeat) {
+            super.edit(data);
+        } else {
+            Alert.danger(this.tasks, `SET ${this.url()}: The passwords are inconsistent`);
+        }
     }
 }
