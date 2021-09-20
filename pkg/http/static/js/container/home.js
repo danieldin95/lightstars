@@ -70,7 +70,7 @@ export class Home extends Container {
                 <!-- Overview buttons -->
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
-                        <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                        <button id="create" type="button" class="btn btn-outline-info btn-sm"
                                 data-toggle="modal" data-target="#createGuestModal">
                             {{'create new instance' | i}}
                         </button>
@@ -97,7 +97,7 @@ export class Home extends Container {
                 <!-- Overview buttons -->
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
-                        <button id="search" type="button" class="btn btn-outline-success btn-sm" 
+                        <button id="search" type="button" class="btn btn-outline-info btn-sm" 
                                 data-toggle="modal" data-target="#searchModal">{{'search' | i}}</button>
                         <button id="download" type="button" class="btn btn-outline-dark btn-sm" 
                                 data-toggle="modal" data-target="#downloadModal">{{'download' | i}}</button>                                

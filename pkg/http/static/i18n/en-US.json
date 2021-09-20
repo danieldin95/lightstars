@@ -40,6 +40,7 @@
 	"new nfs datastore": "New NFS datastore",
 	"new iscsi datastore": "New iSCSI datastore",
 	"upload": "Upload",
+	"upload file": "Upload file",
 	"edit": "Edit",
 	"delete": "Delete",
 	"source": "Source",

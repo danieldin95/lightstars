@@ -230,7 +230,6 @@ ol, ul, dl {
 }
 
 .badge-outline {
-    color: inherit;
     border: solid 1px #343a40;
     font-weight: normal;
     border-radius: 0.25rem;
@@ -241,9 +240,6 @@ ol, ul, dl {
 }
 
 .badge-lite {
-    color: inherit;
-    border: solid 1px #b4bac0;
-    font-weight: normal;
     min-width: 2rem;
     border-radius: 0.25rem;
 }

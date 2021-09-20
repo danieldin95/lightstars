@@ -40,6 +40,7 @@
 	"new nfs datastore": "新建NFS存储",
 	"new iscsi datastore": "新建iSCS存储",
 	"upload": "上传",
+	"upload file": "上传文件",
 	"edit": "编辑",
 	"delete": "删除",
 	"source": "来源",

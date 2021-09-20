@@ -29,25 +29,25 @@ export class Statics extends Widget {
             <dl class="dl-horizontal dl-horizontal-r">
                 <dt>{{'datastore' | i}}:</dt>
                 <dd>
-                    <span class="badge badge-pill badge-lite" title="total">{{datastore.total}}</span>
-                    <span class="badge badge-pill badge-lite st-active" title="active">{{datastore.active}}</span>
+                    <span class="badge badge-pill badge-lite badge-info" title="total">{{datastore.total}}</span>
+                    <span class="badge badge-pill badge-lite badge-success" title="active">{{datastore.active}}</span>
                 </dd>
                 <dt>{{'guest instances' | i}}:</dt>
                 <dd>
-                    <span class="badge badge-pill badge-lite" title="total">{{instance.total}}</span>
-                    <span class="badge badge-pill badge-lite st-running" title="running">{{instance.active}}</span>
-                    <span class="badge badge-pill badge-lite st-inactive" title="shutdown">{{instance.inactive}}</span>
+                    <span class="badge badge-pill badge-lite badge-info" title="total">{{instance.total}}</span>
+                    <span class="badge badge-pill badge-lite badge-success" title="running">{{instance.active}}</span>
+                    <span class="badge badge-pill badge-lite badge-dark" title="shutdown">{{instance.inactive}}</span>
                 </dd>
                 <dt>{{'network' | i}}:</dt>
                 <dd>
-                    <span class="badge badge-pill badge-lite" title="total">{{network.total}}</span>
-                    <span class="badge badge-pill badge-lite st-active" title="active">{{network.active}}</span>
+                    <span class="badge badge-pill badge-lite badge-info" title="total">{{network.total}}</span>
+                    <span class="badge badge-pill badge-lite badge-success" title="active">{{network.active}}</span>
                 </dd>
                 <dt>{{'virtual ports' | i}}:</dt>
                 <dd>
-                    <span class="badge badge-pill badge-lite" title="total">{{ports.total}}</span>
-                    <span class="badge badge-pill badge-lite st-active" title="up">{{ports.active}}</span>
-                    <span class="badge badge-pill badge-lite st-inactive" title="down">{{ports.inactive}}</span>
+                    <span class="badge badge-pill badge-lite badge-info" title="total">{{ports.total}}</span>
+                    <span class="badge badge-pill badge-lite badge-success" title="up">{{ports.active}}</span>
+                    <span class="badge badge-pill badge-lite badge-dark" title="down">{{ports.inactive}}</span>
                 </dd>
             </dl>`, data);
     }

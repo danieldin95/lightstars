@@ -132,7 +132,7 @@ export class Network extends Container {
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">
-                                <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                <button id="create" type="button" class="btn btn-outline-info btn-sm"
                                         data-toggle="modal" data-target="#PortCreateModal">
                                     {{'create port' | i}}
                                 </button>
@@ -169,7 +169,7 @@ export class Network extends Container {
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">
-                                <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                                <button id="create" type="button" class="btn btn-outline-info btn-sm"
                                         data-toggle="modal" data-target="#LeaseCreateModal">
                                     {{'new a lease' | i}}
                                 </button>

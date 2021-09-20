@@ -61,12 +61,12 @@ export class DataStores extends Container {
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
-                            <button id="create" type="button" class="btn btn-outline-success btn-sm"
+                            <button id="create" type="button" class="btn btn-outline-info btn-sm"
                                     data-toggle="modal" data-target="#createDirModal">
                                 {{'new a datastore' | i}}
                             </button>
                             <button id="creates" type="button"
-                                    class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                    class="btn btn-outline-info dropdown-toggle dropdown-toggle-split"
                                     data-toggle="dropdown" aria-expanded="false">
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>

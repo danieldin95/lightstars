@@ -78,8 +78,8 @@ export class Pool extends Container {
                 <!-- Header buttons -->
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
-                        <button id="upload" type="button" class="btn btn-outline-dark btn-sm" 
-                                 data-toggle="modal" data-target="#uploadStoreModal">{{'upload' | i}}</button>
+                        <button id="upload" type="button" class="btn btn-outline-info btn-sm" 
+                                 data-toggle="modal" data-target="#uploadStoreModal">{{'upload file' | i}}</button>
                         <div id="btns-more" class="btn-group btn-group-sm" role="group">
                             <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
                                     data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
@@ -131,7 +131,7 @@ export class Pool extends Container {
             <div class="card-body">
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
-                        <button id="create" type="button" class="btn btn-outline-dark btn-sm"
+                        <button id="create" type="button" class="btn btn-outline-info btn-sm"
                                 data-toggle="modal" data-target="#createVolumeModal">
                             {{'new a volume' | i}}
                         </button>
