@@ -108,7 +108,7 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 				Client: r.RemoteAddr,
 			}
 			service.SERVICE.History.Add(his)
-			uuid := libstar.GenToken(32)
+			uuid := libstar.GenToken(64)
 			sess := &schema.Session{
 				Uuid: uuid,
 			}
