@@ -4,6 +4,7 @@ import {Template} from "./lib/template.js";
 
 
 $(function() {
+    $.removeCookie('session-id', { path: '/' });
     I18N.promise().then(function () {
         let tmpl = new Template();
         let login = new Login({
