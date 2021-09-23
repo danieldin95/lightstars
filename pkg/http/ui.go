@@ -96,27 +96,26 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		pass := r.FormValue("password")
 		next := r.FormValue("next")
-		u, ok := service.SERVICE.Users.Get(name)
-		if !ok || u.Password != pass {
-			data.Error = "Invalid username or password."
-		} else {
+		user, ok := service.SERVICE.Users.Get(name)
+		if ok && user.Password == pass {
 			his := &schema.History{
-				User:   u.Name,
+				User:   user.Name,
 				Date:   time.Now().Format(time.RFC3339),
 				Method: r.Method,
 				Url:    r.URL.Path,
 				Client: r.RemoteAddr,
 			}
 			service.SERVICE.History.Add(his)
-			uuid := libstar.GenToken(64)
 			sess := &schema.Session{
-				Uuid: uuid,
+				Uuid: libstar.GenToken(64),
 			}
-			u.Session = uuid // using newer session
+			user.Session = sess.Uuid // using newer session
 			service.SERVICE.Session.Add(sess)
-			api.UpdateCookie(w, r, u)
+			api.UpdateCookie(w, r, user)
 			http.Redirect(w, r, "/ui#"+next, http.StatusMovedPermanently)
 			return
+		} else {
+			data.Error = "Invalid username or password."
 		}
 	}
 	file := api.GetFile("ui/login.html")
