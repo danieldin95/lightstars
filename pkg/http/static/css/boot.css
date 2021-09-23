@@ -33,14 +33,14 @@ a:hover, a:focus {
     }
     .context #notice,
     .context #container {
-        margin: 0 8rem;
+        margin: 0 4rem;
     }
 }
 
 @media (max-width: 1280px) {
     .navbar {
         min-height: 2rem;
-        padding: 0 1rem;
+        padding: 0 0.5rem;
     }
     .context #notice,
     .context #container {
