@@ -67,7 +67,8 @@ export class Navigation extends Widget {
                 });
             new Preferences({id: '#preferencesModal'})
                 .onsubmit((e) => {
-                    console.log(Utils.toJSON(e.form));
+                    let data = Utils.toJSON(e.form);
+                    $.cookie('lang', data.lang);
                 });
         }, (e) => {
             this.view = $(this.render({

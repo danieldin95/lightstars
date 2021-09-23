@@ -8,7 +8,10 @@ export class I18N {
     }
 
     static promise() {
-        let locale = navigator.language || navigator.userLanguage;
+        let locale = $.cookie('lang');
+        if (!locale) {
+            locale = navigator.language || navigator.userLanguage;
+        }
         $.i18n({
             locale: locale
         });
