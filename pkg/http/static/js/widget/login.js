@@ -81,7 +81,7 @@ export class Login extends Widget {
                     <label for="password" class="col-sm-3 col-form-label-sm">{{'password' | i}}</label>
                     <div class="col-sm-7">
                         <div class="input-group">
-                            <input type="password" class="form-control form-control-sm" id="password" name="password" value=""/>
+                            <input type="password" class="form-control form-control-sm no-border-r" id="password" name="password" value=""/>
                             <div class="input-group-append">
                                 <a href="javascript:void(0)" class="input-group-text input-group-sm" id="password-app">
                                     <i class="bi bi-eye"></i>

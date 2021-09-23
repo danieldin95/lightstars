@@ -249,3 +249,11 @@ ol, ul, dl {
     min-width: 2rem;
     border-radius: 0.25rem;
 }
+
+.no-border-l {
+    border-left: none;
+}
+
+.no-border-r {
+    border-right: none;
+}
