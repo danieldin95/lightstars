@@ -8,21 +8,21 @@ body {
 }
 
 .container {
-    margin: 8% auto auto;
+    margin: 1rem auto auto;
     padding: 1rem;
 }
 
 .notice {
     min-width: 20rem;
-    max-width: 30rem;
+    max-width: 26rem;
     max-height: 32rem;
     margin: auto auto 1rem;
 }
 
 .login {
-    max-width: 30rem;
+    max-width: 26rem;
     min-height: 20rem;
-    max-height: 32rem;
+    max-height: 40rem;
     margin: auto;
     border-radius: 0.25rem;
     border: none;
@@ -31,7 +31,7 @@ body {
 .login .card-header {
     text-align: left;
     padding: 0.75rem .25rem;
-    background: #1d2124 linear-gradient(270deg, #117a8b, #495057);
+    background: #1d2124 linear-gradient(270deg, #0d66ae, #495057);
     border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
 }
 

@@ -54,10 +54,7 @@ export class Login extends Widget {
         <div class="card login">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-sm-3">
-                        <img class="" src="/static/images/lightstar.png" alt="">
-                    </div>
-                    <div class="col-sm-7">
+                    <div class="col-12">
                         <span style="color: #ffffff;">
                             <strong><a href="https://github.com/danieldin95/lightstar">{{'lightstars' | i}}</a></strong>
                         </span>
@@ -70,16 +67,16 @@ export class Login extends Widget {
             </div>
             <div class="card-body">
                 <div class="form-group row">
-                    <label for="name" class="col-sm-3 col-form-label-sm">{{'username' | i}}</label>
-                    <div class="col-sm-7">
+                    <label for="name" class="col-12 col-form-label-sm">{{'username' | i}}</label>
+                    <div class="col-12">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" id="name" name="name" value="${this.user}" id="autofocus"/>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="password" class="col-sm-3 col-form-label-sm">{{'password' | i}}</label>
-                    <div class="col-sm-7">
+                    <label for="password" class="col-12 col-form-label-sm">{{'password' | i}}</label>
+                    <div class="col-12">
                         <div class="input-group">
                             <input type="password" class="form-control form-control-sm no-border-r" id="password" name="password" value=""/>
                             <div class="input-group-append">
