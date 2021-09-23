@@ -16,22 +16,35 @@ export class Login extends Widget {
             this.user = ""
         }
         this.refresh();
-    }
-
-    compile(tmpl, data) {
-        return template.compile(tmpl)(data);
+        this.loading();
     }
 
     refresh() {
         this.title(I18N.i('login'));
         $(this.parent).html(this.render({}));
-        $(this.parent).find('#autofocus').focus();
+    }
+
+    loading() {
+        let parent = $(this.parent);
+        parent.find('#autofocus').focus();
+        parent.find('#password-app').on('click',  function (e) {
+            let current = parent.find('#password').attr('type');
+            if ( current === 'password') {
+                parent.find('#password-app i').addClass('bi-eye-slash');
+                parent.find('#password-app i').removeClass('bi-eye');
+                parent.find('#password').attr('type', 'text');
+            } else {
+                parent.find('#password-app i').addClass('bi-eye');
+                parent.find('#password-app i').removeClass('bi-eye-slash');
+                parent.find('#password').attr('type', 'password');
+            }
+        });
     }
 
     next() {
         let page = Location.get();
         let query = Location.query();
-        return page + "?" + query
+        return page + "?" + query;
     }
 
     render(v) {
@@ -69,6 +82,11 @@ export class Login extends Widget {
                     <div class="col-sm-7">
                         <div class="input-group">
                             <input type="password" class="form-control form-control-sm" id="password" name="password" value=""/>
+                            <div class="input-group-append">
+                                <a href="javascript:void(0)" class="input-group-text input-group-sm" id="password-app">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

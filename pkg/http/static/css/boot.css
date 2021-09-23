@@ -178,6 +178,12 @@ a:hover, a:focus {
     text-align: right;
 }
 
+.input-group-text {
+    padding: 0.2rem 0.5rem;
+    font-size: inherit;
+    background-color: inherit;
+}
+
 ol, ul, dl {
     margin-top: 0;
     margin-bottom: 0;
