@@ -172,7 +172,7 @@ func ParseFiles(w http.ResponseWriter, name string, data interface{}) error {
 }
 
 func GetAuth(req *http.Request) (name, pass string, ok bool) {
-	if t, err := req.Cookie("session-id"); err == nil {
+	if t, err := req.Cookie("token"); err == nil {
 		if sess := service.SERVICE.Session.Get(t.Value); sess != nil {
 			now := time.Now()
 			expired, _ := libstar.GetLocalTime(time.RFC3339, sess.Expires)
@@ -191,7 +191,7 @@ func GetUser(req *http.Request) (schema.User, bool) {
 	libstar.Debug("GetUser %s", name)
 	user, ok := service.SERVICE.Users.Get(name)
 	if ok {
-		if obj, err := req.Cookie("session-id"); err == nil {
+		if obj, err := req.Cookie("token"); err == nil {
 			user.Session = obj.Value
 		}
 	}
@@ -233,8 +233,14 @@ func UpdateCookie(w http.ResponseWriter, req *http.Request, user schema.User) {
 	}
 	service.SERVICE.Session.Mod(sess)
 	http.SetCookie(w, &http.Cookie{
-		Name:    "session-id",
+		Name:    "token",
 		Value:   sess.Uuid,
+		Path:    "/",
+		Expires: expired,
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:    "user",
+		Value:   user.Name,
 		Path:    "/",
 		Expires: expired,
 	})

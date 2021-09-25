@@ -11,7 +11,10 @@ export class Login extends Widget {
         super(props);
         this.props = props;
         this.parent = props.parent;
-
+        this.user = $.cookie('user');
+        if (!this.user) {
+            this.user = ""
+        }
         this.refresh();
     }
 
@@ -57,7 +60,7 @@ export class Login extends Widget {
                     <label for="name" class="col-sm-3 col-form-label-sm">{{'username' | i}}</label>
                     <div class="col-sm-7">
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" name="name" value="" id="autofocus"/>
+                            <input type="text" class="form-control form-control-sm" id="name" name="name" value="${this.user}" id="autofocus"/>
                         </div>
                     </div>
                 </div>
@@ -65,7 +68,7 @@ export class Login extends Widget {
                     <label for="password" class="col-sm-3 col-form-label-sm">{{'password' | i}}</label>
                     <div class="col-sm-7">
                         <div class="input-group">
-                            <input type="password" class="form-control form-control-sm" name="password" value=""/>
+                            <input type="password" class="form-control form-control-sm" id="password" name="password" value=""/>
                         </div>
                     </div>
                 </div>
