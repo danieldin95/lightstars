@@ -1,0 +1,15 @@
+<domain type='kvm'>
+  <memory unit='KiB'>1048576</memory>
+  <currentMemory unit='KiB'>1048576</currentMemory>
+  <memoryBacking>
+    <hugepages>
+      <page size='2048' unit='KiB' nodeset='0'/>
+    </hugepages>
+  </memoryBacking>
+  <vcpu placement='static'>2</vcpu>
+  <cpu mode='custom' match='exact' check='full'>
+    <numa>
+      <cell id='0' cpus='0-1' memory='1048576' unit='KiB' memAccess='shared'/>
+    </numa>
+  </cpu>
+</domain>

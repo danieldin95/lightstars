@@ -1,0 +1,5 @@
+<interface type='vhostuser'>
+  <source type='unix' path='/tmp/vm_port1' mode='server'/>
+  <model type='virtio'/>
+  <driver name='vhost' rx_queue_size='1024' tx_queue_size='1024'/>
+</interface>
