@@ -98,7 +98,6 @@ export class Login extends Widget {
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-end">
-                <button id="reset" class="btn btn-outline-dark btn-sm mr-4" type="reset">{{'reset' | i}}</button>
                 <button id="submit" class="btn btn-outline-success btn-sm mr-0">{{ 'login' | i}}</button>
             </div>
         </div>
