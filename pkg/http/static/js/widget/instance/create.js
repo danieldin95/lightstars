@@ -89,7 +89,7 @@ export class InstanceCreate extends FormModal {
     render() {
         super.render();
         this.view.find("select[name='cpu'] option").remove();
-        for (let i = 1; i < 17; i++) {
+        for (let i = 1; i < 33; i++) {
             this.view.find("select[name='cpu']").append(new Option(i, i));
         }
     }
