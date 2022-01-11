@@ -18,7 +18,7 @@ export class InstanceSet extends FormModal {
         super.render();
         let cpu = this.view.find("select[name='cpu']");
         cpu.find("option").remove();
-        for (let i = 1; i < 17; i++) {
+        for (let i = 1; i < 33; i++) {
             cpu.append(new Option(i, i));
         }
         cpu.val(this.cpu).change();
