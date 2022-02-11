@@ -12,5 +12,5 @@ sed -e "s/Version:.*/Version:\ ${version}/" ./dist/lightstar.spec.in > ./build/l
 
 # link source
 # shellcheck disable=SC2086
-rm -rf ~/rpmbuild/SOURCES/lightstar-${version}
+rm -rf ~/rpmbuild/SOURCES/lightstar-*
 ln -s $(pwd) ~/rpmbuild/SOURCES/lightstar-"${version}"

@@ -26,7 +26,7 @@ export class Login extends Widget {
 
     loading() {
         let parent = $(this.parent);
-        parent.find('#autofocus').focus();
+        parent.find('#name').focus();
         parent.find('#password-app').on('click',  function (e) {
             let current = parent.find('#password').attr('type');
             if ( current === 'password') {
@@ -38,6 +38,10 @@ export class Login extends Widget {
                 parent.find('#password-app i').removeClass('bi-eye-slash');
                 parent.find('#password').attr('type', 'password');
             }
+            parent.find('#password').focus();
+        });
+        parent.find('#name-app').on('click',  function (e) {
+            parent.find('#name').focus();
         });
     }
 
@@ -70,7 +74,12 @@ export class Login extends Widget {
                     <label for="name" class="col-12 col-form-label-sm">{{'username' | i}}</label>
                     <div class="col-12">
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="name" name="name" value="${this.user}" id="autofocus"/>
+                            <input type="text" class="form-control form-control-sm" id="name" name="name" value="${this.user}"/>
+                            <div class="input-group-append">
+                                <a href="javascript:void(0)" class="input-group-text input-group-sm" id="name-app">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +87,7 @@ export class Login extends Widget {
                     <label for="password" class="col-12 col-form-label-sm">{{'password' | i}}</label>
                     <div class="col-12">
                         <div class="input-group">
-                            <input type="password" class="form-control form-control-sm no-border-r" id="password" name="password" value=""/>
+                            <input type="password" class="form-control form-control-sm" id="password" name="password" value=""/>
                             <div class="input-group-append">
                                 <a href="javascript:void(0)" class="input-group-text input-group-sm" id="password-app">
                                     <i class="bi bi-eye"></i>
@@ -89,7 +98,6 @@ export class Login extends Widget {
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-end">
-                <button id="reset" class="btn btn-outline-dark btn-sm mr-2" type="reset">{{'reset' | i}}</button>
                 <button id="submit" class="btn btn-outline-success btn-sm mr-0">{{ 'login' | i}}</button>
             </div>
         </div>
