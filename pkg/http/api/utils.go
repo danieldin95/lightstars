@@ -224,7 +224,7 @@ func UpdateCookie(w http.ResponseWriter, req *http.Request, user schema.User) {
 		libstar.Info("UpdateCookie session is empty for %s", req.URL)
 		return
 	}
-	expired := time.Now().Add(time.Minute * 15)
+	expired := time.Now().Add(time.Minute * 480)
 	sess := &schema.Session{
 		Uuid:    user.Session,
 		Client:  req.RemoteAddr,

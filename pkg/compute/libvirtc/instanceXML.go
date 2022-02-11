@@ -219,8 +219,12 @@ type InterfaceMacXML struct {
 
 type InterfaceSourceXML struct {
 	XMLName xml.Name    `xml:"source" json:"-"`
+	Type    string      `xml:"type,attr,omitempty" json:"type"`
 	Bridge  string      `xml:"bridge,attr,omitempty" json:"bridge"`
 	Network string      `xml:"network,attr,omitempty" json:"network"`
+	Path    string      `xml:"path,attr,omitempty" json:"path"`
+	Mode    string      `xml:"mode,attr,omitempty" json:"mode"`
+	Dev     string      `xml:"dev,attr,omitempty" json:"dev"`
 	Address *AddressXML `xml:"address,omitempty" json:"address"`
 }
 

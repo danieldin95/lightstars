@@ -22,8 +22,18 @@ func NewFromInterfaceXML(xml libvirtc.InterfaceXML, domain schema.Instance) (int
 		UUID: domain.UUID,
 		Name: domain.Name,
 	}
-	int.Source = xml.Source.Bridge
-	int.Network = xml.Source.Network
+	switch xml.Type {
+	case "bridge":
+		int.Source = xml.Source.Bridge
+	case "network":
+		int.Network = xml.Source.Network
+	case "vhostuser":
+		int.Source = xml.Source.Path
+	case "direct":
+		int.Source = xml.Source.Dev
+	default:
+		int.Source = "unknown"
+	}
 	addr := xml.Source.Address
 	if addr != nil && addr.Type == "pci" {
 		int.HostDev = addr.Type
