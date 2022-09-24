@@ -105,7 +105,7 @@ export class Guest extends Container {
     }
 
     template(v) {
-        let disabled = v.state === 'running' ? '' : 'disabled';
+        let disabled = (v.state === 'running' || v.state === 'paused' ) ? '' : 'disabled';
         let host = Api.host();
         let pass = Utils.graphic(v, 'vnc', 'password');
         let vncUrl = `/ui/console?id=${v.uuid}&password=${pass}&node=${host}&title=${v.name}`;
