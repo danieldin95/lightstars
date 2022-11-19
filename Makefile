@@ -42,13 +42,14 @@ env:
 
 ## light star
 .PHONY: lightstar
+
 lightstar: env
 	go build -mod=vendor -ldflags "$(LDFLAGS)" -o $(BD)/lightstar ./cmd/lightstar
 
 ### linux packaging
 rpm-env:
 	@./dist/spec.sh
-	@[ -e "$(BD)"/cert ] || ln -s $(SD)/../freecert $(BD)/cert
+	@rm -rf $(BD)/cert && ln -s $(SD)/dist/resource/cert $(BD)/cert
 
 rpm-lightstar: rpm-env
 	rpmbuild -ba $(BD)/lightstar.spec
@@ -83,10 +84,11 @@ linux-zip: env lightstar ## build linux zip packages
 	@popd
 
 centos-devel:
-	yum install libvirt-devel
+	yum install -y libvirt-devel
+	patch -p 1 < libvirt-go.patch
 
 ubuntu-devel:
-	apt-get install libvirt-dev
+	apt-get install -y libvirt-dev
 
 ## upgrade
 upgrade:

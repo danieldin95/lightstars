@@ -47,7 +47,7 @@ export class IsolatedCreate extends FormModal {
                         <label for="address" class="col-form-label-sm">{{'interface address for bridge' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm"
-                                   name="address" value="192.168.200.1"/>
+                                   name="address" value="192.168.2.1"/>
                             <select class="select-unit-right" name="prefix">
                                 <option value="24" selected>/24</option>
                             </select>
@@ -57,7 +57,7 @@ export class IsolatedCreate extends FormModal {
                         <label for="range" class="col-form-label-sm">{{'address range for dhcp' | i}}</label>
                         <div class="input-group">
                             <textarea type="text" class="form-control form-control-sm" 
-                                name="range" rows="3">192.168.200.100,192.168.200.200</textarea>                                   
+                                name="range" rows="3">192.168.2.10,192.168.2.200</textarea>
                         </div>
                     </div>
                 </form>

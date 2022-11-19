@@ -21,6 +21,6 @@ export class NetworkCtl extends Controller {
         this.tasks = props.tasks || "tasks";
 
         this.leases = new LeasesCtl({...props.leases, uuid, name});
-        this.ports = new PortCtl({...props.ports, name});
+        this.ports = new PortCtl({...props.ports, uuid, name});
     }
 }

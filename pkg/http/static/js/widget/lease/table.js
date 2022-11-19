@@ -42,6 +42,7 @@ export class LeaseTable extends Widget {
             <tr>
                 <td><input id="on-one" type="checkbox" data="{{v.type}}"></td>
                 <td>{{i+1}}</td>
+                <td>{{v.hostname}}</td>
                 <td>{{v.mac}}</td>
                 <td>{{v.ipAddr}}/{{v.prefix}}</td>
             </tr>

@@ -4,6 +4,7 @@ import (
 	"github.com/danieldin95/lightstar/pkg/compute"
 	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
 	"github.com/danieldin95/lightstar/pkg/libstar"
+	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -40,6 +41,21 @@ func (in Interface) List(w http.ResponseWriter, r *http.Request) {
 			list.Items = append(list.Items, port)
 		}
 	}
+
+	address := make(map[string]string, 2)
+	name := GetQueryOne(r, "uuid")
+	if leases, err := libvirtn.LookupLeases(name); err == nil {
+		for _, l := range leases {
+			address[l.Mac] = l.IPAddr
+		}
+	}
+	libstar.Info("%v", address)
+	for i, port := range list.Items {
+		if ip, ok := address[port.Address]; ok {
+			list.Items[i].IpAddr = ip
+		}
+	}
+
 	sort.SliceStable(list.Items, func(i, j int) bool {
 		return list.Items[i].Address < list.Items[j].Address
 	})

@@ -177,8 +177,8 @@ export class InstanceCreate extends FormModal {
                         <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
                             <select class="form-control form-control-sm" name="cpuMode">
-                                <option value="host-model" selected>Default</option>
-                                <option value="host-passthrough">Host passthrough</option>
+                                <option value="host-model">Default</option>
+                                <option value="host-passthrough" selected>Host passthrough</option>
                             </select>
                             <select class="select-twice-md" name="cpu">
                                 <option value="1">1</option>
@@ -192,10 +192,10 @@ export class InstanceCreate extends FormModal {
                         <label for="MaxMem" class="col-form-label-sm">{{'memory size' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm"
-                                   name="memSize" value="2048"/>
+                                   name="memSize" value="2"/>
                             <select class="select-twice-md" name="memUnit">
-                                <option value="MiB" selected>MiB</option>
-                                <option value="GiB">GiB</option>
+                                <option value="MiB">MiB</option>
+                                <option value="GiB" selected>GiB</option>
                             </select>
                         </div>
                     </div>

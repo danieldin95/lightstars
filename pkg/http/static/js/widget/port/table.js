@@ -10,11 +10,14 @@ export class PortTable extends Widget {
     // }
     constructor(props) {
         super(props);
+        console.log(props);
         this.uuid = props.uuid;
+        this.name = props.name;
+        this.bridge = props.bridge;
     }
 
     loading() {
-        return `<tr><td colspan="6" class="text-center">Loading...</td></tr>`;
+        return `<tr><td colspan="7" class="text-center">Loading...</td></tr>`;
     }
 
     refresh(data, func) {
@@ -25,7 +28,8 @@ export class PortTable extends Widget {
         $(this.id).html(this.loading());
         new PortApi({
             tasks: this.tasks,
-            bridge: this.uuid,
+            bridge: this.bridge,
+            query: {uuid: this.uuid}
         }).list(this,function (e) {
             $(e.data.id).html(e.data.render(e.resp));
             func({data, resp: e.resp});
@@ -37,7 +41,7 @@ export class PortTable extends Widget {
         return this.compile(`
         {{if (items.length === 0)}}
             <tr>
-                <td colspan="6" class="text-center">{{'no data to display' | i}}</td>
+                <td colspan="7" class="text-center">{{'no data to display' | i}}</td>
             </tr>
         {{/if}}
         {{each items v i}}
@@ -47,8 +51,9 @@ export class PortTable extends Widget {
                 <td><a id="on-this" class="text-decoration-none" data="{{v.domain.uuid}}" 
                         href="#/guest/{{v.domain.uuid}}?${query}">{{v.domain.name}}</a>
                 </td>
-                <td>{{v.device}}</td>
+                <td>{{v.device == "" ? '-' : v.device}}</td>
                 <td>{{v.address}}</td>
+                <td>{{v.ipaddr == "" ? '-' : v.ipaddr}}</td>
                 <td>{{v.model}}</td>
             </tr>
         {{/each}}

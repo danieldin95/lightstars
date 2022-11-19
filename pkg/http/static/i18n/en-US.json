@@ -164,5 +164,6 @@
 	"client": "Client",
 	"method": "Method",
 	"url": "URL",
-	"system info": "System information"
+	"system info": "System information",
+	"hostname": "Hostname"
 }

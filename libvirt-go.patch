@@ -1,0 +1,59 @@
+diff --git a/vendor/github.com/libvirt/libvirt-go/domain.go b/vendor/github.com/libvirt/libvirt-go/domain.go
+index 02d5eaf..9870225 100644
+--- a/vendor/github.com/libvirt/libvirt-go/domain.go
++++ b/vendor/github.com/libvirt/libvirt-go/domain.go
+@@ -2086,9 +2086,9 @@ func (d *Domain) ListAllCheckpoints(flags DomainCheckpointListFlags) ([]DomainCh
+ 		return []DomainCheckpoint{}, makeNotImplementedError("virDomainListAllCheckpoints")
+ 	}
+ 
+-	var cList *C.virDomainCheckpointPtr
++	var cList **C.virDomainCheckpoint
+ 	var err C.virError
+-	numCps := C.virDomainListAllCheckpointsWrapper(d.ptr, (**C.virDomainCheckpointPtr)(&cList), C.uint(flags), &err)
++	numCps := C.virDomainListAllCheckpointsWrapper(d.ptr, (***C.virDomainCheckpoint)(&cList), C.uint(flags), &err)
+ 	if numCps == -1 {
+ 		return nil, makeError(&err)
+ 	}
+@@ -2098,7 +2098,7 @@ func (d *Domain) ListAllCheckpoints(flags DomainCheckpointListFlags) ([]DomainCh
+ 		Cap:  int(numCps),
+ 	}
+ 	var cps []DomainCheckpoint
+-	slice := *(*[]C.virDomainCheckpointPtr)(unsafe.Pointer(&hdr))
++	slice := *(*[]*C.virDomainCheckpoint)(unsafe.Pointer(&hdr))
+ 	for _, ptr := range slice {
+ 		cps = append(cps, DomainCheckpoint{ptr})
+ 	}
+diff --git a/vendor/github.com/libvirt/libvirt-go/domain_checkpoint.go b/vendor/github.com/libvirt/libvirt-go/domain_checkpoint.go
+index da876f9..35429be 100644
+--- a/vendor/github.com/libvirt/libvirt-go/domain_checkpoint.go
++++ b/vendor/github.com/libvirt/libvirt-go/domain_checkpoint.go
+@@ -72,7 +72,7 @@ const (
+ )
+ 
+ type DomainCheckpoint struct {
+-	ptr C.virDomainCheckpointPtr
++	ptr *C.virDomainCheckpoint
+ }
+ 
+ // See also https://libvirt.org/html/libvirt-libvirt-domain-checkpoint.html#virDomainCheckpointFree
+@@ -167,9 +167,9 @@ func (d *DomainCheckpoint) ListAllChildren(flags DomainCheckpointListFlags) ([]D
+ 		return []DomainCheckpoint{}, makeNotImplementedError("virDomainCheckpointListAllChildren")
+ 	}
+ 
+-	var cList *C.virDomainCheckpointPtr
++	var cList **C.virDomainCheckpoint
+ 	var err C.virError
+-	numVols := C.virDomainCheckpointListAllChildrenWrapper(d.ptr, (**C.virDomainCheckpointPtr)(&cList), C.uint(flags), &err)
++	numVols := C.virDomainCheckpointListAllChildrenWrapper(d.ptr, (***C.virDomainCheckpoint)(&cList), C.uint(flags), &err)
+ 	if numVols == -1 {
+ 		return nil, makeError(&err)
+ 	}
+@@ -179,7 +179,7 @@ func (d *DomainCheckpoint) ListAllChildren(flags DomainCheckpointListFlags) ([]D
+ 		Cap:  int(numVols),
+ 	}
+ 	var pools []DomainCheckpoint
+-	slice := *(*[]C.virDomainCheckpointPtr)(unsafe.Pointer(&hdr))
++	slice := *(*[]*C.virDomainCheckpoint)(unsafe.Pointer(&hdr))
+ 	for _, ptr := range slice {
+ 		pools = append(pools, DomainCheckpoint{ptr})
+ 	}

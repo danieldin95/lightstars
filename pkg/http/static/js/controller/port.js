@@ -18,12 +18,15 @@ export class PortCtl extends Controller {
         super(props);
         this.name = props.name;
         this.uuid = props.uuid;
+        this.bridge = props.bridge;
 
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
         this.table = new PortTable({
             id: this.child('#display-table'),
             uuid: this.uuid,
+            name: this.name,
+            bridge: this.bridge,
         });
         $(this.child('#remove')).on("click", (e) => {
             this.uuids.store.forEach((item, index, err) => {

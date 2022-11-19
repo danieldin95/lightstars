@@ -164,5 +164,6 @@
 	"client": "客户地址",
 	"method": "方法",
 	"url": "资源路径",
-	"system info": "系统信息"
+	"system info": "系统信息",
+	"hostname": "主机名称"
 }

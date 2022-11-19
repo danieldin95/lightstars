@@ -49,7 +49,7 @@ export class Network extends Container {
             leases: {id: this.id("#leases")},
             ports: {
                 id: this.id("#ports"),
-                uuid: data.bridge,
+                bridge: data.bridge,
             }
         });
     }
@@ -152,6 +152,7 @@ export class Network extends Container {
                                     <th>{{'instance' | i}}</th>
                                     <th>{{'device' | i}}</th>
                                     <th>{{'mac' | i}}</th>
+                                    <th>{{'ip address' | i}}</th>
                                     <th>{{'model' | i}}</th>
                                 </tr>
                                 </thead>
@@ -186,6 +187,7 @@ export class Network extends Container {
                                 <tr>
                                     <th><input id="on-all" type="checkbox"></th>
                                     <th>{{'id' | i}}</th>
+                                    <th>{{'hostname' | i}}</th>
                                     <th>{{'mac' | i}}</th>
                                     <th>{{'ip address' | i}}</th>
                                 </tr>
