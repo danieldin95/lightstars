@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/danieldin95/lightstar/libstar"
+	"github.com/danieldin95/lightstar/pkg/libstar"
 	"io"
 	"net"
 )
