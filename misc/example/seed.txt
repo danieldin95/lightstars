@@ -10,10 +10,17 @@ cat > user-data <<EOF
 password: root@123
 chpasswd: { expire: False }
 ssh_pwauth: True
-ssh_authorized_keys:
-  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI5iz8K9b6n0/UCY0z4Gi1Mb+/X9rdFh6SXyhqTNZhh+curTNlmUMGd1fmtgMbtMG6WMNVxa4iclUWhRWaEePWf9xcQqf9F8OgrufQr5qkioRwEhrPeD58veVBMV/ci/4X7ukLJL+luwv4YnJI7ybW71eZSfrnaI3+ddsyHJvFhoqDb/qy7qplEEmmCmSRigx5qpbatD8WaSS4TDZrarJ8vP5AE6DEgwXpcMGgY8acDekQcT2iguHoVmLIyxfouFZ+s29Xyzsg3Jlh+PS8v4WOpwskEiAheaFeKyZeJTUnxhaSwpainmity07MdPu9UVSe50OmeypC8bZfIXCLsf99 root@daniel.local
+  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAz09YjjZgFmMGElZvhHwRl3j15vMlF/tAIDHxMksxOUf5u3NRB4p328CWbxw5FwCcZT0cykpRexwJnFgXhokAtL4tSpGc5KIDOe6nHUJn+1TRVJvuFp4TY/l/eflo+0kNRH2D5MtlHeDLJ5P5opQZuKx3Gz0OmyYHbLgXJpDODNePHXGdshy4d4zal+paO+O3is9nqKyjjNfpnr+LKVo6ovxrI8h71W8at0hQNGtSoOCcrc+JMdqppD0WpbTvqe8PVaaoKlQhK8Q0AT3hQWujJ8I0YiQKA2Idl1iojaLIRYx4Cud8ypHNzaRblyzomZ3BAXQDBz5QK85QwLDqTrwEdQ== daniel-pc@easystack.cn
+users:
+  - name: daniel
+    gecos: Daniel ding
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    lock_passwd: true
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAz09YjjZgFmMGElZvhHwRl3j15vMlF/tAIDHxMksxOUf5u3NRB4p328CWbxw5FwCcZT0cykpRexwJnFgXhokAtL4tSpGc5KIDOe6nHUJn+1TRVJvuFp4TY/l/eflo+0kNRH2D5MtlHeDLJ5P5opQZuKx3Gz0OmyYHbLgXJpDODNePHXGdshy4d4zal+paO+O3is9nqKyjjNfpnr+LKVo6ovxrI8h71W8at0hQNGtSoOCcrc+JMdqppD0WpbTvqe8PVaaoKlQhK8Q0AT3hQWujJ8I0YiQKA2Idl1iojaLIRYx4Cud8ypHNzaRblyzomZ3BAXQDBz5QK85QwLDqTrwEdQ== daniel-pc@easystack.cn
 EOF
 
 ## change centos's password root.
 
-genisoimage -input-charset utf-8 -output seed.iso -volid cidata -joliet -rock user-data meta-data
+genisoimage -input-charset utf-8 -output ../seed.iso -volid cidata -joliet -rock user-data meta-data
