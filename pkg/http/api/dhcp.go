@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
+	"github.com/danieldin95/lightstar/pkg/network"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -16,7 +16,7 @@ func (l DHCPLease) Router(router *mux.Router) {
 }
 
 func (l DHCPLease) Getx(data schema.DHCPLeases) error {
-	leases, err := libvirtn.ListLeases()
+	leases, err := network.ListLeases()
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (l DHCPLease) Get(w http.ResponseWriter, r *http.Request) {
 		}
 		ResponseJson(w, data)
 	} else {
-		leases, err := libvirtn.LookupLeases(uuid)
+		leases, err := network.LookupLeases(uuid)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return

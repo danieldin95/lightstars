@@ -2,11 +2,9 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/pkg/compute"
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/danieldin95/lightstar/pkg/storage"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
 	"github.com/gorilla/mux"
 	"net/http"
 	"path"
@@ -25,18 +23,18 @@ func (disk Disk) Router(router *mux.Router) {
 	router.HandleFunc("/api/instance/{id}/disk/{dev}", disk.Delete).Methods("DELETE")
 }
 
-func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo {
+func (disk Disk) Travel(instance schema.Instance) map[string]storage.VolumeInfo {
 	name := instance.Name
 	disks := instance.Disks
 
-	vols := make(map[string]libvirts.VolumeInfo, 32)
+	vols := make(map[string]storage.VolumeInfo, 32)
 	sources := make(map[string]int, 4)
 	for _, disk := range disks { // to traver all disks and record it's path.
 		if _, ok := vols[disk.Name]; ok {
 			continue
 		}
 		dir := path.Dir(disk.Name)
-		if volsDir, err := (&libvirts.Pool{Path: dir}).ListByTarget(); err == nil {
+		if volsDir, err := (&storage.Pool{Path: dir}).ListByTarget(); err == nil {
 			for file, vol := range volsDir {
 				vols[file] = vol
 			}
@@ -64,11 +62,11 @@ func (disk Disk) Travel(instance schema.Instance) map[string]libvirts.VolumeInfo
 		}
 	}
 	if curDir != "" { // try to create it.
-		if _, err := libvirts.CreatePool(libvirts.ToDomainPool(name), curDir); err != nil {
+		if _, err := storage.CreatePool(storage.ToDomainPool(name), curDir); err != nil {
 			libstar.Warn("Disk.Travel %s", err)
 		}
 	}
-	pol := &libvirts.Pool{Name: libvirts.ToDomainPool(name)}
+	pol := &storage.Pool{Name: storage.ToDomainPool(name)}
 	if volsDir, err := pol.List(); err == nil {
 		for file, vol := range volsDir {
 			vols[file] = vol
@@ -81,7 +79,7 @@ func (disk Disk) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dev, ok := GetArg(r, "dev")
 	if !ok {
-		dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+		dom, err := compute.LookupDomainByUUIDString(uuid)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return
@@ -126,29 +124,29 @@ func IsVolume(file string) bool {
 	return false
 }
 
-func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
-	xml := &libvirtc.DiskXML{}
+func Disk2XML(conf *schema.Disk) (*compute.DiskXML, error) {
+	xml := &compute.DiskXML{}
 	if conf.Source == "" { // create new disk firstly.
 		size := libstar.ToBytes(conf.Size, conf.SizeUnit)
 		slot := libstar.H2D8(conf.Seq)
-		name := libvirtc.DISK.Slot2Name(slot)
+		name := compute.DISK.Slot2Name(slot)
 		vol, err := NewVolume(conf.Name, name, size)
 		if err != nil {
 			return nil, err
 		}
-		xml = &libvirtc.DiskXML{
+		xml = &compute.DiskXML{
 			Type:   "file",
 			Device: "disk",
-			Driver: libvirtc.DiskDriverXML{
+			Driver: compute.DiskDriverXML{
 				Name: "qemu",
 				Type: vol.Target.Format.Type,
 			},
-			Source: libvirtc.DiskSourceXML{
+			Source: compute.DiskSourceXML{
 				File: vol.Target.Path,
 			},
-			Target: libvirtc.DiskTargetXML{
+			Target: compute.DiskTargetXML{
 				Bus: conf.Bus,
-				Dev: libvirtc.DISK.Slot2Dev(conf.Bus, slot),
+				Dev: compute.DISK.Slot2Dev(conf.Bus, slot),
 			},
 		}
 	} else if strings.HasSuffix(conf.Source, ".iso") ||
@@ -156,30 +154,30 @@ func Disk2XML(conf *schema.Disk) (*libvirtc.DiskXML, error) {
 		// attach cdrom.
 		file := storage.PATH.Unix(conf.Source)
 		seq, _ := strconv.Atoi(conf.Seq)
-		xml = &libvirtc.DiskXML{
+		xml = &compute.DiskXML{
 			Type:   "file",
 			Device: "cdrom",
-			Driver: libvirtc.DiskDriverXML{
+			Driver: compute.DiskDriverXML{
 				Type: "raw",
 				Name: "qemu",
 			},
-			Source: libvirtc.DiskSourceXML{
+			Source: compute.DiskSourceXML{
 				File: file,
 			},
-			Target: libvirtc.DiskTargetXML{
+			Target: compute.DiskTargetXML{
 				Bus: "ide",
-				Dev: libvirtc.DISK.Slot2Dev("ide", uint8(seq)),
+				Dev: compute.DISK.Slot2Dev("ide", uint8(seq)),
 			},
 		}
 	}
 	switch conf.Bus {
 	case "virtio":
-		xml.Address = &libvirtc.AddressXML{
+		xml.Address = &compute.AddressXML{
 			Type:     "pci",
-			Domain:   libvirtc.PciDomain,
-			Bus:      libvirtc.PciDiskBus,
+			Domain:   compute.PciDomain,
+			Bus:      compute.PciDiskBus,
 			Slot:     conf.Seq,
-			Function: libvirtc.PciFunc,
+			Function: compute.PciFunc,
 		}
 	}
 	return xml, nil
@@ -193,7 +191,7 @@ func (disk Disk) Post(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -209,15 +207,15 @@ func (disk Disk) Post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	libstar.Debug("Disk.Post: %s", libstar.XML.Encode(xmlObj))
-	flags := libvirtc.DomainDeviceModifyPersistent
+	flags := compute.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
-		flags = libvirtc.DomainDeviceModifyConfig
+		flags = compute.DomainDeviceModifyConfig
 	}
 	if err := dom.AttachDeviceFlags(libstar.XML.Encode(xmlObj), flags); err != nil {
 		file := xmlObj.Source.File
 		if IsVolume(file) {
 			volume := path.Base(file)
-			_ = libvirts.RemoveVolume(libvirts.ToDomainPool(conf.Name), volume)
+			_ = storage.RemoveVolume(storage.ToDomainPool(conf.Name), volume)
 		}
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -225,7 +223,7 @@ func (disk Disk) Post(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, xmlObj.Target.Dev)
 }
 
-func (disk Disk) FindByDev(devices *libvirtc.DevicesXML, dev string) *libvirtc.DiskXML {
+func (disk Disk) FindByDev(devices *compute.DevicesXML, dev string) *compute.DiskXML {
 	if devices == nil || devices.Disks == nil {
 		return nil
 	}
@@ -241,7 +239,7 @@ func (disk Disk) FindByDev(devices *libvirtc.DevicesXML, dev string) *libvirtc.D
 
 func (disk Disk) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -249,16 +247,16 @@ func (disk Disk) Delete(w http.ResponseWriter, r *http.Request) {
 	defer dom.Free()
 
 	dev, _ := GetArg(r, "dev")
-	xml := libvirtc.NewDomainXMLFromDom(dom, true)
+	xml := compute.NewDomainXMLFromDom(dom, true)
 	if xml == nil {
 		http.Error(w, "Cannot get domain's descXML", http.StatusInternalServerError)
 		return
 	}
 	if d := disk.FindByDev(&xml.Devices, dev); d != nil {
 		// found device
-		flags := libvirtc.DomainDeviceModifyPersistent
+		flags := compute.DomainDeviceModifyPersistent
 		if active, _ := dom.IsActive(); !active {
-			flags = libvirtc.DomainDeviceModifyConfig
+			flags = compute.DomainDeviceModifyConfig
 		}
 		if err := dom.DetachDeviceFlags(libstar.XML.Encode(d), flags); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -269,7 +267,7 @@ func (disk Disk) Delete(w http.ResponseWriter, r *http.Request) {
 			dir := path.Dir(file)
 			volume := path.Base(file)
 			pool := path.Base(dir)
-			_ = libvirts.RemoveVolume(libvirts.ToDomainPool(pool), volume)
+			_ = storage.RemoveVolume(storage.ToDomainPool(pool), volume)
 		}
 	}
 	ResponseMsg(w, 0, "")

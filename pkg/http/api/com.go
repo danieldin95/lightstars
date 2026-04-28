@@ -1,12 +1,12 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
-	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
+	"github.com/danieldin95/lightstar/pkg/compute"
+	"github.com/danieldin95/lightstar/pkg/network"
 )
 
-func Interface2XML(source, model, seq, typ, drv, que string) *libvirtc.InterfaceXML {
-	if br, err := libvirtn.BRIDGE.Get(source); err == nil {
+func Interface2XML(source, model, seq, typ, drv, que string) *compute.InterfaceXML {
+	if br, err := network.BRIDGE.Get(source); err == nil {
 		typ = br.Type
 	}
 	if drv == "" {
@@ -15,28 +15,28 @@ func Interface2XML(source, model, seq, typ, drv, que string) *libvirtc.Interface
 			que = "2"
 		}
 	}
-	xmlObj := &libvirtc.InterfaceXML{
+	xmlObj := &compute.InterfaceXML{
 		Type: "bridge",
-		Source: libvirtc.InterfaceSourceXML{
+		Source: compute.InterfaceSourceXML{
 			Bridge: source,
 		},
-		Model: libvirtc.InterfaceModelXML{
+		Model: compute.InterfaceModelXML{
 			Type: model,
 		},
-		Address: &libvirtc.AddressXML{
+		Address: &compute.AddressXML{
 			Type:     "pci",
-			Domain:   libvirtc.PciDomain,
-			Bus:      libvirtc.PciInterfaceBus,
+			Domain:   compute.PciDomain,
+			Bus:      compute.PciInterfaceBus,
 			Slot:     seq,
-			Function: libvirtc.PciFunc,
+			Function: compute.PciFunc,
 		},
-		Driver: &libvirtc.InterfaceDriverXML{
+		Driver: &compute.InterfaceDriverXML{
 			Name:   drv,
 			Queues: que,
 		},
 	}
 	if typ == "openvswitch" {
-		xmlObj.VirtualPort = &libvirtc.InterfaceVirPortXML{
+		xmlObj.VirtualPort = &compute.InterfaceVirPortXML{
 			Type: typ,
 		}
 	}

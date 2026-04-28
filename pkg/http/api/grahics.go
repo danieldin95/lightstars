@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/pkg/compute"
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/gorilla/mux"
@@ -21,7 +20,7 @@ func (gra Graphics) Router(router *mux.Router) {
 
 func (gra Graphics) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -98,7 +97,7 @@ func (gra Graphics) Post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -113,7 +112,7 @@ func (gra Graphics) Post(w http.ResponseWriter, r *http.Request) {
 	if conf.AutoPort == "yes" {
 		conf.Port = "-1"
 	}
-	xmlObj := &libvirtc.GraphicsXML{
+	xmlObj := &compute.GraphicsXML{
 		Type:     conf.Type,
 		Listen:   conf.Listen,
 		Port:     conf.Port,
@@ -121,7 +120,7 @@ func (gra Graphics) Post(w http.ResponseWriter, r *http.Request) {
 		Password: conf.Password,
 	}
 
-	flags := libvirtc.DomainDeviceModifyConfig
+	flags := compute.DomainDeviceModifyConfig
 	if err := dom.AttachDeviceFlags(libstar.XML.Encode(xmlObj), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

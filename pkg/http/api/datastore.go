@@ -4,11 +4,7 @@ import (
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/danieldin95/lightstar/pkg/storage"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
 	"github.com/gorilla/mux"
-	"github.com/libvirt/libvirt-go"
-
-	//"github.com/libvirt/libvirt-go"
 	"net/http"
 	"sort"
 )
@@ -16,31 +12,31 @@ import (
 type DataStore struct {
 }
 
-func DataStore2XML(conf schema.DataStore) libvirts.Pool {
+func DataStore2XML(conf schema.DataStore) storage.Pool {
 	name := storage.PATH.GetStoreID(conf.Name)
 	path := storage.PATH.Unix(conf.Name)
 
-	xmlObj := &libvirts.PoolXML{
+	xmlObj := &storage.PoolXML{
 		Type: conf.Type,
 		Name: name,
-		Target: libvirts.TargetXML{
+		Target: storage.TargetXML{
 			Path: path,
 		},
 	}
 	if conf.Type == "netfs" && conf.NFS != nil {
-		xmlObj.Source = libvirts.SourceXML{
-			Host: libvirts.HostXML{
+		xmlObj.Source = storage.SourceXML{
+			Host: storage.HostXML{
 				Name: conf.NFS.Host,
 			},
-			Dir: libvirts.DirXML{
+			Dir: storage.DirXML{
 				Path: conf.NFS.Path,
 			},
-			Format: libvirts.FormatXML{
+			Format: storage.FormatXML{
 				Type: "nfs",
 			},
 		}
 	}
-	return libvirts.Pool{
+	return storage.Pool{
 		Type: conf.Type,
 		Name: name,
 		Path: path,
@@ -62,7 +58,7 @@ func (store DataStore) Get(w http.ResponseWriter, r *http.Request) {
 		list := schema.ListDataStore{
 			Items: make([]schema.DataStore, 0, 32),
 		}
-		if pools, err := libvirts.ListPools(); err == nil {
+		if pools, err := storage.ListPools(); err == nil {
 			for _, p := range pools {
 				store := storage.NewDataStore(p)
 				list.Items = append(list.Items, store)
@@ -78,7 +74,7 @@ func (store DataStore) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pool, err := libvirts.LookupPoolByUUID(uuid)
+	pool, err := storage.LookupPoolByUUID(uuid)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
@@ -87,7 +83,7 @@ func (store DataStore) Get(w http.ResponseWriter, r *http.Request) {
 	defer pool.Free()
 	format := GetQueryOne(r, "format")
 	if format == "xml" {
-		xmlDesc, err := pool.GetXMLDesc(libvirt.STORAGE_XML_INACTIVE)
+		xmlDesc, err := pool.GetXMLDesc(1)
 		if err == nil {
 			ResponseXML(w, xmlDesc)
 		} else {

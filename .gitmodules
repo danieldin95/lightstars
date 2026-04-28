@@ -1,3 +1,6 @@
 [submodule "packaging/resource/cert"]
 	path = packaging/resource/cert
 	url = https://github.com/danieldin95/cert
+[submodule "dist/resource/cert"]
+	path = dist/resource/cert
+	url = https://github.com/danieldin95/openca

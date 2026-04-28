@@ -61,3 +61,14 @@ This software makes it easier for you to control virtual compute, network and st
 ## Get Username and Password
 
     cat /etc/lightstar.auth
+
+
+# Ubuntu
+
+## 
+
+``` bash
+sudo apt update
+
+sudo apt install -y qemu-system qemu-utils libvirt-daemon-system libvirt-clients virtinst bridge-utils
+```

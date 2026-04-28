@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
+	"github.com/danieldin95/lightstar/pkg/compute"
 	"github.com/danieldin95/lightstar/pkg/http/client"
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
@@ -20,7 +20,7 @@ func (pro ProxyTcp) Router(router *mux.Router) {
 
 func (pro ProxyTcp) Graphics(inst *schema.Instance) []schema.Target {
 	dst := make([]schema.Target, 0, 32)
-	hyper, err := libvirtc.GetHyper()
+	hyper, err := compute.GetHyper()
 	if err != nil {
 		libstar.Error("ProxyTcp.Graphics %s", err)
 		return dst

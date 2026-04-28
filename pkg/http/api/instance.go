@@ -3,12 +3,10 @@ package api
 import (
 	"fmt"
 	"github.com/danieldin95/lightstar/pkg/compute"
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
 	"github.com/danieldin95/lightstar/pkg/libstar"
-	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
+	"github.com/danieldin95/lightstar/pkg/network"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/danieldin95/lightstar/pkg/storage"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
 	"github.com/gorilla/mux"
 	"net/http"
 	"path"
@@ -40,7 +38,7 @@ func GetTypeByVolume(file string) (string, string) {
 	if file == "" {
 		return "", ""
 	}
-	vol := libvirts.Volume{
+	vol := storage.Volume{
 		Pool: path.Dir(file),
 		Name: path.Base(file),
 	}
@@ -67,34 +65,34 @@ type diskSeq struct {
 	VdId uint8
 }
 
-func NewCdXML(file, family string, seq *diskSeq) libvirtc.DiskXML {
+func NewCdXML(file, family string, seq *diskSeq) compute.DiskXML {
 	seq.HdId++
-	return libvirtc.DiskXML{
+	return compute.DiskXML{
 		Type:   "block",
 		Device: "cdrom",
-		Driver: libvirtc.DiskDriverXML{
+		Driver: compute.DiskDriverXML{
 			Name: "qemu",
 			Type: "raw",
 		},
-		Source: libvirtc.DiskSourceXML{
+		Source: compute.DiskSourceXML{
 			Device: file,
 		},
-		Target: libvirtc.DiskTargetXML{
+		Target: compute.DiskTargetXML{
 			Bus: "ide",
-			Dev: libvirtc.DISK.Slot2Dev("ide", seq.HdId),
+			Dev: compute.DISK.Slot2Dev("ide", seq.HdId),
 		},
 	}
 }
 
-func NewIsoXML(file, family string, seq *diskSeq) libvirtc.DiskXML {
-	xml := libvirtc.DiskXML{
+func NewIsoXML(file, family string, seq *diskSeq) compute.DiskXML {
+	xml := compute.DiskXML{
 		Type:   "file",
 		Device: "disk",
-		Driver: libvirtc.DiskDriverXML{
+		Driver: compute.DiskDriverXML{
 			Type: "raw",
 			Name: "qemu",
 		},
-		Source: libvirtc.DiskSourceXML{
+		Source: compute.DiskSourceXML{
 			File: file,
 		},
 	}
@@ -104,60 +102,60 @@ func NewIsoXML(file, family string, seq *diskSeq) libvirtc.DiskXML {
 	xml.Driver.Type = format
 	if family == "linux" && !strings.HasSuffix(name, ".ISO") {
 		seq.VdId++
-		xml.Target = libvirtc.DiskTargetXML{
+		xml.Target = compute.DiskTargetXML{
 			Bus: "virtio",
-			Dev: libvirtc.DISK.Slot2Dev("virtio", seq.VdId),
+			Dev: compute.DISK.Slot2Dev("virtio", seq.VdId),
 		}
 	} else {
 		seq.HdId++
-		xml.Target = libvirtc.DiskTargetXML{
+		xml.Target = compute.DiskTargetXML{
 			Bus: "ide",
-			Dev: libvirtc.DISK.Slot2Dev("ide", seq.HdId),
+			Dev: compute.DISK.Slot2Dev("ide", seq.HdId),
 		}
 	}
 	return xml
 }
 
-func NewDiskXML(format, file, bus string, seq *diskSeq) libvirtc.DiskXML {
-	disk := libvirtc.DiskXML{
+func NewDiskXML(format, file, bus string, seq *diskSeq) compute.DiskXML {
+	disk := compute.DiskXML{
 		Type:   "file",
 		Device: "disk",
-		Driver: libvirtc.DiskDriverXML{
+		Driver: compute.DiskDriverXML{
 			Name: "qemu",
 			Type: format,
 		},
-		Source: libvirtc.DiskSourceXML{
+		Source: compute.DiskSourceXML{
 			File: file,
 		},
 	}
 	switch bus {
 	case "virtio":
 		seq.VdId++
-		disk.Target = libvirtc.DiskTargetXML{
+		disk.Target = compute.DiskTargetXML{
 			Bus: bus,
-			Dev: libvirtc.DISK.Slot2Dev(bus, seq.VdId),
+			Dev: compute.DISK.Slot2Dev(bus, seq.VdId),
 		}
-		disk.Address = &libvirtc.AddressXML{
+		disk.Address = &compute.AddressXML{
 			Type:     "pci",
-			Domain:   libvirtc.PciDomain,
-			Bus:      libvirtc.PciDiskBus,
+			Domain:   compute.PciDomain,
+			Bus:      compute.PciDiskBus,
 			Slot:     fmt.Sprintf("0x%x", seq.VdId),
-			Function: libvirtc.PciFunc,
+			Function: compute.PciFunc,
 		}
 	case "ide", "scsi":
 		seq.HdId++
-		disk.Target = libvirtc.DiskTargetXML{
+		disk.Target = compute.DiskTargetXML{
 			Bus: bus,
-			Dev: libvirtc.DISK.Slot2Dev(bus, seq.HdId),
+			Dev: compute.DISK.Slot2Dev(bus, seq.HdId),
 		}
 	}
 	return disk
 }
 
-func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq *diskSeq) (libvirtc.DiskXML, error) {
-	obj := libvirtc.DiskXML{}
+func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq *diskSeq) (compute.DiskXML, error) {
+	obj := compute.DiskXML{}
 	file := storage.PATH.Unix(disk.Source)
-	name := libvirtc.DISK.Slot2Name(seq.VdId)
+	name := compute.DISK.Slot2Name(seq.VdId)
 	size := libstar.ToBytes(disk.Size, disk.SizeUnit)
 	device, format := GetTypeByVolume(file)
 	if file == "" {
@@ -186,25 +184,25 @@ func NewFileXML(disk *schema.Disk, conf *schema.Instance, seq *diskSeq) (libvirt
 	return obj, nil
 }
 
-func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
-	dom := libvirtc.DomainXML{
+func Instance2XML(conf *schema.Instance) (compute.DomainXML, error) {
+	dom := compute.DomainXML{
 		Type: "kvm",
 		Name: conf.Name,
 		UUID: libstar.GenUUID(),
-		Devices: libvirtc.DevicesXML{
-			Disks:       make([]libvirtc.DiskXML, 0, 2),
-			Graphics:    make([]libvirtc.GraphicsXML, 2), // vnc/spice
-			Interfaces:  make([]libvirtc.InterfaceXML, 0, 1),
-			Controllers: make([]libvirtc.ControllerXML, 4),
-			Inputs:      make([]libvirtc.InputDeviceXML, 1), // <input type="tablet" bus="usb"/>
+		Devices: compute.DevicesXML{
+			Disks:       make([]compute.DiskXML, 0, 2),
+			Graphics:    make([]compute.GraphicsXML, 2), // vnc/spice
+			Interfaces:  make([]compute.InterfaceXML, 0, 1),
+			Controllers: make([]compute.ControllerXML, 4),
+			Inputs:      make([]compute.InputDeviceXML, 1), // <input type="tablet" bus="usb"/>
 		},
-		OS: libvirtc.OSXML{
-			Type: libvirtc.OSTypeXML{
+		OS: compute.OSXML{
+			Type: compute.OSTypeXML{
 				Arch:  conf.Arch,
 				Value: "hvm",
 			},
-			Boot: make([]libvirtc.OSBootXML, 3),
-			BootMenu: libvirtc.OSBootMenuXML{
+			Boot: make([]compute.OSBootXML, 3),
+			BootMenu: compute.OSBootMenuXML{
 				Enable: "yes",
 			},
 		},
@@ -218,46 +216,46 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	}
 	for i, v := range strings.Split(conf.Boots, ",") {
 		if i < 3 {
-			dom.OS.Boot[i] = libvirtc.OSBootXML{
+			dom.OS.Boot[i] = compute.OSBootXML{
 				Dev: v,
 			}
 		}
 	}
 	// features
-	dom.Features = libvirtc.FeaturesXML{
-		Apic: &libvirtc.APICXML{},
-		Acpi: &libvirtc.ACPIXML{},
-		Pae:  &libvirtc.PaeXML{},
+	dom.Features = compute.FeaturesXML{
+		Apic: &compute.APICXML{},
+		Acpi: &compute.ACPIXML{},
+		Pae:  &compute.PaeXML{},
 	}
 	// cpu and memory
 	if conf.CpuMode != "" {
-		dom.CPU = libvirtc.CPUXML{
+		dom.CPU = compute.CPUXML{
 			Mode:  conf.CpuMode,
 			Check: "full",
 		}
 	}
-	dom.VCPU = libvirtc.VCPUXML{
+	dom.VCPU = compute.VCPUXML{
 		Placement: "static",
 		Value:     fmt.Sprintf("%d", conf.MaxCpu),
 	}
-	dom.Memory = libvirtc.MemXML{
+	dom.Memory = compute.MemXML{
 		Value: fmt.Sprintf("%d", conf.MaxMem),
 		Type:  "KiB",
 	}
-	dom.CurMem = libvirtc.CurMemXML{
+	dom.CurMem = compute.CurMemXML{
 		Value: fmt.Sprintf("%d", conf.MaxMem),
 		Type:  "KiB",
 	}
 	// vnc
 	pass := libstar.GenToken(8)
-	dom.Devices.Graphics[0] = libvirtc.GraphicsXML{
+	dom.Devices.Graphics[0] = compute.GraphicsXML{
 		Type:     "vnc",
 		Listen:   "0.0.0.0",
 		Port:     "-1",
 		AutoPort: "yes",
 		Password: pass,
 	}
-	dom.Devices.Graphics[1] = libvirtc.GraphicsXML{
+	dom.Devices.Graphics[1] = compute.GraphicsXML{
 		Type:     "spice",
 		Listen:   "0.0.0.0",
 		Port:     "-1",
@@ -265,20 +263,20 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 		Password: pass,
 	}
 	// controllers
-	dom.Devices.Controllers[0] = libvirtc.ControllerXML{
+	dom.Devices.Controllers[0] = compute.ControllerXML{
 		Type:  "pci",
 		Index: "0",
 		Model: "pci-root",
 	}
 	for i := 1; i < len(dom.Devices.Controllers); i++ {
-		dom.Devices.Controllers[i] = libvirtc.ControllerXML{
+		dom.Devices.Controllers[i] = compute.ControllerXML{
 			Type:  "pci",
 			Index: strconv.Itoa(i),
 			Model: "pci-bridge",
 		}
 	}
 	//
-	dom.Devices.Controllers = append(dom.Devices.Controllers, libvirtc.ControllerXML{
+	dom.Devices.Controllers = append(dom.Devices.Controllers, compute.ControllerXML{
 		Type:  "virtio-serial",
 		Index: "0",
 	})
@@ -286,7 +284,7 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	seq := &diskSeq{}
 	for _, disk := range conf.Disks {
 		file := disk.Source
-		obj := libvirtc.DiskXML{}
+		obj := compute.DiskXML{}
 		if strings.HasPrefix(file, "/dev") {
 			obj = NewCdXML(file, conf.Family, seq)
 		} else if strings.HasSuffix(file, ".iso") || strings.HasSuffix(file, ".ISO") {
@@ -304,53 +302,53 @@ func Instance2XML(conf *schema.Instance) (libvirtc.DomainXML, error) {
 	for i, inf := range conf.Interfaces {
 		seq := fmt.Sprintf("0x%x", i+1)
 		source := inf.Source
-		br, _ := libvirtn.BRIDGE.Get(source)
+		br, _ := network.BRIDGE.Get(source)
 		obj := Interface2XML(source, "virtio", seq, br.Type, "", "")
 		switch conf.Family {
 		case "linux":
-			obj.Model = libvirtc.InterfaceModelXML{
+			obj.Model = compute.InterfaceModelXML{
 				Type: "virtio",
 			}
 		case "windows":
-			obj.Model = libvirtc.InterfaceModelXML{
+			obj.Model = compute.InterfaceModelXML{
 				Type: "rtl8139", //e1000,rtl8139
 			}
 		default:
-			obj.Model = libvirtc.InterfaceModelXML{
+			obj.Model = compute.InterfaceModelXML{
 				Type: "rtl8139",
 			}
 		}
 		dom.Devices.Interfaces = append(dom.Devices.Interfaces, *obj)
 	}
 	// inputs
-	dom.Devices.Inputs[0] = libvirtc.InputDeviceXML{
+	dom.Devices.Inputs[0] = compute.InputDeviceXML{
 		Type: "tablet",
 		Bus:  "usb",
 	}
 	// sound
-	dom.Devices.Sound = libvirtc.SoundDeviceXML{
+	dom.Devices.Sound = compute.SoundDeviceXML{
 		Model: "ich6",
 	}
 	// video
-	dom.Devices.Video = libvirtc.VideoDeviceXML{
-		Model: libvirtc.VideoModelXML{
+	dom.Devices.Video = compute.VideoDeviceXML{
+		Model: compute.VideoModelXML{
 			Type: "qxl",
 		},
 	}
 	// channel
-	dom.Devices.Channels = append(dom.Devices.Channels, libvirtc.ChannelDeviceXML{
+	dom.Devices.Channels = append(dom.Devices.Channels, compute.ChannelDeviceXML{
 		Type: "spicevmc",
-		Target: libvirtc.ChannelTargetXML{
+		Target: compute.ChannelTargetXML{
 			Type: "virtio",
 			Name: "com.redhat.spice.0",
 		},
 	})
-	dom.Devices.Channels = append(dom.Devices.Channels, libvirtc.ChannelDeviceXML{
+	dom.Devices.Channels = append(dom.Devices.Channels, compute.ChannelDeviceXML{
 		Type: "spiceport",
-		Source: libvirtc.ChannelSourceXML{
+		Source: compute.ChannelSourceXML{
 			Channel: "org.spice-space.webdav.0",
 		},
-		Target: libvirtc.ChannelTargetXML{
+		Target: compute.ChannelTargetXML{
 			Type: "virtio",
 			Name: "org.spice-space.webdav.0",
 		},
@@ -377,7 +375,7 @@ func (ins Instance) HasPermission(user *schema.User, instance string) bool {
 }
 
 func (ins Instance) GetByUser(user *schema.User, list *schema.ListInstance) {
-	if domains, err := libvirtc.ListDomains(); err == nil {
+	if domains, err := compute.ListDomains(); err == nil {
 		for _, d := range domains {
 			inst := compute.NewInstance(d)
 			if user == nil {
@@ -441,7 +439,7 @@ func (ins Instance) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -461,7 +459,7 @@ func (ins Instance) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ins Instance) Post(w http.ResponseWriter, r *http.Request) {
-	hyper, err := libvirtc.GetHyper()
+	hyper, err := compute.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -504,7 +502,7 @@ func (ins Instance) Post(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	domXML := libvirtc.NewDomainXMLFromDom(dom, true)
+	domXML := compute.NewDomainXMLFromDom(dom, true)
 	if domXML != nil {
 		ResponseJson(w, domXML)
 	} else {
@@ -513,7 +511,7 @@ func (ins Instance) Post(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ins Instance) Execute(w http.ResponseWriter, uuid, action string) {
-	hyper, err := libvirtc.GetHyper()
+	hyper, err := compute.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -535,7 +533,7 @@ func (ins Instance) Execute(w http.ResponseWriter, uuid, action string) {
 			libstar.Warn("Instance.Put: start %s", err)
 		}
 	case "shutdown":
-		if err := dom.ShutdownFlags(libvirtc.DomainShutdownAcpi); err != nil {
+		if err := dom.ShutdownFlags(compute.DomainShutdownAcpi); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -553,7 +551,7 @@ func (ins Instance) Execute(w http.ResponseWriter, uuid, action string) {
 			return
 		}
 	case "destroy":
-		if err := dom.DestroyFlags(libvirtc.DomainDestroyGraceful); err != nil {
+		if err := dom.DestroyFlags(compute.DomainDestroyGraceful); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -614,7 +612,7 @@ func (ins Instance) Title(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	hyper, err := libvirtc.GetHyper()
+	hyper, err := compute.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -636,7 +634,7 @@ func (ins Instance) Title(w http.ResponseWriter, r *http.Request) {
 func (ins Instance) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 
-	hyper, err := libvirtc.GetHyper()
+	hyper, err := compute.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -661,7 +659,7 @@ func (ins Instance) Delete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := CleanPool(libvirts.ToDomainPool(name)); err != nil {
+	if err := CleanPool(storage.ToDomainPool(name)); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

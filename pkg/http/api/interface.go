@@ -2,9 +2,8 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/pkg/compute"
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
 	"github.com/danieldin95/lightstar/pkg/libstar"
-	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
+	"github.com/danieldin95/lightstar/pkg/network"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -44,7 +43,7 @@ func (in Interface) List(w http.ResponseWriter, r *http.Request) {
 
 	address := make(map[string]string, 2)
 	name := GetQueryOne(r, "uuid")
-	if leases, err := libvirtn.LookupLeases(name); err == nil {
+	if leases, err := network.LookupLeases(name); err == nil {
 		for _, l := range leases {
 			address[l.Mac] = l.IPAddr
 		}
@@ -68,7 +67,7 @@ func (in Interface) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
 	dev, ok := GetArg(r, "dev")
 	if !ok {
-		dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+		dom, err := compute.LookupDomainByUUIDString(uuid)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return
@@ -100,7 +99,7 @@ func (in Interface) Post(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -110,9 +109,9 @@ func (in Interface) Post(w http.ResponseWriter, r *http.Request) {
 	xmlObj := Interface2XML(conf.Source, conf.Model, conf.Seq, conf.Type, "", "")
 	libstar.Debug("Interface.Post: %s", libstar.XML.Encode(xmlObj))
 
-	flags := libvirtc.DomainDeviceModifyPersistent
+	flags := compute.DomainDeviceModifyPersistent
 	if active, _ := dom.IsActive(); !active {
-		flags = libvirtc.DomainDeviceModifyConfig
+		flags = compute.DomainDeviceModifyConfig
 	}
 	if err := dom.AttachDeviceFlags(libstar.XML.Encode(xmlObj), flags); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -127,7 +126,7 @@ func (in Interface) Put(w http.ResponseWriter, r *http.Request) {
 
 func (in Interface) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -135,7 +134,7 @@ func (in Interface) Delete(w http.ResponseWriter, r *http.Request) {
 	defer dom.Free()
 
 	address, _ := GetArg(r, "dev")
-	xml := libvirtc.NewDomainXMLFromDom(dom, true)
+	xml := compute.NewDomainXMLFromDom(dom, true)
 	if xml == nil {
 		http.Error(w, "Cannot get domain's descXML", http.StatusNotFound)
 		return
@@ -149,9 +148,9 @@ func (in Interface) Delete(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		// found device
-		flags := libvirtc.DomainDeviceModifyPersistent
+		flags := compute.DomainDeviceModifyPersistent
 		if active, _ := dom.IsActive(); !active {
-			flags = libvirtc.DomainDeviceModifyConfig
+			flags = compute.DomainDeviceModifyConfig
 		}
 		if err := dom.DetachDeviceFlags(libstar.XML.Encode(&port), flags); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

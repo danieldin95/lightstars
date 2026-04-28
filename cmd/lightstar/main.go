@@ -2,13 +2,12 @@ package main
 
 import (
 	"flag"
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
+	"github.com/danieldin95/lightstar/pkg/compute"
 	"github.com/danieldin95/lightstar/pkg/http"
 	"github.com/danieldin95/lightstar/pkg/libstar"
-	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
+	"github.com/danieldin95/lightstar/pkg/network"
 	"github.com/danieldin95/lightstar/pkg/service"
 	"github.com/danieldin95/lightstar/pkg/storage"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
 	"os"
 )
 
@@ -64,9 +63,9 @@ func main() {
 	service.SERVICE.Load(cfg.ConfDir)
 	go service.SERVICE.Loop()
 	// Initialize hyper
-	_, _ = libvirtc.SetHyper(cfg.Hyper)
-	_, _ = libvirts.SetHyper(cfg.Hyper)
-	_, _ = libvirtn.SetHyper(cfg.Hyper)
+	_, _ = compute.SetHyper(cfg.Hyper)
+	_, _ = storage.SetHyper(cfg.Hyper)
+	_, _ = network.SetHyper(cfg.Hyper)
 	// Configure cert and auth.
 	authFile := cfg.ConfDir + "/auth.json"
 	h := http.NewServer(cfg.Listen, cfg.StaticDir, authFile)

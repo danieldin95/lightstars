@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/network"
-	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/gorilla/mux"
 	"net"
@@ -25,15 +24,15 @@ func IsUniCast(address string) bool {
 	return true
 }
 
-func Network2XML(conf schema.Network) *libvirtn.NetworkXML {
-	xmlObj := &libvirtn.NetworkXML{
+func Network2XML(conf schema.Network) *network.NetworkXML {
+	xmlObj := &network.NetworkXML{
 		Name: conf.Name,
-		Bridge: libvirtn.BridgeXML{
+		Bridge: network.BridgeXML{
 			Name: conf.Bridge,
 		},
 	}
 	if conf.Mode != "" {
-		xmlObj.Forward = &libvirtn.ForwardXML{
+		xmlObj.Forward = &network.ForwardXML{
 			Mode: conf.Mode,
 		}
 	}
@@ -42,7 +41,7 @@ func Network2XML(conf schema.Network) *libvirtn.NetworkXML {
 		xmlObj.Bridge.Delay = "0"
 	}
 	if conf.Address != "" {
-		xmlObj.IPv4 = &libvirtn.IPv4XML{
+		xmlObj.IPv4 = &network.IPv4XML{
 			Address: conf.Address,
 		}
 		if conf.Prefix != "" {
@@ -52,19 +51,19 @@ func Network2XML(conf schema.Network) *libvirtn.NetworkXML {
 			xmlObj.IPv4.Netmask = conf.Netmask
 		}
 		// DHCP address range
-		xmlObj.IPv4.DHCP = &libvirtn.DHCPXML{
-			Range: make([]libvirtn.DHCPRangeXML, 0, 32),
+		xmlObj.IPv4.DHCP = &network.DHCPXML{
+			Range: make([]network.DHCPRangeXML, 0, 32),
 		}
 		for _, addr := range conf.Range {
 			xmlObj.IPv4.DHCP.Range = append(xmlObj.IPv4.DHCP.Range,
-				libvirtn.DHCPRangeXML{
+				network.DHCPRangeXML{
 					Start: addr.Start,
 					End:   addr.End,
 				})
 		}
 	}
 	if conf.Type == "openvswitch" {
-		xmlObj.VirtualPort = &libvirtn.VirtualPortXML{
+		xmlObj.VirtualPort = &network.VirtualPortXML{
 			Type: conf.Type,
 		}
 	}
@@ -85,7 +84,7 @@ func (net Network) Get(w http.ResponseWriter, r *http.Request) {
 		list := schema.ListNetwork{
 			Items: make([]schema.Network, 0, 32),
 		}
-		if obj, err := libvirtn.ListNetworks(); err == nil {
+		if obj, err := network.ListNetworks(); err == nil {
 			for _, n := range obj {
 				sn := network.NewNetwork(n)
 				list.Items = append(list.Items, sn)
@@ -99,11 +98,11 @@ func (net Network) Get(w http.ResponseWriter, r *http.Request) {
 		}
 		ResponseJson(w, list)
 	} else {
-		if n, err := libvirtn.LookupNetwork(uuid); err == nil {
+		if n, err := network.LookupNetwork(uuid); err == nil {
 
 			format := GetQueryOne(r, "format")
 			if format == "xml" {
-				obj := libvirtn.NewNetworkXMLFromNet(n)
+				obj := network.NewNetworkXMLFromNet(n)
 				ResponseXML(w, libstar.XML.Encode(obj))
 			} else {
 				obj := network.NewNetwork(*n)
@@ -124,7 +123,7 @@ func (net Network) Post(w http.ResponseWriter, r *http.Request) {
 	}
 	xmlObj := Network2XML(conf)
 	libstar.Debug("Network.Post %s", libstar.XML.Encode(xmlObj))
-	hyper, err := libvirtn.GetHyper()
+	hyper, err := network.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -152,7 +151,7 @@ func (net Network) Put(w http.ResponseWriter, r *http.Request) {
 
 func (net Network) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	hyper, err := libvirtn.GetHyper()
+	hyper, err := network.GetHyper()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

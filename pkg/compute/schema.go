@@ -2,13 +2,12 @@ package compute
 
 import (
 	"fmt"
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
 )
 
 func NewHyper() (hs schema.Hyper) {
-	hyper, _ := libvirtc.GetHyper()
+	hyper, _ := GetHyper()
 	hs.Name = hyper.Url
 	hs.Host = hyper.Host
 	hs.CpuNum, hs.CpuVendor, hs.CpuUtils = hyper.GetCPU()
@@ -17,7 +16,7 @@ func NewHyper() (hs schema.Hyper) {
 	return hs
 }
 
-func NewFromInterfaceXML(xml libvirtc.InterfaceXML, domain schema.Instance) (int schema.Interface) {
+func NewFromInterfaceXML(xml InterfaceXML, domain schema.Instance) (int schema.Interface) {
 	int.Domain = schema.Instance{
 		UUID: domain.UUID,
 		Name: domain.Name,
@@ -60,7 +59,7 @@ func NewFromInterfaceXML(xml libvirtc.InterfaceXML, domain schema.Instance) (int
 	return int
 }
 
-func NewFromDiskXML(xml libvirtc.DiskXML, domain schema.Instance) (disk schema.Disk) {
+func NewFromDiskXML(xml DiskXML, domain schema.Instance) (disk schema.Disk) {
 	disk.Domain = schema.Instance{
 		UUID: domain.UUID,
 		Name: domain.Name,
@@ -94,7 +93,7 @@ func NewFromDiskXML(xml libvirtc.DiskXML, domain schema.Instance) (disk schema.D
 	return disk
 }
 
-func NewFromControllerXML(xml libvirtc.ControllerXML) (ctl schema.Controller) {
+func NewFromControllerXML(xml ControllerXML) (ctl schema.Controller) {
 	ctl.Type = xml.Type
 	ctl.Model = xml.Model
 	ctl.Index = xml.Index
@@ -104,12 +103,12 @@ func NewFromControllerXML(xml libvirtc.ControllerXML) (ctl schema.Controller) {
 	return ctl
 }
 
-func NewInstance(dom libvirtc.Domain) schema.Instance {
+func NewInstance(dom Domain) schema.Instance {
 	obj := schema.Instance{}
 	obj.UUID, _ = dom.GetUUIDString()
 	obj.Name, _ = dom.GetName()
 	if info, err := dom.GetInfo(); err == nil {
-		obj.State = libvirtc.DomainState2Str(info.State)
+		obj.State = DomainState2Str(info.State)
 		obj.MaxMem = info.MaxMem
 		obj.Memory = info.Memory
 		obj.MaxCpu = info.NrVirtCpu
@@ -117,7 +116,7 @@ func NewInstance(dom libvirtc.Domain) schema.Instance {
 	}
 	obj.Title, _ = dom.GetMetadataTitle(true)
 	obj.Description, _ = dom.GetMetadataTitle(false)
-	xmlObj := libvirtc.NewDomainXMLFromDom(&dom, true)
+	xmlObj := NewDomainXMLFromDom(&dom, true)
 	if xmlObj == nil {
 		return obj
 	}
@@ -152,7 +151,7 @@ func NewInstance(dom libvirtc.Domain) schema.Instance {
 	return obj
 }
 
-func NewFromAddressXML(xml libvirtc.AddressXML) (addr schema.Address) {
+func NewFromAddressXML(xml AddressXML) (addr schema.Address) {
 	addr.Type = xml.Type
 	addr.Domain = xml.Domain
 	addr.Bus = xml.Bus

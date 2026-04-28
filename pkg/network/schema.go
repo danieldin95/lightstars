@@ -1,11 +1,10 @@
 package network
 
 import (
-	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
 	"github.com/danieldin95/lightstar/pkg/schema"
 )
 
-func NewNetwork(net libvirtn.Network) schema.Network {
+func NewNetwork(net Network) schema.Network {
 	obj := schema.Network{
 		Range: make([]schema.Range, 0, 32),
 	}
@@ -17,7 +16,7 @@ func NewNetwork(net libvirtn.Network) schema.Network {
 	} else {
 		obj.State = "inactive"
 	}
-	xml := libvirtn.NewNetworkXMLFromNet(&net)
+	xml := NewNetworkXMLFromNet(&net)
 	if xml.Forward != nil {
 		obj.Mode = xml.Forward.Mode
 	}

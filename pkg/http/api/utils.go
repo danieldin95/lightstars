@@ -8,7 +8,6 @@ import (
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/danieldin95/lightstar/pkg/service"
 	"github.com/danieldin95/lightstar/pkg/storage"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
@@ -82,8 +81,8 @@ func GetPath(store, name string) string {
 // name: domain name
 // disk: disk name
 // size: disk size using bytes
-func NewVolume(name, disk string, size uint64) (*libvirts.VolumeXML, error) {
-	vol, err := libvirts.CreateVolume(libvirts.ToDomainPool(name), disk, size)
+func NewVolume(name, disk string, size uint64) (*storage.VolumeXML, error) {
+	vol, err := storage.CreateVolume(storage.ToDomainPool(name), disk, size)
 	if err != nil {
 		return nil, err
 	}
@@ -92,13 +91,13 @@ func NewVolume(name, disk string, size uint64) (*libvirts.VolumeXML, error) {
 
 // name: Domain name.
 // store: like: datatore@01
-func NewVolumeAndPool(store, name, disk string, size uint64) (*libvirts.VolumeXML, error) {
+func NewVolumeAndPool(store, name, disk string, size uint64) (*storage.VolumeXML, error) {
 	path := GetPath(store, name)
-	pol, err := libvirts.CreatePool(libvirts.ToDomainPool(name), path)
+	pol, err := storage.CreatePool(storage.ToDomainPool(name), path)
 	if err != nil {
 		return nil, err
 	}
-	vol, err := libvirts.CreateVolume(pol.Name, disk, size)
+	vol, err := storage.CreateVolume(pol.Name, disk, size)
 	if err != nil {
 		return nil, err
 	}
@@ -107,13 +106,13 @@ func NewVolumeAndPool(store, name, disk string, size uint64) (*libvirts.VolumeXM
 
 // name: Domain name.
 // store: like: datatore@01
-func NewBackingVolumeAndPool(store, name, disk, backingFle, backingFmt string) (*libvirts.VolumeXML, error) {
+func NewBackingVolumeAndPool(store, name, disk, backingFle, backingFmt string) (*storage.VolumeXML, error) {
 	path := GetPath(store, name)
-	pol, err := libvirts.CreatePool(libvirts.ToDomainPool(name), path)
+	pol, err := storage.CreatePool(storage.ToDomainPool(name), path)
 	if err != nil {
 		return nil, err
 	}
-	vol, err := libvirts.CreateBackingVolume(pol.Name, disk, backingFle, backingFmt)
+	vol, err := storage.CreateBackingVolume(pol.Name, disk, backingFle, backingFmt)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +121,7 @@ func NewBackingVolumeAndPool(store, name, disk, backingFle, backingFmt string) (
 
 // name: Domain name.
 func RemovePool(name string) error {
-	pol := &libvirts.Pool{Name: name}
+	pol := &storage.Pool{Name: name}
 	if err := pol.Remove(); err != nil {
 		return err
 	}
@@ -130,7 +129,7 @@ func RemovePool(name string) error {
 }
 
 func CleanPool(name string) error {
-	pol := &libvirts.Pool{Name: name}
+	pol := &storage.Pool{Name: name}
 	if err := pol.Clean(); err != nil {
 		return err
 	}

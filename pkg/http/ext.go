@@ -2,7 +2,7 @@ package http
 
 import (
 	"encoding/base64"
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
+	"github.com/danieldin95/lightstar/pkg/compute"
 	"github.com/danieldin95/lightstar/pkg/http/api"
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
@@ -92,7 +92,7 @@ func (w WsGraphics) GetRemote(id, name, typ string) string {
 
 func (w WsGraphics) GetLocal(id, typ string) string {
 	libstar.Debug("WsGraphics.GetLocal %s://%s", typ, id)
-	hyper, err := libvirtc.GetHyper()
+	hyper, err := compute.GetHyper()
 	if err != nil {
 		libstar.Error("WsGraphics.GetLocal %s", err)
 		return ""
@@ -102,7 +102,7 @@ func (w WsGraphics) GetLocal(id, typ string) string {
 		return ""
 	}
 	defer dom.Free()
-	instXml := libvirtc.NewDomainXMLFromDom(dom, true)
+	instXml := compute.NewDomainXMLFromDom(dom, true)
 	if instXml == nil {
 		return ""
 	}

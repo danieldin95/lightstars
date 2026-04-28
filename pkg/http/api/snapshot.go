@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
+	"github.com/danieldin95/lightstar/pkg/compute"
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/gorilla/mux"
@@ -23,7 +23,7 @@ func (in Snapshot) Router(router *mux.Router) {
 
 func (in Snapshot) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -41,7 +41,7 @@ func (in Snapshot) Get(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		for _, obj := range objs {
-			if sn := libvirtc.NewSnapshotXMLFromDom(&obj); sn != nil {
+			if sn := compute.NewSnapshotXMLFromDom(&obj); sn != nil {
 				list.Items = append(list.Items, schema.Snapshot{
 					Name:      sn.Name,
 					State:     sn.State,
@@ -55,7 +55,7 @@ func (in Snapshot) Get(w http.ResponseWriter, r *http.Request) {
 		if obj, err := dom.SnapshotLookupByName(name, 0); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
-		} else if snx := libvirtc.NewSnapshotXMLFromDom(obj); snx != nil {
+		} else if snx := compute.NewSnapshotXMLFromDom(obj); snx != nil {
 			list.Items = append(list.Items, schema.Snapshot{
 				Name:   snx.Name,
 				State:  snx.State,
@@ -80,14 +80,14 @@ func (in Snapshot) Post(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer dom.Free()
 
-	xml := &libvirtc.SnapshotXML{
+	xml := &compute.SnapshotXML{
 		Name: conf.Name,
 	}
 	if snx, err := dom.CreateSnapshotXML(libstar.XML.Encode(xml), 0); err != nil {
@@ -101,7 +101,7 @@ func (in Snapshot) Post(w http.ResponseWriter, r *http.Request) {
 
 func (in Snapshot) Revert(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -127,7 +127,7 @@ func (in Snapshot) Revert(w http.ResponseWriter, r *http.Request) {
 
 func (in Snapshot) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

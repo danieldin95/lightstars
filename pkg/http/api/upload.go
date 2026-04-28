@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/pkg/libstar"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
+	"github.com/danieldin95/lightstar/pkg/storage"
 	"github.com/gorilla/mux"
 	"io"
 	"net/http"
@@ -19,7 +19,7 @@ func (up Upload) Router(router *mux.Router) {
 
 func (up Upload) Get(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	pool, err := libvirts.LookupPoolByUUIDOrName(uuid)
+	pool, err := storage.LookupPoolByUUIDOrName(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -46,7 +46,7 @@ func (up Upload) Get(w http.ResponseWriter, r *http.Request) {
 
 func (up Upload) Post(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	pol, err := libvirts.LookupPoolByUUIDOrName(uuid)
+	pol, err := storage.LookupPoolByUUIDOrName(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -57,7 +57,7 @@ func (up Upload) Post(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	pool := &libvirts.PoolXML{}
+	pool := &storage.PoolXML{}
 	if err := libstar.XML.Decode(pool, desc); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

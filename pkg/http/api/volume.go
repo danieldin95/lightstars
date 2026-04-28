@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/pkg/schema"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
+	"github.com/danieldin95/lightstar/pkg/storage"
 	"github.com/gorilla/mux"
 	"net/http"
 	"sort"
@@ -21,7 +21,7 @@ func (v Volume) Get(w http.ResponseWriter, r *http.Request) {
 	data := schema.Volumes{
 		Items: make([]schema.Volume, 0, 32),
 	}
-	pool := &libvirts.Pool{Name: uuid}
+	pool := &storage.Pool{Name: uuid}
 	infos, err := pool.List()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -55,7 +55,7 @@ func (v Volume) Put(w http.ResponseWriter, r *http.Request) {
 
 func (v Volume) Delete(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	pool, err := libvirts.LookupPoolByUUIDOrName(uuid)
+	pool, err := storage.LookupPoolByUUIDOrName(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return

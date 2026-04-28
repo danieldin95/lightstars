@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/danieldin95/lightstar/pkg/compute"
-	"github.com/danieldin95/lightstar/pkg/network/libvirtn"
+	"github.com/danieldin95/lightstar/pkg/network"
 	"github.com/danieldin95/lightstar/pkg/schema"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
+	"github.com/danieldin95/lightstar/pkg/storage"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -51,7 +51,7 @@ func (h Hyper) Statics(w http.ResponseWriter, r *http.Request) {
 		sts.Ports.Total += len(obj.Interfaces)
 	}
 	sts.Instance.Total = len(list.Items)
-	if objs, err := libvirtn.ListNetworks(); err == nil {
+	if objs, err := network.ListNetworks(); err == nil {
 		for _, obj := range objs {
 			if ok, err := obj.IsActive(); err == nil {
 				if ok {
@@ -63,7 +63,7 @@ func (h Hyper) Statics(w http.ResponseWriter, r *http.Request) {
 		}
 		sts.Network.Total = len(objs)
 	}
-	if objs, err := libvirts.ListPools(); err == nil {
+	if objs, err := storage.ListPools(); err == nil {
 		for _, obj := range objs {
 			if ok, err := obj.IsActive(); err == nil {
 				if ok {

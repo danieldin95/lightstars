@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/danieldin95/lightstar/pkg/compute/libvirtc"
+	"github.com/danieldin95/lightstar/pkg/compute"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -25,7 +25,7 @@ func (mem Memory) Post(w http.ResponseWriter, r *http.Request) {
 
 func (mem Memory) Put(w http.ResponseWriter, r *http.Request) {
 	uuid, _ := GetArg(r, "id")
-	dom, err := libvirtc.LookupDomainByUUIDString(uuid)
+	dom, err := compute.LookupDomainByUUIDString(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

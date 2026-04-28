@@ -1,11 +1,10 @@
 package storage
 
 import (
-	"github.com/danieldin95/lightstar/pkg/libstar"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
-	"github.com/libvirt/libvirt-go"
 	"path"
 	"strings"
+
+	"github.com/danieldin95/lightstar/pkg/libstar"
 )
 
 type IsoFile struct {
@@ -20,50 +19,37 @@ type IsoMgr struct {
 func (iso *IsoMgr) ListFiles(dir string) []IsoFile {
 	images := make([]IsoFile, 0, 32)
 
-	hyper, err := libvirts.GetHyper()
-	if err != nil {
-		libstar.Warn("IsoMgr.ListFiles %s", err)
-		return images
-	}
-
-	pool, err := hyper.Conn.LookupStoragePoolByTargetPath(dir)
+	pool, err := LookupPoolByTargetPath(dir)
 	if err != nil {
 		name := path.Base(dir)
 		libstar.Warn("IsoMgr.ListFiles %s, and try %s", err, name)
-		pool, err = hyper.Conn.LookupStoragePoolByName(name)
+		pool, err = LookupPoolByUUIDOrName(name)
 		if err != nil {
 			return images
 		}
 	}
 
-	defer pool.Free()
-	_ = pool.Refresh(0)
-	if vols, err := pool.ListAllStorageVolumes(0); err == nil {
-		for _, vol := range vols {
-			file, err := vol.GetPath()
-			if err != nil {
-				continue
-			}
-			name := strings.ToUpper(file)
-			if strings.HasSuffix(name, ".ISO") ||
-				strings.HasSuffix(name, ".IMG") ||
-				strings.HasSuffix(name, ".QCOW2") ||
-				strings.HasSuffix(name, ".RAW") ||
-				strings.HasSuffix(name, ".VMDK") {
-				images = append(images, IsoFile{
-					Name: path.Base(file),
-					Path: PATH.Fmt(file),
-				})
-			}
-			_ = vol.Free()
+	vols, err := pool.List()
+	if err != nil {
+		return images
+	}
+	for file := range vols {
+		name := strings.ToUpper(file)
+		if strings.HasSuffix(name, ".ISO") ||
+			strings.HasSuffix(name, ".IMG") ||
+			strings.HasSuffix(name, ".QCOW2") ||
+			strings.HasSuffix(name, ".RAW") ||
+			strings.HasSuffix(name, ".VMDK") {
+			images = append(images, IsoFile{
+				Name: path.Base(file),
+				Path: PATH.Fmt(file),
+			})
 		}
 	}
 	return images
 }
 
-var ISO = IsoMgr{
-	Files: make([]IsoFile, 0, 32),
-}
+var ISO = IsoMgr{Files: make([]IsoFile, 0, 32)}
 
 type Store struct {
 	Name       string `json:"name"`
@@ -79,9 +65,9 @@ type StoreMgr struct {
 }
 
 func (store *StoreMgr) Init() {
-	libvirts.AddHyperListener(libvirts.HyperListener{
-		Opened: func(Conn *libvirt.Connect) error {
-			_, err := libvirts.CreatePool("01", PATH.Unix("datastore@01"))
+	AddHyperListener(HyperListener{
+		Opened: func(_ *HyperVisor) error {
+			_, err := CreatePool("01", PATH.Unix("datastore@01"))
 			if err != nil {
 				libstar.Error("StoreMgr.Init CreatePool %s", err)
 			}
@@ -93,40 +79,31 @@ func (store *StoreMgr) Init() {
 
 func (store *StoreMgr) List() []Store {
 	stores := make([]Store, 0, 32)
-
-	hyper, err := libvirts.GetHyper()
+	pools, err := ListPools()
 	if err != nil {
 		libstar.Warn("StoreMgr.List %s", err)
 		return stores
 	}
-	if pools, err := hyper.Conn.ListAllStoragePools(0); err == nil {
-		for _, pool := range pools {
-			name, err := pool.GetName()
-			if err != nil {
-				continue
-			}
-			if libvirts.IsDomainPool(name) {
-				_ = pool.Free()
-				continue
-			}
-			info, err := pool.GetInfo()
-			if err == nil {
-				path := DataStore + name
-				stores = append(stores, Store{
-					Name:       path,
-					Path:       path,
-					State:      int(info.State),
-					Capacity:   info.Capacity,
-					Allocation: info.Allocation,
-					Available:  info.Available,
-				})
-			}
-			_ = pool.Free()
+	for _, pool := range pools {
+		name := pool.Name
+		if IsDomainPool(name) {
+			continue
 		}
+		info, err := pool.GetInfo()
+		if err != nil {
+			continue
+		}
+		p := DataStore + name
+		stores = append(stores, Store{
+			Name:       p,
+			Path:       p,
+			State:      int(info.State),
+			Capacity:   info.Capacity,
+			Allocation: info.Allocation,
+			Available:  info.Available,
+		})
 	}
 	return stores
 }
 
-var DATASTOR = StoreMgr{
-	Store: make([]Store, 0, 32),
-}
+var DATASTOR = StoreMgr{Store: make([]Store, 0, 32)}

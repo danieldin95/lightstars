@@ -3,13 +3,12 @@ package storage
 import (
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
-	"github.com/danieldin95/lightstar/pkg/storage/libvirts"
 )
 
-func NewDataStore(pol libvirts.Pool) schema.DataStore {
+func NewDataStore(pol Pool) schema.DataStore {
 	obj := schema.DataStore{}
 	xml, _ := pol.GetXMLDesc(0)
-	xmlObj := &libvirts.PoolXML{}
+	xmlObj := &PoolXML{}
 	_ = libstar.XML.Decode(xmlObj, xml)
 
 	obj.Id = xmlObj.Name
@@ -33,7 +32,7 @@ func NewDataStore(pol libvirts.Pool) schema.DataStore {
 		obj.Source = obj.Type + "://" + obj.Name
 	}
 	if info, err := pol.GetInfo(); err == nil {
-		obj.State = libvirts.PoolState2Str(info.State)
+		obj.State = PoolState2Str(info.State)
 		obj.Capacity = info.Capacity
 		obj.Available = info.Available
 		obj.Allocation = info.Allocation
