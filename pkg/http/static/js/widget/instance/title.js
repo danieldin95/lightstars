@@ -27,9 +27,9 @@ export class TitleSet extends FormModal {
             <div id="" class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="cpu" class="col-form-label-sm">{{'title' | i}}</label>
+                        <label for="title" class="col-form-label-sm">{{'title' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" name="title" value=""/>
+                            <input type="text" class="form-control form-control-sm" id="title" name="title" value=""/>
                         </div>
                     </div>
                 </form>

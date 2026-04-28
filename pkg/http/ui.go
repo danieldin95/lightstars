@@ -104,6 +104,7 @@ func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 				Method: r.Method,
 				Url:    r.URL.Path,
 				Client: r.RemoteAddr,
+				Result: "success",
 			}
 			service.SERVICE.History.Add(his)
 			sess := &schema.Session{

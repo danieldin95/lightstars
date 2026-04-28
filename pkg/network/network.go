@@ -87,6 +87,15 @@ func (n *Network) IsActive() (bool, error) {
 	return state == "yes", nil
 }
 
+func (n *Network) IsAutostart() (bool, error) {
+	out, err := n.run("net-info", n.networkRef())
+	if err != nil {
+		return false, err
+	}
+	val := strings.ToLower(virsh.ParseKV(out)["autostart"])
+	return val == "yes", nil
+}
+
 func (n *Network) Create() error {
 	_, err := n.run("net-start", n.networkRef())
 	return err

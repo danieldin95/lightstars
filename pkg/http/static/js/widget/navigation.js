@@ -138,11 +138,25 @@ export class Navigation extends Widget {
 
     render(v) {
         return this.compile(`
-        <nav id="navs" class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
-        <!-- Brand -->
-        <a class="navbar-brand" href="${this.home}">
-            <img src="/static/images/lightstar.png" width="30" height="30" alt="">
-        </a>
+        <nav id="navs" class="navbar navbar-expand-md navbar-dark bg-dark sidebar-nav">
+        <div class="nav-top d-flex align-items-center justify-content-between w-100">
+            <!-- Brand -->
+            <a class="navbar-brand" href="${this.home}">
+                <img src="/static/images/lightstar.png" width="30" height="30" alt="">
+            </a>
+            <!-- Zone -->
+            <ul class="navbar-nav nav-zone-top">
+                <li class="nav-item dropdown">
+                    <a id="nodeMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <node-name>localhost</node-name>
+                    </a>
+                    <div id="node" class="dropdown-menu" aria-labelledby="nodeMore">
+                        <a class="dropdown-item" data="">default</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
         <!-- Collapse bar -->
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarMore" aria-controls="navbarMore" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,38 +172,12 @@ export class Navigation extends Widget {
                     <a id="instances" class="nav-link" href="${this.url('#/instances')}">{{'guest instances' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="datastore" class="nav-link" href="${this.url('#/datastores')}">{{'datastore' | i}}</a>
+                    <a id="datastore" class="nav-link" href="${this.url('#/datastores')}">{{'local datastores' | i}}</a>
                 </li>
                 <li class="nav-item">
-                    <a id="network" class="nav-link" href="${this.url('#/networks')}">{{'network' | i}}</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <!-- Physical -->
-                    <a id="phyMore" class="nav-link dropdown-toggle" href="javascript:void(0)" 
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{'host' | i}} 
-                    </a>
-                    <div id="phy" class="dropdown-menu" aria-labelledby="phyMore">
-                        <a id="disk" class="dropdown-item" href="javascript:void(0);">{{'hardware disk' | i}}</a>
-                        <a id="network" class="dropdown-item" href="javascript:void(0);">{{'network interface' | i}}</a>
-                        <a id="rootfs" class="dropdown-item" href="javascript:void(0);">{{'filesystem' | i}}</a>
-                        <div class="dropdown-divider"></div>
-                        <a id="ssh" class="dropdown-item" href="/static/sshy">{{'ssh console' | i}}</a>
-                    </div>
+                    <a id="network" class="nav-link" href="${this.url('#/networks')}">{{'virtual networks' | i}}</a>
                 </li>
             </ul>
-            <!-- Zone -->
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a id="nodeMore" class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">
-                        <node-name>localhost</node-name>
-                    </a>
-                    <div id="node" class="dropdown-menu" aria-labelledby="nodeMore">
-                        <a class="dropdown-item" data="">default</a>
-                    </div>
-                </li>            
-            </ul>      
             <!-- User -->      
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">

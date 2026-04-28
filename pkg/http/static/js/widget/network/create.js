@@ -40,13 +40,13 @@ export class NATCreate extends FormModal {
                     <div class="form-group">
                         <label for="name" class="">{{'network name' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" name="name" value=""/>
+                            <input type="text" class="form-control form-control-sm" id="name" name="name" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="address" class="">{{'interface address for bridge' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm"
+                            <input type="text" class="form-control form-control-sm" id="address"
                                    name="address" value="192.168.100.1"/>
                             <select class="select-unit-right" name="prefix">
                                 <option value="24" selected>/24</option>
@@ -56,7 +56,7 @@ export class NATCreate extends FormModal {
                     <div class="form-group">
                         <label for="range" class="col-form-label-sm">{{'address range for dhcp' | i}}</label>
                         <div class="input-group">
-                            <textarea type="text" class="form-control form-control-sm" 
+                            <textarea type="text" class="form-control form-control-sm" id="range"
                                 name="range" rows="3">192.168.100.100,192.168.100.200</textarea>                                         
                         </div>
                     </div>

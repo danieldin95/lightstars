@@ -26,21 +26,21 @@ export class ChangePassword extends FormModal {
                 <div class="modal-body">
                     <form id="form-change">
                         <div class="form-group">
-                            <label for="name" class="col-form-label-sm">{{'old password' | i}}</label>
+                            <label for="old" class="col-form-label-sm">{{'old password' | i}}</label>
                             <div class="input-group">
-                                <input type="password" class="form-control form-control-sm" name="old" value="" autofocus/>
+                                <input type="password" class="form-control form-control-sm" id="old" name="old" value="" autofocus/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="name" class=" col-form-label-sm">{{'new password' | i}}</label>
+                            <label for="new" class=" col-form-label-sm">{{'new password' | i}}</label>
                             <div class="input-group">
-                                <input type="password" class="form-control form-control-sm" name="new" value=""/>
+                                <input type="password" class="form-control form-control-sm" id="new" name="new" value=""/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="name" class="col-form-label-sm">{{'repeat new password' | i}}</label>
+                            <label for="repeat" class="col-form-label-sm">{{'repeat new password' | i}}</label>
                             <div class="input-group">
-                                <input type="password" class="form-control form-control-sm" name="repeat" value=""/>
+                                <input type="password" class="form-control form-control-sm" id="repeat" name="repeat" value=""/>
                             </div>
                         </div>
                     </form>

@@ -16,6 +16,7 @@ func NewNetwork(net Network) schema.Network {
 	} else {
 		obj.State = "inactive"
 	}
+	obj.Auto, _ = net.IsAutostart()
 	xml := NewNetworkXMLFromNet(&net)
 	if xml.Forward != nil {
 		obj.Mode = xml.Forward.Mode

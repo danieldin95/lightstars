@@ -41,7 +41,7 @@ export class DirCreate extends FormModal {
                 <div class="form-group">
                     <label for="name" class="col-form-label-sm ">{{'select datastore' | i}}</label>
                     <div class="input-group">
-                        <select class="select-lg" name="name">
+                        <select class="select-lg" id="name" name="name">
                             <option value="datastore@01" selected>datastore@01</option>
                         </select>
                     </div>

@@ -37,13 +37,13 @@ export class InstanceSet extends FormModal {
                 <form>
                     <input type="text" class="d-none" name="mode" value=""/>
                     <div class="form-group">
-                        <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
+                        <label for="cpuMode" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
-                           <select class="form-control form-control-sm" name="cpuMode" value="${this.cpuMode}">
+                           <select class="form-control form-control-sm" id="cpuMode" name="cpuMode" value="${this.cpuMode}">
                                 <option value="host-model" selected>Default</option>
                                 <option value="host-passthrough">Host passthrough</option>
                             </select>
-                            <select class="select-twice-md" name="cpu" value="${this.cpu}">
+                            <select class="select-twice-md" id="cpu" name="cpu" value="${this.cpu}">
                                 <option value="1">1</option>
                                 <option value="2" selected>2</option>
                                 <option value="3">3</option>
@@ -52,9 +52,9 @@ export class InstanceSet extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="MaxMem" class="col-form-label-sm">{{'memory size' | i}}</label>
+                        <label for="memSize" class="col-form-label-sm">{{'memory size' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm input-md"
+                            <input type="text" class="form-control form-control-sm input-md" id="memSize"
                                    name="memSize" value="${this.mem}"/>
                             <select class="select-twice-md" name="memUnit">
                                 <option value="MiB" selected>MiB</option>

@@ -31,7 +31,7 @@ export class DiskCreate extends FormModal {
                     <div class="form-group">
                         <label for="bus" class="col-form-label-sm ">{{'target bus' | i}}</label>
                         <div class="input-group">
-                            <select class="select-lg" name="bus">
+                            <select class="select-lg" id="bus" name="bus">
                                 <option value="virtio" selected>Linux Virtual IO</option>
                                 <option value="scsi">Logical SCSI</option>
                                 <option value="ide">Logical IDE</option>
@@ -41,7 +41,7 @@ export class DiskCreate extends FormModal {
                     <div class="form-group">
                         <label for="size" class="col-form-label-sm">{{'disk size' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" name="size" value="10"/>
+                            <input type="text" class="form-control form-control-sm" id="size" name="size" value="10"/>
                             <select class="select-unit-right" name="sizeUnit">
                                 <option value="Mib">MiB</option>
                                 <option value="GiB" selected>GiB</option>
@@ -50,9 +50,9 @@ export class DiskCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="slot" class="col-form-label-sm ">{{'sequence number' | i}}</label>
+                        <label for="seq" class="col-form-label-sm ">{{'sequence number' | i}}</label>
                         <div class="input-group">
-                            <select class="select-lg" name="seq">
+                            <select class="select-lg" id="seq" name="seq">
                                 <option value="0" selected>0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>

@@ -6,6 +6,7 @@ type History struct {
 	Method string `json:"method"`
 	Client string `json:"client"`
 	Url    string `json:"url"`
+	Result string `json:"result"`
 }
 
 type ListHistory struct {

@@ -25,13 +25,13 @@ export class OVSCreate extends FormModal {
                     <div class="form-group">
                         <label for="name" class="col-form-label-sm ">{{'network name' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" name="name" value=""/>
+                            <input type="text" class="form-control form-control-sm" id="name" name="name" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="name" class="col-form-label-sm ">{{'existing ovs bridge' | i}}</label>
+                        <label for="bridge" class="col-form-label-sm ">{{'existing ovs bridge' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm input-lg" name="bridge" value="br-int"/>                                    
+                            <input type="text" class="form-control form-control-sm input-lg" id="bridge" name="bridge" value="br-int"/>                                    
                         </div>
                     </div>
                 </form>    

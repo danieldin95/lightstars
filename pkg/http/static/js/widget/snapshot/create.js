@@ -20,9 +20,9 @@ export class SnapshotCreate extends FormModal {
             <div id="" class="modal-body">
                 <form name="snapshot-new">
                     <div class="form-group">
-                        <label for="bus" class="col-form-label-sm ">{{'name' | i}}</label>
+                        <label for="name" class="col-form-label-sm ">{{'name' | i}}</label>
                           <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" name="name" value="snapshot-"/>
+                            <input type="text" class="form-control form-control-sm" id="name" name="name" value="snapshot-"/>
                         </div>
                     </div>
                 </form>

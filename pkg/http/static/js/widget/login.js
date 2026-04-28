@@ -75,11 +75,6 @@ export class Login extends Widget {
                     <div class="col-12">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" id="name" name="name" value="${this.user}"/>
-                            <div class="input-group-append">
-                                <a href="javascript:void(0)" class="input-group-text input-group-sm" id="name-app">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,11 +83,6 @@ export class Login extends Widget {
                     <div class="col-12">
                         <div class="input-group">
                             <input type="password" class="form-control form-control-sm" id="password" name="password" value=""/>
-                            <div class="input-group-append">
-                                <a href="javascript:void(0)" class="input-group-text input-group-sm" id="password-app">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>

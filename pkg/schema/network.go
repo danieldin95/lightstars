@@ -10,6 +10,7 @@ type Network struct {
 	Name    string  `json:"name"`
 	Bridge  string  `json:"bridge"`
 	State   string  `json:"state"`
+	Auto    bool    `json:"autostart"`
 	Address string  `json:"address"`
 	Netmask string  `json:"netmask,omitempty"`
 	Prefix  string  `json:"prefix,omitempty"`

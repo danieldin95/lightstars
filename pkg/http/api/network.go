@@ -74,6 +74,10 @@ func (net Network) Router(router *mux.Router) {
 	router.HandleFunc("/api/network", net.Get).Methods("GET")
 	router.HandleFunc("/api/network/{id}", net.Get).Methods("GET")
 	router.HandleFunc("/api/network", net.Post).Methods("POST")
+	router.HandleFunc("/api/network/{id}/start", net.Start).Methods("PUT")
+	router.HandleFunc("/api/network/{id}/destroy", net.Destroy).Methods("PUT")
+	router.HandleFunc("/api/network/{id}/autostart", net.Autostart).Methods("PUT")
+	router.HandleFunc("/api/network/{id}/remove", net.Remove).Methods("PUT")
 	router.HandleFunc("/api/network/{id}", net.Delete).Methods("DELETE")
 }
 
@@ -145,8 +149,80 @@ func (net Network) Post(w http.ResponseWriter, r *http.Request) {
 	ResponseMsg(w, 0, conf.Name+" success")
 }
 
-func (net Network) Put(w http.ResponseWriter, r *http.Request) {
-	ResponseMsg(w, 0, "")
+func (net Network) execute(w http.ResponseWriter, uuid, action string) {
+	hyper, err := network.GetHyper()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	netvir, err := hyper.LookupNetwork(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer netvir.Free()
+
+	switch action {
+	case "start":
+		if err := netvir.Create(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "destroy":
+		if err := netvir.Destroy(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "remove":
+		if err := netvir.Destroy(); err != nil {
+			libstar.Warn("Network.Remove destroy %s", err)
+		}
+		if err := netvir.Undefine(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	default:
+		http.Error(w, "unsupported action", http.StatusBadRequest)
+		return
+	}
+	ResponseMsg(w, 0, "success")
+}
+
+func (net Network) Start(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	net.execute(w, uuid, "start")
+}
+
+func (net Network) Destroy(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	net.execute(w, uuid, "destroy")
+}
+
+func (net Network) Autostart(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	enable := GetQueryOne(r, "enable")
+	on := !(enable == "false" || enable == "0" || enable == "no" || enable == "off")
+	hyper, err := network.GetHyper()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	netvir, err := hyper.LookupNetwork(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer netvir.Free()
+	if err := netvir.SetAutostart(on); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ResponseMsg(w, 0, "success")
+}
+
+func (net Network) Remove(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	net.execute(w, uuid, "remove")
 }
 
 func (net Network) Delete(w http.ResponseWriter, r *http.Request) {

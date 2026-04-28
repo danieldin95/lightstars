@@ -1,19 +1,69 @@
 package http
 
 import (
+	"bufio"
+	"bytes"
 	"context"
+	"encoding/json"
 	"github.com/danieldin95/lightstar/pkg/http/api"
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/schema"
 	"github.com/danieldin95/lightstar/pkg/service"
 	"github.com/danieldin95/lightstar/pkg/storage"
 	"github.com/gorilla/mux"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
 	"time"
 )
+
+type historyResponseWriter struct {
+	http.ResponseWriter
+	status int
+	body   bytes.Buffer
+}
+
+func (w *historyResponseWriter) WriteHeader(status int) {
+	w.status = status
+	w.ResponseWriter.WriteHeader(status)
+}
+
+func (w *historyResponseWriter) Write(p []byte) (int, error) {
+	if w.status == 0 {
+		w.status = http.StatusOK
+	}
+	if w.body.Len() < 8192 {
+		remain := 8192 - w.body.Len()
+		if remain > len(p) {
+			remain = len(p)
+		}
+		_, _ = w.body.Write(p[:remain])
+	}
+	return w.ResponseWriter.Write(p)
+}
+
+func (w *historyResponseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
+	hj, ok := w.ResponseWriter.(http.Hijacker)
+	if !ok {
+		return nil, nil, http.ErrNotSupported
+	}
+	return hj.Hijack()
+}
+
+func (w *historyResponseWriter) Flush() {
+	if fl, ok := w.ResponseWriter.(http.Flusher); ok {
+		fl.Flush()
+	}
+}
+
+func (w *historyResponseWriter) Push(target string, opts *http.PushOptions) error {
+	if ps, ok := w.ResponseWriter.(http.Pusher); ok {
+		return ps.Push(target, opts)
+	}
+	return http.ErrNotSupported
+}
 
 type Server struct {
 	listen     string
@@ -154,17 +204,47 @@ func (h *Server) LogRequest(r *http.Request) {
 	}
 }
 
-func (h *Server) History(user schema.User, r *http.Request) {
+func (h *Server) History(user schema.User, r *http.Request, status int, body string) {
 	if strings.HasPrefix(r.URL.Path, "/ui") {
 		return
 	}
 	if r.Method == "POST" || r.Method == "PUT" || r.Method == "DELETE" {
+		method := strings.ToUpper(strings.TrimSpace(r.Method))
+		if method == "" {
+			method = "UNKNOWN"
+		}
+		path := strings.TrimSpace(r.URL.Path)
+		if path == "" {
+			path = strings.TrimSpace(r.RequestURI)
+		}
+		if path == "" {
+			path = "-"
+		}
+		result := "success"
+		trimBody := strings.TrimSpace(body)
+		if trimBody != "" {
+			var resp struct {
+				Message string `json:"message"`
+			}
+			if err := json.Unmarshal([]byte(trimBody), &resp); err == nil {
+				if strings.TrimSpace(resp.Message) != "" {
+					result = strings.TrimSpace(resp.Message)
+				}
+			}
+		}
+		if status >= 400 {
+			result = trimBody
+			if result == "" {
+				result = http.StatusText(status)
+			}
+		}
 		his := &schema.History{
 			User:   user.Name,
 			Date:   time.Now().Format(time.RFC3339),
-			Method: r.Method,
-			Url:    r.URL.Path,
+			Method: method,
+			Url:    path,
 			Client: r.RemoteAddr,
+			Result: result,
 		}
 		service.SERVICE.History.Add(his)
 	}
@@ -176,9 +256,10 @@ func (h *Server) Middleware(next http.Handler) http.Handler {
 		if h.IsAuth(w, r) {
 			user, _ := api.GetUser(r)
 			if user.Type == "admin" || service.SERVICE.Permission.Has(r) {
-				h.History(user, r)
 				api.UpdateCookie(w, r, user)
-				next.ServeHTTP(w, r)
+				rw := &historyResponseWriter{ResponseWriter: w}
+				next.ServeHTTP(rw, r)
+				h.History(user, r, rw.status, rw.body.String())
 			} else {
 				http.Error(w, "Request not allowed", http.StatusForbidden)
 			}

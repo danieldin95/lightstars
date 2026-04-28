@@ -66,7 +66,7 @@ export class Pool extends Container {
         let dumpUrl = Api.path(`/api/datastore/${v.uuid}?format=xml`);
 
         return this.compile(`
-        <div id="datastores" data="{{uuid}}" name="{{name}}">
+        <div id="datastores" data="{{uuid}}" name="{{name}}" state="{{state}}" autostart="{{autostart}}">
         <div id="header" class="card shadow">
             <div class="card-header">
                 <div class="text-left">
@@ -80,6 +80,9 @@ export class Pool extends Container {
                     <div class="col-auto mr-auto">
                         <button id="upload" type="button" class="btn btn-outline-info btn-sm" 
                                  data-toggle="modal" data-target="#uploadStoreModal">{{'upload file' | i}}</button>
+                        <button id="autostart" type="button" class="btn btn-outline-dark btn-sm">
+                            {{if autostart}}{{'disable autostart' | i}}{{else}}{{'enable autostart' | i}}{{/if}}
+                        </button>
                         <div id="btns-more" class="btn-group btn-group-sm" role="group">
                             <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
                                     data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
@@ -90,6 +93,7 @@ export class Pool extends Container {
                                 <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
                                 <div class="dropdown-divider"></div>
                                 <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
+                                <a id="clean" class="dropdown-item" href="javascript:void(0)">{{'clean' | i}}</a>
                                 <a id="remove" class="dropdown-item" href="javascript:void(0)">{{'remove' | i}}</a>
                             </div>
                         </div>

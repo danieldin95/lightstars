@@ -26,7 +26,7 @@ export class Preferences extends FormModal {
                 <div class="modal-body">
                     <form id="form-preferences">
                         <div class="form-group">
-                            <label for="name" class="col-form-label-sm">{{'language and region' | i}}</label>
+                            <label for="lang" class="col-form-label-sm">{{'language and region' | i}}</label>
                             <div class="input-group">
                                 <select class="select-lg" id="lang" name="lang">
                                     <option value="en-US" selected>English/US</option>

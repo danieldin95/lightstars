@@ -3,6 +3,23 @@
     min-height: 320px;
 }
 
+.header .card-header {
+    background: linear-gradient(90deg, #0b1220 0%, #111827 100%);
+    border-bottom: 1px solid #334155;
+}
+
+.header .card-header .btn,
+.header .card-header .btn-group > .btn,
+.header .card-header .btn-group-vertical > .btn {
+    border: none !important;
+}
+
+.header .card-header .btn:hover,
+.header .card-header .btn:focus {
+    background-color: rgba(148, 163, 184, 0.14);
+    box-shadow: none;
+}
+
 .modal-console {
     min-width: 802px;
     min-height: 660px;

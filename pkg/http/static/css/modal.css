@@ -30,12 +30,13 @@
 }
 
 .modal-body .card {
-    border: none;
+    border: 1px solid #334155;
     margin: .5rem 0;
 }
 
 .modal-body .card-header {
     color: #cccccc;
+    border: 1px solid #334155;
     border-radius: .25rem;
 }
 
@@ -58,5 +59,6 @@
 }
 
 .modal-footer {
-    background-color: #f8f9fa;
+    background-color: #111827;
+    border-top: 1px solid #334155;
 }

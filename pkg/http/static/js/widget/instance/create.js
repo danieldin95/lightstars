@@ -147,13 +147,13 @@ export class InstanceCreate extends FormModal {
                     <div class="form-group">
                         <label for="name" class="col-form-label-sm">{{'guest name' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" name="name" value="guest.01"/>
+                            <input type="text" class="form-control form-control-sm" id="name" name="name" value="guest.01"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="family" class="col-form-label-sm">{{'operating system' | i}}</label>
                         <div class="input-group">
-                            <select class="select-lg" name="family">
+                            <select class="select-lg" id="family" name="family">
                                 <option value="linux" selected>linux</option>
                                 <option value="windows">windows</option>
                                 <option value="other">other</option>
@@ -165,7 +165,7 @@ export class InstanceCreate extends FormModal {
                     <div class="form-group">
                         <label for="datastore" class="col-form-label-sm">{{'datastore location' | i}}</label>
                         <div class="input-group">
-                            <select class="select-lg" name="datastore">
+                            <select class="select-lg" id="datastore" name="datastore">
                                 <option value="datastore@01" selected>datastore01</option>
                                 <option value="datastore@02">datastore02</option>
                             </select>
@@ -174,13 +174,13 @@ export class InstanceCreate extends FormModal {
                 </div>
                 <div id="custom" class="d-none">
                     <div class="form-group">
-                        <label for="cpu" class="col-form-label-sm">{{'processors' | i}}</label>
+                        <label for="cpuMode" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
-                            <select class="form-control form-control-sm" name="cpuMode">
+                            <select class="form-control form-control-sm" id="cpuMode" name="cpuMode">
                                 <option value="host-model">Default</option>
                                 <option value="host-passthrough" selected>Host passthrough</option>
                             </select>
-                            <select class="select-twice-md" name="cpu">
+                            <select class="select-twice-md" id="cpu" name="cpu">
                                 <option value="1">1</option>
                                 <option value="2" selected>2</option>
                                 <option value="3">3</option>
@@ -189,9 +189,9 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="MaxMem" class="col-form-label-sm">{{'memory size' | i}}</label>
+                        <label for="memSize" class="col-form-label-sm">{{'memory size' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm"
+                            <input type="text" class="form-control form-control-sm" id="memSize"
                                    name="memSize" value="2"/>
                             <select class="select-twice-md" name="memUnit">
                                 <option value="MiB">MiB</option>
@@ -200,9 +200,9 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="diskSize" class="col-form-label-sm">{{'hardware disk' | i}}</label>
+                        <label for="disk1Size" class="col-form-label-sm">{{'hardware disk' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm"
+                            <input type="text" class="form-control form-control-sm" id="disk1Size"
                                    name="disk1Size" value="10"/>
                             <select class="select-twice-md" name="disk1Unit">
                                 <option value="Mib">MiB</option>
@@ -214,7 +214,7 @@ export class InstanceCreate extends FormModal {
                     <div class="form-group">
                         <label for="disk0File" class="col-form-label-sm">{{'select ISO or image' | i}}</label>
                         <div class="input-group">
-                            <select class="form-control form-control-sm" name="disk0File">
+                            <select class="form-control form-control-sm" id="disk0File" name="disk0File">
                                 <option value="/dev/sr0">sr0</option>
                             </select>
                         </div>
@@ -222,7 +222,7 @@ export class InstanceCreate extends FormModal {
                     <div class="form-group">
                         <label for="interface0Source" class="col-form-label-sm">{{'network interface' | i}}</label>
                         <div class="input-group">
-                            <select class="form-control form-control-sm" name="interface0Source">
+                            <select class="form-control form-control-sm" id="interface0Source" name="interface0Source">
                                 <option value="virbr0" selected>Linux Bridge #virbr0</option>
                                 <option value="virbr1">Linux Bridge #virbr1</option>
                                 <option value="virbr2">Linux Bridge #virbr2</option>

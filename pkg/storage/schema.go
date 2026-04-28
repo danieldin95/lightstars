@@ -18,6 +18,7 @@ func NewDataStore(pol Pool) schema.DataStore {
 		obj.Name = "datastore@" + obj.Name
 	}
 	obj.Type = xmlObj.Type
+	obj.Auto, _ = pol.IsAutostart()
 	switch obj.Type {
 	case "netfs":
 		if xmlObj.Source.Format.Type == "nfs" {

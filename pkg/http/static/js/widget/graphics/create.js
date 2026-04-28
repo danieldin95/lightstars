@@ -21,9 +21,9 @@ export class GraphicsCreate extends FormModal {
                 <form name="disk-new">
                     <input type="text" class="d-none" name="autoport" value="yes"/>
                     <div class="form-group">
-                        <label for="bus" class="col-form-label-sm ">{{'type' | i}}</label>
+                        <label for="type" class="col-form-label-sm ">{{'type' | i}}</label>
                         <div class="input-group">
-                            <select class="select-lg" name="type">
+                            <select class="select-lg" id="type" name="type">
                                 <option value="vnc" selected>VNC</option>
                                 <option value="spice">Spice</option>
                             </select>

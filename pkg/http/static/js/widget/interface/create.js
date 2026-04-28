@@ -53,7 +53,7 @@ export class InterfaceCreate extends FormModal {
                 <div class="form-group">
                     <label for="model" class="col-form-label-sm">{{'target model' | i}}</label>
                     <div class="input-group">
-                        <select class="select-lg" name="model">
+                        <select class="select-lg" id="model" name="model">
                             <option value="virtio" selected>Linux Virtual IO</option>
                             <option value="rtl8139">Realtek rtl8139</option>
                             <option value="e1000">Intel e1000</option>
@@ -63,7 +63,7 @@ export class InterfaceCreate extends FormModal {
                 <div class="form-group">
                     <label for="source" class="col-form-label-sm">{{'bridge name' | i}}</label>
                     <div class="input-group">
-                        <select class="select-lg" name="source">
+                        <select class="select-lg" id="source" name="source">
                             <option value="ovs-br1">Open vSwitch #ovs-br1</option>
                             <option value="ovs-br2">Open vSwitch #ovs-br2</option>
                             <option value="br-mgt">Open vSwitch #br-mgt</option>
@@ -71,9 +71,9 @@ export class InterfaceCreate extends FormModal {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="slot" class="col-form-label-sm ">{{'sequence number' | i}}</label>
+                    <label for="seq" class="col-form-label-sm ">{{'sequence number' | i}}</label>
                     <div class="input-group">
-                        <select class="select-lg" name="seq">
+                        <select class="select-lg" id="seq" name="seq">
                             <option value="0" selected>0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>

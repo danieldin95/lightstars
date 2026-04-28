@@ -66,7 +66,7 @@ export class IsoCreate extends FormModal {
                     <div class="form-group">
                         <label for="datastore" class="col-form-label-sm">{{'datastore location' | i}}</label>
                         <div class="input-group">
-                            <select class="select-lg" name="datastore">
+                            <select class="select-lg" id="datastore" name="datastore">
                                 <option value="datastore/01" selected>datastore01</option>
                                 <option value="datastore/02">datastore02</option>
                             </select>
@@ -75,15 +75,15 @@ export class IsoCreate extends FormModal {
                     <div class="form-group">
                         <label for="source" class="col-form-label-sm">{{'select ISO file' | i}}</label>
                         <div class="input-group">
-                            <select class="form-control form-control-sm" name=source>
+                            <select class="form-control form-control-sm" id="source" name=source>
                                 <option value="/dev/sr0">sr0</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="slot" class="col-form-label-sm ">{{'sequence number' | i}}</label>
+                        <label for="seq" class="col-form-label-sm ">{{'sequence number' | i}}</label>
                         <div class="input-group">
-                            <select class="select-lg" name="seq">
+                            <select class="select-lg" id="seq" name="seq">
                                 <option value="1" selected>1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>

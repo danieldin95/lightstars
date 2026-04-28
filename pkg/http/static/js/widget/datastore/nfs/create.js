@@ -42,7 +42,7 @@ export class NFSCreate extends FormModal {
                 <div class="form-group">
                     <label for="name" class="col-form-label-sm ">{{'datastore' | i}}</label>
                     <div class="input-group">
-                        <select class="select-lg" name="name">
+                        <select class="select-lg" id="name" name="name">
                             <option value="datastore@01" selected>datastore@01</option>
                         </select>
                     </div>
@@ -50,13 +50,13 @@ export class NFSCreate extends FormModal {
                 <div class="form-group">
                     <label for="host" class="col-form-label-sm">{{'host address' | i}}</label>
                     <div class="input-group">
-                        <input type="text" class="form-control form-control-sm" name="host" value=""/>                                         
+                        <input type="text" class="form-control form-control-sm" id="host" name="host" value=""/>                                         
                     </div>
                 </div>  
                 <div class="form-group">
-                    <label for="host" class="col-form-label-sm">{{'remote directory' | i}}</label>
+                    <label for="path" class="col-form-label-sm">{{'remote directory' | i}}</label>
                     <div class="input-group">
-                        <input type="text" class="form-control form-control-sm" name="path" value="/public"/>                                         
+                        <input type="text" class="form-control form-control-sm" id="path" name="path" value="/public"/>                                         
                     </div>
                 </div>  
             </form>                                          

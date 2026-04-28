@@ -26,23 +26,45 @@ export class System extends Widget {
 
     render(data) {
         return this.compile(`
-            <dl class="dl-horizontal dl-horizontal-r">
-                <dt>{{'uptime' | i}}:</dt>
-                <dd>{{hyper.uptime | prettyTime}}</dd>
-                <dt>{{'version' | i}}:</dt>
-                <dd>{{version.version}}</dd>
-                <dt>{{'built on' | i}}:</dt>
-                <dd>{{version.date}}</dd>
-                <dt>{{'hypervisor' | i}}:</dt>
-                <dd>{{hyper.name}}</dd>
-                <dt>{{'processor' | i}}:</dt>
-                <dd title="{{'total|free|vendor' | i}}">
-                    {{hyper.cpuNum}} | {{hyper.cpuUtils | figureCpuFree hyper.cpuNum}} | {{hyper.cpuVendor}}
-                </dd>
-                <dt>{{'memory' | i}}:</dt>
-                <dd title="{{'total|free|cache' | i}}">
-                    {{hyper.memTotal | prettyByte}} | {{hyper.memFree | prettyByte}} | {{hyper.memCached | prettyByte}}
-                </dd>
-            </dl>`, data);
+            <div class="dashboard-stats system-dashboard">
+                <div class="dashboard-grid dashboard-grid-2">
+                    <div class="dashboard-stat total">
+                        <div class="label">{{'uptime' | i}}</div>
+                        <div class="value">{{hyper.uptime | prettyTime}}</div>
+                    </div>
+                    <div class="dashboard-stat total">
+                        <div class="label">{{'version' | i}}</div>
+                        <div class="value">{{version.version}}</div>
+                    </div>
+                </div>
+                <div class="dashboard-grid dashboard-grid-2">
+                    <div class="dashboard-stat total">
+                        <div class="label">{{'built on' | i}}</div>
+                        <div class="value">{{version.date}}</div>
+                    </div>
+                    <div class="dashboard-stat total">
+                        <div class="label">{{'hypervisor' | i}}</div>
+                        <div class="value">{{hyper.name}}</div>
+                    </div>
+                </div>
+                <div class="dashboard-grid dashboard-grid-1">
+                    <div class="dashboard-stat up">
+                        <div class="label">{{'processor' | i}}</div>
+                        <div class="value">
+                            {{hyper.cpuNum}} / {{hyper.cpuUtils | figureCpuFree hyper.cpuNum}}
+                        </div>
+                        <div class="label">{{hyper.cpuVendor}}</div>
+                    </div>
+                </div>
+                <div class="dashboard-grid dashboard-grid-1">
+                    <div class="dashboard-stat total">
+                        <div class="label">{{'memory' | i}}</div>
+                        <div class="value">
+                            {{hyper.memTotal | prettyByte}} / {{hyper.memFree | prettyByte}}
+                        </div>
+                        <div class="label">cache {{hyper.memCached | prettyByte}}</div>
+                    </div>
+                </div>
+            </div>`, data);
     }
 }

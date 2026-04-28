@@ -13,6 +13,7 @@ type DataStore struct {
 	Type       string `json:"type"`
 	Format     string `json:"format"`
 	State      string `json:"state"`
+	Auto       bool   `json:"autostart"`
 	Capacity   uint64 `json:"capacity"`   // bytes
 	Allocation uint64 `json:"allocation"` // bytes
 	Available  uint64 `json:"available"`  // Bytes

@@ -26,29 +26,67 @@ export class Statics extends Widget {
 
     render(data) {
         return this.compile(`
-            <dl class="dl-horizontal dl-horizontal-r">
-                <dt>{{'datastore' | i}}:</dt>
-                <dd>
-                    <span class="badge badge-pill badge-lite badge-outline" title="total">{{datastore.total}}</span>
-                    <span class="badge badge-pill badge-lite badge-outline" title="active">{{datastore.active}}</span>
-                </dd>
-                <dt>{{'guest instances' | i}}:</dt>
-                <dd>
-                    <span class="badge badge-pill badge-lite badge-outline" title="total">{{instance.total}}</span>
-                    <span class="badge badge-pill badge-lite badge-outline" title="running">{{instance.active}}</span>
-                    <span class="badge badge-pill badge-lite badge-outline" title="shutdown">{{instance.inactive}}</span>
-                </dd>
-                <dt>{{'network' | i}}:</dt>
-                <dd>
-                    <span class="badge badge-pill badge-lite badge-outline" title="total">{{network.total}}</span>
-                    <span class="badge badge-pill badge-lite badge-outline" title="active">{{network.active}}</span>
-                </dd>
-                <dt>{{'virtual ports' | i}}:</dt>
-                <dd>
-                    <span class="badge badge-pill badge-lite badge-outline" title="total">{{ports.total}}</span>
-                    <span class="badge badge-pill badge-lite badge-outline" title="up">{{ports.active}}</span>
-                    <span class="badge badge-pill badge-lite badge-outline" title="down">{{ports.inactive}}</span>
-                </dd>
-            </dl>`, data);
+            <div class="dashboard-stats">
+                <div class="dashboard-group">
+                    <div class="dashboard-group-title">{{'datastore' | i}}</div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-stat total">
+                            <div class="label">total</div>
+                            <div class="value">{{datastore.total}}</div>
+                        </div>
+                        <div class="dashboard-stat up">
+                            <div class="label">active</div>
+                            <div class="value">{{datastore.active}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-group">
+                    <div class="dashboard-group-title">{{'guest instances' | i}}</div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-stat total">
+                            <div class="label">total</div>
+                            <div class="value">{{instance.total}}</div>
+                        </div>
+                        <div class="dashboard-stat up">
+                            <div class="label">running</div>
+                            <div class="value">{{instance.active}}</div>
+                        </div>
+                        <div class="dashboard-stat down">
+                            <div class="label">shutdown</div>
+                            <div class="value">{{instance.inactive}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-group">
+                    <div class="dashboard-group-title">{{'network' | i}}</div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-stat total">
+                            <div class="label">total</div>
+                            <div class="value">{{network.total}}</div>
+                        </div>
+                        <div class="dashboard-stat up">
+                            <div class="label">active</div>
+                            <div class="value">{{network.active}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-group">
+                    <div class="dashboard-group-title">{{'virtual ports' | i}}</div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-stat total">
+                            <div class="label">total</div>
+                            <div class="value">{{ports.total}}</div>
+                        </div>
+                        <div class="dashboard-stat up">
+                            <div class="label">up</div>
+                            <div class="value">{{ports.active}}</div>
+                        </div>
+                        <div class="dashboard-stat down">
+                            <div class="label">down</div>
+                            <div class="value">{{ports.inactive}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>`, data);
     }
 }

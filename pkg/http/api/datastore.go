@@ -48,6 +48,12 @@ func (store DataStore) Router(router *mux.Router) {
 	router.HandleFunc("/api/datastore", store.Get).Methods("GET")
 	router.HandleFunc("/api/datastore", store.Post).Methods("POST")
 	router.HandleFunc("/api/datastore/{id}", store.Get).Methods("GET")
+	router.HandleFunc("/api/datastore/{id}/start", store.Start).Methods("PUT")
+	router.HandleFunc("/api/datastore/{id}/destroy", store.Destroy).Methods("PUT")
+	router.HandleFunc("/api/datastore/{id}/refresh", store.Refresh).Methods("PUT")
+	router.HandleFunc("/api/datastore/{id}/autostart", store.Autostart).Methods("PUT")
+	router.HandleFunc("/api/datastore/{id}/clean", store.Clean).Methods("PUT")
+	router.HandleFunc("/api/datastore/{id}/remove", store.Remove).Methods("PUT")
 	router.HandleFunc("/api/datastore/{id}", store.Delete).Methods("DELETE")
 }
 
@@ -112,6 +118,88 @@ func (store DataStore) Post(w http.ResponseWriter, r *http.Request) {
 
 func (store DataStore) Put(w http.ResponseWriter, r *http.Request) {
 	ResponseJson(w, nil)
+}
+
+func (store DataStore) execute(w http.ResponseWriter, uuid, action string) {
+	pol, err := storage.LookupPoolByUUIDOrName(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer pol.Free()
+	switch action {
+	case "start":
+		if err := pol.Start(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "destroy":
+		if err := pol.Destroy(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "refresh":
+		if err := pol.Refresh(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "clean":
+		if err := pol.Clean(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "remove":
+		if err := pol.Remove(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	default:
+		http.Error(w, "unsupported action", http.StatusBadRequest)
+		return
+	}
+	ResponseMsg(w, 0, "success")
+}
+
+func (store DataStore) Start(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	store.execute(w, uuid, "start")
+}
+
+func (store DataStore) Destroy(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	store.execute(w, uuid, "destroy")
+}
+
+func (store DataStore) Refresh(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	store.execute(w, uuid, "refresh")
+}
+
+func (store DataStore) Autostart(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	enable := GetQueryOne(r, "enable")
+	on := !(enable == "false" || enable == "0" || enable == "no" || enable == "off")
+	pol, err := storage.LookupPoolByUUIDOrName(uuid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer pol.Free()
+	if err := pol.SetAutostart(on); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ResponseMsg(w, 0, "success")
+}
+
+func (store DataStore) Clean(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	store.execute(w, uuid, "clean")
+}
+
+func (store DataStore) Remove(w http.ResponseWriter, r *http.Request) {
+	uuid, _ := GetArg(r, "id")
+	store.execute(w, uuid, "remove")
 }
 
 func (store DataStore) Delete(w http.ResponseWriter, r *http.Request) {

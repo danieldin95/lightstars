@@ -55,9 +55,9 @@ export default class VolumeTable extends Widget {
                     <td><input id="on-one" type="checkbox" data="{{v.name}}"></td>
                     <td>
                         {{if v.type == "dir"}}
-                        <img src="/static/images/folder-icon.svg" style="opacity: 0.6; filter:alpha(opacity=60);"/>
+                        <img class="file-browser-icon" src="/static/images/folder-icon.svg"/>
                         {{else if v.type == "file"}}
-                        <img src="/static/images/file-icon.svg" style="opacity: 0.6; filter:alpha(opacity=60);"/>
+                        <img class="file-browser-icon" src="/static/images/file-icon.svg"/>
                         {{/if}}
                     </td>
                     <td>

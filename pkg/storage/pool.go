@@ -326,6 +326,39 @@ func (pol *Pool) IsActive() (bool, error) {
 	return info.State == STORAGE_POOL_RUNNING, nil
 }
 
+func (pol *Pool) IsAutostart() (bool, error) {
+	out, err := pol.run("pool-info", pol.Name)
+	if err != nil {
+		return false, err
+	}
+	val := strings.ToLower(strings.TrimSpace(virsh.ParseKV(out)["autostart"]))
+	return val == "yes", nil
+}
+
+func (pol *Pool) Start() error {
+	_, err := pol.run("pool-start", pol.Name)
+	return err
+}
+
+func (pol *Pool) Destroy() error {
+	_, err := pol.run("pool-destroy", pol.Name)
+	return err
+}
+
+func (pol *Pool) Refresh() error {
+	_, err := pol.run("pool-refresh", pol.Name)
+	return err
+}
+
+func (pol *Pool) SetAutostart(enable bool) error {
+	args := []string{"pool-autostart", pol.Name}
+	if !enable {
+		args = append(args, "--disable")
+	}
+	_, err := pol.run(args...)
+	return err
+}
+
 func PoolState2Str(state StoragePoolState) string {
 	switch state {
 	case STORAGE_POOL_BUILDING:

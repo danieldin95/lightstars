@@ -1,4 +1,5 @@
 import {Api} from "./api.js"
+import {Alert} from "../lib/alert.js";
 
 
 export class DataStoreApi extends Api {
@@ -23,4 +24,27 @@ export class DataStoreApi extends Api {
         }
         super.create(data)
     }
+
+    putAction(uuid, action) {
+        let url = this.url(uuid) + "/" + action;
+        $.PUT(url, (resp, status) => {
+            Alert.success(this.tasks, `${action} '${uuid}' success`);
+        }).fail((e) => {
+            Alert.danger(this.tasks, `PUT ${url}: ${e.responseText}`);
+        });
+    }
+
+    start(uuid) { this.putAction(uuid, "start"); }
+    destroy(uuid) { this.putAction(uuid, "destroy"); }
+    refresh(uuid) { this.putAction(uuid, "refresh"); }
+    autostart(uuid, enable) {
+        let url = this.url(uuid) + "/autostart?enable=" + (enable ? "true" : "false");
+        $.PUT(url, (resp, status) => {
+            Alert.success(this.tasks, `autostart '${uuid}' success`);
+        }).fail((e) => {
+            Alert.danger(this.tasks, `PUT ${url}: ${e.responseText}`);
+        });
+    }
+    clean(uuid) { this.putAction(uuid, "clean"); }
+    removeAction(uuid) { this.putAction(uuid, "remove"); }
 }

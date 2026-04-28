@@ -45,8 +45,8 @@ zip: env lightstar ## build zip packages
 
 	@cp $(SD)/dist/README.md $(LD)
 	@mkdir -p $(LD)/etc/lightstar
-	@cp -rvf $(SD)/dist/resource/{auth.json, auth.json.example} $(LD)/etc/lightstar
-	@cp -rvf $(SD)/dist/resource/{zone.json, zone.json.example} $(LD)/etc/lightstar
+	@cp -rvf $(SD)/dist/resource/{auth.json,auth.json.example} $(LD)/etc/lightstar
+	@cp -rvf $(SD)/dist/resource/{zone.json,zone.json.example} $(LD)/etc/lightstar
 	@cp -rvf $(SD)/dist/resource/permission.json $(LD)/etc/lightstar
 
 	@mkdir -p $(LD)/etc/sysconfig

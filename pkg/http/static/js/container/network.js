@@ -58,7 +58,7 @@ export class Network extends Container {
         let dumpUrl = Api.path(`/api/network/${v.uuid}?format=xml`);
 
         return this.compile(`
-        <div id="network" data="{{uuid}}" name="{{name}}">
+        <div id="network" data="{{uuid}}" name="{{name}}" state="{{state}}" autostart="{{autostart}}">
         <div id="header" class="card shadow">
             <div class="card-header">
                 <div class="text-left">
@@ -70,7 +70,9 @@ export class Network extends Container {
                 <!-- Header buttons -->
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
-                        <button id="autostart" type="button" class="btn btn-outline-dark btn-sm">{{'autostart' | i}}</button>
+                        <button id="autostart" type="button" class="btn btn-outline-dark btn-sm">
+                            {{if autostart}}{{'disable autostart' | i}}{{else}}{{'enable autostart' | i}}{{/if}}
+                        </button>
                         <div id="btns-more" class="btn-group btn-group-sm" role="group">
                             <button id="btns-more" type="button" class="btn btn-outline-dark dropdown-toggle"
                                     data-toggle="dropdown" aria-expanded="true" aria-expanded="false">
