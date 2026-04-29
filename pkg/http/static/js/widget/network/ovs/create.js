@@ -31,7 +31,7 @@ export class OVSCreate extends FormModal {
                     <div class="form-group">
                         <label for="bridge" class="col-form-label-sm ">{{'existing ovs bridge' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm input-lg" id="bridge" name="bridge" value="br-int"/>                                    
+                            <input type="text" class="form-control form-control-sm input-lg" id="bridge" name="bridge" value="" placeholder="br-int"/>
                         </div>
                     </div>
                 </form>    

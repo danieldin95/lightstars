@@ -45,6 +45,7 @@ export class Pool extends Container {
         new PoolCtl({
             id: this.id(),
             header: {id: this.id("#header")},
+            confirm: this.id("#confirmActionModal"),
             volumes: {
                 id: this.id("#volumes"),
                 upload: "#uploadPoolModal",
@@ -78,7 +79,7 @@ export class Pool extends Container {
                 <!-- Header buttons -->
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
-                        <button id="upload" type="button" class="btn btn-outline-info btn-sm" 
+                        <button id="upload" type="button" class="btn btn-outline-info btn-sm"
                                  data-toggle="modal" data-target="#uploadStoreModal">{{'upload file' | i}}</button>
                         <button id="autostart" type="button" class="btn btn-outline-dark btn-sm">
                             {{if autostart}}{{'disable autostart' | i}}{{else}}{{'enable autostart' | i}}{{/if}}
@@ -93,31 +94,42 @@ export class Pool extends Container {
                                 <a id="dumpxml" class="dropdown-item" href="${dumpUrl}">{{'dump xml' | i}}</a>
                                 <div class="dropdown-divider"></div>
                                 <a id="destroy" class="dropdown-item" href="javascript:void(0)">{{'destroy' | i}}</a>
-                                <a id="clean" class="dropdown-item" href="javascript:void(0)">{{'clean' | i}}</a>
                                 <a id="remove" class="dropdown-item" href="javascript:void(0)">{{'remove' | i}}</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-auto">
-                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>                    
+                        <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     </div>
                 </div>
-                <div class="card-body-hdl">
-                    <div class="overview">
-                        <dl class="dl-horizontal">
-                            <dt>{{'name' | i}}:</dt>
-                            <dd>{{name}}</dd>                        
-                            <dt>{{'state' | i}}:</dt>
-                            <dd><span class="st-{{state}}">{{state}}</span></dd>
-                            <dt>{{'uuid' | i}}:</dt>
-                            <dd>{{uuid}}</dd>
-                            <dt>{{'source' | i}}:</dt>
-                            <dd>{{source}}</dd>
-                            <dt>{{'allocation' | i}}:</dt>
-                            <dd>{{allocation | prettyByte}}</dd>
-                            <dt>{{'capacity' | i}}:</dt>
-                            <dd>{{capacity | prettyByte}}</dd>
-                        </dl>
+                <div class="card-body-hdl pt-1">
+                    <div class="resource-overview">
+                        <div class="dashboard-grid datastore-overview-grid">
+                            <div class="dashboard-stat total">
+                                <div class="label">{{'name' | i}}</div>
+                                <div class="value">{{name}}</div>
+                            </div>
+                            <div class="dashboard-stat total">
+                                <div class="label">{{'state' | i}}</div>
+                                <div class="value"><span class="st-{{state}}">{{state}}</span></div>
+                            </div>
+                            <div class="dashboard-stat total">
+                                <div class="label">{{'allocation' | i}}</div>
+                                <div class="value">{{allocation | prettyByte}}</div>
+                            </div>
+                            <div class="dashboard-stat total">
+                                <div class="label">{{'capacity' | i}}</div>
+                                <div class="value">{{capacity | prettyByte}}</div>
+                            </div>
+                            <div class="dashboard-stat resource-wide">
+                                <div class="label">{{'uuid' | i}}</div>
+                                <div class="value resource-code">{{uuid}}</div>
+                            </div>
+                            <div class="dashboard-stat resource-wide">
+                                <div class="label">{{'source' | i}}</div>
+                                <div class="value resource-code">{{source}}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,7 +151,7 @@ export class Pool extends Container {
                                 data-toggle="modal" data-target="#createVolumeModal">
                             {{'new a volume' | i}}
                         </button>
-                        <button id="upload" type="button" class="btn btn-outline-dark btn-sm" 
+                        <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
                                 data-toggle="modal" data-target="#uploadPoolModal">{{'upload' | i}}</button>
                         <button id="remove" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#removeVolModal">{{'remove' | i}}</button>
@@ -174,6 +186,7 @@ export class Pool extends Container {
             <div id="removeVolModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="uploadStoreModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="uploadPoolModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="confirmActionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         </div>`, v);
     }

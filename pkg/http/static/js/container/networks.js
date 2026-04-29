@@ -31,6 +31,7 @@ export class Networks extends Container {
                     uuid: e.uuid,
                 });
             },
+            confirm: '#confirmActionModal',
         });
         new NATCreate({id: '#createNatModal'})
             .onsubmit((e) => {
@@ -116,7 +117,8 @@ export class Networks extends Container {
             <div id="createNatModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="createBridgeModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="createIsolatedModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createOvsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>          
+            <div id="createOvsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="confirmActionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         </div>`)
     }

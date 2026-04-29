@@ -4,6 +4,7 @@ import {DiskCtl} from "./disk.js";
 import {InterfaceCtl} from "./interface.js"
 import {GraphicsCtl} from "./graphics.js";
 import {SnapshotCtl} from "./snapshot.js";
+import {ConfirmAction} from "../widget/common/confirm.js";
 
 
 class HeaderCtl extends Controller {
@@ -13,6 +14,9 @@ class HeaderCtl extends Controller {
     constructor(props) {
         super(props);
         this.api = new InstanceApi({uuids: props.uuid});
+        this.uuid = props.uuid;
+        this.name = props.name || props.uuid;
+        this.confirm = props.confirm;
 
         this.console();
         // register buttons's click.
@@ -31,8 +35,16 @@ class HeaderCtl extends Controller {
         $(this.child('#resume')).on("click", this, function (e) {
             e.data.api.resume();
         });
-        $(this.child('#destroy')).on("click", (e) => {
-            this.api.destroy();
+        $(this.child('#destroy')).on("click", () => {
+            new ConfirmAction({
+                id: this.confirm,
+                action: "destroy",
+                name: this.name,
+                message: "destroy",
+            }).onsubmit(() => {
+                this.api.destroy();
+            });
+            $(this.confirm).modal("show");
         });
 
         // console
@@ -88,9 +100,9 @@ export class GuestCtl extends Controller {
         this.api = new InstanceApi({uuids: uuid});
         this.header = new HeaderCtl({...props.header, uuid, name});
         this.disk = new DiskCtl({...props.disks, uuid, name});
-        this.interface = new InterfaceCtl({...props.interfaces, uuid, name});
-        this.graphics = new GraphicsCtl({...props.graphics, uuid, name});
-        this.snapshot = new SnapshotCtl({...props.snapshot, uuid, name})
+        this.interface = new InterfaceCtl({...props.interfaces, uuid, name, confirm: props.header.confirm});
+        this.graphics = new GraphicsCtl({...props.graphics, uuid, name, confirm: props.header.confirm});
+        this.snapshot = new SnapshotCtl({...props.snapshot, uuid, name, confirm: props.header.confirm})
     }
 
     edit(data) {

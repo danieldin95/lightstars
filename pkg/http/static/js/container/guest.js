@@ -14,6 +14,7 @@ import {TitleSet} from "../widget/instance/title.js";
 import {SnapshotCreate} from "../widget/snapshot/create.js";
 import {DiskRemove} from "../widget/disk/remove.js";
 import {DiskApi} from "../api/disk.js";
+import {InterfaceApi} from "../api/interface.js";
 
 export class Guest extends Container {
     // {
@@ -48,7 +49,7 @@ export class Guest extends Container {
             id: this.id(),
             name: data.name,
             uuid: data.uuid,
-            header: {id: this.id("#header")},
+            header: {id: this.id("#header"), confirm: this.id("#confirmActionModal")},
             disks: {
                 id: this.id("#disk"),
                 onRemove: (objs) => {
@@ -78,18 +79,66 @@ export class Guest extends Container {
                 ctl.remove();
             });
         // loading disks and interfaces.
-        new DiskCreate({id: this.id('#createDiskModal')})
-            .onsubmit((e) => {
-                ctl.disk.create(Utils.toJSON(e.form));
+        let diskCreateModal = new DiskCreate({id: this.id('#createDiskModal')});
+        diskCreateModal.onsubmit((e) => {
+            ctl.disk.create(Utils.toJSON(e.form));
+        });
+        let isoCreateModal = new IsoCreate({id: this.id("#createIsoModal")});
+        isoCreateModal.onsubmit((e) => {
+            ctl.disk.create(Utils.toJSON(e.form));
+        });
+
+        let refreshUsedDiskSeqs = () => {
+            new DiskApi({inst: this.uuid}).list(this, (resp) => {
+                let items = (resp && resp.resp && resp.resp.items) ? resp.resp.items : [];
+                let usedPciSeqs = new Set();
+                let usedDriveSeqs = new Set();
+                for (let item of items) {
+                    if (item.addrType === 'pci') {
+                        let bus = Number(item.addrBus);
+                        let slot = Number(item.addrSlot);
+                        let func = Number(item.addrFunc);
+                        if (bus === 1 && func === 0 && Number.isInteger(slot) && slot >= 1 && slot <= 15) {
+                            usedPciSeqs.add(slot);
+                        }
+                    } else if (item.addrType === 'drive') {
+                        let bus = Number(item.addrBus);
+                        let tgt = Number(item.addrTgt);
+                        let unit = Number(item.addrUnit);
+                        if (bus === 0 && tgt === 0 && Number.isInteger(unit) && unit >= 1 && unit <= 15) {
+                            usedDriveSeqs.add(unit);
+                        }
+                    }
+                }
+                diskCreateModal.setUsedSeqs({pciSeqs: usedPciSeqs, driveSeqs: usedDriveSeqs});
+                isoCreateModal.setUsedSeqs({driveSeqs: usedDriveSeqs});
             });
-        new IsoCreate({id: this.id("#createIsoModal")})
-            .onsubmit((e) => {
-                ctl.disk.create(Utils.toJSON(e.form));
+        };
+        $(this.id('#createDiskModal')).on('show.bs.modal', refreshUsedDiskSeqs);
+        $(this.id('#createIsoModal')).on('show.bs.modal', refreshUsedDiskSeqs);
+        let interfaceCreateModal = new InterfaceCreate({id: this.id('#createInterfaceModal')});
+        interfaceCreateModal.onsubmit((e) => {
+            ctl.interface.create(Utils.toJSON(e.form));
+        });
+        let refreshUsedInterfaceSeqs = () => {
+            new InterfaceApi({inst: this.uuid}).list(this, (resp) => {
+                let items = (resp && resp.resp && resp.resp.items) ? resp.resp.items : [];
+                let usedPciSeqs = new Set();
+                for (let item of items) {
+                    if (item.addrType !== 'pci') {
+                        continue;
+                    }
+                    let bus = Number(item.addrBus);
+                    let slot = Number(item.addrSlot);
+                    let func = Number(item.addrFunc);
+                    if (bus === 2 && func === 0 && Number.isInteger(slot) && slot >= 1 && slot <= 16) {
+                        usedPciSeqs.add(slot);
+                    }
+                }
+                interfaceCreateModal.setUsedSeqs({pciSeqs: usedPciSeqs});
             });
-        new InterfaceCreate({id: this.id('#createInterfaceModal')})
-            .onsubmit((e) => {
-                ctl.interface.create(Utils.toJSON(e.form));
-            });
+        };
+        $(this.id('#createInterfaceModal')).on('show.bs.modal', refreshUsedInterfaceSeqs);
         new GraphicsCreate({id: this.id('#createGraphicModal')})
             .onsubmit((e) => {
                 ctl.graphics.create(Utils.toJSON(e.form));
@@ -191,32 +240,48 @@ export class Guest extends Container {
                     </div>
                 </div>
                 <div class="card-body-tbl row">
-                    <div class="col-sm-12 col-md-5 col-lg-4 mt-1 pt-3 split-vertical">
+                    <div class="col-sm-12 col-md-5 col-lg-4 mt-1 pt-1 split-vertical">
                         <div style="width: 328px; height: 188px; background-color: rgb(40 40 40); border-radius: 4px; padding: 4px;">
                             <iframe width="320px" height="180px" src="${liteUrl}" frameborder="0"></iframe>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-7 col-lg-8 mt-1 split-vertical">
-                        <dl class="dl-horizontal dl-horizontal-r">
-                            <dt>{{'name' | i}}:</dt>
-                            <dd>&nbsp;{{name}}</dd>
-                            <dt>{{'state' | i}}:</dt>
-                            <dd>&nbsp;<span class="st-{{state}}">{{state}}</span></dd>
-                            <dt>{{'uuid' | i}}:</dt>
-                            <dd>&nbsp;{{uuid}}</dd>
-                            <dt>{{'title' | i}}:</dt>
-                            <dd>&nbsp;{{title}}</dd>                            
-                            <dt>{{'arch' | i}}:</dt>
-                            <dd>&nbsp;{{arch}} | {{type}}</dd>
-                            <dt>{{'processor' | i}}:</dt>
-                            <dd title="{{'model | number | time' | i}}">
-                              &nbsp;{{cpuMode | prettyCpuMode}} | {{maxCpu}} | {{cpuTime}}ms
-                            </dd>
-                            <dt>{{'memory' | i}}:</dt>
-                            <dd title="{{'max | current' | i}}">
-                              &nbsp;{{maxMem | prettyKiB}} | {{memory | prettyKiB}}
-                            </dd>
-                        </dl>
+                    <div class="col-sm-12 col-md-7 col-lg-8 mt-1 pt-1 split-vertical">
+                        <div class="resource-overview instance-overview">
+                            <div class="dashboard-grid instance-overview-grid">
+                                <div class="dashboard-stat total">
+                                    <div class="label">{{'name' | i}}</div>
+                                    <div class="value">{{name}}</div>
+                                </div>
+                                <div class="dashboard-stat total">
+                                    <div class="label">{{'state' | i}}</div>
+                                    <div class="value"><span class="st-{{state}}">{{state}}</span></div>
+                                </div>
+                                <div class="dashboard-stat total">
+                                    <div class="label">{{'arch' | i}}</div>
+                                    <div class="value">{{arch}} | {{type}}</div>
+                                </div>
+                                <div class="dashboard-stat total">
+                                    <div class="label">{{'memory' | i}}</div>
+                                    <div class="value" title="{{'max | current' | i}}">
+                                        {{maxMem | prettyKiB}} | {{memory | prettyKiB}}
+                                    </div>
+                                </div>
+                                <div class="dashboard-stat resource-wide">
+                                    <div class="label">{{'uuid' | i}}</div>
+                                    <div class="value resource-code">{{uuid}}</div>
+                                </div>
+                                <div class="dashboard-stat resource-wide">
+                                    <div class="label">{{'processor' | i}}</div>
+                                    <div class="value resource-code" title="{{'model | number | time' | i}}">
+                                        {{cpuMode | prettyCpuMode}} | {{maxCpu}} | {{cpuTime}}ms
+                                    </div>
+                                </div>
+                                <div class="dashboard-stat resource-full">
+                                    <div class="label">{{'title' | i}}</div>
+                                    <div class="value">{{title}}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -379,6 +444,7 @@ export class Guest extends Container {
             </div>
             <!-- Remove confirm -->
             <div id="removeModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="confirmActionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Setting instance modal -->
             <div id="settingModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <!-- Create disk modal -->

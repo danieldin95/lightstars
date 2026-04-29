@@ -140,7 +140,7 @@ export class History extends Widget {
                 let tb = Date.parse(b.date || "") || 0;
                 return tb - ta;
             });
-            let header = ["User", "Date", "Client", "Result", "URL"];
+            let header = ["User", "Date", "Client", "Message", "URL"];
             let lines = [header.map((v) => this.toCSVValue(v)).join(",")];
             items.forEach((v) => {
                 let urlDisplay = `${v.method || ""} ${v.url || ""}`.trim() || "-";

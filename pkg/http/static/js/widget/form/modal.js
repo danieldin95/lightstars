@@ -23,6 +23,15 @@ export class FormModal {
 
     render() {
         this.view = $(this.template());
+        this.view.find('input:not([autocomplete])').each(function () {
+            let type = (this.type || "").toLowerCase();
+            if (type === "password") {
+                $(this).attr('autocomplete', 'current-password');
+            } else {
+                $(this).attr('autocomplete', 'off');
+            }
+        });
+        this.view.find('textarea:not([autocomplete])').attr('autocomplete', 'off');
         this.container().html(this.view);
     }
 
@@ -54,11 +63,41 @@ export class FormModal {
     }
 
     loading() {
-        this.container().find('[name=finish-btn]').on('click', this, function(e) {
+        let releaseFocus = (container) => {
+            let root = container && container.length ? container[0] : null;
+            let active = document.activeElement;
+            if (active && root && root.contains(active) && typeof active.blur === "function") {
+                active.blur();
+            }
+            if (root && typeof root.blur === "function") {
+                root.blur();
+            }
+        };
+
+        this.container().off('hidden.bs.modal.formmodal');
+        this.container().on('hidden.bs.modal.formmodal', function() {
+            // Move focus out of hidden modal for a11y.
+            if (document.activeElement && typeof document.activeElement.blur === "function") {
+                document.activeElement.blur();
+            }
+            if (document.body && typeof document.body.focus === "function") {
+                document.body.focus();
+            }
+        });
+
+        this.container().off('click.formmodal', '[name=finish-btn]');
+        this.container().on('click.formmodal', '[name=finish-btn]', this, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            releaseFocus(e.data.container());
             e.data.submit();
             e.data.container().modal("hide");
         });
-        this.container().find('[name=cancel-btn]').on('click', this, function(e) {
+        this.container().off('click.formmodal', '[name=cancel-btn]');
+        this.container().on('click.formmodal', '[name=cancel-btn]', this, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            releaseFocus(e.data.container());
             e.data.container().modal("hide");
         });
         $(this.forms).each(function (i, e) {

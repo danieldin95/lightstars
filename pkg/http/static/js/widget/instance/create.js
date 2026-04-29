@@ -147,7 +147,7 @@ export class InstanceCreate extends FormModal {
                     <div class="form-group">
                         <label for="name" class="col-form-label-sm">{{'guest name' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="name" name="name" value="guest.01"/>
+                            <input type="text" class="form-control form-control-sm" id="name" name="name" value="" placeholder="guest.01"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -172,8 +172,8 @@ export class InstanceCreate extends FormModal {
                         </div>
                     </div>
                 </div>
-                <div id="custom" class="d-none">
-                    <div class="form-group">
+                <div id="custom" class="d-none custom-setting-grid row">
+                    <div class="form-group col-12 col-md-6">
                         <label for="cpuMode" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
                             <select class="form-control form-control-sm" id="cpuMode" name="cpuMode">
@@ -188,7 +188,7 @@ export class InstanceCreate extends FormModal {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-12 col-md-6">
                         <label for="memSize" class="col-form-label-sm">{{'memory size' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" id="memSize"
@@ -199,7 +199,18 @@ export class InstanceCreate extends FormModal {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-12 col-md-6">
+                        <label for="interface0Source" class="col-form-label-sm">{{'network interface' | i}}</label>
+                        <div class="input-group">
+                            <select class="form-control form-control-sm" id="interface0Source" name="interface0Source">
+                                <option value="virbr0" selected>Linux Bridge #virbr0</option>
+                                <option value="virbr1">Linux Bridge #virbr1</option>
+                                <option value="virbr2">Linux Bridge #virbr2</option>
+                                <option value="virbr3">Linux Bridge #virbr3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-6">
                         <label for="disk1Size" class="col-form-label-sm">{{'hardware disk' | i}}</label>
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm" id="disk1Size"
@@ -211,7 +222,7 @@ export class InstanceCreate extends FormModal {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-12">
                         <label for="disk0File" class="col-form-label-sm">{{'select ISO or image' | i}}</label>
                         <div class="input-group">
                             <select class="form-control form-control-sm" id="disk0File" name="disk0File">
@@ -219,17 +230,6 @@ export class InstanceCreate extends FormModal {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="interface0Source" class="col-form-label-sm">{{'network interface' | i}}</label>
-                        <div class="input-group">
-                            <select class="form-control form-control-sm" id="interface0Source" name="interface0Source">
-                                <option value="virbr0" selected>Linux Bridge #virbr0</option>
-                                <option value="virbr1">Linux Bridge #virbr1</option>
-                                <option value="virbr2">Linux Bridge #virbr2</option>
-                                <option value="virbr3">Linux Bridge #virbr3</option>
-                            </select>
-                        </div>
-                        </div>
                     </div>
                 </div>
                 </form>

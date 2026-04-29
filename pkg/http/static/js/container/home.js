@@ -76,8 +76,8 @@ export class Home extends Container {
                 </div>
                 <div class="card-body-tbl row overview-panels">
                     <!-- Loading -->
-                    <div id="system" class="col-12 split-vertical mt-1 panel-left"></div>
-                    <div id="statics" class="col-12 split-vertical mt-2 panel-right"></div>
+                    <div id="system" class="col-12 split-vertical mt-1 pt-1 panel-left"></div>
+                    <div id="statics" class="col-12 split-vertical mt-2 pt-1 panel-right"></div>
                 </div>
             </div>
         </div>

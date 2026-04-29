@@ -3,6 +3,7 @@ import {VolumeCtl} from "./volume.js";
 import {FileUpload} from "../widget/common/upload.js";
 import {UploadApi} from "../api/upload.js";
 import {DataStoreApi} from "../api/datastores.js";
+import {ConfirmAction} from "../widget/common/confirm.js";
 
 
 export class PoolCtl extends Controller {
@@ -15,6 +16,7 @@ export class PoolCtl extends Controller {
         this.uuid = uuid;
         this.name = name;
         this.tasks = props.tasks || "tasks";
+        this.confirm = props.confirm;
         this.volumes = new VolumeCtl({
             ...props.volumes, uuid, name,
             upload: props.volumes.upload,
@@ -35,7 +37,15 @@ export class PoolCtl extends Controller {
         let autostart = ($(this.id).attr("autostart") || "").toLowerCase() === "true";
 
         $(root + " #destroy").on("click", () => {
-            api.destroy(this.uuid);
+            new ConfirmAction({
+                id: this.confirm,
+                action: "destroy",
+                name: this.name,
+                message: "destroy",
+            }).onsubmit(() => {
+                api.destroy(this.uuid);
+            });
+            $(this.confirm).modal("show");
         });
         if (state === "inactive") {
             $(root + " #destroy").text("start");
@@ -52,7 +62,15 @@ export class PoolCtl extends Controller {
             api.clean(this.uuid);
         });
         $(root + " #remove").on("click", () => {
-            api.removeAction(this.uuid);
+            new ConfirmAction({
+                id: this.confirm,
+                action: "remove",
+                name: this.name,
+                message: "remove",
+            }).onsubmit(() => {
+                api.removeAction(this.uuid);
+            });
+            $(this.confirm).modal("show");
         });
     }
 }

@@ -2,6 +2,7 @@ import {Controller} from "./controller.js";
 import {NetworkApi} from "../api/network.js";
 import {NetworkTable} from "../widget/network/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
+import {ConfirmAction} from "../widget/common/confirm.js";
 
 
 class CheckBoxCtl extends CheckBox {
@@ -18,10 +19,20 @@ export class NetworksCtl extends Controller {
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
         this.table = new NetworkTable({id: `${this.id} #display-table`});
+        this.confirm = props.confirm;
 
         // register buttons's click.
         $(this.child('#delete')).on("click", (e) => {
-            new NetworkApi({uuids: this.uuids.store}).delete();
+            let uuids = this.uuids.store.slice();
+            new ConfirmAction({
+                id: this.confirm,
+                action: "remove",
+                name: uuids.join(", "),
+                message: "remove",
+            }).onsubmit(() => {
+                new NetworkApi({uuids: uuids}).delete();
+            });
+            $(this.confirm).modal("show");
         });
 
         // refresh table and register refresh click.

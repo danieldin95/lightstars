@@ -31,11 +31,15 @@ export class DataStores extends Container {
                 });
             },
             upload: '#uploadFileModal',
+            confirm: '#confirmActionModal',
         });
-        new DirCreate({id: '#createDirModal'})
-            .onsubmit((e) => {
-                sCtl.create(Utils.toJSON(e.form));
-            });
+        let dirCreateModal = new DirCreate({id: '#createDirModal'});
+        dirCreateModal.onsubmit((e) => {
+            sCtl.create(Utils.toJSON(e.form));
+        });
+        $('#createDirModal').on('show.bs.modal', () => {
+            dirCreateModal.refreshUsedNames();
+        });
         new NFSCreate({id: '#createNfsModal'})
             .onsubmit((e) => {
                 sCtl.create(Utils.toJSON(e.form));
@@ -119,7 +123,8 @@ export class DataStores extends Container {
             <!-- Upload file modal -->
             <div id="uploadFileModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
             <div id="createNfsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-            <div id="createIscsiModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>    
+            <div id="createIscsiModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="confirmActionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         </div>`)
     }

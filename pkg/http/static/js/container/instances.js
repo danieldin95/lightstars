@@ -23,6 +23,7 @@ export class Instances extends Container {
 
         new InstanceCtl({
             id: this.id('#instances'),
+            confirm: '#confirmActionModal',
             onthis: (e) => {
                 new Guest({
                     parent: this.parent,
@@ -106,7 +107,8 @@ export class Instances extends Container {
         <!-- Modal -->
         <div id="modals">
             <!-- Create instance modal -->
-            <div id="createGuestModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>      
+            <div id="createGuestModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <div id="confirmActionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         </div>`)
     }

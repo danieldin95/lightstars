@@ -54,6 +54,15 @@ export class Navigation extends Widget {
             forceActive(this.active);
             this.node();
             $(this.parent).html(this.view);
+            // Move account modals to body to avoid sidebar stacking-context overlay issues.
+            let prefsModal = this.view.find('#preferencesModal');
+            let passwdModal = this.view.find('#changePasswdModal');
+            if (prefsModal.length) {
+                $('body').append(prefsModal);
+            }
+            if (passwdModal.length) {
+                $('body').append(passwdModal);
+            }
 
             // register fullscreen click.
             this.view.find("#fullscreen").on('click', (e) => {
@@ -61,6 +70,12 @@ export class Navigation extends Widget {
             });
             // register change password and preferences.
             let user = e.resp.user.name;
+            this.view.find('[data-target="#preferencesModal"], [data-target="#changePasswdModal"]').on('click', function () {
+                let menu = $(this).closest('.dropdown-menu');
+                menu.removeClass('show');
+                menu.parent('.dropdown').removeClass('show');
+                menu.parent('.dropdown').find('.dropdown-toggle').attr('aria-expanded', 'false');
+            });
             new ChangePassword({id: '#changePasswdModal'})
                 .onsubmit((e) => {
                     new PasswordApi({uuids: user}).set(Utils.toJSON(e.form));

@@ -3,6 +3,7 @@ import {InstanceApi} from "../api/instance.js";
 import {InstanceTable} from "../widget/instance/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
 import {InstanceFooter} from "../widget/instance/footer.js";
+import {ConfirmAction} from "../widget/common/confirm.js";
 
 
 class CheckboxCtl extends CheckBox {
@@ -34,6 +35,7 @@ export class InstanceCtl extends Controller {
         this.uuids = this.checkbox.uuids;
         this.table = new InstanceTable({id: `${this.id} #display-body`});
         this.footer = new InstanceFooter({id: `${this.id} #footer`});
+        this.confirm = props.confirm;
 
         // register buttons's click.
         $(this.child('#console')).on("click", this.uuids, function (e) {
@@ -63,8 +65,17 @@ export class InstanceCtl extends Controller {
         $(this.child('#more-resume')).on("click", this.uuids, function (e) {
             new InstanceApi({uuids: e.data.store}).resume();
         });
-        $(this.child('#more-destroy')).on("click", this.uuids, function (e) {
-            new InstanceApi({uuids: e.data.store}).destroy();
+        $(this.child('#more-destroy')).on("click", this.uuids, (e) => {
+            let uuids = e.data.store.slice();
+            new ConfirmAction({
+                id: this.confirm,
+                action: "destroy",
+                name: uuids.join(", "),
+                message: "destroy",
+            }).onsubmit(() => {
+                new InstanceApi({uuids: uuids}).destroy();
+            });
+            $(this.confirm).modal("show");
         });
 
         // refresh table and register refresh click.

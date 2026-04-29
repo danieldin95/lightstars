@@ -2,6 +2,7 @@ import {Controller} from "./controller.js";
 import {GraphicsApi} from "../api/graphics.js";
 import {GraphicsTable} from "../widget/graphics/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
+import {ConfirmAction} from "../widget/common/confirm.js";
 
 
 class CheckBoxCtl extends CheckBox {
@@ -18,6 +19,7 @@ export class GraphicsCtl extends Controller {
         super(props);
         this.name = props.name;
         this.inst = props.uuid;
+        this.confirm = props.confirm;
 
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
@@ -27,11 +29,20 @@ export class GraphicsCtl extends Controller {
         });
 
         // register button's click.
-        $(this.child('#remove')).on("click", this, function (e) {
-            new GraphicsApi({
-                inst: e.data.inst,
-                uuids: e.data.uuids.store,
-                name: e.data.name}).delete();
+        $(this.child('#remove')).on("click", (e) => {
+            let uuids = this.uuids.store.slice();
+            new ConfirmAction({
+                id: this.confirm,
+                action: "remove",
+                name: uuids.join(", "),
+                message: "remove",
+            }).onsubmit(() => {
+                new GraphicsApi({
+                    inst: this.inst,
+                    uuids: uuids,
+                    name: this.name}).delete();
+            });
+            $(this.confirm).modal("show");
         });
 
         // refresh table and register refresh click.

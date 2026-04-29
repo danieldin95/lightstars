@@ -270,6 +270,48 @@ hr,
     background-color: inherit;
 }
 
+input[type="checkbox"] {
+    width: .9rem;
+    height: .9rem;
+    margin: 0;
+    vertical-align: middle;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid #475569;
+    border-radius: .2rem;
+    background-color: #0f172a;
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, .35);
+    cursor: pointer;
+    transition: background-color .12s ease-in-out, border-color .12s ease-in-out, box-shadow .12s ease-in-out;
+}
+
+input[type="checkbox"]:hover {
+    border-color: #60a5fa;
+}
+
+input[type="checkbox"]:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 .15rem rgba(96, 165, 250, .18);
+}
+
+input[type="checkbox"]:checked {
+    border-color: #60a5fa;
+    background-color: #2563eb;
+    background-image: linear-gradient(135deg, transparent 42%, #fff 42%, #fff 58%, transparent 58%),
+        linear-gradient(45deg, transparent 48%, #fff 48%, #fff 62%, transparent 62%);
+    background-position: .09rem .42rem, .36rem .19rem;
+    background-size: .28rem .28rem, .44rem .44rem;
+    background-repeat: no-repeat;
+}
+
+input[type="checkbox"]:disabled {
+    border-color: #334155;
+    background-color: #1f2937;
+    cursor: not-allowed;
+    opacity: .65;
+}
+
 ol, ul, dl {
     margin-top: 0;
     margin-bottom: 0;
@@ -316,7 +358,7 @@ ol, ul, dl {
         top: 0;
         left: 0;
         bottom: 0;
-        width: 176px;
+        width: 148px;
         z-index: 1040;
     }
 
@@ -325,7 +367,7 @@ ol, ul, dl {
         top: 0;
         left: 0;
         bottom: 0;
-        width: 176px;
+        width: 148px;
         display: block;
         padding: .75rem .5rem;
         border-right: 1px solid #334155;
@@ -334,7 +376,11 @@ ol, ul, dl {
 
     #navigation #navs .navbar-brand {
         margin-right: 0;
-        margin-bottom: .75rem;
+        margin-bottom: 0;
+    }
+
+    #navigation #navs .nav-top {
+        margin-bottom: .85rem;
     }
 
     #navigation #navs .navbar-toggler {
@@ -358,16 +404,21 @@ ol, ul, dl {
         padding: .4rem .65rem;
     }
 
+    #navigation #navs.sidebar-nav .dropdown {
+        position: relative;
+    }
+
     #navigation #navs.sidebar-nav .dropdown-menu {
-        top: 0;
-        left: 100%;
+        top: calc(100% + .2rem);
+        left: calc(100% - 2rem);
         right: auto;
         margin-top: 0;
         margin-left: 0;
+        z-index: 1030;
     }
 
     .context {
-        margin-left: 176px;
+        margin-left: 148px;
     }
 
     .context #notice,

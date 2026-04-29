@@ -6,17 +6,40 @@ export class DiskCreate extends FormModal {
     //
     constructor (props) {
         super(props);
+        this.usedPciSeqs = new Set();
+        this.usedDriveSeqs = new Set();
 
         this.render();
         this.loading();
     }
 
+    setUsedSeqs({pciSeqs, driveSeqs}) {
+        this.usedPciSeqs = new Set(pciSeqs || []);
+        this.usedDriveSeqs = new Set(driveSeqs || []);
+        this.render();
+        this.loading();
+    }
+
+    renderSeqOptions() {
+        let seqSelector = this.view.find("select[name='seq']");
+        seqSelector.find("option").remove();
+        let bus = this.view.find("select[name='bus']").val();
+        let usedSeqs = (bus === 'ide') ? this.usedDriveSeqs : this.usedPciSeqs;
+
+        console.log("DiskCreate.renderSeqOptions", bus, usedSeqs);
+        for (let i = 1; i < 16; i++) {
+            if (!usedSeqs.has(i)) {
+                seqSelector.append(new Option(i, i));
+            }
+        }
+    }
+
     render() {
         super.render();
-        this.view.find("select[name='seq'] option").remove();
-        for (let i = 1; i < 16; i++) {
-            this.view.find("select[name='seq']").append(new Option(i, i));
-        }
+        this.renderSeqOptions();
+        this.view.find("select[name='bus']").off('change.disk-seq').on('change.disk-seq', () => {
+            this.renderSeqOptions();
+        });
     }
 
     template() {

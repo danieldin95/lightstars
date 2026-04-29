@@ -32,7 +32,7 @@ $(function() {
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">
-                                <input id="search-input" type="text" class="form-control form-control-sm" placeholder="${$.i18n("search")}">
+                                <input id="search-input" type="text" class="form-control form-control-sm" autocomplete="off" placeholder="${$.i18n("search")}">
                                 <button id="download" type="button" class="btn btn-outline-dark btn-sm">${$.i18n("download")}</button>
                             </div>
                             <div class="col-auto">
@@ -46,7 +46,7 @@ $(function() {
                                     <th>${$.i18n("user")}</th>
                                     <th>${$.i18n("date")}</th>
                                     <th>${$.i18n("client")}</th>
-                                    <th>${$.i18n("result")}</th>
+                                    <th>${$.i18n("message")}</th>
                                     <th>${$.i18n("url")}</th>
                                 </tr>
                                 </thead>

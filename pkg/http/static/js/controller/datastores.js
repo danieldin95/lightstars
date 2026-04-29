@@ -4,6 +4,7 @@ import {DataStoreTable} from "../widget/datastore/table.js";
 import {FileUpload} from "../widget/common/upload.js";
 import {UploadApi} from "../api/upload.js";
 import {CheckBox} from "../widget/common/checkbox.js";
+import {ConfirmAction} from "../widget/common/confirm.js";
 
 
 class CheckBoxCtl extends CheckBox {
@@ -28,13 +29,23 @@ export class DataStoresCtl extends Controller {
         this.uuids = this.checkbox.uuids;
         this.table = new DataStoreTable({id: this.child('#display-table')});
         this.upload = new FileUpload({id: props.upload});
+        this.confirm = props.confirm;
 
         this.upload.onsubmit(this.uuids, function (e) {
             new UploadApi({uuids: e.data.store, id: '#process'}).upload(e.form);
         });
         // register buttons's  click.
-        $(this.child('#delete')).on("click", this.uuids, function (e) {
-            new DataStoreApi({uuids: e.data.store}).delete();
+        $(this.child('#delete')).on("click", this.uuids, (e) => {
+            let uuids = e.data.store.slice();
+            new ConfirmAction({
+                id: this.confirm,
+                action: "remove",
+                name: uuids.join(", "),
+                message: "remove",
+            }).onsubmit(() => {
+                new DataStoreApi({uuids: uuids}).delete();
+            });
+            $(this.confirm).modal("show");
         });
 
         // refresh table and register refresh click.

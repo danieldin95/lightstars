@@ -7,7 +7,14 @@ export class InterfaceCreate extends FormModal {
     //
     constructor (props) {
         super(props);
+        this.usedPciSeqs = new Set();
 
+        this.render();
+        this.loading();
+    }
+
+    setUsedSeqs({pciSeqs}) {
+        this.usedPciSeqs = new Set(pciSeqs || []);
         this.render();
         this.loading();
     }
@@ -31,10 +38,13 @@ export class InterfaceCreate extends FormModal {
             fresh: function() {
                 this.selector.find('option').remove();
                 for (let i = 1; i < 17; i++) {
-                    this.selector.append(new Option(i, i));
+                    if (!this.usedPciSeqs.has(i)) {
+                        this.selector.append(new Option(i, i));
+                    }
                 }
             },
             selector: this.view.find("select[name='seq']"),
+            usedPciSeqs: this.usedPciSeqs,
         };
 
         cpu.fresh();

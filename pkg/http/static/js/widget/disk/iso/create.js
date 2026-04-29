@@ -8,13 +8,28 @@ export class IsoCreate extends FormModal {
     //
     constructor (props) {
         super(props);
+        this.usedDriveSeqs = new Set();
 
+        this.render();
+        this.loading();
+    }
+
+    setUsedSeqs({driveSeqs}) {
+        this.usedDriveSeqs = new Set(driveSeqs || []);
         this.render();
         this.loading();
     }
 
     render() {
         super.render();
+
+        let seqSelector = this.view.find("select[name='seq']");
+        seqSelector.find("option").remove();
+        for (let i = 1; i < 16; i++) {
+            if (!this.usedDriveSeqs.has(i)) {
+                seqSelector.append(Option(i, i));
+            }
+        }
 
         let iso = {
             selector: this.view.find("select[name='source']"),

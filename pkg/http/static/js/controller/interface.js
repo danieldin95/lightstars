@@ -2,6 +2,7 @@ import {Controller} from './controller.js'
 import {InterfaceApi} from "../api/interface.js";
 import {InterfaceTable} from "../widget/interface/table.js";
 import {CheckBox} from "../widget/common/checkbox.js";
+import {ConfirmAction} from "../widget/common/confirm.js";
 
 
 class CheckBoxCtl extends CheckBox {
@@ -18,6 +19,7 @@ export class InterfaceCtl extends Controller {
         super(props);
         this.name = props.name;
         this.inst = props.uuid;
+        this.confirm = props.confirm;
 
         this.checkbox = new CheckBoxCtl(props);
         this.uuids = this.checkbox.uuids;
@@ -28,10 +30,19 @@ export class InterfaceCtl extends Controller {
 
         // register buttons's click
         $(this.child('#remove')).on("click", (e) => {
-            new InterfaceApi({
-                inst: this.inst,
-                uuids: this.uuids.store
-            }).delete();
+            let uuids = this.uuids.store.slice();
+            new ConfirmAction({
+                id: this.confirm,
+                action: "remove",
+                name: uuids.join(", "),
+                message: "remove",
+            }).onsubmit(() => {
+                new InterfaceApi({
+                    inst: this.inst,
+                    uuids: uuids
+                }).delete();
+            });
+            $(this.confirm).modal("show");
         });
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {

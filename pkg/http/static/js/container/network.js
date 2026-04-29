@@ -46,6 +46,7 @@ export class Network extends Container {
         new NetworkCtl({
             id: this.id(),
             header: {id: this.id("#header")},
+            confirm: this.id("#confirmActionModal"),
             leases: {id: this.id("#leases")},
             ports: {
                 id: this.id("#ports"),
@@ -91,26 +92,40 @@ export class Network extends Container {
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>                        
                     </div>
                 </div>
-                <div class="card-body-hdl">
-                    <div class="overview">                
-                        <dl class="dl-horizontal">
-                            <dt>{{'name' | i}}:</dt>
-                            <dd>{{name}}</dd>                            
-                            <dt>{{'state' | i}}:</dt>
-                            <dd><span class="st-{{state}}">{{state}}</span></dd>
-                            <dt>UUID:</dt>
-                            <dd>{{uuid}}</dd>
-                            <dt>{{'mode' | i}}:</dt>
-                            <dd>{{mode == '' ? 'isolated' : mode}}</dd>
-                            <dt>{{'bridge' | i}}:</dt>
-                            <dd>{{bridge}}</dd>                            
-                            <dt>{{'address' | i}}:</dt>
-                            <dd>{{if address == ''}} 
-                              - 
-                            {{else}} 
-                              {{address}}/{{if prefix}} {{prefix}} {{else}} {{netmask | netmask2prefix}} {{/if}}
-                            {{/if}}</dd>
-                        </dl>
+                <div class="card-body-hdl pt-1">
+                    <div class="resource-overview">
+                        <div class="dashboard-grid network-overview-grid">
+                            <div class="dashboard-stat total">
+                                <div class="label">{{'name' | i}}</div>
+                                <div class="value">{{name}}</div>
+                            </div>
+                            <div class="dashboard-stat total">
+                                <div class="label">{{'state' | i}}</div>
+                                <div class="value"><span class="st-{{state}}">{{state}}</span></div>
+                            </div>
+                            <div class="dashboard-stat total">
+                                <div class="label">{{'mode' | i}}</div>
+                                <div class="value">{{mode == '' ? 'isolated' : mode}}</div>
+                            </div>
+                            <div class="dashboard-stat total">
+                                <div class="label">{{'bridge' | i}}</div>
+                                <div class="value">{{bridge}}</div>
+                            </div>
+                            <div class="dashboard-stat resource-wide">
+                                <div class="label">UUID</div>
+                                <div class="value resource-code">{{uuid}}</div>
+                            </div>
+                            <div class="dashboard-stat resource-wide">
+                                <div class="label">{{'address' | i}}</div>
+                                <div class="value resource-code">
+                                    {{if address == ''}}
+                                        -
+                                    {{else}}
+                                        {{address}}/{{if prefix}}{{prefix}}{{else}}{{netmask | netmask2prefix}}{{/if}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -203,6 +218,9 @@ export class Network extends Container {
                 </div>
               </div>
             </div>
+        </div>
+        <div id="modals">
+            <div id="confirmActionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
         </div>
         </div>`, v);
     }

@@ -191,6 +191,22 @@ select {
     width: 100%;
 }
 
+#custom.custom-setting-grid {
+    margin-left: -0.35rem;
+    margin-right: -0.35rem;
+}
+
+#custom.custom-setting-grid .form-group {
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+#custom.custom-setting-grid .input-group .select-twice-md {
+    margin-left: 0.5rem;
+    min-width: 5rem;
+}
+
 .btn-spot {
     border: 1px solid #64748b;
     padding: 0;
@@ -387,6 +403,61 @@ select {
     color: #fca5a5;
 }
 
+.resource-overview {
+    max-width: 860px;
+}
+
+.datastore-overview-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.instance-overview {
+    max-width: none;
+}
+
+.instance-overview-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.network-overview-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dashboard-stat.resource-wide {
+    grid-column: span 2;
+}
+
+.dashboard-stat.resource-full {
+    grid-column: 1 / -1;
+}
+
+.dashboard-stat .resource-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .82rem;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+@media (max-width: 992px) {
+    .datastore-overview-grid,
+    .instance-overview-grid,
+    .network-overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    .datastore-overview-grid,
+    .instance-overview-grid,
+    .network-overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-stat.resource-wide {
+        grid-column: span 1;
+    }
+}
+
 .overview-panels {
     margin-left: 0;
     margin-right: 0;
@@ -461,11 +532,10 @@ select {
 
 #global-history #history .history-result {
     max-width: 28rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: block;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
     line-height: 1.35;
 }
 
