@@ -63,9 +63,9 @@ export class VolumeTableWid extends Widget {
                     </td>
                     <td>
                       {{if v.type == "dir"}}
-                      <a id="on-this" data-name="{{v.fullName || v.name}}" data-type="{{v.type}}" href="javascript:void(0)">{{v.name}}</a>
+                      <a id="on-this" data-name="{{v.name}}" data-type="{{v.type}}" href="javascript:void(0)">{{v.name}}</a>
                       {{else if v.type == "file"}}
-                      <a href="${prefix}/{{v.name}}">{{v.name}}</a>
+                      <a href="${prefix}/{{v.fullName || v.name}}">{{v.name}}</a>
                       {{else}}
                       <a data-name="{{v.name}}" href="#">{{v.name}}</a>
                       {{/if}}

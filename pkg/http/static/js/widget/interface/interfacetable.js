@@ -1,5 +1,7 @@
 import {Widget} from "../widget.js";
 import {InterfaceApi} from "../../api/interfaceapi.js";
+import {NetworkApi} from "../../api/networkapi.js";
+import {Location} from "../../lib/location.js";
 
 
 export class InterfaceTableWid extends Widget {
@@ -26,8 +28,39 @@ export class InterfaceTableWid extends Widget {
             tasks: this.tasks,
             inst: this.inst,
         }).list(this,function (e) {
-            $(e.data.id).html(e.data.render(e.resp));
+            $(e.data.id).html(e.data.render(e.data.formatData(e.resp)));
+            $(e.data.id).find(".js-network-link").off("click").on("click", function (evt) {
+                evt.preventDefault();
+                let bridge = ($(this).attr("data-bridge") || "").trim();
+                if (!bridge) {
+                    return;
+                }
+                new NetworkApi().list((resp) => {
+                    let items = (resp && resp.resp && resp.resp.items) ? resp.resp.items : [];
+                    let found = items.find((it) => {
+                        return (it.bridge || "").trim() === bridge || (it.name || "").trim() === bridge;
+                    });
+                    if (!found || !found.uuid) {
+                        return;
+                    }
+                    let query = Location.query();
+                    window.location.hash = `#/network/${found.uuid}${query ? "?" + query : ""}`;
+                });
+            });
             func({data, resp: e.resp});
+        });
+    }
+
+    formatData(data) {
+        let items = (data && data.items) ? data.items : [];
+        return Object.assign({}, data, {
+            items: items.map((v) => {
+                let sourceText = v.source == "" ? (v.network == "" ? v.hostDev : v.network) : v.source;
+                return Object.assign({}, v, {
+                    sourceText: sourceText || "-",
+                    sourceBridge: sourceText || "",
+                });
+            }),
         });
     }
 
@@ -50,7 +83,13 @@ export class InterfaceTableWid extends Widget {
                     pci:{{v.addrBus}}:{{v.addrSlot}}.{{v.addrFunc}}
                 {{/if}}</span>
                 </td>
-                <td>{{v.source == "" ? v.network == "" ? v.hostDev : v.network : v.source}}</td>
+                <td>
+                    {{if v.sourceBridge}}
+                        <a href="javascript:void(0)" class="js-network-link" data-bridge="{{v.sourceBridge}}">{{v.sourceText}}</a>
+                    {{else}}
+                        {{v.sourceText}}
+                    {{/if}}
+                </td>
             </tr>
         {{/each}}
         `, data);
