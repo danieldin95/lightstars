@@ -1,8 +1,8 @@
-import {Widget} from "../widget.js";
-import {HyperApi} from "../../api/hyper.js";
+import {widget} from "../widget.js";
+import {HyperApi} from "../../api/hyperapi.js";
 
 
-export class Statics extends Widget {
+export class statics extends widget {
     // {
     //   id: '#xx'.
     // }
@@ -26,8 +26,8 @@ export class Statics extends Widget {
 
     render(data) {
         return this.compile(`
-            <div class="dashboard-stats">
-                <div class="dashboard-group">
+            <div class="dashboard-stats home-stats-row">
+                <div class="dashboard-group home-stats-item">
                     <div class="dashboard-group-title">{{'datastore' | i}}</div>
                     <div class="dashboard-grid">
                         <div class="dashboard-stat total">
@@ -40,9 +40,9 @@ export class Statics extends Widget {
                         </div>
                     </div>
                 </div>
-                <div class="dashboard-group">
+                <div class="dashboard-group home-stats-item">
                     <div class="dashboard-group-title">{{'guest instances' | i}}</div>
-                    <div class="dashboard-grid">
+                    <div class="dashboard-grid home-stat-grid-two-row">
                         <div class="dashboard-stat total">
                             <div class="label">total</div>
                             <div class="value">{{instance.total}}</div>
@@ -57,8 +57,8 @@ export class Statics extends Widget {
                         </div>
                     </div>
                 </div>
-                <div class="dashboard-group">
-                    <div class="dashboard-group-title">{{'network' | i}}</div>
+                <div class="dashboard-group home-stats-item">
+                    <div class="dashboard-group-title">{{'virtual networks' | i}}</div>
                     <div class="dashboard-grid">
                         <div class="dashboard-stat total">
                             <div class="label">total</div>
@@ -70,9 +70,9 @@ export class Statics extends Widget {
                         </div>
                     </div>
                 </div>
-                <div class="dashboard-group">
+                <div class="dashboard-group home-stats-item">
                     <div class="dashboard-group-title">{{'virtual ports' | i}}</div>
-                    <div class="dashboard-grid">
+                    <div class="dashboard-grid home-stat-grid-two-row">
                         <div class="dashboard-stat total">
                             <div class="label">total</div>
                             <div class="value">{{ports.total}}</div>

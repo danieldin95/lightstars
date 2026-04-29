@@ -1,6 +1,6 @@
 import {Location} from "../lib/location.js";
 
-export class Collapse {
+export class collapse {
     // {
     //   default: page,
     //   pages: [ {id: '#', name: ""} ],

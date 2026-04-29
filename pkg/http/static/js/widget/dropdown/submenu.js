@@ -1,5 +1,5 @@
 
-export class SubMenu {
+export class submenu {
     //
     constructor(props) {
         $('.dropdown-submenu > a').on("click", function(e) {

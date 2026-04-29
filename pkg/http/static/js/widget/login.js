@@ -1,9 +1,9 @@
 import {I18N} from "../lib/i18n.js";
-import {Widget} from "./widget.js";
+import {widget} from "./widget.js";
 import {Location} from "../lib/location.js";
 
 
-export class Login extends Widget {
+export class login extends widget {
     // {
     //   parent: "#container"
     // }

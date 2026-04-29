@@ -1,10 +1,10 @@
 import {Container} from "./container.js"
-import {Collapse} from "../widget/collapse.js";
-import {DataStoreApi} from "../api/datastores.js";
-import {PoolCtl} from "../controller/pool.js";
+import {collapse} from "../widget/collapse.js";
+import {DataStoreApi} from "../api/datastoresapi.js";
+import {Pool as PoolController} from "../controller/poolctl.js";
 import {Api} from "../api/api.js";
-import {VolumeRemove} from "../widget/volume/remove.js";
-import {VolumeApi} from "../api/volume.js";
+import {volumeremove} from "../widget/volume/volumeremove.js";
+import {VolumeApi} from "../api/volumeapi.js";
 
 
 export class Pool extends Container {
@@ -34,7 +34,7 @@ export class Pool extends Container {
         // collapse
         $(this.id('#collapseOver')).fadeIn('slow');
         $(this.id('#collapseOver')).collapse();
-        new Collapse({
+        new collapse({
             pages: [
                 {id: this.id('#collapseVol'), name: 'volumes'},
             ],
@@ -42,7 +42,7 @@ export class Pool extends Container {
             update: false,
         });
 
-        new PoolCtl({
+        new PoolController({
             id: this.id(),
             header: {id: this.id("#header")},
             confirm: this.id("#confirmActionModal"),
@@ -50,7 +50,7 @@ export class Pool extends Container {
                 id: this.id("#volumes"),
                 upload: "#uploadPoolModal",
                 onRemove: (objs) => {
-                    new VolumeRemove({
+                    new volumeremove({
                         id: this.id('#removeVolModal'),
                         name: objs.uuids,
                     }).onsubmit((e) => {

@@ -1,10 +1,10 @@
 import {Container} from "./container.js"
-import {System} from "../widget/index/system.js";
-import {Statics} from "../widget/index/statics.js";
+import {system} from "../widget/index/system.js";
+import {statics} from "../widget/index/statics.js";
 import {I18N} from "../lib/i18n.js";
-import {InstanceCreate} from "../widget/instance/create.js";
+import {instancecreate} from "../widget/instance/instancecreate.js";
 import {Utils} from "../lib/utils.js";
-import {InstanceApi} from "../api/instance.js";
+import {InstanceApi} from "../api/instanceapi.js";
 
 export class Home extends Container {
     // {
@@ -21,7 +21,7 @@ export class Home extends Container {
     loading() {
         this.title(I18N.i('home'));
         // loading overview.
-        let sys = new System({
+        let sys = new system({
             id: this.id('#overview .card-body-tbl #system'),
         });
         sys.refresh((e) => {
@@ -29,7 +29,7 @@ export class Home extends Container {
             $(this.id('#refresh-hdl')).text(this.props.name);
         });
 
-        let sts = new Statics({
+        let sts = new statics({
             id: this.id('#overview .card-body-tbl #statics'),
         });
         sts.refresh();
@@ -45,7 +45,7 @@ export class Home extends Container {
         $(this.id('#refresh-hdl')).on('click', () => {
             refresh();
         });
-        new InstanceCreate({id: '#createGuestModal'})
+        new instancecreate({id: '#createGuestModal'})
             .onsubmit((e) => {
                 new InstanceApi().create(Utils.toJSON(e.form));
             });
@@ -54,7 +54,7 @@ export class Home extends Container {
     template(v) {
         return this.compile(`
         <div id="index" class="home-layout">
-        <!-- System -->
+        <!-- system -->
         <div id="system" class="card shadow system">
             <div class="card-header">
                 <button id="" class="btn btn-link btn-block text-left btn-sm">{{ 'system info' | i}}</button>
@@ -67,8 +67,6 @@ export class Home extends Container {
                                 data-toggle="modal" data-target="#createGuestModal">
                             {{'create new instance' | i}}
                         </button>
-                        <button id="console" type="button" class="btn btn-outline-dark btn-sm">{{'power off' | i}}</button>
-                        <button id="start" type="button" class="btn btn-outline-dark btn-sm">{{'reboot' | i}}</button>
                     </div>
                     <div class="col-auto">
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>

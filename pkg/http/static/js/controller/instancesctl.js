@@ -1,0 +1,107 @@
+import {Controller} from './controller.js';
+import {InstanceApi} from "../api/instanceapi.js";
+import {instancetable} from "../widget/instance/instancetable.js";
+import {checkbox} from "../widget/common/checkbox.js";
+import {instancefooter} from "../widget/instance/instancefooter.js";
+import {confirmaction} from "../widget/common/confirmaction.js";
+
+
+class CheckboxCtl extends checkbox {
+    change(from) {
+        super.change(from);
+        if (from.store.length === 0) {
+            $(this.child('#start')).attr("disabled","disabled");
+            $(this.child('#console')).attr("disabled","disabled");
+            $(this.child('#shutdown')).attr("disabled","disabled");
+            $(this.child('#more')).attr("disabled","disabled");
+        } else {
+            $(this.child('#start')).removeAttr('disabled');
+            $(this.child('#console')).removeAttr('disabled');
+            $(this.child('#shutdown')).removeAttr('disabled');
+            $(this.child('#more')).removeAttr('disabled');
+        }
+    }
+}
+
+
+export class Instances extends Controller {
+    // {
+    //   id: '#instances'
+    //   onthis: function (e) {},
+    // }
+    constructor(props) {
+        super(props);
+        this.checkbox = new CheckboxCtl(props);
+        this.uuids = this.checkbox.uuids;
+        this.table = new instancetable({id: `${this.id} #display-body`});
+        this.footer = new instancefooter({id: `${this.id} #footer`});
+        this.confirm = props.confirm;
+
+        // register buttons's click.
+        $(this.child('#console')).on("click", this.uuids, function (e) {
+            let props = {uuids: e.data.store, passwd: {}, name: {}};
+            e.data.store.forEach(function (v) {
+                let obj = $('input[data='+v+']');
+                props.passwd[v] = obj.attr('passwd');
+                props.name[v] = obj.attr('name');
+            });
+            new InstanceApi(props).console();
+        });
+        $(this.child('#start')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).start();
+        });
+        $(this.child('#more-start')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).start();
+        });
+        $(this.child('#more-shutdown')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).shutdown();
+        });
+        $(this.child('#more-reset')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).reset();
+        });
+        $(this.child('#more-suspend')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).suspend();
+        });
+        $(this.child('#more-resume')).on("click", this.uuids, function (e) {
+            new InstanceApi({uuids: e.data.store}).resume();
+        });
+        $(this.child('#more-destroy')).on("click", this.uuids, (e) => {
+            let uuids = e.data.store.slice();
+            new confirmaction({
+                id: this.confirm,
+                action: "destroy",
+                name: uuids.join(", "),
+                message: "destroy",
+            }).onsubmit(() => {
+                new InstanceApi({uuids: uuids}).destroy();
+            });
+            $(this.confirm).modal("show");
+        });
+
+        // refresh table and register refresh click.
+        $(this.child('#refresh')).on("click", (e) => {
+            this.refresh();
+        });
+        this.refresh();
+    }
+
+    refresh() {
+        this.table.refresh((e) => {
+            this.checkbox.refresh();
+            // register click on this table row.
+            let func = this.props.onthis;
+            if (func) {
+                $(this.child('#on-this')).on('click', function(e) {
+                    func({uuid: $(this).attr('data')});
+                });
+            }
+        });
+        this.footer.refresh((e) => {
+            //TODO
+        })
+    }
+
+    create(data) {
+        new InstanceApi().create(data);
+    }
+}

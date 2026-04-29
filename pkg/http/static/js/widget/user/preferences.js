@@ -1,7 +1,7 @@
-import {FormModal} from "../form/modal.js";
+import {formmodal} from "../form/formmodal.js";
 
 
-export class Preferences extends FormModal {
+export class preferences extends formmodal {
     // {
     //   id: ""
     // }

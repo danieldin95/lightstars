@@ -1,7 +1,7 @@
-import {CheckBox as CheckBoxCom} from "../../lib/checkbox.js";
+import {checkbox as CheckBoxCom} from "../../lib/checkbox.js";
 
 
-export class CheckBox {
+export class checkbox {
     // {
     //   id: "#networks"
     // }

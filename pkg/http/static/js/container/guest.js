@@ -1,20 +1,20 @@
 import {Container} from "./container.js"
 import {Utils} from "../lib/utils.js";
-import {GuestCtl} from '../controller/guest.js';
+import {Guest as GuestController} from '../controller/guestctl.js';
 import {Api} from "../api/api.js";
-import {InstanceApi} from "../api/instance.js";
+import {InstanceApi} from "../api/instanceapi.js";
 
-import {DiskCreate} from '../widget/disk/create.js';
-import {IsoCreate} from "../widget/disk/iso/create.js";
-import {InterfaceCreate} from '../widget/interface/create.js';
-import {InstanceSet} from "../widget/instance/setting.js";
-import {InstanceRemove} from "../widget/instance/remove.js";
-import {GraphicsCreate} from "../widget/graphics/create.js";
-import {TitleSet} from "../widget/instance/title.js";
-import {SnapshotCreate} from "../widget/snapshot/create.js";
-import {DiskRemove} from "../widget/disk/remove.js";
-import {DiskApi} from "../api/disk.js";
-import {InterfaceApi} from "../api/interface.js";
+import {diskcreate} from '../widget/disk/diskcreate.js';
+import {isocreate} from "../widget/disk/isocreate.js";
+import {interfacecreate} from '../widget/interface/interfacecreate.js';
+import {instanceset} from "../widget/instance/instanceset.js";
+import {instanceremove} from "../widget/instance/instanceremove.js";
+import {graphicscreate} from "../widget/graphics/graphicscreate.js";
+import {titleset} from "../widget/instance/titleset.js";
+import {snapshotcreate} from "../widget/snapshot/snapshotcreate.js";
+import {diskremove} from "../widget/disk/diskremove.js";
+import {DiskApi} from "../api/diskapi.js";
+import {InterfaceApi} from "../api/interfaceapi.js";
 
 export class Guest extends Container {
     // {
@@ -45,7 +45,7 @@ export class Guest extends Container {
     }
 
     loading(data) {
-        let ctl = new GuestCtl({
+        let ctl = new GuestController({
             id: this.id(),
             name: data.name,
             uuid: data.uuid,
@@ -53,7 +53,7 @@ export class Guest extends Container {
             disks: {
                 id: this.id("#disk"),
                 onRemove: (objs) => {
-                    new DiskRemove({
+                    new diskremove({
                         id: this.id('#removeDiskModal'),
                         name: objs.uuids,
                     }).onsubmit((e) => {
@@ -66,24 +66,24 @@ export class Guest extends Container {
             snapshot: {id: this.id('#snapshot')},
             data: data,
         });
-        new InstanceSet({id: this.id('#settingModal'), data: data })
+        new instanceset({id: this.id('#settingModal'), data: data })
             .onsubmit((e) => {
                 ctl.edit(Utils.toJSON(e.form));
             });
-        new TitleSet({id: this.id('#settingTitleModal'), data: data })
+        new titleset({id: this.id('#settingTitleModal'), data: data })
             .onsubmit((e) => {
                 ctl.title(Utils.toJSON(e.form));
             });
-        new InstanceRemove({id: this.id('#removeModal'), name: this.name, uuid: this.uuid })
+        new instanceremove({id: this.id('#removeModal'), name: this.name, uuid: this.uuid })
             .onsubmit((e) => {
                 ctl.remove();
             });
         // loading disks and interfaces.
-        let diskCreateModal = new DiskCreate({id: this.id('#createDiskModal')});
+        let diskCreateModal = new diskcreate({id: this.id('#createDiskModal')});
         diskCreateModal.onsubmit((e) => {
             ctl.disk.create(Utils.toJSON(e.form));
         });
-        let isoCreateModal = new IsoCreate({id: this.id("#createIsoModal")});
+        let isoCreateModal = new isocreate({id: this.id("#createIsoModal")});
         isoCreateModal.onsubmit((e) => {
             ctl.disk.create(Utils.toJSON(e.form));
         });
@@ -116,7 +116,7 @@ export class Guest extends Container {
         };
         $(this.id('#createDiskModal')).on('show.bs.modal', refreshUsedDiskSeqs);
         $(this.id('#createIsoModal')).on('show.bs.modal', refreshUsedDiskSeqs);
-        let interfaceCreateModal = new InterfaceCreate({id: this.id('#createInterfaceModal')});
+        let interfaceCreateModal = new interfacecreate({id: this.id('#createInterfaceModal')});
         interfaceCreateModal.onsubmit((e) => {
             ctl.interface.create(Utils.toJSON(e.form));
         });
@@ -139,11 +139,11 @@ export class Guest extends Container {
             });
         };
         $(this.id('#createInterfaceModal')).on('show.bs.modal', refreshUsedInterfaceSeqs);
-        new GraphicsCreate({id: this.id('#createGraphicModal')})
+        new graphicscreate({id: this.id('#createGraphicModal')})
             .onsubmit((e) => {
                 ctl.graphics.create(Utils.toJSON(e.form));
             });
-        new SnapshotCreate({id: this.id('#createSnapshotModal')})
+        new snapshotcreate({id: this.id('#createSnapshotModal')})
             .onsubmit((e) => {
                 ctl.snapshot.create(Utils.toJSON(e.form));
             });

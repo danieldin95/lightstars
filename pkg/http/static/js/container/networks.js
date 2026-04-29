@@ -1,11 +1,11 @@
 import {Container} from "./container.js"
 import {Network} from "./network.js";
 import {Utils} from "../lib/utils.js";
-import {NetworksCtl} from "../controller/networks.js";
-import {NATCreate} from "../widget/network/create.js";
-import {OVSCreate} from "../widget/network/ovs/create.js";
-import {BridgeCreate} from "../widget/network/bridge/create.js";
-import {IsolatedCreate} from "../widget/network/isolated/create.js";
+import {Networks as NetworksController} from "../controller/networksctl.js";
+import {natcreate} from "../widget/network/natcreate.js";
+import {ovscreate} from "../widget/network/ovscreate.js";
+import {bridgecreate} from "../widget/network/bridgecreate.js";
+import {isolatedcreate} from "../widget/network/isolatedcreate.js";
 import {I18N} from "../lib/i18n.js";
 
 export class Networks extends Container {
@@ -23,7 +23,7 @@ export class Networks extends Container {
     loading() {
         this.title(I18N.i('network'));
         // loading network.
-        let nCtl = new NetworksCtl({
+        let nCtl = new NetworksController({
             id: this.id('#networks'),
             onthis: (e) => {
                 new Network({
@@ -33,19 +33,19 @@ export class Networks extends Container {
             },
             confirm: '#confirmActionModal',
         });
-        new NATCreate({id: '#createNatModal'})
+        new natcreate({id: '#createNatModal'})
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });
-        new BridgeCreate({id: '#createBridgeModal'})
+        new bridgecreate({id: '#createBridgeModal'})
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });
-        new IsolatedCreate({id: '#createIsolatedModal'})
+        new isolatedcreate({id: '#createIsolatedModal'})
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });
-        new OVSCreate({id: '#createOvsModal'})
+        new ovscreate({id: '#createOvsModal'})
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });

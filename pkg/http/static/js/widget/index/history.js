@@ -1,8 +1,8 @@
-import {HistoryApi} from "../../api/history.js";
-import {Widget} from "../widget.js";
+import {HistoryApi} from "../../api/historyapi.js";
+import {widget} from "../widget.js";
 
 
-export class History extends Widget {
+export class history extends widget {
     // {
     //   id: '#xx'.
     // }

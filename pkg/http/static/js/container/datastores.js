@@ -1,9 +1,9 @@
 import {Container} from "./container.js"
 import {Utils} from "../lib/utils.js";
-import {DataStoresCtl} from "../controller/datastores.js";
-import {DirCreate} from "../widget/datastore/create.js";
-import {NFSCreate} from "../widget/datastore/nfs/create.js";
-import {iSCSICreate} from "../widget/datastore/iscsi/create.js";
+import {Datastores} from "../controller/datastoresctl.js";
+import {dircreate} from "../widget/datastore/dircreate.js";
+import {nfscreate} from "../widget/datastore/nfscreate.js";
+import {iscsicreate} from "../widget/datastore/iscsicreate.js";
 import {Pool} from "./pool.js";
 import {I18N} from "../lib/i18n.js";
 
@@ -22,7 +22,7 @@ export class DataStores extends Container {
     loading() {
         this.title(I18N.i('datastore'));
         // loading data storage.
-        let sCtl = new DataStoresCtl({
+        let sCtl = new Datastores({
             id: this.id('#datastores'),
             onthis: (e) => {
                 new Pool({
@@ -33,18 +33,18 @@ export class DataStores extends Container {
             upload: '#uploadFileModal',
             confirm: '#confirmActionModal',
         });
-        let dirCreateModal = new DirCreate({id: '#createDirModal'});
+        let dirCreateModal = new dircreate({id: '#createDirModal'});
         dirCreateModal.onsubmit((e) => {
             sCtl.create(Utils.toJSON(e.form));
         });
         $('#createDirModal').on('show.bs.modal', () => {
             dirCreateModal.refreshUsedNames();
         });
-        new NFSCreate({id: '#createNfsModal'})
+        new nfscreate({id: '#createNfsModal'})
             .onsubmit((e) => {
                 sCtl.create(Utils.toJSON(e.form));
             });
-        new iSCSICreate({id: '#createIscsiModal'})
+        new iscsicreate({id: '#createIscsiModal'})
             .onsubmit((e) => {
                 sCtl.create(Utils.toJSON(e.form));
             });

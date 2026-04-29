@@ -1,12 +1,12 @@
 import {Api} from "./api/api.js";
 import {Location} from "./lib/location.js";
 import {I18N} from "./lib/i18n.js";
-import {Navigation} from "./widget/navigation.js";
+import {navigation} from "./widget/navigation.js";
 import {Container} from "./container/container.js";
 import {Routes} from "./routes.js";
 import {Template} from "./lib/template.js";
 import {Alert} from "./lib/alert.js";
-import {History} from "./widget/index/history.js";
+import {history} from "./widget/index/history.js";
 
 $(function() {
     let hyper = $('hyper');
@@ -63,7 +63,7 @@ $(function() {
                     </div>
                 </div>
             `);
-            let his = new History({
+            let his = new history({
                 id: "#global-history #history .card-body-tbl #display-table",
                 pageSize: 10,
                 pager: {
@@ -81,7 +81,7 @@ $(function() {
         };
         renderGlobalHistory();
 
-        let nav = new Navigation({
+        let nav = new navigation({
             parent: "#navigation",
             home: ".",
             container: "#container",

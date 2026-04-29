@@ -162,15 +162,22 @@ func readMemInfo() (total, free, cached uint64) {
 		return 0, 0, 0
 	}
 	defer f.Close()
+	parseMemInfoVal := func(line string) uint64 {
+		parts := strings.SplitN(line, ":", 2)
+		if len(parts) != 2 {
+			return 0
+		}
+		return parseUint(parts[1])
+	}
 	s := bufio.NewScanner(f)
 	for s.Scan() {
 		line := strings.TrimSpace(s.Text())
 		if strings.HasPrefix(line, "MemTotal:") {
-			total = parseUint(line) * 1024
-		} else if strings.HasPrefix(line, "MemAvailable:") {
-			free = parseUint(line) * 1024
+			total = parseMemInfoVal(line) * 1024
+		} else if strings.HasPrefix(line, "MemAvailable:") && free == 0 {
+			free = parseMemInfoVal(line) * 1024
 		} else if strings.HasPrefix(line, "Cached:") {
-			cached = parseUint(line) * 1024
+			cached = parseMemInfoVal(line) * 1024
 		}
 	}
 	if free == 0 {
@@ -179,11 +186,71 @@ func readMemInfo() (total, free, cached uint64) {
 	return total, free, cached
 }
 
+func readMemByVirsh(url string) (total, free, cached uint64) {
+	var out string
+	var err error
+	// Preferred fallback: query memory stats from libvirt.
+	out, err = virsh.Run(url, "node-memory-stats")
+	if err == nil {
+		kv := virsh.ParseKV(out)
+		// virsh reports these values in KiB.
+		total = parseUint(kv["total"]) * 1024
+		free = parseUint(kv["free"]) * 1024
+		cached = parseUint(kv["cached"]) * 1024
+		if free == 0 {
+			// Some hosts expose "available" instead of "free".
+			free = parseUint(kv["available"]) * 1024
+		}
+	}
+
+	// Secondary fallback: nodeinfo for total.
+	out, err = virsh.Run(url, "nodeinfo")
+	if err == nil && total == 0 {
+		kv := virsh.ParseKV(out)
+		// "Memory size" is in KiB.
+		total = parseUint(kv["memory size"]) * 1024
+	}
+
+	// Secondary fallback for free memory when node-memory-stats is unavailable.
+	out, err = virsh.Run(url, "freecell", "--all")
+	if err == nil && free == 0 {
+		lines := strings.Split(out, "\n")
+		for _, line := range lines {
+			line = strings.TrimSpace(line)
+			lower := strings.ToLower(line)
+			if strings.HasPrefix(lower, "free") {
+				// "Free:  123456 KiB"
+				free = parseUint(line) * 1024
+				break
+			}
+		}
+		if free == 0 {
+			// Fallback for outputs where only "Total" appears.
+			for _, line := range lines {
+				line = strings.TrimSpace(line)
+				if strings.HasPrefix(strings.ToLower(line), "total") {
+					free = parseUint(line) * 1024
+					break
+				}
+			}
+		}
+	}
+
+	if total == 0 && free > 0 {
+		total = free
+	}
+	return total, free, 0
+}
+
 func (h *HyperVisor) GetMem() (t uint64, f uint64, c uint64) {
 	if err := h.Open(); err != nil {
 		return 0, 0, 0
 	}
-	return readMemInfo()
+	t, f, c = readMemInfo()
+	if t == 0 {
+		return readMemByVirsh(h.Url)
+	}
+	return t, f, c
 }
 
 func (h *HyperVisor) GetRootfs() string {

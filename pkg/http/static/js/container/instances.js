@@ -1,10 +1,10 @@
 import {Container} from "./container.js"
 import {Guest} from "./guest.js"
 import {Utils} from "../lib/utils.js";
-import {InstanceCtl} from '../controller/instance.js';
-import {InstanceCreate} from '../widget/instance/create.js';
+import {Instances as InstancesController} from '../controller/instancesctl.js';
+import {instancecreate} from '../widget/instance/instancecreate.js';
 import {I18N} from "../lib/i18n.js";
-import {InstanceApi} from "../api/instance.js";
+import {InstanceApi} from "../api/instanceapi.js";
 
 export class Instances extends Container {
     // {
@@ -21,7 +21,7 @@ export class Instances extends Container {
     loading() {
         this.title(I18N.i('instances'));
 
-        new InstanceCtl({
+        new InstancesController({
             id: this.id('#instances'),
             confirm: '#confirmActionModal',
             onthis: (e) => {
@@ -31,7 +31,7 @@ export class Instances extends Container {
                 });
             },
         });
-        new InstanceCreate({id: '#createGuestModal'})
+        new instancecreate({id: '#createGuestModal'})
             .onsubmit((e) => {
                 new InstanceApi().create(Utils.toJSON(e.form));
             });
@@ -99,8 +99,8 @@ export class Instances extends Container {
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="card-footer" id="footer">
+                <div class="card-footer" id="footer">
+                </div>
             </div>
         </div>
         

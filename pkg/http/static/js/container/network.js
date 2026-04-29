@@ -1,8 +1,8 @@
 import {Container} from "./container.js"
 import {Api} from "../api/api.js";
-import {NetworkApi} from "../api/network.js";
-import {Collapse} from "../widget/collapse.js";
-import {NetworkCtl} from "../controller/network.js";
+import {NetworkApi} from "../api/networkapi.js";
+import {collapse} from "../widget/collapse.js";
+import {Network as NetworkController} from "../controller/networkctl.js";
 
 export class Network extends Container {
     // {
@@ -35,7 +35,7 @@ export class Network extends Container {
         // collapse
         $(this.id('#collapseOver')).fadeIn('slow');
         $(this.id('#collapseOver')).collapse();
-        new Collapse({
+        new collapse({
             pages: [
                 {id: this.id('#collapseLea'), name: 'lease'},
             ],
@@ -43,7 +43,7 @@ export class Network extends Container {
             update: false,
         });
 
-        new NetworkCtl({
+        new NetworkController({
             id: this.id(),
             header: {id: this.id("#header")},
             confirm: this.id("#confirmActionModal"),

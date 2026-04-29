@@ -1,0 +1,49 @@
+import {widget} from "../widget.js";
+import {InstanceApi} from "../../api/instanceapi.js";
+
+
+export class instancefooter extends widget {
+    // {
+    //   id: '#xx'.
+    // }
+    constructor(props) {
+        super(props);
+        this.api = new InstanceApi({tasks: this.tasks});
+    }
+
+    loading() {
+        return `<div style="text-align:center">Loading...</div>`;
+    }
+
+    refresh(data, func) {
+        if (typeof data == 'function') {
+            func = data;
+            data = {};
+        }
+        $(this.id).html(this.loading());
+        this.api.stats(this,function (e) {
+            $(e.data.id).html(e.data.render(e.resp));
+            func({data, resp: e.resp});
+        });
+    }
+
+    render(data) {
+        return this.compile(`
+        <div class="row">
+            <div class="col-auto mr-auto ml-auto instance-footer-summary">
+                <span class="badge badge-pill badge-outline" title="up / down / other">
+                    Total {{running}} / {{shutdown}} / {{others}}
+                </span>
+                <span class="badge badge-pill badge-outline" title="used / alloc">
+                    Memory {{occupiedMem | prettyKiB}} / {{allocMem | prettyKiB}}
+                </span>
+                <span class="badge badge-pill badge-outline" title="used / alloc">
+                    CPU {{occupiedCpu}} / {{allocCpu}}
+                </span>
+                <span class="badge badge-pill badge-outline" title="size">
+                    Storage {{allocStorage | prettyByte}}
+                </span>
+            </div>
+        </div>`, data);
+    }
+}

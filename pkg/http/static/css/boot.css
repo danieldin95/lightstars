@@ -168,7 +168,7 @@ a:hover, a:focus {
 
 .card-body {
     margin-top: .25rem;
-    max-height: 600px;
+    max-height: 340px;
 }
 
 .card-footer {
@@ -247,12 +247,6 @@ hr,
 
 .card-body-tbl {
     overflow: auto;
-    min-height: 200px;
-    max-height: 500px;
-}
-
-.card-body-hdl .btn {
-    /*border: none;*/
 }
 
 .form-control-sm {
