@@ -1,18 +1,18 @@
 import {Container} from "./container.js"
 import {Utils} from "../lib/utils.js";
-import {Guest as GuestController} from '../controller/guestctl.js';
+import {GuestCtl as GuestController} from '../controller/guestctl.js';
 import {Api} from "../api/api.js";
 import {InstanceApi} from "../api/instanceapi.js";
 
-import {diskcreate} from '../widget/disk/diskcreate.js';
-import {isocreate} from "../widget/disk/isocreate.js";
-import {interfacecreate} from '../widget/interface/interfacecreate.js';
-import {instanceset} from "../widget/instance/instanceset.js";
-import {instanceremove} from "../widget/instance/instanceremove.js";
-import {graphicscreate} from "../widget/graphics/graphicscreate.js";
-import {titleset} from "../widget/instance/titleset.js";
-import {snapshotcreate} from "../widget/snapshot/snapshotcreate.js";
-import {diskremove} from "../widget/disk/diskremove.js";
+import {DiskCreateWid} from '../widget/disk/diskcreate.js';
+import {IsoCreateWid} from "../widget/disk/isocreate.js";
+import {InterfaceCreateWid} from '../widget/interface/interfacecreate.js';
+import {InstanceSetWid} from "../widget/instance/instanceset.js";
+import {InstanceRemoveWid} from "../widget/instance/instanceremove.js";
+import {GraphicsCreateWid} from "../widget/graphics/graphicscreate.js";
+import {TitleSetWid} from "../widget/instance/titleset.js";
+import {SnapshotCreateWid} from "../widget/snapshot/snapshotcreate.js";
+import {DiskRemoveWid} from "../widget/disk/diskremove.js";
 import {DiskApi} from "../api/diskapi.js";
 import {InterfaceApi} from "../api/interfaceapi.js";
 
@@ -53,7 +53,7 @@ export class Guest extends Container {
             disks: {
                 id: this.id("#disk"),
                 onRemove: (objs) => {
-                    new diskremove({
+                    new DiskRemoveWid({
                         id: this.id('#removeDiskModal'),
                         name: objs.uuids,
                     }).onsubmit((e) => {
@@ -66,24 +66,24 @@ export class Guest extends Container {
             snapshot: {id: this.id('#snapshot')},
             data: data,
         });
-        new instanceset({id: this.id('#settingModal'), data: data })
+        new InstanceSetWid({id: this.id('#settingModal'), data: data })
             .onsubmit((e) => {
                 ctl.edit(Utils.toJSON(e.form));
             });
-        new titleset({id: this.id('#settingTitleModal'), data: data })
+        new TitleSetWid({id: this.id('#settingTitleModal'), data: data })
             .onsubmit((e) => {
                 ctl.title(Utils.toJSON(e.form));
             });
-        new instanceremove({id: this.id('#removeModal'), name: this.name, uuid: this.uuid })
+        new InstanceRemoveWid({id: this.id('#removeModal'), name: this.name, uuid: this.uuid })
             .onsubmit((e) => {
                 ctl.remove();
             });
         // loading disks and interfaces.
-        let diskCreateModal = new diskcreate({id: this.id('#createDiskModal')});
+        let diskCreateModal = new DiskCreateWid({id: this.id('#createDiskModal')});
         diskCreateModal.onsubmit((e) => {
             ctl.disk.create(Utils.toJSON(e.form));
         });
-        let isoCreateModal = new isocreate({id: this.id("#createIsoModal")});
+        let isoCreateModal = new IsoCreateWid({id: this.id("#createIsoModal")});
         isoCreateModal.onsubmit((e) => {
             ctl.disk.create(Utils.toJSON(e.form));
         });
@@ -116,7 +116,7 @@ export class Guest extends Container {
         };
         $(this.id('#createDiskModal')).on('show.bs.modal', refreshUsedDiskSeqs);
         $(this.id('#createIsoModal')).on('show.bs.modal', refreshUsedDiskSeqs);
-        let interfaceCreateModal = new interfacecreate({id: this.id('#createInterfaceModal')});
+        let interfaceCreateModal = new InterfaceCreateWid({id: this.id('#createInterfaceModal')});
         interfaceCreateModal.onsubmit((e) => {
             ctl.interface.create(Utils.toJSON(e.form));
         });
@@ -139,17 +139,33 @@ export class Guest extends Container {
             });
         };
         $(this.id('#createInterfaceModal')).on('show.bs.modal', refreshUsedInterfaceSeqs);
-        new graphicscreate({id: this.id('#createGraphicModal')})
+        new GraphicsCreateWid({id: this.id('#createGraphicModal')})
             .onsubmit((e) => {
                 ctl.graphics.create(Utils.toJSON(e.form));
             });
-        new snapshotcreate({id: this.id('#createSnapshotModal')})
+        new SnapshotCreateWid({id: this.id('#createSnapshotModal')})
             .onsubmit((e) => {
                 ctl.snapshot.create(Utils.toJSON(e.form));
             });
         // register console draggable.
         $((e) => {
             $(this.id('#consoleModal')).draggable();
+        });
+        const consoleModal = $(this.id('#consoleModal'));
+        consoleModal.off('hide.bs.modal.a11y hidden.bs.modal.a11y');
+        consoleModal.on('hide.bs.modal.a11y', function () {
+            if (document.activeElement && typeof document.activeElement.blur === "function") {
+                document.activeElement.blur();
+            }
+            if (this && typeof this.blur === "function") {
+                this.blur();
+            }
+        });
+        consoleModal.on('hidden.bs.modal.a11y', function () {
+            $(this).find('.modal-body').empty();
+            if (document.body && typeof document.body.focus === "function") {
+                document.body.focus();
+            }
         });
     }
 
@@ -239,13 +255,13 @@ export class Guest extends Container {
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     </div>
                 </div>
-                <div class="card-body-tbl row">
-                    <div class="col-sm-12 col-md-5 col-lg-4 mt-1 pt-1 split-vertical">
+                <div class="card-body-tbl row mr-auto ml-auto pt-2 pb-2 pr-1 pl-1 ">
+                    <div class="col-sm-12 col-md-5 col-lg-4 split-vertical">
                         <div style="width: 328px; height: 188px; background-color: rgb(40 40 40); border-radius: 4px; padding: 4px;">
                             <iframe width="320px" height="180px" src="${liteUrl}" frameborder="0"></iframe>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-7 col-lg-8 mt-1 pt-1 split-vertical">
+                    <div class="col-sm-12 col-md-7 col-lg-8 split-vertical">
                         <div class="resource-overview instance-overview">
                             <div class="dashboard-grid instance-overview-grid">
                                 <div class="dashboard-stat total">
@@ -289,7 +305,7 @@ export class Guest extends Container {
         </div>
         
         <div class="card-tab">
-            <ul class="nav nav-pills justify-content-start" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills justify-content-start pb-1 card-header" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-0-tab" data-toggle="pill" href="#pills-0" 
                     role="tab" aria-controls="pills-0" aria-selected="true">{{'virtual disk' | i}}</a>
@@ -305,7 +321,7 @@ export class Guest extends Container {
             </ul>
             <div class="tab-content" id="pills-tabContent">
               <div class="tab-pane fade show active" id="pills-0" role="tabpanel" aria-labelledby="pills-0-tab">
-                <!-- Virtual Disk -->
+                <!-- Virtual DiskCtl -->
                 <div id="disk" class="card shadow">
                     <div class="card-body">
                         <div class="row card-body-hdl">
@@ -357,7 +373,7 @@ export class Guest extends Container {
                 </div>
               </div>
               <div class="tab-pane fade" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
-                <!-- Interface -->
+                <!-- InterfaceCtl -->
                 <div id="interface" class="card shadow">
                     <div class="card-body">
                         <div class="row card-body-hdl">

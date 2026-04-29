@@ -1,15 +1,15 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {VolumeApi} from "../../api/volumeapi.js";
-import {checkbox} from "../common/checkbox.js";
+import {CheckboxWid} from "../common/checkbox.js";
 import {Utils} from "../../lib/utils.js";
 import {Api} from "../../api/api.js";
 
 
-export class volumetable extends widget {
+export class VolumeTableWid extends Widget {
 
     constructor(props) {
         super(props);
-        this.checkbox = new checkbox(props);
+        this.CheckboxWid = new CheckboxWid(props);
         this.pool = props.pool;
     }
 
@@ -35,8 +35,9 @@ export class volumetable extends widget {
         let items = data.items;
         return Object.assign({}, data, {
             items: items.map((i) => {
-                let name = Utils.basename(i.name);
-                return Object.assign({}, i, {name});
+                let fullName = i.name;
+                let name = Utils.basename(fullName);
+                return Object.assign({}, i, {name, fullName});
             })
         })
     }
@@ -62,7 +63,7 @@ export class volumetable extends widget {
                     </td>
                     <td>
                       {{if v.type == "dir"}}
-                      <a id="on-this" data-name="{{v.name}}" data-type="{{v.type}}" href="javascript:void(0)">{{v.name}}</a>
+                      <a id="on-this" data-name="{{v.fullName || v.name}}" data-type="{{v.type}}" href="javascript:void(0)">{{v.name}}</a>
                       {{else if v.type == "file"}}
                       <a href="${prefix}/{{v.name}}">{{v.name}}</a>
                       {{else}}

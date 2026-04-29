@@ -1,13 +1,13 @@
 import {Controller} from "./controller.js";
-import {leasetable} from "../widget/lease/leasetable.js";
-import {checkbox} from "../widget/common/checkbox.js";
+import {LeaseTableWid} from "../widget/lease/leasetable.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
 
 
-class CheckBoxCtl extends checkbox {
+class CheckBoxCtl extends CheckboxWid {
 }
 
 
-export class Leases extends Controller {
+export class LeasesCtl extends Controller {
     // {
     //   id: '#network #leases',
     //   uuid: uuid of network,
@@ -18,20 +18,20 @@ export class Leases extends Controller {
         this.name = props.name;
         this.uuid = props.uuid;
 
-        this.checkbox = new CheckBoxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new leasetable({
+        this.CheckboxWid = new CheckBoxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new LeaseTableWid({
             id: this.child('#display-table'),
             uuid: this.uuid,
         });
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
-                this.checkbox.refresh();
+                this.CheckboxWid.refresh();
             });
         });
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
         });
     }
 }

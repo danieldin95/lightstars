@@ -1,5 +1,5 @@
 //
-export class formmodal {
+export class FormModalWid {
     // {
     //   id: '#disk'
     // }

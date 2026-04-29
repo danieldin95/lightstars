@@ -1,10 +1,10 @@
 
-export class formwizard {
+export class FormWizardWid {
     //
     constructor(props) {
         this.id = props.id;
         this.default = `${this.id} ${props.default}`;
-        this.navtabs = `${this.id} ${props.navigation}`;
+        this.navtabs = `${this.id} ${props.NavigationWid}`;
         this.form = `${this.id} ${props.form}`;
         this.prev = `${this.id} ${props.buttons.prev}`;
         this.next = `${this.id} ${props.buttons.next}`;
@@ -31,12 +31,16 @@ export class formwizard {
 
         // register prev and next.
         $(this.prev).on('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
             let pos = this.pages.indexOf(this.active);
             if (pos > 0) {
                 this.move(pos-1);
             }
         });
         $(this.next).on('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
             let pos = this.pages.indexOf(this.active)+1;
             if (pos < this.pages.length) {
                 this.move(pos);
@@ -59,12 +63,22 @@ export class formwizard {
 
     load (callback) {
         $(this.submit).on('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.currentTarget && typeof event.currentTarget.blur === "function") {
+                event.currentTarget.blur();
+            }
             let data = $(this.form).serializeArray();
             if (callback && callback.submit) {
                 callback.submit({event, data});
             }
         });
         $(this.cancel).on('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.currentTarget && typeof event.currentTarget.blur === "function") {
+                event.currentTarget.blur();
+            }
             if (callback && callback.cancel) {
                 callback.cancel({event});
             }

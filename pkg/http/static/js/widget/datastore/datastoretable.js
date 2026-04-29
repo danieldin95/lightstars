@@ -1,9 +1,9 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {Api} from "../../api/api.js";
 import {DataStoreApi} from "../../api/datastoresapi.js";
 import {Location} from "../../lib/location.js";
 
-export class datastoretable extends widget {
+export class DataStoreTableWid extends Widget {
     // {
     //   id: '#xx'.
     // }

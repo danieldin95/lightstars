@@ -1,12 +1,12 @@
 import {Option} from "../option.js";
-import {formmodal} from "../form/formmodal.js";
-import {formwizard} from "../form/formwizard.js";
+import {FormModalWid} from "../form/formmodal.js";
+import {FormWizardWid} from "../form/formwizard.js";
 import {BridgeApi} from "../../api/bridgeapi.js";
 import {IsoApi} from "../../api/isoapi.js"
 import {DataStoreApi} from "../../api/datastoresapi.js";
 
 
-export class instancecreate extends formmodal {
+export class InstanceCreateWid extends FormModalWid {
     // {
     //   id: "#InstanceCrateModal",
     //   wizardId: "",
@@ -95,10 +95,10 @@ export class instancecreate extends formmodal {
     }
 
     loading() {
-        new formwizard({
+        new FormWizardWid({
             id: this.id,
             default: '#head1',
-            navigation: '#nav-tabs li a',
+            NavigationWid: '#nav-tabs li a',
             form: '#form',
             buttons: {
                 prev: '#btn-prev',
@@ -130,20 +130,20 @@ export class instancecreate extends formmodal {
                     <div class="">
                         <ul id="nav-tabs" class="nav flex-column nav-pills">
                             <li class="nav-item">
-                                <a id="head1" class="nav-link" data-target="#guest">{{'configure guest' | i}}</a>
+                                <a id="head1" class="nav-link" data-target="#pane-guest">{{'configure guest' | i}}</a>
                             </li>
                             <li class="nav-item">
-                                <a id="head2" class="nav-link" data-target="#datastore">{{'select datastore' | i}}</a>
+                                <a id="head2" class="nav-link" data-target="#pane-datastore">{{'select datastore' | i}}</a>
                             </li>
                             <li class="nav-item">
-                                <a id="head3" class="nav-link" data-target="#custom">{{'custom setting' | i}}</a>
+                                <a id="head3" class="nav-link" data-target="#pane-custom">{{'custom setting' | i}}</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-9">
                 <form>
-                <div id="guest" class="d-none">
+                <div id="pane-guest" class="d-none">
                     <div class="form-group">
                         <label for="name" class="col-form-label-sm">{{'guest name' | i}}</label>
                         <div class="input-group">
@@ -151,7 +151,7 @@ export class instancecreate extends formmodal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="family" class="col-form-label-sm">{{'operating system' | i}}</label>
+                        <label for="family" class="col-form-label-sm">{{'operating System' | i}}</label>
                         <div class="input-group">
                             <select class="select-lg" id="family" name="family">
                                 <option value="linux" selected>linux</option>
@@ -161,7 +161,7 @@ export class instancecreate extends formmodal {
                         </div>
                     </div>
                 </div>
-                <div id="datastore" class="d-none">
+                <div id="pane-datastore" class="d-none">
                     <div class="form-group">
                         <label for="datastore" class="col-form-label-sm">{{'datastore location' | i}}</label>
                         <div class="input-group">
@@ -172,7 +172,7 @@ export class instancecreate extends formmodal {
                         </div>
                     </div>
                 </div>
-                <div id="custom" class="d-none custom-setting-grid row">
+                <div id="pane-custom" class="d-none custom-setting-grid row">
                     <div class="form-group col-12 col-md-6">
                         <label for="cpuMode" class="col-form-label-sm">{{'processors' | i}}</label>
                         <div class="input-group">
@@ -236,10 +236,10 @@ export class instancecreate extends formmodal {
                 </div>
             </div>
             <div class="modal-footer text-right">
-                <button id="btn-prev" class="btn btn-outline-dark btn-sm">{{'previous' | i}}</button>
-                <button id="btn-next" class="btn btn-outline-info btn-sm">{{'next' | i}}</button>
-                <button id="btn-cancel" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
-                <button id="btn-submit" class="btn btn-outline-success btn-sm">{{'submit' | i}}</button>
+                <button type="button" id="btn-prev" class="btn btn-outline-dark btn-sm">{{'previous' | i}}</button>
+                <button type="button" id="btn-next" class="btn btn-outline-info btn-sm">{{'next' | i}}</button>
+                <button type="button" id="btn-cancel" class="btn btn-outline-dark btn-sm">{{'cancel' | i}}</button>
+                <button type="button" id="btn-submit" class="btn btn-outline-success btn-sm">{{'submit' | i}}</button>
             </div>
         </div>
         </div>`);

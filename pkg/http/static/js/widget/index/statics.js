@@ -1,8 +1,8 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {HyperApi} from "../../api/hyperapi.js";
 
 
-export class statics extends widget {
+export class StaticsWid extends Widget {
     // {
     //   id: '#xx'.
     // }

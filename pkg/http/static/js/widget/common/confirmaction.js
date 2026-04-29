@@ -1,6 +1,6 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 
-export class confirmaction extends formmodal {
+export class ConfirmActionWid extends FormModalWid {
     constructor(props) {
         super(props);
         this.action = props.action || "confirm";

@@ -28,17 +28,14 @@ export class HyperApi extends Api {
             func = data;
             data = {};
         }
-        let url = this.url('statics');
-        if (this.uuids.length > 0) {
-            url = this.url(this.uuids[0]);
-        }
+        let url = super.url('/hyper/statics');
         $.GET(url, {format: 'schema'}, (resp, status) => {
             func({data, resp});
         }).fail((e) => {
             if (fail) {
                 fail(e)
             }
-            console.log(`GET ${this.url()}: ${e.responseText}`);
+            console.log(`GET ${url}: ${e.responseText}`);
         });
     }
 }

@@ -1,11 +1,11 @@
 import {Controller} from "./controller.js";
 import {SnapshotApi} from "../api/snapshotapi.js";
-import {snapshottable} from "../widget/snapshot/snapshottable.js";
-import {checkbox} from "../widget/common/checkbox.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {SnapshotTableWid} from "../widget/snapshot/snapshottable.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
 
-class CheckBoxCtl extends checkbox {
+class CheckBoxCtl extends CheckboxWid {
     change(from) {
         super.change(from);
         if (from.store.length === 1) {
@@ -17,7 +17,7 @@ class CheckBoxCtl extends checkbox {
 }
 
 
-export class Snapshot extends Controller {
+export class SnapshotCtl extends Controller {
     // {
     //   id: '#instance #snapshot',
     //   uuid: uuid of instance,
@@ -29,9 +29,9 @@ export class Snapshot extends Controller {
         this.inst = props.uuid;
         this.confirm = props.confirm;
 
-        this.checkbox = new CheckBoxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new snapshottable({
+        this.CheckboxWid = new CheckBoxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new SnapshotTableWid({
             id: this.child('#display-table'),
             inst: this.inst,
         });
@@ -39,7 +39,7 @@ export class Snapshot extends Controller {
         // register button's click.
         $(this.child('#remove')).on("click", (e) => {
             let uuids = this.uuids.store.slice();
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "remove",
                 name: uuids.join(", "),
@@ -62,11 +62,11 @@ export class Snapshot extends Controller {
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
-                this.checkbox.refresh();
+                this.CheckboxWid.refresh();
             });
         });
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
         });
     }
 

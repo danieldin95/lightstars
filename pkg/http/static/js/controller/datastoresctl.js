@@ -1,13 +1,13 @@
 import {Controller} from './controller.js'
 import {DataStoreApi} from "../api/datastoresapi.js";
-import {datastoretable} from "../widget/datastore/datastoretable.js";
-import {fileupload} from "../widget/common/fileupload.js";
+import {DataStoreTableWid} from "../widget/datastore/datastoretable.js";
+import {FileUploadWid} from "../widget/common/fileupload.js";
 import {UploadApi} from "../api/uploadapi.js";
-import {checkbox} from "../widget/common/checkbox.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
 
-class CheckBoxCtl extends checkbox {
+class CheckBoxCtl extends CheckboxWid {
     change(from) {
         super.change(from);
         if (from.store.length !== 1) {
@@ -19,16 +19,16 @@ class CheckBoxCtl extends checkbox {
 }
 
 
-export class Datastores extends Controller {
+export class DataStoresCtl extends Controller {
     // {
     //   id: "#datastores"
     // }
     constructor(props) {
         super(props);
-        this.checkbox = new CheckBoxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new datastoretable({id: this.child('#display-table')});
-        this.upload = new fileupload({id: props.upload});
+        this.CheckboxWid = new CheckBoxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new DataStoreTableWid({id: this.child('#display-table')});
+        this.upload = new FileUploadWid({id: props.upload});
         this.confirm = props.confirm;
 
         this.upload.onsubmit(this.uuids, function (e) {
@@ -37,7 +37,7 @@ export class Datastores extends Controller {
         // register buttons's  click.
         $(this.child('#delete')).on("click", this.uuids, (e) => {
             let uuids = e.data.store.slice();
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "remove",
                 name: uuids.join(", "),
@@ -51,11 +51,11 @@ export class Datastores extends Controller {
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
-                this.checkbox.refresh();
+                this.CheckboxWid.refresh();
             });
         });
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
         });
 
         this.refresh();
@@ -67,7 +67,7 @@ export class Datastores extends Controller {
 
     refresh() {
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
             // register click on this table row.
             let func = this.props.onthis;
             if (func) {

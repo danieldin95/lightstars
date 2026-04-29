@@ -1,10 +1,10 @@
 import {Controller} from "./controller.js"
-import {Leases} from "./leasesctl.js";
-import {Port} from "./portctl.js";
+import {LeasesCtl} from "./leasesctl.js";
+import {PortCtl} from "./portctl.js";
 import {NetworkApi} from "../api/networkapi.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
-export class Network extends Controller {
+export class NetworkCtl extends Controller {
     // {
     //   id: '#network'
     //   header: {
@@ -25,8 +25,8 @@ export class Network extends Controller {
         this.state = ($(this.id).attr("state") || "").toLowerCase();
         this.autostart = ($(this.id).attr("autostart") || "").toLowerCase() === "true";
 
-        this.leases = new Leases({...props.leases, uuid, name});
-        this.ports = new Port({...props.ports, uuid, name, confirm: this.confirm});
+        this.leases = new LeasesCtl({...props.leases, uuid, name});
+        this.ports = new PortCtl({...props.ports, uuid, name, confirm: this.confirm});
 
         let api = new NetworkApi({tasks: this.tasks});
         let root = this.child('#header');
@@ -34,7 +34,7 @@ export class Network extends Controller {
         let autoEnabled = this.autostart;
 
         $(root + " #destroy").on("click", () => {
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "destroy",
                 name: this.name,
@@ -45,7 +45,7 @@ export class Network extends Controller {
             $(this.confirm).modal("show");
         });
         $(root + " #remove").on("click", () => {
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "remove",
                 name: this.name,

@@ -125,11 +125,11 @@ a:hover, a:focus {
 
 .card {
     margin: 0;
+    border: none !important;
 }
 
 .card-header {
     padding: .35rem 1.25rem;
-    margin-bottom: -1px;
     background: #111827;
     border-bottom: 1px solid #334155;
     border-radius: calc(0.25rem - 1px);
@@ -169,11 +169,12 @@ a:hover, a:focus {
 .card-body {
     margin-top: .25rem;
     max-height: 340px;
+    overflow: auto;
 }
 
 .card-footer {
     background: #111827;
-    border-top: 1px solid #334155;
+    border-top: none;
 }
 
 .dropdown-menu {
@@ -247,6 +248,7 @@ hr,
 
 .card-body-tbl {
     overflow: auto;
+    min-height: 200px;
 }
 
 .form-control-sm {

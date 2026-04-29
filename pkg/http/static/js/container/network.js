@@ -1,8 +1,8 @@
 import {Container} from "./container.js"
 import {Api} from "../api/api.js";
 import {NetworkApi} from "../api/networkapi.js";
-import {collapse} from "../widget/collapse.js";
-import {Network as NetworkController} from "../controller/networkctl.js";
+import {CollapseWid} from "../widget/collapse.js";
+import {NetworkCtl as NetworkController} from "../controller/networkctl.js";
 
 export class Network extends Container {
     // {
@@ -32,10 +32,10 @@ export class Network extends Container {
     }
 
     loading(data) {
-        // collapse
+        // CollapseWid
         $(this.id('#collapseOver')).fadeIn('slow');
-        $(this.id('#collapseOver')).collapse();
-        new collapse({
+        $(this.id('#collapseOver')).collapse('show');
+        new CollapseWid({
             pages: [
                 {id: this.id('#collapseLea'), name: 'lease'},
             ],
@@ -92,7 +92,7 @@ export class Network extends Container {
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>                        
                     </div>
                 </div>
-                <div class="card-body-hdl pt-1">
+                <div class="card-body-tbl pr-1 pl-1 pt-2 pb-2">
                     <div class="resource-overview">
                         <div class="dashboard-grid network-overview-grid">
                             <div class="dashboard-stat total">
@@ -132,7 +132,7 @@ export class Network extends Container {
         </div>
         
         <div class="card-tab">
-            <ul class="nav nav-pills justify-content-start" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills justify-content-start pb-1 card-header" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-0-tab" data-toggle="pill" href="#pills-0" 
                     role="tab" aria-controls="pills-0" aria-selected="true">{{'virtual ports' | i}}</a>
@@ -149,12 +149,6 @@ export class Network extends Container {
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">
-                                <button id="create" type="button" class="btn btn-outline-info btn-sm"
-                                        data-toggle="modal" data-target="#PortCreateModal">
-                                    {{'create port' | i}}
-                                </button>
-                                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                             </div>
                             <div class="col-auto">
                                 <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>
@@ -187,12 +181,6 @@ export class Network extends Container {
                     <div class="card-body">
                         <div class="row card-body-hdl">
                             <div class="col-auto mr-auto">
-                                <button id="create" type="button" class="btn btn-outline-info btn-sm"
-                                        data-toggle="modal" data-target="#LeaseCreateModal">
-                                    {{'new a lease' | i}}
-                                </button>
-                                <button id="edit" type="button" class="btn btn-outline-dark btn-sm">{{'edit' | i}}</button>
-                                <button id="remove" type="button" class="btn btn-outline-dark btn-sm">{{'remove' | i}}</button>
                             </div>
                             <div class="col-auto">
                                 <button id="refresh" type="button" class="btn btn-outline-dark btn-sm" >{{'refresh' | i}}</button>

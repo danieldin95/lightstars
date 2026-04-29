@@ -1,7 +1,7 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 
 
-export class preferences extends formmodal {
+export class PreferencesWid extends FormModalWid {
     // {
     //   id: ""
     // }
@@ -21,7 +21,7 @@ export class preferences extends formmodal {
         <div class="modal-dialog modal-dialog-centered model-md" role="document">
             <div class="modal-content ">
                 <div class="modal-header">
-                    <h7>{{'preferences' | i}}</h7>
+                    <h7>{{'Preferences' | i}}</h7>
                 </div>
                 <div class="modal-body">
                     <form id="form-preferences">

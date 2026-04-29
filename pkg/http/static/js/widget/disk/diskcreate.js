@@ -1,8 +1,8 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 import {Option} from "../option.js";
 
 
-export class diskcreate extends formmodal {
+export class DiskCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

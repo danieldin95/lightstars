@@ -1,9 +1,9 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {PortApi} from "../../api/portapi.js";
 import {Location} from "../../lib/location.js";
 
 
-export class porttable extends widget {
+export class PortTableWid extends Widget {
     // {
     //   id: '#xx',
     //   uuid: 'uuid',

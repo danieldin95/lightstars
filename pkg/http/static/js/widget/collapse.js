@@ -1,6 +1,6 @@
 import {Location} from "../lib/location.js";
 
-export class collapse {
+export class CollapseWid {
     // {
     //   default: page,
     //   pages: [ {id: '#', name: ""} ],
@@ -8,8 +8,8 @@ export class collapse {
     //   update: false, // update href.
     // }
     constructor(props) {
-        // collapse
-        this.collapse = props;
+        // CollapseWid
+        this.CollapseWid = props;
         this.pages = props.pages;
         this.default = props.default;
 
@@ -25,7 +25,7 @@ export class collapse {
         for (let v of this.pages) {
             if (page === v.name) {
                 $(v.id).fadeIn('slow');
-                $(v.id).collapse();
+                $(v.id).collapse('show');
             }
             $(v.id).on('show.bs.collapse', this, function (e) {
                 if (update) {

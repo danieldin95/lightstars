@@ -1,8 +1,8 @@
 import {HistoryApi} from "../../api/historyapi.js";
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 
 
-export class history extends widget {
+export class HistoryWid extends Widget {
     // {
     //   id: '#xx'.
     // }
@@ -14,7 +14,7 @@ export class history extends widget {
         this.page = 1;
         this.items = [];
         this.pager = props.pager || null;
-        window.addEventListener("lightstar:history:append", () => this.refresh());
+        window.addEventListener("lightstar:History:append", () => this.refresh());
         $(this.id).off("history:refresh").on("history:refresh", () => this.refresh());
         if (this.pager) {
             $(this.pager.prev).off("click").on("click", () => this.prevPage());
@@ -156,7 +156,7 @@ export class history extends widget {
             let csv = "\uFEFF" + lines.join("\n");
             let blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
             let ts = new Date().toISOString().replace(/[:.]/g, "-");
-            let filename = `history-${ts}.csv`;
+            let filename = `History-${ts}.csv`;
             let a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
             a.download = filename;

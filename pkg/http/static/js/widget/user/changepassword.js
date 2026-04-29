@@ -1,7 +1,7 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 
 
-export class changepassword extends formmodal {
+export class ChangePasswordWid extends FormModalWid {
     // {
     //   id: ""
     // }

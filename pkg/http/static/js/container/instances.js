@@ -1,8 +1,8 @@
 import {Container} from "./container.js"
 import {Guest} from "./guest.js"
 import {Utils} from "../lib/utils.js";
-import {Instances as InstancesController} from '../controller/instancesctl.js';
-import {instancecreate} from '../widget/instance/instancecreate.js';
+import {InstancesCtl as InstancesController} from '../controller/instancesctl.js';
+import {InstanceCreateWid} from '../widget/instance/instancecreate.js';
 import {I18N} from "../lib/i18n.js";
 import {InstanceApi} from "../api/instanceapi.js";
 
@@ -31,7 +31,7 @@ export class Instances extends Container {
                 });
             },
         });
-        new instancecreate({id: '#createGuestModal'})
+        new InstanceCreateWid({id: '#createGuestModal'})
             .onsubmit((e) => {
                 new InstanceApi().create(Utils.toJSON(e.form));
             });
@@ -41,7 +41,7 @@ export class Instances extends Container {
         return this.compile(`
         <div id="index">
         
-        <!-- Instances -->
+        <!-- InstancesCtl -->
         <div id="instances" class="card shadow instances">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm" type="button">
@@ -49,7 +49,7 @@ export class Instances extends Container {
                 </button>
             </div>
             <div class="card-body">
-                <!-- Instances buttons -->
+                <!-- InstancesCtl buttons -->
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
                         <button id="create" type="button" class="btn btn-outline-info btn-sm"
@@ -78,7 +78,7 @@ export class Instances extends Container {
                     </div>
                 </div>
     
-                <!-- Instances display -->
+                <!-- InstancesCtl display -->
                 <div class="card-body-tbl">
                     <table class="table table-striped">
                         <thead>

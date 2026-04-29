@@ -1,8 +1,8 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {InterfaceApi} from "../../api/interfaceapi.js";
 
 
-export class interfacetable extends widget {
+export class InterfaceTableWid extends Widget {
     // {
     //   id: '#xx',
     //   inst: 'uuid',

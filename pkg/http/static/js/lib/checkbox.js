@@ -1,8 +1,8 @@
 
-export class checkbox {
+export class CheckboxWid {
     // {
-    //  all: selector for top checkbox
-    //  one: selector for bottom checkbox
+    //  all: selector for top CheckboxWid
+    //  one: selector for bottom CheckboxWid
     //  change: callback on check
     // }
     constructor(props) {

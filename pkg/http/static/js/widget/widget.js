@@ -1,6 +1,6 @@
 import {Location} from "../lib/location.js";
 
-export class widget {
+export class Widget {
     constructor(props) {
         this.id = props.id || "";
         this.props = props;

@@ -1,8 +1,8 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {DiskApi} from "../../api/diskapi.js";
 
 
-export class disktable extends widget {
+export class DiskTableWid extends Widget {
     // {
     //   id: '#xx',
     //   inst: 'uuid',

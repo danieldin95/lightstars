@@ -1,12 +1,12 @@
 import {Controller} from "./controller.js"
-import {Volume} from "./volumectl.js";
-import {fileupload} from "../widget/common/fileupload.js";
+import {VolumeCtl} from "./volumectl.js";
+import {FileUploadWid} from "../widget/common/fileupload.js";
 import {UploadApi} from "../api/uploadapi.js";
 import {DataStoreApi} from "../api/datastoresapi.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
 
-export class Pool extends Controller {
+export class PoolCtl extends Controller {
 
     constructor(props) {
         super(props);
@@ -17,11 +17,11 @@ export class Pool extends Controller {
         this.name = name;
         this.tasks = props.tasks || "tasks";
         this.confirm = props.confirm;
-        this.volumes = new Volume({
+        this.volumes = new VolumeCtl({
             ...props.volumes, uuid, name,
             upload: props.volumes.upload,
         });
-        this.upload = new fileupload({
+        this.upload = new FileUploadWid({
             id: props.upload
         });
         this.upload.onsubmit((e) => {
@@ -37,7 +37,7 @@ export class Pool extends Controller {
         let autostart = ($(this.id).attr("autostart") || "").toLowerCase() === "true";
 
         $(root + " #destroy").on("click", () => {
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "destroy",
                 name: this.name,
@@ -62,7 +62,7 @@ export class Pool extends Controller {
             api.clean(this.uuid);
         });
         $(root + " #remove").on("click", () => {
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "remove",
                 name: this.name,

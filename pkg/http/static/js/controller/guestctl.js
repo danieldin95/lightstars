@@ -1,10 +1,10 @@
 import {Controller} from "./controller.js";
 import {InstanceApi} from "../api/instanceapi.js";
-import {Disk} from "./diskctl.js";
-import {Interface} from "./interfacectl.js"
-import {Graphics} from "./graphicsctl.js";
-import {Snapshot} from "./snapshotctl.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {DiskCtl} from "./diskctl.js";
+import {InterfaceCtl} from "./interfacectl.js"
+import {GraphicsCtl} from "./graphicsctl.js";
+import {SnapshotCtl} from "./snapshotctl.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
 
 class HeaderCtl extends Controller {
@@ -36,7 +36,7 @@ class HeaderCtl extends Controller {
             e.data.api.resume();
         });
         $(this.child('#destroy')).on("click", () => {
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "destroy",
                 name: this.name,
@@ -73,7 +73,7 @@ class HeaderCtl extends Controller {
     }
 }
 
-export class Guest extends Controller {
+export class GuestCtl extends Controller {
     // {
     //   id: '#instance'
     //   header: {
@@ -99,10 +99,10 @@ export class Guest extends Controller {
         this.tasks = props.tasks || "tasks";
         this.api = new InstanceApi({uuids: uuid});
         this.header = new HeaderCtl({...props.header, uuid, name});
-        this.disk = new Disk({...props.disks, uuid, name});
-        this.interface = new Interface({...props.interfaces, uuid, name, confirm: props.header.confirm});
-        this.graphics = new Graphics({...props.graphics, uuid, name, confirm: props.header.confirm});
-        this.snapshot = new Snapshot({...props.snapshot, uuid, name, confirm: props.header.confirm})
+        this.disk = new DiskCtl({...props.disks, uuid, name});
+        this.interface = new InterfaceCtl({...props.interfaces, uuid, name, confirm: props.header.confirm});
+        this.graphics = new GraphicsCtl({...props.graphics, uuid, name, confirm: props.header.confirm});
+        this.snapshot = new SnapshotCtl({...props.snapshot, uuid, name, confirm: props.header.confirm})
     }
 
     edit(data) {

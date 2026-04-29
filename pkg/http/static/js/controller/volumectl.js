@@ -1,19 +1,19 @@
 import {Controller} from "./controller.js";
-import {checkbox} from "../widget/common/checkbox.js";
-import {volumetable} from "../widget/volume/volumetable.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
+import {VolumeTableWid} from "../widget/volume/volumetable.js";
 import {VolumeApi} from "../api/volumeapi.js";
-import {fileupload} from "../widget/common/fileupload.js";
+import {FileUploadWid} from "../widget/common/fileupload.js";
 import {UploadApi} from "../api/uploadapi.js";
 
 
-class CheckBoxCtl extends checkbox {
+class CheckBoxCtl extends CheckboxWid {
     change(from) {
         super.change(from);
     }
 }
 
 
-export class Volume extends Controller {
+export class VolumeCtl extends Controller {
     // {
     //   id: '#pool #volume',
     //   uuid: uuid of pool,
@@ -24,13 +24,13 @@ export class Volume extends Controller {
         this.name = props.name;
         this.pool = props.uuid;
 
-        this.checkbox = new CheckBoxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new volumetable({
+        this.CheckboxWid = new CheckBoxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new VolumeTableWid({
             id: this.child('#display-table'),
             pool: this.pool
         });
-        this.upload = new fileupload({id: props.upload});
+        this.upload = new FileUploadWid({id: props.upload});
         this.upload.onsubmit((e) => {
             new UploadApi({
                 uuids: this.table.pool,
@@ -62,18 +62,28 @@ export class Volume extends Controller {
             this.refresh();
         });
         $(this.child("#current")).on("click", (e) => {
+            this.table.pool = this.pool;
+            this.current("");
             this.refresh();
         });
         this.refresh()
     }
 
     current(value) {
-        $(this.child("#current")).text(value);
+        const cur = (value || "").trim();
+        const curBtn = $(this.child("#current"));
+        if (cur === "") {
+            curBtn.text("");
+            curBtn.attr("disabled", "disabled");
+            return;
+        }
+        curBtn.text(`/${cur}`);
+        curBtn.removeAttr("disabled");
     }
 
     refresh() {
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
             // register click on this table row.
             $(this.child('#on-this')).on('click', this, function (e) {
                 let name = $(this).attr('data-name');

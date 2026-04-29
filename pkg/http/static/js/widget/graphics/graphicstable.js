@@ -1,8 +1,8 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {GraphicsApi} from "../../api/graphicsapi.js";
 
 
-export class graphicstable extends widget {
+export class GraphicsTableWid extends Widget {
     // {
     //   id: '#xx',
     //   inst: 'uuid',

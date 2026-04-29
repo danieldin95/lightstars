@@ -1,8 +1,8 @@
 import {Container} from "./container.js"
-import {system} from "../widget/index/system.js";
-import {statics} from "../widget/index/statics.js";
+import {SystemWid} from "../widget/index/system.js";
+import {StaticsWid} from "../widget/index/statics.js";
 import {I18N} from "../lib/i18n.js";
-import {instancecreate} from "../widget/instance/instancecreate.js";
+import {InstanceCreateWid} from "../widget/instance/instancecreate.js";
 import {Utils} from "../lib/utils.js";
 import {InstanceApi} from "../api/instanceapi.js";
 
@@ -21,7 +21,7 @@ export class Home extends Container {
     loading() {
         this.title(I18N.i('home'));
         // loading overview.
-        let sys = new system({
+        let sys = new SystemWid({
             id: this.id('#overview .card-body-tbl #system'),
         });
         sys.refresh((e) => {
@@ -29,7 +29,7 @@ export class Home extends Container {
             $(this.id('#refresh-hdl')).text(this.props.name);
         });
 
-        let sts = new statics({
+        let sts = new StaticsWid({
             id: this.id('#overview .card-body-tbl #statics'),
         });
         sts.refresh();
@@ -45,7 +45,7 @@ export class Home extends Container {
         $(this.id('#refresh-hdl')).on('click', () => {
             refresh();
         });
-        new instancecreate({id: '#createGuestModal'})
+        new InstanceCreateWid({id: '#createGuestModal'})
             .onsubmit((e) => {
                 new InstanceApi().create(Utils.toJSON(e.form));
             });
@@ -54,8 +54,8 @@ export class Home extends Container {
     template(v) {
         return this.compile(`
         <div id="index" class="home-layout">
-        <!-- system -->
-        <div id="system" class="card shadow system">
+        <!-- SystemWid -->
+            <div id="system" class="card shadow system">
             <div class="card-header">
                 <button id="" class="btn btn-link btn-block text-left btn-sm">{{ 'system info' | i}}</button>
             </div>
@@ -75,7 +75,7 @@ export class Home extends Container {
                 <div class="card-body-tbl row overview-panels">
                     <!-- Loading -->
                     <div id="system" class="col-12 split-vertical mt-1 pt-1 panel-left"></div>
-                    <div id="statics" class="col-12 split-vertical mt-2 pt-1 panel-right"></div>
+                    <div id="statics" class="col-12 split-vertical mb-1 pb-1 mt-2 panel-right"></div>
                 </div>
             </div>
         </div>

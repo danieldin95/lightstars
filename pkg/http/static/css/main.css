@@ -558,8 +558,7 @@ select {
 }
 
 #global-history #history .history-result {
-    max-width: 28rem;
-    display: block;
+    max-width: 260px;
     white-space: pre-wrap;
     word-break: break-word;
     overflow-wrap: anywhere;
@@ -655,6 +654,16 @@ select {
     vertical-align: middle;
     padding-top: .45rem;
     padding-bottom: .45rem;
+}
+
+.card-body-tbl {
+    border: 1px solid #475569;
+    border-radius: .35rem;
+    box-shadow:
+        inset 0 1px 0 rgba(148, 163, 184, 0.16),
+        inset 0 -1px 0 rgba(15, 23, 42, 0.55),
+        0 0 0 1px rgba(15, 23, 42, 0.7),
+        0 8px 18px rgba(2, 6, 23, 0.18);
 }
 
 @media (max-width: 992px) {
@@ -756,6 +765,10 @@ select {
 #network .header .card-body,
 #datastore .header .card-body {
     min-height: 200px;
+}
+
+#instances .card-body {
+    min-height: 350px;
 }
 
 #instances .card-body-tbl,

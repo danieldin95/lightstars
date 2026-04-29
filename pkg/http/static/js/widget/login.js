@@ -1,9 +1,9 @@
 import {I18N} from "../lib/i18n.js";
-import {widget} from "./widget.js";
+import {Widget} from "./widget.js";
 import {Location} from "../lib/location.js";
 
 
-export class login extends widget {
+export class LoginWid extends Widget {
     // {
     //   parent: "#container"
     // }
@@ -60,7 +60,7 @@ export class login extends widget {
                 <div class="row">
                     <div class="col-12">
                         <span style="color: #ffffff;">
-                            <strong><a href="https://github.com/danieldin95/lightstar">{{'lightstars' | i}}</a></strong>
+                            <strong><a href="https://github.com/danieldin95/lightstars">{{'lightstars' | i}}</a></strong>
                         </span>
                         <br/>
                         <span style="color: #ced4da">

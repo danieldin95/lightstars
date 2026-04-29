@@ -1,7 +1,7 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 
 
-export class snapshotcreate extends formmodal {
+export class SnapshotCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

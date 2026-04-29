@@ -1,11 +1,11 @@
 import {Container} from "./container.js"
 import {Network} from "./network.js";
 import {Utils} from "../lib/utils.js";
-import {Networks as NetworksController} from "../controller/networksctl.js";
-import {natcreate} from "../widget/network/natcreate.js";
-import {ovscreate} from "../widget/network/ovscreate.js";
-import {bridgecreate} from "../widget/network/bridgecreate.js";
-import {isolatedcreate} from "../widget/network/isolatedcreate.js";
+import {NetworksCtl as NetworksController} from "../controller/networksctl.js";
+import {NATCreateWid} from "../widget/network/natcreate.js";
+import {OVSCreateWid} from "../widget/network/ovscreate.js";
+import {BridgeCreateWid} from "../widget/network/bridgecreate.js";
+import {IsolatedCreateWid} from "../widget/network/isolatedcreate.js";
 import {I18N} from "../lib/i18n.js";
 
 export class Networks extends Container {
@@ -33,19 +33,19 @@ export class Networks extends Container {
             },
             confirm: '#confirmActionModal',
         });
-        new natcreate({id: '#createNatModal'})
+        new NATCreateWid({id: '#createNatModal'})
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });
-        new bridgecreate({id: '#createBridgeModal'})
+        new BridgeCreateWid({id: '#createBridgeModal'})
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });
-        new isolatedcreate({id: '#createIsolatedModal'})
+        new IsolatedCreateWid({id: '#createIsolatedModal'})
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });
-        new ovscreate({id: '#createOvsModal'})
+        new OVSCreateWid({id: '#createOvsModal'})
             .onsubmit((e) => {
                 nCtl.create(Utils.toJSON(e.form));
             });
@@ -54,7 +54,7 @@ export class Networks extends Container {
     template(v) {
         return this.compile(`
         <div id="index">
-        <!-- Network -->
+        <!-- NetworkCtl -->
         <div id="networks" class="card shadow">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm" type="button">
@@ -62,7 +62,7 @@ export class Networks extends Container {
                 </button>
             </div>
             <div class="card-body">
-                <!-- Network buttons -->
+                <!-- NetworkCtl buttons -->
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
                         <div id="create-btns" class="btn-group btn-group-sm" role="group">
@@ -92,7 +92,7 @@ export class Networks extends Container {
                     </div>
                 </div>
 
-                <!-- Network display -->
+                <!-- NetworkCtl display -->
                 <div class="card-body-tbl">
                     <table class="table table-striped">
                         <thead>

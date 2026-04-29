@@ -1,9 +1,9 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 import {Option} from "../option.js";
 import {BridgeApi} from "../../api/bridgeapi.js";
 
 
-export class interfacecreate extends formmodal {
+export class InterfaceCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

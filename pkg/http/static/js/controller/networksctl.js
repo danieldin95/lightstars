@@ -1,30 +1,30 @@
 import {Controller} from "./controller.js";
 import {NetworkApi} from "../api/networkapi.js";
-import {networktable} from "../widget/network/networktable.js";
-import {checkbox} from "../widget/common/checkbox.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {NetworkTableWid} from "../widget/network/networktable.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
 
-class CheckBoxCtl extends checkbox {
+class CheckBoxCtl extends CheckboxWid {
 }
 
 
-export class Networks extends Controller {
+export class NetworksCtl extends Controller {
     // {
     //   id: "#networks",
     //   onthis: function (e) {},
     // }
     constructor(props) {
         super(props);
-        this.checkbox = new CheckBoxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new networktable({id: `${this.id} #display-table`});
+        this.CheckboxWid = new CheckBoxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new NetworkTableWid({id: `${this.id} #display-table`});
         this.confirm = props.confirm;
 
         // register buttons's click.
         $(this.child('#delete')).on("click", (e) => {
             let uuids = this.uuids.store.slice();
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "remove",
                 name: uuids.join(", "),
@@ -48,7 +48,7 @@ export class Networks extends Controller {
 
     refresh() {
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
             // register click on this table row.
             let func = this.props.onthis;
             if (func) {

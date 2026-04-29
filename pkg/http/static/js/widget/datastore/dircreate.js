@@ -1,10 +1,10 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 import {Option} from "../option.js";
 import {Utils} from "../../lib/utils.js";
 import {DataStoreApi} from "../../api/datastoresapi.js";
 
 
-export class dircreate extends formmodal {
+export class DirCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

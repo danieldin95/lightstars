@@ -1,7 +1,7 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 
 
-export class bridgecreate extends formmodal {
+export class BridgeCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);
@@ -22,15 +22,15 @@ export class bridgecreate extends formmodal {
                     <input type="text" class="d-none" name="mode" value="bridge"/>
                     <input type="text" class="d-none" name="dhcp" value="no"/>
                     <div class="form-group">
-                        <label for="name" class="col-form-label-sm ">{{'network name' | i}}</label>
+                        <label for="bridge-name" class="col-form-label-sm ">{{'network name' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="name" name="name" value=""/>
+                            <input type="text" class="form-control form-control-sm" id="bridge-name" name="name" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="bridge" class="col-form-label-sm ">{{'existing bridge on host' | i}}</label>
+                        <label for="bridge-host" class="col-form-label-sm ">{{'existing bridge on host' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm input-lg" id="bridge" name="bridge" value="" placeholder="br0"/>
+                            <input type="text" class="form-control form-control-sm input-lg" id="bridge-host" name="bridge" value="" placeholder="br0"/>
                         </div>
                     </div>
                 </form>    

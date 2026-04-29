@@ -1,15 +1,15 @@
 import {Controller} from "./controller.js";
 import {GraphicsApi} from "../api/graphicsapi.js";
-import {graphicstable} from "../widget/graphics/graphicstable.js";
-import {checkbox} from "../widget/common/checkbox.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {GraphicsTableWid} from "../widget/graphics/graphicstable.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
 
-class CheckBoxCtl extends checkbox {
+class CheckBoxCtl extends CheckboxWid {
 }
 
 
-export class Graphics extends Controller {
+export class GraphicsCtl extends Controller {
     // {
     //   id: '#instance #graphics',
     //   uuid: uuid of instance,
@@ -21,9 +21,9 @@ export class Graphics extends Controller {
         this.inst = props.uuid;
         this.confirm = props.confirm;
 
-        this.checkbox = new CheckBoxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new graphicstable({
+        this.CheckboxWid = new CheckBoxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new GraphicsTableWid({
             id: this.child('#display-table'),
             inst: this.inst,
         });
@@ -31,7 +31,7 @@ export class Graphics extends Controller {
         // register button's click.
         $(this.child('#remove')).on("click", (e) => {
             let uuids = this.uuids.store.slice();
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "remove",
                 name: uuids.join(", "),
@@ -48,11 +48,11 @@ export class Graphics extends Controller {
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
-                this.checkbox.refresh();
+                this.CheckboxWid.refresh();
             });
         });
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
         });
     }
 

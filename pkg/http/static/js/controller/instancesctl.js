@@ -1,12 +1,12 @@
 import {Controller} from './controller.js';
 import {InstanceApi} from "../api/instanceapi.js";
-import {instancetable} from "../widget/instance/instancetable.js";
-import {checkbox} from "../widget/common/checkbox.js";
-import {instancefooter} from "../widget/instance/instancefooter.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {InstanceTableWid} from "../widget/instance/instancetable.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
+import {InstanceFooterWid} from "../widget/instance/instancefooter.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
 
-class CheckboxCtl extends checkbox {
+class CheckboxCtl extends CheckboxWid {
     change(from) {
         super.change(from);
         if (from.store.length === 0) {
@@ -24,17 +24,17 @@ class CheckboxCtl extends checkbox {
 }
 
 
-export class Instances extends Controller {
+export class InstancesCtl extends Controller {
     // {
     //   id: '#instances'
     //   onthis: function (e) {},
     // }
     constructor(props) {
         super(props);
-        this.checkbox = new CheckboxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new instancetable({id: `${this.id} #display-body`});
-        this.footer = new instancefooter({id: `${this.id} #footer`});
+        this.CheckboxWid = new CheckboxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new InstanceTableWid({id: `${this.id} #display-body`});
+        this.footer = new InstanceFooterWid({id: `${this.id} #footer`});
         this.confirm = props.confirm;
 
         // register buttons's click.
@@ -67,7 +67,7 @@ export class Instances extends Controller {
         });
         $(this.child('#more-destroy')).on("click", this.uuids, (e) => {
             let uuids = e.data.store.slice();
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "destroy",
                 name: uuids.join(", "),
@@ -87,7 +87,7 @@ export class Instances extends Controller {
 
     refresh() {
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
             // register click on this table row.
             let func = this.props.onthis;
             if (func) {

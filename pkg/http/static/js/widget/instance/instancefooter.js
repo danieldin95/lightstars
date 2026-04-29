@@ -1,8 +1,8 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {InstanceApi} from "../../api/instanceapi.js";
 
 
-export class instancefooter extends widget {
+export class InstanceFooterWid extends Widget {
     // {
     //   id: '#xx'.
     // }

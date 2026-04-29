@@ -1,8 +1,8 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 import {Option} from "../option.js";
 
 
-export class instanceset extends formmodal {
+export class InstanceSetWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

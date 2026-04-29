@@ -1,7 +1,7 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 
 
-export class titleset extends formmodal {
+export class TitleSetWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

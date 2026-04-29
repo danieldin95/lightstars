@@ -1,10 +1,10 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 import {Option} from "../option.js";
 import {DataStoreApi} from "../../api/datastoresapi.js";
 import {IsoApi} from "../../api/isoapi.js";
 
 
-export class isocreate extends formmodal {
+export class IsoCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

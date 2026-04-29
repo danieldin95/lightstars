@@ -19,13 +19,13 @@ body {
 
 .notice {
     min-width: 20rem;
-    max-width: 26rem;
+    max-width: 340px;
     max-height: 32rem;
     margin: auto auto 1rem;
 }
 
 .login {
-    max-width: 26rem;
+    max-width: 480px;
     min-height: 20rem;
     max-height: 40rem;
     margin: auto;
@@ -56,9 +56,6 @@ body {
 
 .login label {
     text-align: left;
-}
-
-.login .card-footer {
 }
 
 .login .card-footer .btn {

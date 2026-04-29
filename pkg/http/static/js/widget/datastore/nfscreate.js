@@ -1,9 +1,9 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 import {Option} from "../option.js";
 import {Utils} from "../../lib/utils.js";
 
 
-export class nfscreate extends formmodal {
+export class NFSCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

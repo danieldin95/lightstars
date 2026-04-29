@@ -1,8 +1,8 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {SnapshotApi} from "../../api/snapshotapi.js";
 
 
-export class snapshottable extends widget {
+export class SnapshotTableWid extends Widget {
     // {
     //   id: '#xx',
     //   inst: 'uuid',

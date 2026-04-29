@@ -1,7 +1,7 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 
 
-export class fileupload extends formmodal {
+export class FileUploadWid extends FormModalWid {
     //
     constructor (props) {
         super(props);

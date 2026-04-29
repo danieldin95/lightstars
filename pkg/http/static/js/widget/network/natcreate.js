@@ -1,8 +1,8 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 import {Option} from "../option.js";
 
 
-export class natcreate extends formmodal {
+export class NATCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);
@@ -38,15 +38,15 @@ export class natcreate extends formmodal {
                 <form>
                     <input type="text" class="d-none" name="mode" value="nat"/>
                     <div class="form-group">
-                        <label for="name" class="">{{'network name' | i}}</label>
+                        <label for="nat-name" class="">{{'network name' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="name" name="name" value=""/>
+                            <input type="text" class="form-control form-control-sm" id="nat-name" name="name" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="address" class="">{{'interface address for bridge' | i}}</label>
+                        <label for="nat-address" class="">{{'interface address for bridge' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="address"
+                            <input type="text" class="form-control form-control-sm" id="nat-address"
                                    name="address" value="" placeholder="192.168.100.1"/>
                             <select class="select-unit-right" name="prefix">
                                 <option value="24" selected>/24</option>
@@ -54,9 +54,9 @@ export class natcreate extends formmodal {
                          </div>
                     </div>
                     <div class="form-group">
-                        <label for="range" class="col-form-label-sm">{{'address range for dhcp' | i}}</label>
+                        <label for="nat-range" class="col-form-label-sm">{{'address range for dhcp' | i}}</label>
                         <div class="input-group">
-                            <textarea type="text" class="form-control form-control-sm" id="range"
+                            <textarea type="text" class="form-control form-control-sm" id="nat-range"
                                 name="range" rows="3" placeholder="192.168.100.100,192.168.100.200"></textarea>
                         </div>
                     </div>

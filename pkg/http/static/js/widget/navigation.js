@@ -2,15 +2,15 @@ import {Api} from "../api/api.js";
 import {HyperApi} from "../api/hyperapi.js";
 import {ZoneApi} from "../api/zoneapi.js";
 import {Location} from "../lib/location.js";
-import {changepassword} from "./user/changepassword.js";
+import {ChangePasswordWid} from "./user/changepassword.js";
 import {PasswordApi} from "../api/passwordapi.js";
 import {Utils} from "../lib/utils.js";
-import {widget} from "./widget.js";
-import {preferences} from "./user/preferences.js";
+import {Widget} from "./widget.js";
+import {PreferencesWid} from "./user/preferences.js";
 
 
 
-export class navigation extends widget {
+export class NavigationWid extends Widget {
     // {
     //   parent: '#xx'.
     //   hyper: {}
@@ -32,13 +32,13 @@ export class navigation extends widget {
     }
 
     refresh() {
-        let page = Location.get("/system");
+        let page = Location.get("/SystemWid");
         this.active = "#" + page;
-        console.log("navigation.refresh", this.active);
+        console.log("NavigationWid.refresh", this.active);
 
         let forceActive = (cur) => {
             this.active = cur;
-            console.log("navigation.force", cur);
+            console.log("NavigationWid.force", cur);
             this.view.find('li').each((i, e) => {
                 let href = $(e).find('a').attr("href");
                 if (cur && cur === this.page(href)) {
@@ -68,7 +68,7 @@ export class navigation extends widget {
             this.view.find("#fullscreen").on('click', (e) => {
                 this.fullscreen();
             });
-            // register change password and preferences.
+            // register change password and PreferencesWid.
             let user = e.resp.user.name;
             this.view.find('[data-target="#preferencesModal"], [data-target="#changePasswdModal"]').on('click', function () {
                 let menu = $(this).closest('.dropdown-menu');
@@ -76,11 +76,11 @@ export class navigation extends widget {
                 menu.parent('.dropdown').removeClass('show');
                 menu.parent('.dropdown').find('.dropdown-toggle').attr('aria-expanded', 'false');
             });
-            new changepassword({id: '#changePasswdModal'})
+            new ChangePasswordWid({id: '#changePasswdModal'})
                 .onsubmit((e) => {
                     new PasswordApi({uuids: user}).set(Utils.toJSON(e.form));
                 });
-            new preferences({id: '#preferencesModal'})
+            new PreferencesWid({id: '#preferencesModal'})
                 .onsubmit((e) => {
                     let data = Utils.toJSON(e.form);
                     $.cookie('lang', data.lang);
@@ -172,9 +172,9 @@ export class navigation extends widget {
                 </li>
             </ul>
         </div>
-        <!-- collapse bar -->
+        <!-- Collapse bar -->
         <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarMore" aria-controls="navbarMore" aria-expanded="false" aria-label="Toggle navigation">
+                data-target="#navbarMore" aria-controls="navbarMore" aria-expanded="false" aria-label="Toggle Navigation">
             <span class="navbar-toggler-icon"/>
         </button>
         <!-- More bar -->

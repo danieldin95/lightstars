@@ -1,8 +1,8 @@
-import {widget} from "../widget.js";
+import {Widget} from "../widget.js";
 import {LeaseApi} from "../../api/leaseapi.js";
 
 
-export class leasetable extends widget {
+export class LeaseTableWid extends Widget {
     // {
     //   id: '#xx',
     //   uuid: 'uuid',

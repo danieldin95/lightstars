@@ -1,15 +1,15 @@
 import {Controller} from "./controller.js";
-import {porttable} from "../widget/port/porttable.js";
-import {checkbox} from "../widget/common/checkbox.js";
+import {PortTableWid} from "../widget/port/porttable.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
 import {InterfaceApi} from "../api/interfaceapi.js";
-import {confirmaction} from "../widget/common/confirmaction.js";
+import {ConfirmActionWid} from "../widget/common/confirmaction.js";
 
 
-class CheckBoxCtl extends checkbox {
+class CheckBoxCtl extends CheckboxWid {
 }
 
 
-export class Port extends Controller {
+export class PortCtl extends Controller {
     // {
     //   id: '#network #port',
     //   bridge: bridge of network,
@@ -22,9 +22,9 @@ export class Port extends Controller {
         this.bridge = props.bridge;
         this.confirm = props.confirm;
 
-        this.checkbox = new CheckBoxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new porttable({
+        this.CheckboxWid = new CheckBoxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new PortTableWid({
             id: this.child('#display-table'),
             uuid: this.uuid,
             name: this.name,
@@ -32,7 +32,7 @@ export class Port extends Controller {
         });
         $(this.child('#remove')).on("click", (e) => {
             let uuids = this.uuids.store.slice();
-            new confirmaction({
+            new ConfirmActionWid({
                 id: this.confirm,
                 action: "remove",
                 name: uuids.join(", "),
@@ -53,11 +53,11 @@ export class Port extends Controller {
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
-                this.checkbox.refresh();
+                this.CheckboxWid.refresh();
             });
         });
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
         });
     }
 }

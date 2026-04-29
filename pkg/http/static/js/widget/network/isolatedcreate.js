@@ -1,8 +1,8 @@
-import {formmodal} from "../form/formmodal.js";
+import {FormModalWid} from "../form/formmodal.js";
 import {Option} from "../option.js";
 
 
-export class isolatedcreate extends formmodal {
+export class IsolatedCreateWid extends FormModalWid {
     //
     constructor (props) {
         super(props);
@@ -38,15 +38,15 @@ export class isolatedcreate extends formmodal {
                 <form>
                     <input type="text" class="d-none" name="mode" value=""/>
                     <div class="form-group">
-                        <label for="name" class="col-form-label-sm ">{{'network name' | i}}</label>
+                        <label for="isolated-name" class="col-form-label-sm ">{{'network name' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="name" name="name" value=""/>
+                            <input type="text" class="form-control form-control-sm" id="isolated-name" name="name" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="address" class="col-form-label-sm">{{'interface address for bridge' | i}}</label>
+                        <label for="isolated-address" class="col-form-label-sm">{{'interface address for bridge' | i}}</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="address"
+                            <input type="text" class="form-control form-control-sm" id="isolated-address"
                                    name="address" value="" placeholder="192.168.2.1"/>
                             <select class="select-unit-right" name="prefix">
                                 <option value="24" selected>/24</option>
@@ -54,9 +54,9 @@ export class isolatedcreate extends formmodal {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="range" class="col-form-label-sm">{{'address range for dhcp' | i}}</label>
+                        <label for="isolated-range" class="col-form-label-sm">{{'address range for dhcp' | i}}</label>
                         <div class="input-group">
-                            <textarea type="text" class="form-control form-control-sm" id="range"
+                            <textarea type="text" class="form-control form-control-sm" id="isolated-range"
                                 name="range" rows="3" placeholder="192.168.2.10,192.168.2.200"></textarea>
                         </div>
                     </div>

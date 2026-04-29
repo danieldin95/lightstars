@@ -1,9 +1,9 @@
 import {Container} from "./container.js"
-import {collapse} from "../widget/collapse.js";
+import {CollapseWid} from "../widget/collapse.js";
 import {DataStoreApi} from "../api/datastoresapi.js";
-import {Pool as PoolController} from "../controller/poolctl.js";
+import {PoolCtl as PoolController} from "../controller/poolctl.js";
 import {Api} from "../api/api.js";
-import {volumeremove} from "../widget/volume/volumeremove.js";
+import {VolumeRemoveWid} from "../widget/volume/volumeremove.js";
 import {VolumeApi} from "../api/volumeapi.js";
 
 
@@ -31,10 +31,10 @@ export class Pool extends Container {
     }
 
     loading() {
-        // collapse
+        // CollapseWid
         $(this.id('#collapseOver')).fadeIn('slow');
-        $(this.id('#collapseOver')).collapse();
-        new collapse({
+        $(this.id('#collapseOver')).collapse('show');
+        new CollapseWid({
             pages: [
                 {id: this.id('#collapseVol'), name: 'volumes'},
             ],
@@ -50,7 +50,7 @@ export class Pool extends Container {
                 id: this.id("#volumes"),
                 upload: "#uploadPoolModal",
                 onRemove: (objs) => {
-                    new volumeremove({
+                    new VolumeRemoveWid({
                         id: this.id('#removeVolModal'),
                         name: objs.uuids,
                     }).onsubmit((e) => {
@@ -102,7 +102,7 @@ export class Pool extends Container {
                         <button id="refresh" type="button" class="btn btn-outline-dark btn-sm">{{'refresh' | i}}</button>
                     </div>
                 </div>
-                <div class="card-body-hdl pt-1">
+                <div class="card-body-tbl pl-1 pr-1 pt-2 pb-2">
                     <div class="resource-overview">
                         <div class="dashboard-grid datastore-overview-grid">
                             <div class="dashboard-stat total">
@@ -134,7 +134,7 @@ export class Pool extends Container {
                 </div>
             </div>
         </div>
-        <!-- Volume list-->
+        <!-- VolumeCtl list-->
         <div id="volumes" class="card shadow">
             <div class="card-header">
                 <button class="btn btn-link btn-block text-left btn-sm"
@@ -147,17 +147,13 @@ export class Pool extends Container {
             <div class="card-body">
                 <div class="row card-body-hdl">
                     <div class="col-auto mr-auto">
-                        <button id="create" type="button" class="btn btn-outline-info btn-sm"
-                                data-toggle="modal" data-target="#createVolumeModal">
-                            {{'new a volume' | i}}
-                        </button>
                         <button id="upload" type="button" class="btn btn-outline-dark btn-sm"
                                 data-toggle="modal" data-target="#uploadPoolModal">{{'upload' | i}}</button>
                         <button id="remove" type="button" class="btn btn-outline-dark btn-sm"
                             data-toggle="modal" data-target="#removeVolModal">{{'remove' | i}}</button>
                     </div>
-                    <div class="col-auto">
-                        <button id="datastore" class="btn btn-link btn-sm p-0" data="{{uuid}}">{{name}}:/</button>
+                    <div class="col-auto mt-auto mb-auto">
+                        <button id="datastore" class="btn btn-link btn-sm p-0" data="{{uuid}}">{{name}}:</button>
                         <button id="current"  class="btn btn-link btn-sm p-0 pr-2" data=""></button>
                     </div>
                     <div class="col-auto">

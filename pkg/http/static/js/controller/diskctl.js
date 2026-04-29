@@ -1,14 +1,14 @@
 import {Controller} from "./controller.js";
 import {DiskApi} from "../api/diskapi.js";
-import {disktable} from "../widget/disk/disktable.js";
-import {checkbox} from "../widget/common/checkbox.js";
+import {DiskTableWid} from "../widget/disk/disktable.js";
+import {CheckboxWid} from "../widget/common/checkbox.js";
 
 
-class CheckBoxCtl extends checkbox {
+class CheckBoxCtl extends CheckboxWid {
 }
 
 
-export class Disk extends Controller {
+export class DiskCtl extends Controller {
     // {
     //   id: '#instance #disk',
     //   uuid: uuid of instance,
@@ -20,9 +20,9 @@ export class Disk extends Controller {
         this.name = props.name;
         this.inst = props.uuid;
 
-        this.checkbox = new CheckBoxCtl(props);
-        this.uuids = this.checkbox.uuids;
-        this.table = new disktable({
+        this.CheckboxWid = new CheckBoxCtl(props);
+        this.uuids = this.CheckboxWid.uuids;
+        this.table = new DiskTableWid({
             id: this.child('#display-table'),
             inst: this.inst,
         });
@@ -40,11 +40,11 @@ export class Disk extends Controller {
         // refresh table and register refresh click.
         $(this.child('#refresh')).on("click", (e) => {
             this.table.refresh((e) => {
-                this.checkbox.refresh();
+                this.CheckboxWid.refresh();
             });
         });
         this.table.refresh((e) => {
-            this.checkbox.refresh();
+            this.CheckboxWid.refresh();
         });
     }
 
