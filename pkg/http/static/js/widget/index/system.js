@@ -19,6 +19,21 @@ export class SystemWid extends Widget {
         new HyperApi({tasks: this.tasks}).get(this,function (e) {
             let resp = e.resp || {};
             let hyper = resp.hyper || {};
+            let levelByFreeRatio = (free, total) => {
+                let freeNum = Number(free);
+                let totalNum = Number(total);
+                if (!Number.isFinite(freeNum) || !Number.isFinite(totalNum) || totalNum <= 0) {
+                    return "total";
+                }
+                let ratio = freeNum / totalNum;
+                if (ratio >= 0.6) {
+                    return "up";
+                }
+                if (ratio >= 0.3) {
+                    return "total";
+                }
+                return "down";
+            };
             let toBytes = (v) => {
                 if (v === null || v === undefined) {
                     return NaN;
@@ -55,6 +70,8 @@ export class SystemWid extends Widget {
             hyper.memTotal = pickNum(hyper.memTotal, hyper.memoryTotal, hyper.memory, hyper.mem);
             hyper.memFree = pickNum(hyper.memFree, hyper.memoryFree, hyper.freeMem, hyper.memAvailable);
             hyper.memCached = pickNum(hyper.memCached, hyper.memoryCached, hyper.cachedMem);
+            hyper.cpuCardClass = levelByFreeRatio(hyper.cpuUtils, 1000);
+            hyper.memCardClass = levelByFreeRatio(hyper.memFree, hyper.memTotal);
             resp.hyper = hyper;
             $(e.data.id).html(e.data.render(resp));
             if (func) {
@@ -87,7 +104,7 @@ export class SystemWid extends Widget {
                     </div>
                 </div>
                 <div class="dashboard-grid dashboard-grid-1">
-                    <div class="dashboard-stat up">
+                    <div class="dashboard-stat {{hyper.cpuCardClass}}">
                         <div class="label">{{'processor' | i}}</div>
                         <div class="value">
                             {{hyper.cpuUtils | figureCpuFree hyper.cpuNum}} / {{hyper.cpuNum}}
@@ -96,7 +113,7 @@ export class SystemWid extends Widget {
                     </div>
                 </div>
                 <div class="dashboard-grid dashboard-grid-1">
-                    <div class="dashboard-stat total">
+                    <div class="dashboard-stat {{hyper.memCardClass}}">
                         <div class="label">{{'memory' | i}}</div>
                         <div class="value">
                             {{hyper.memFree | prettyByte}} / {{hyper.memTotal | prettyByte}}
