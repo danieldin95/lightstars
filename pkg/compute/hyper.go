@@ -29,6 +29,9 @@ type HyperVisor struct {
 	Ticker     *time.Ticker
 	Done       chan bool
 	IdleUtil   uint64
+	PrevCPUAll uint64
+	PrevIdle   uint64
+	HasPrevCPU bool
 	DomUtil    map[string]uint64
 }
 
@@ -111,9 +114,33 @@ func (h *HyperVisor) FigureCPU() error {
 	if total == 0 {
 		return nil
 	}
+
+	// Use delta between two samples so util matches tools like `top`.
+	// top CPU% ~= (busyDelta / totalDelta) over sampling window.
 	h.Lock.Lock()
 	defer h.Lock.Unlock()
-	h.IdleUtil = 1000 * idle / total
+	if !h.HasPrevCPU {
+		h.PrevCPUAll = total
+		h.PrevIdle = idle + iowait
+		h.HasPrevCPU = true
+		// Keep a fallback ratio for first sample.
+		h.IdleUtil = 1000 * (idle + iowait) / total
+		return nil
+	}
+	curIdle := idle + iowait
+	if total < h.PrevCPUAll || curIdle < h.PrevIdle {
+		h.PrevCPUAll = total
+		h.PrevIdle = curIdle
+		h.IdleUtil = 1000 * curIdle / total
+		return nil
+	}
+	deltaTotal := total - h.PrevCPUAll
+	deltaIdle := curIdle - h.PrevIdle
+	if deltaTotal > 0 && deltaIdle <= deltaTotal {
+		h.IdleUtil = 1000 * deltaIdle / deltaTotal
+	}
+	h.PrevCPUAll = total
+	h.PrevIdle = curIdle
 	return nil
 }
 
@@ -189,14 +216,22 @@ func readMemInfo() (total, free, cached uint64) {
 func readMemByVirsh(url string) (total, free, cached uint64) {
 	var out string
 	var err error
-	// Preferred fallback: query memory stats from libvirt.
-	out, err = virsh.Run(url, "node-memory-stats")
+	// Preferred source: query memory stats from libvirt.
+	// `nodememstats` is the canonical virsh command; keep
+	// `node-memory-stats` as compatibility fallback.
+	out, err = virsh.Run(url, "nodememstats")
+	if err != nil {
+		out, err = virsh.Run(url, "node-memory-stats")
+	}
 	if err == nil {
 		kv := virsh.ParseKV(out)
 		// virsh reports these values in KiB.
 		total = parseUint(kv["total"]) * 1024
 		free = parseUint(kv["free"]) * 1024
 		cached = parseUint(kv["cached"]) * 1024
+		if cached == 0 {
+			cached = parseUint(kv["buffers"]) * 1024
+		}
 		if free == 0 {
 			// Some hosts expose "available" instead of "free".
 			free = parseUint(kv["available"]) * 1024
@@ -239,16 +274,17 @@ func readMemByVirsh(url string) (total, free, cached uint64) {
 	if total == 0 && free > 0 {
 		total = free
 	}
-	return total, free, 0
+	return total, free, cached
 }
 
 func (h *HyperVisor) GetMem() (t uint64, f uint64, c uint64) {
 	if err := h.Open(); err != nil {
 		return 0, 0, 0
 	}
-	t, f, c = readMemInfo()
+	t, f, c = readMemByVirsh(h.Url)
 	if t == 0 {
-		return readMemByVirsh(h.Url)
+		// Final fallback for environments where virsh mem stats are unavailable.
+		return readMemInfo()
 	}
 	return t, f, c
 }
