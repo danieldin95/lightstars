@@ -29,7 +29,7 @@ This software makes it easier for you to control virtual compute, network and st
 ## Install from binary package
 
     curl -L -o /tmp/lightstar.bin \
-      https://github.com/danieldin95/lightstars/releases/download/v0.9.4/lightstar-debian-0.9.4.tar.gz
+      https://github.com/danieldin95/lightstars/releases/download/v0.9.4/lightstar-debian-0.9.4.bin
     chmod +x /tmp/lightstar.bin
     /tmp/lightstar.bin
 

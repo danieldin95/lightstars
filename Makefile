@@ -57,8 +57,11 @@ tar: env lightstar ## build tar packages
 	@mkdir -p $(LIN_DIR)/etc/sysconfig
 	@echo OPTIONS="-static:dir /var/lightstar/static -crt:dir /var/lightstar/cert -conf /etc/lightstar" > $(LIN_DIR)/etc/sysconfig/lightstar.cfg
 
-	@mkdir -p $(LIN_DIR)/var/lightstar
-	@cp -R $(SRC_DIR)/dist/resource/cert/lightstar/ca $(LIN_DIR)/var/lightstar
+	@mkdir -p $(LIN_DIR)/var/lightstar/cert
+	@cp -R $(SRC_DIR)/dist/resource/cert/lightstar/ca/ca.crt $(LIN_DIR)/var/lightstar/cert
+	@cp -R $(SRC_DIR)/dist/resource/cert/lightstar/cert/crt $(LIN_DIR)/var/lightstar/cert
+	@cp -R $(SRC_DIR)/dist/resource/cert/lightstar/cert/key $(LIN_DIR)/var/lightstar/cert
+
 	@cp -R $(SRC_DIR)/pkg/http/static $(LIN_DIR)/var/lightstar
 
 	@mkdir -p $(LIN_DIR)/usr/bin

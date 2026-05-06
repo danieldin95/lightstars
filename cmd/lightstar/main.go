@@ -2,13 +2,14 @@ package main
 
 import (
 	"flag"
+	"os"
+
 	"github.com/danieldin95/lightstar/pkg/compute"
 	"github.com/danieldin95/lightstar/pkg/http"
 	"github.com/danieldin95/lightstar/pkg/libstar"
 	"github.com/danieldin95/lightstar/pkg/network"
 	"github.com/danieldin95/lightstar/pkg/service"
 	"github.com/danieldin95/lightstar/pkg/storage"
-	"os"
 )
 
 type StarConfig struct {
@@ -23,11 +24,11 @@ type StarConfig struct {
 
 var cfg = StarConfig{
 	StaticDir: "static",
-	CrtDir:    "ca",
+	CrtDir:    "cert",
 	ConfDir:   "/etc/lightstar",
 	Listen:    "0.0.0.0:10010",
 	Hyper:     "qemu:///system",
-	LogFile:   "/var/log/lightstar.log",
+	LogFile:   "-",
 	Verbose:   2,
 }
 
@@ -57,6 +58,9 @@ func main() {
 	libstar.PreNotify()
 	// Check and Start pprof.
 	pprof(cfg.ConfDir + "/pprof.json")
+	if cfg.LogFile == "-" {
+		cfg.LogFile = ""
+	}
 	libstar.Init(cfg.LogFile, cfg.Verbose)
 	// Initialize storage
 	storage.DATASTOR.Init()
