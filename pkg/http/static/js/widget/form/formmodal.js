@@ -103,6 +103,7 @@ export class FormModalWid {
         this.container().on('click.formmodal', '[name=finish-btn]', this, function(e) {
             e.preventDefault();
             e.stopPropagation();
+            $(e.currentTarget).attr('type', 'button');
             releaseFocus(e.data.container());
             e.data.submit();
             e.data.container().modal("hide");
@@ -111,6 +112,7 @@ export class FormModalWid {
         this.container().on('click.formmodal', '[name=cancel-btn]', this, function(e) {
             e.preventDefault();
             e.stopPropagation();
+            $(e.currentTarget).attr('type', 'button');
             releaseFocus(e.data.container());
             e.data.container().modal("hide");
         });
